@@ -20,11 +20,45 @@
     background-color: @pageColor;
 }
 
+.editModal_content :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #444; opacity:1; 
+}
+
+.editModal_content ::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #444;opacity:1;
+}
+
+.editModal_content input:-ms-input-placeholder{
+    color: #444;opacity:1;
+}
+
+.editModal_content input::-webkit-input-placeholder{
+    color: #444;opacity:1;
+}
+
+.editModal_content input::-webkit-select-placeholder{
+    color: #444;opacity:1;
+}
+
+.editModal_content .ivu-select-placeholder {
+    color: #444 !important;opacity:1;
+}
+/**
+模态框高度与滚动条
+*/
+.ivu-modal-body { overflow-y: auto;
+    max-height: 500px; } 
+
+    
 .ivu-btn-ghost:hover {
     color: #404040;//orange;
     border-color: #404040;//orange
 }
 
+
+/**
+    分页样式定制
+*/
 .ivu-page-item:hover,.ivu-page-item:hover a {
     border-color: @pageColor;
     color: @pageColor;
@@ -56,9 +90,6 @@
 .ivu-page-item-jump-prev i::after {
     color:@pageColor;
 }
-
-
-
 
 .ivu-page-item-jump-next, ivu-page-item-jump-next a,ivu-page-item-jump-next::after:hover {
     color: @pageColor;
@@ -96,6 +127,10 @@ div.ivu-select-selection:hover {
     color: #fff;
     background: rgb(68, 71, 79);
 }
+
+/**
+    菜单hover背景色调整
+*/
 .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item-active, .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item-active:hover{background-color:rgba(73, 80, 96, 0.48)!important;}
 /**
 // Prefix

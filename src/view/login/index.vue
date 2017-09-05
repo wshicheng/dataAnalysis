@@ -45,12 +45,38 @@
                 }
             }
         },
+        mounted () {
+
+        },
         methods: {
             handleSubmit(name) {
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        this.$Message.success('登录成功!');
-                        this.$router.push('/')
+                        this.axios({
+                            url:'/system/login',
+                            method: 'post',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            params:{
+                                'userName': 'admin',
+                                'passWord': '456123'
+                            }
+                        })
+                        .then((res) => {
+                            console.log(res)
+                            window.localStorage.setItem('token', res.data.data.token)
+                        })
+                        .then( (err) => {
+                            console.log(err)
+                        })
+                        // this.axios.post('/system/login', params:{
+                        //         'userName':'admin',
+                        //         'passWord':'456123'
+                        //     })
+                        
+                        // this.$Message.success('登录成功!');
+                        // this.$router.push('/')
                     } else {
                         // this.$Message.error('表单验证失败!');
                     }

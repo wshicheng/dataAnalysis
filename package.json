@@ -33,7 +33,9 @@
     "webpack-dev-server": "^2.7.1",
     "webpack-merge": "^4.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "element-ui": "^1.4.3"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --open --config webpack.dev.js",

@@ -54,7 +54,7 @@
 </template>
 <style lang='scss' scoped type="text/css">
 .citySelect_area span {
-    width: 70px;
+    width: 80px;
     height: 30px;
     line-height: 30px;
     cursor: pointer;
@@ -77,7 +77,7 @@
 //     color: #f60;
 // }
 .citySelect_area div.citySelect_area_span span:nth-of-type(1) {
-    width: 70px;
+    width: 80px;
     margin-left: 4px;
     margin-right: 9px;
     text-align: center;

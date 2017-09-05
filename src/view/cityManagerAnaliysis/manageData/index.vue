@@ -11,8 +11,8 @@
             <city-select></city-select>
             <div class="cityManageData_type">
                 <span>类别:</span>
-                <span>固定资产</span>
-                <span>运维费用</span>
+                <button class="active" @click='handleClick'>固定资产</button>
+                <button @click='handleClick'>运维费用</button>
             </div>
         </div>
 
@@ -32,11 +32,11 @@
                 </p>
                 <div class="editModal_content">
                     <Form ref="editValidate" :model="editValidate" :rules="editValidateRule" :label-width="80">
-                        <FormItem label="月份" prop="time">
-                            <DatePicker v-model="editValidate.time" format="yyyy年MM月dd日" style=" width:216px;" placeholder="选择日期"></DatePicker>
+                        <FormItem label="月份" prop="month">
+                            <DatePicker :model="editValidate.month" format="yyyy年MM月dd日" style=" width:216px;" :placeholder="editMonth"></DatePicker>
                         </FormItem>
-                        <FormItem label="城市" prop="city">
-                            <Select class="city_select" v-model="editValidate.city" placeholder="请选择地区">
+                        <FormItem label="城市" prop="area">
+                            <Select class="city_select" :model="editValidate.area" :placeholder="editArea">
                                 <Option value="beijing">北京市</Option>
                                 <Option value="shanghai">上海市</Option>
                                 <Option value="shenzhen">深圳市</Option>
@@ -44,15 +44,15 @@
                                 <Option value="shenzhen">深圳市</Option>
                             </Select>
                         </FormItem>
-                        <FormItem label="类别" prop='type'>
+                        <FormItem label="类别">
                             <FormItem prop='bigType'>
-                                <Select class="big_select" v-model="editValidate.bigType" placeholder="请选择大类">
+                                <Select class="big_select" :model="editValidate.bigType" :placeholder="editBigType">
                                     <Option value="beijing">固定资产</Option>
                                     <Option value="shanghai">运维费用</Option>
                                 </Select>
                             </FormItem>
                             <FormItem prop='smallType'>
-                                <Select class="small_select" v-model="editValidate.smallType" placeholder="请选择小类">
+                                <Select class="small_select" :model="editValidate.smallType" :placeholder="editSmallType">
                                     <Option value="beijing">车辆</Option>
                                     <Option value="shanghai">电池</Option>
                                     <Option value="shenzhen">充电站</Option>
@@ -62,8 +62,8 @@
                         <FormItem label="单价" class="price" prop="price">
                             <Input v-model.number="editValidate.price" placeholder="请输入姓名"></Input>
                         </FormItem>
-                        <FormItem label="数量" class="number" prop="number">
-                            <Input v-model.number="editValidate.number" placeholder="请输入姓名"></Input>
+                        <FormItem label="数量" class="number" prop="num">
+                            <Input v-model.number="editValidate.num" placeholder="请输入姓名"></Input>
                         </FormItem>
                     </Form>
                 </div>
@@ -149,7 +149,7 @@
         padding: 10px 10px 0px 10px;
         .cityManageData_month {
             span:nth-of-type(1) {
-                margin-right: 6px;
+                margin-right: 9px;
             }
             margin-bottom: 10px;
         }
@@ -194,15 +194,23 @@
             max-width: 97%;
             float: left;
         }
-        .cityManageData_type span {
-            width: 70px;
+        .cityManageData_type button {
+            width: 80px;
             height: 30px;
             line-height: 30px;
+            outline: none;
+            background: #fff;
             display: inline-block;
             border: 1px solid #dddee1;
             border-radius: 4px;
+            color: #565c6b;
             text-align: center;
             margin: 0 5px 10px 5px;
+            cursor: pointer;
+        }
+        .cityManageData_type button.active {
+            color: orange;
+            border: 1px solid orange;
         }
         .cityManageData_type span:nth-of-type(1) {
             border: none;
@@ -319,6 +327,7 @@
 <script>
 import $ from 'jquery'
 import citySelect from '../../../components/citySelect.vue'
+import { siblings } from '../../../util/util.js'
 export default {
     components: {
         "city-select": citySelect
@@ -330,19 +339,23 @@ export default {
                 'margin-top': '20px'
             },
             editValidate: {
-                time: '',
-                city: '',
-                type: '',
+                month: '',
+                area: '',
                 bigType: '',
+                type: '',
                 smallType: '',
                 price: '',
-                number: ''
+                num: ''
             },
+            editMonth: '',
+            editArea: '',
+            editBigType: '',
+            editSmallType: '',
             editValidateRule: {
-                time: [
+                month: [
                     { required: true, type: 'date', message: '请选择时间', trigger: 'change' }
                 ],
-                city: [
+                area: [
                     { required: true, message: '请选择地区', trigger: 'change' }
                 ],
                 type: [
@@ -357,7 +370,7 @@ export default {
                 price: [
                     { required: true, type: 'number', message: '请输入单价', trigger: 'blur'}
                 ],
-                number: [
+                num: [
                     { required: true, type: 'number', message: '请输入数量', trigger: 'blur'}
                 ]
             },
@@ -376,7 +389,7 @@ export default {
                     key: 'area'
                 },
                 {
-                    title: '类别',
+                    title: '大类/小类',
                     key: 'type'
                 },
                 {
@@ -406,7 +419,7 @@ export default {
                                 },
                                 nativeOn: {
                                     click: () => {
-                                        this.show(params.index)
+                                        this.show(params.index, params.row)
                                     }
                                 }
                             }),
@@ -431,209 +444,17 @@ export default {
             ],
             data1: [
                 {
-                    month: '王小222明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
+                    month: '2017年7月2日',
+                    area: '南京市',
+                    type: '固定资产/电池',
+                    num: '100',
+                    price: '2222',
                 }, {
-                    month: '王小22明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王22332小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小434明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
-                }, {
-                    month: '王小明',
-                    area: 18,
-                    type: 18,
-                    num: 10,
-                    price: 100,
+                    month: '2017年7月2日',
+                    area: '北京市',
+                    type: '固定资产/电池',
+                    num: '222',
+                    price: '333',
                 }
             ],
             modal1: false,
@@ -679,8 +500,18 @@ export default {
                 this.$Message.success('上传成功')
             }, 1500);
         },
-        show (index) {
+        show (index, row) {
             this.editModal = true
+            console.log(row)
+            this.editMonth = row.month
+            this.editArea = row.area
+            var type = row.type.split('/')
+            // this.$set(this.editValidate.bigType,type[0],0) 
+            this.editBigType = type[0]
+            this.editSmallType = type[1]
+            this.editValidate.price = row.price
+            this.editValidate.num = row.num
+            console.log(this.editValidate)
         },
         remove (index) {
             this.delIndex = index
@@ -709,6 +540,13 @@ export default {
         handleReset (name) {
             this.$refs[name].resetFields();
             this.editModal = false
+        },
+        handleClick (e) {
+            var elems = siblings(e.target)
+            for (var i = 0; i < elems.length; i++) {
+                elems[i].setAttribute('class', '')
+            }
+            e.target.setAttribute('class', 'active')            
         }
     }
 }
