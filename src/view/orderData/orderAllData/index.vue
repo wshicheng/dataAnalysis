@@ -11,10 +11,26 @@
             <button @click="handleClick">近七日</button>
             <button @click="handleClick">近30天</button>
             <button @click="handleClick">指定时间段</button>
-            <DatePicker type="daterange" placement="bottom-end" placeholder="选择日期" style="width: 216px; height: 28px;"></DatePicker>
+        </div>
+        <div class="timeSelectShow" v-show="timeSelectShow">
+            <DatePicker type="daterange" v-model="timeLine" placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
             <div class="search"><button @click="searchByTimeLine">搜索</button></div>
         </div>
         <city-select></city-select>
+      </div>
+
+      <div class="orderAllData_table">
+        <div class="help">
+            <Poptip trigger="hover" style="float: right;"  placement="top-end" title="提示标题" content="提示内容">
+                <span>?</span>
+            </Poptip>
+        </div>
+        <Table border size='small' :columns="columns_orderData" :data="orderData"></Table>
+        <Page :total="100" show-sizer show-elevator :styles='page' placement="bottom"></Page>
+      </div>
+
+      <div class="orderAllData_chart">
+          <div id="container" style="min-width:400px; height: 400px;"></div>
       </div>
   </div>
 </template>
@@ -35,6 +51,7 @@
             background: #fff;
             padding: 10px;
             overflow: hidden;
+            position: relative;
             div.orderAllData_head_time {
                 margin-bottom: 10px;
                 span:nth-of-type(1) {
@@ -61,9 +78,26 @@
                     border: 1px solid orange;
                     color: orange;
                 }
+
+            }
+            div.timeSelectShow {
+                display: inline;
+                position: absolute;
+                left: 523px;
+                top: 9px;
                 div.search {
                     display: inline-block;
                     button {
+                        width: 80px;
+                        height: 32px;
+                        line-height: 32px;
+                        cursor: pointer;
+                        margin-left: 3px;
+                        display: inline-block;
+                        border-radius: 4px;
+                        text-align: center;
+                        outline: none;
+                        margin-right: 10px;
                         color: #fff;
                         background: #444;
                         font-weight: bolder;
@@ -76,19 +110,209 @@
                 }
             }
         }
+        .orderAllData_table {
+            padding: 10px;
+            margin-top: 20px;
+            background: #fff;
+            overflow: hidden;
+            .help {
+                width: 100%;
+                height: 30px;
+                line-height: 30px;
+                overflow: hidden;
+                margin-bottom: 10px;
+                span {
+                    float: right;
+                    display: inline-block;
+                    width: 30px;
+                    height: 30px;
+                    background: orange;
+                    color: #fff;
+                    font-weight: bolder;
+                    border-radius: 50%;
+                    text-align: center;
+                    font-size: 18px;
+                    cursor: pointer;
+                    margin-bottom: 10px;
+                }
+            }
+        }
+        .orderAllData_chart {
+            margin-top: 20px;
+            padding: 10px;
+            background: #fff;
+        }
     }
 </style>
 <script>
 import citySelect from '../../../components/citySelect.vue'
 import { siblings } from '../../../util/util.js'
+import $ from 'jquery'
+var Highcharts = require('highcharts');
+// 在 Highcharts 加载之后加载功能模块
+require('highcharts/modules/exporting')(Highcharts);
 export default {
     components: {
         "city-select": citySelect
     },
     data () {
         return {
-            timeSelectShow: false
+            timeSelectShow: false,
+            timeLine: '',
+            page: {
+                'float': 'right',
+                'margin-top': '20px'
+            },
+            columns_orderData: [
+                {
+                    title: '地区',
+                    key: 'area'
+                },
+                {
+                    title: '订单数',
+                    key: 'orderNum',
+                    sortable: true
+                },
+                {
+                    title: '订单金额(￥)',
+                    key: 'orderMoney',
+                    sortable: true
+                },
+                {
+                    title: '均单价',
+                    key: 'price',
+                    sortable: true
+                },
+                {
+                    title: '实际支付金额',
+                    key: 'actualMoney',
+                    sortable: true
+                },
+                {
+                    title: '实收率',
+                    key: 'earningMoney'
+                },
+                {
+                    title: '优惠卷订单数',
+                    key: 'discountsNum'
+                },
+                {
+                    title: '平均订单时长(min)',
+                    key: 'time',
+                    width: 150
+                },
+                {
+                    title: '平均订单里程(m)',
+                    key: 'mileage'
+                }
+            ],
+            orderData: [
+                {
+                    area: '无为',
+                    orderNum: '432423',
+                    orderMoney: '23213123',
+                    price: '2',
+                    actualMoney: '323',
+                    earningMoney: '20%',
+                    discountsNum: '234',
+                    time: '232',
+                    mileage: '20',
+                },{
+                    area: '无为',
+                    orderNum: '432423',
+                    orderMoney: '23213123',
+                    price: '2',
+                    actualMoney: '323',
+                    earningMoney: '20%',
+                    discountsNum: '234',
+                    time: '232',
+                    mileage: '20',
+                },{
+                    area: '无为',
+                    orderNum: '432423',
+                    orderMoney: '23213123',
+                    price: '2',
+                    actualMoney: '323',
+                    earningMoney: '20%',
+                    discountsNum: '234',
+                    time: '232',
+                    mileage: '20',
+                },{
+                    area: '无为',
+                    orderNum: '432423',
+                    orderMoney: '23213123',
+                    price: '2',
+                    actualMoney: '323',
+                    earningMoney: '20%',
+                    discountsNum: '234',
+                    time: '232',
+                    mileage: '20',
+                },{
+                    area: '无为',
+                    orderNum: '432423',
+                    orderMoney: '23213123',
+                    price: '2',
+                    actualMoney: '323',
+                    earningMoney: '20%',
+                    discountsNum: '234',
+                    time: '232',
+                    mileage: '20',
+                },{
+                    area: '无为',
+                    orderNum: '432423',
+                    orderMoney: '23213123',
+                    price: '2',
+                    actualMoney: '323',
+                    earningMoney: '20%',
+                    discountsNum: '234',
+                    time: '232',
+                    mileage: '20',
+                },{
+                    area: '无为',
+                    orderNum: '432423',
+                    orderMoney: '23213123',
+                    price: '2',
+                    actualMoney: '323',
+                    earningMoney: '20%',
+                    discountsNum: '234',
+                    time: '232',
+                    mileage: '20',
+                },{
+                    area: '无为',
+                    orderNum: '432423',
+                    orderMoney: '23213123',
+                    price: '2',
+                    actualMoney: '323',
+                    earningMoney: '20%',
+                    discountsNum: '234',
+                    time: '232',
+                    mileage: '20',
+                },{
+                    area: '无为',
+                    orderNum: '432423',
+                    orderMoney: '23213123',
+                    price: '2',
+                    actualMoney: '323',
+                    earningMoney: '20%',
+                    discountsNum: '234',
+                    time: '232',
+                    mileage: '20',
+                },{
+                    area: '无为',
+                    orderNum: '432423',
+                    orderMoney: '23213123',
+                    price: '2',
+                    actualMoney: '323',
+                    earningMoney: '20%',
+                    discountsNum: '234',
+                    time: '232',
+                    mileage: '20',
+                }
+            ]
         }
+    },
+    mounted () {
+        this.initChart()
     },
     methods: {
         handleClick (e) {
@@ -98,10 +322,125 @@ export default {
             }
             e.target.setAttribute('class', 'active')
             if (e.target.innerHTML === '指定时间段') {
-                //this.timeSelectShow = true
-            }       
+                this.timeSelectShow = true
+            } else {
+                this.timeSelectShow = false
+                this.timeLine = ''
+            }
         },
-        searchByTimeLine () {}
+        searchByTimeLine () {},
+        initChart () {
+            var options = {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: '堆叠柱形图'
+                },
+                credits:{
+                    enabled:false
+                },
+                exporting:{
+                    enabled:false
+                },
+                xAxis: {
+                    categories: ['苹果', '橘子', '梨', '葡萄', '香蕉']
+                },
+                yAxis: [{ // Primary yAxis
+                            labels: {
+                                format: '{value}°C',
+                                style: {
+                                    color: Highcharts.getOptions().colors[2]
+                                }
+                            },
+                            title: {
+                                text: '温度',
+                                style: {
+                                    color: Highcharts.getOptions().colors[2]
+                                }
+                            },
+                            opposite: true
+                        }, { // Secondary yAxis
+                            gridLineWidth: 0,
+                            title: {
+                                text: '降雨量',
+                                style: {
+                                    color: Highcharts.getOptions().colors[0]
+                                }
+                            },
+                            labels: {
+                                format: '{value} mm',
+                                style: {
+                                    color: Highcharts.getOptions().colors[0]
+                                }
+                            }
+                        }, { // Tertiary yAxis
+                            gridLineWidth: 0,
+                            title: {
+                                text: '海平面气压',
+                                style: {
+                                    color: Highcharts.getOptions().colors[1]
+                                }
+                            },
+                            labels: {
+                                format: '{value} mb',
+                                style: {
+                                    color: Highcharts.getOptions().colors[1]
+                                }
+                            },
+                            opposite: true
+                        }],
+                legend: {
+                    align: 'center',
+                    x: 0,
+                    verticalAlign: 'bottom',
+                    y: 0,
+                    floating: false,
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                    // borderColor: '#CCC',
+                    // borderWidth: 1,
+                    shadow: false
+                },
+                tooltip: {
+                    formatter: function () {
+                        return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + this.y + '<br/>' +
+                            '总量: ' + this.point.stackTotal;
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true,
+                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                            style: {
+                                textShadow: '0 0 3px black'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: '小张',
+                    data: [5, 3, 4, 7, 2]
+                }, {
+                    name: '小彭',
+                    data: [2, 2, 3, 2, 1]
+                }, {
+                    name: '小潘',
+                    data: [3, 4, 4, 2, 5]
+                }, {
+                    name: '温度',
+                    type: 'spline',
+                    data: [7.0, 6.9, 9.5,6.9, 9.5],
+                    tooltip: {
+                        valueSuffix: ' °C'
+                    }
+                }]
+            }
+
+            new Highcharts.chart('container', options);
+        }
     }
 }
 </script>

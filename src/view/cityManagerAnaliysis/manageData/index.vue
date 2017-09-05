@@ -5,6 +5,7 @@
         </Breadcrumb>
         <div id="cityManagerData_head">
             <div class="cityManageData_month">
+            <div id="demo"></div>
                 <span>月份:</span>
                 <DatePicker type="date" placeholder="选择日期" style="width: 216px"></DatePicker>
             </div>
@@ -20,7 +21,6 @@
             <Button type="warning" @click="exportModal = true">导入数据</Button>
             <Button class="cancel">删除</Button>
             <span>*每月10号后，不可编辑和删除上月数据</span>
-
 
             <Table class="cityManage_table" border size='small' :columns="columns4" :data="data1"></Table>
             <Page :total="100" show-sizer show-elevator :styles='page' placement="top"></Page>
@@ -84,12 +84,7 @@
                 </div>
                 <div class="managerData_upload_uploadFile">
                     <span>选择文件:</span>
-                    <Upload
-                        :before-upload="handleUpload"
-                        class="upload"
-                        action="">
-                        <Button type="ghost" style="width: 216px;" icon="ios-cloud-upload-outline">选择要上传文件的文件</Button>
-                    </Upload>
+                    <input class="upload" type="file" @change="importExcel($event.target)" placeholder=""/>
                 </div>
                 <div class="managerData_upload_download">
                     <span>*请选择xls、xlsx格式文件</span>
@@ -118,210 +113,221 @@
 </template>
 
 <style lang='scss' scoped type="text/css">
-    #cityManagerData_body {
+#cityManagerData_body {
+    width: 100%; // border: 1px solid #dddee1;
+    background: #ececec;
+    border-radius: 4px;
+    .Breadcrumb {
         width: 100%;
-        // border: 1px solid #dddee1;
-        background: #ececec;
-        border-radius: 4px;
-        .Breadcrumb {
-            width: 100%;
-            height: 30px;
-            font-size: 16px;
-            line-height: 30px;
-          
-        }
+        height: 30px;
+        font-size: 16px;
+        line-height: 30px;
     }
-    #cityManagerData_head {
-        -moz-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
-        -webkit-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
-        box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
-        display: block;
-        // width: 79%;
-        // position: fixed;
-        // right: 2.3%;
-        // top: 12%;
-        z-index: 10;
-        font-size: 14px;
-        background: #fff;
-        overflow: hidden;
-        box-sizing: border-box;
-        border: 1px solid #eee;
-        padding: 10px 10px 0px 10px;
-        .cityManageData_month {
-            span:nth-of-type(1) {
-                margin-right: 9px;
-            }
-            margin-bottom: 10px;
-        }
-        .cityManageData_area span {
-            width: 70px;
-            height: 30px;
-            line-height: 30px;
-            cursor: pointer;
-            display: inline-block;
-            border: 1px solid #dddee1;
-            border-radius: 4px;
-            text-align: center;
-            margin: 0 5px 10px 5px;
-        }
-        .cityManageData_area span:nth-of-type(1) {
-            border: none;
-            margin: 0;
-            float: left;
-            text-align: left;
-            width: 3%;
-            padding: 0;
-        }
-        // .cityManageData_area span:nth-of-type(1):active {
-        //     color: #f60;
-        // }
-        .cityManageData_area div.cityManageData_area_span span:nth-of-type(1) {
-            width: 70px;
-            margin-left: 4px;
-            margin-right: 9px;
-            text-align: center;
-            padding: 0 3px 0 3px;
-        }
-        .cityManageData_area div.cityManageData_area_span {
-            span.active {
-                background: orange;
-                color: #fff;
-                border: 1px solid #fff;
-                transition: all .1s linear 0s;
-            }
-        }
-        .cityManageData_area div {
-            max-width: 97%;
-            float: left;
-        }
-        .cityManageData_type button {
-            width: 80px;
-            height: 30px;
-            line-height: 30px;
-            outline: none;
-            background: #fff;
-            display: inline-block;
-            border: 1px solid #dddee1;
-            border-radius: 4px;
-            color: #565c6b;
-            text-align: center;
-            margin: 0 5px 10px 5px;
-            cursor: pointer;
-        }
-        .cityManageData_type button.active {
-            color: orange;
-            border: 1px solid orange;
-        }
-        .cityManageData_type span:nth-of-type(1) {
-            border: none;
-            margin: 0;
-            float: left;
-            text-align: left;
-            width: 40px;
-            padding: 0;
-        }
-    }
+}
 
-    #cityManage_table {
-        width: 100%;
-        overflow: hidden;
-        background: #fff;
-        box-sizing: border-box;
-        padding: 20px 10px 20px 10px;
-        // margin-top: 274px;
-        margin-top: 20px;
-        button:nth-of-type(1){
-            margin-right: 10px;
-        }
+#cityManagerData_head {
+    -moz-box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
+    -webkit-box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
+    box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
+    display: block; // width: 79%;
+    // position: fixed;
+    // right: 2.3%;
+    // top: 12%;
+    z-index: 10;
+    font-size: 14px;
+    background: #fff;
+    overflow: hidden;
+    box-sizing: border-box;
+    border: 1px solid #eee;
+    padding: 10px 10px 0px 10px;
+    .cityManageData_month {
         span:nth-of-type(1) {
-            float: right;
-            color: #ccc;
-            font-size: 13px;
-            line-height: 50px;
+            margin-right: 9px;
         }
-        .cityManage_table {
-            margin-top: 20px;
+        margin-bottom: 10px;
+    }
+    .cityManageData_area span {
+        width: 70px;
+        height: 30px;
+        line-height: 30px;
+        cursor: pointer;
+        display: inline-block;
+        border: 1px solid #dddee1;
+        border-radius: 4px;
+        text-align: center;
+        margin: 0 5px 10px 5px;
+    }
+    .cityManageData_area span:nth-of-type(1) {
+        border: none;
+        margin: 0;
+        float: left;
+        text-align: left;
+        width: 3%;
+        padding: 0;
+    } // .cityManageData_area span:nth-of-type(1):active {
+    //     color: #f60;
+    // }
+    .cityManageData_area div.cityManageData_area_span span:nth-of-type(1) {
+        width: 70px;
+        margin-left: 4px;
+        margin-right: 9px;
+        text-align: center;
+        padding: 0 3px 0 3px;
+    }
+    .cityManageData_area div.cityManageData_area_span {
+        span.active {
+            background: orange;
+            color: #fff;
+            border: 1px solid #fff;
+            transition: all .1s linear 0s;
         }
     }
-
-    div.ivu-modal {
-        width: 900px;
+    .cityManageData_area div {
+        max-width: 97%;
+        float: left;
     }
-
-    .editModal_form {
-        div.managerData_upload_month {
-            span:nth-of-type(1) {
-                font-size: 14px;
-                float: left;
-                width: 58px;
-                text-align: right;
-                margin-top: 20px;
-                margin-right: 17px;
-            }
-            .DatePicker {
-                margin-top: 14px;
-            }
-        }
-        div.managerData_upload_uploadFile {
-            span:nth-of-type(1) {
-                font-size: 14px;
-                float: left;
-                line-height: 10px;
-                margin-right: 16px;
-                margin-top: 10px;
-            }
-            .upload {
-                margin-top: 30px;
-            }
-        }
-        div.managerData_upload_download {
-            font-size: 13px;
-            span:nth-of-type(1) {
-                display: inline-block;
-                margin-left: 76px;
-                margin-top: 10px;
-                color: #888;
-            }
-            span:nth-of-type(2) {
-                display: inline-block;
-                margin-left: 14px;
-                cursor: pointer;
-                text-decoration: underline;
-            }
-        }
-        p.editModal_head {
-            text-align: left;
-            color: #404040;
-        }
-        div.editModal_content {
-            .city_select {
-                width: 216px;
-            }
-            .big_select {
-                display: inline-block;
-                width: 216px;
-            }
-            .small_select {
-                display: inline-block;
-                width: 216px;
-                position: relative;
-                left: 225px;
-                top: -33px;
-            }
-            .price {
-                margin-top: -30px; 
-                width:296px;
-            }
-            .number { 
-                width:296px;
-            }
-        }
+    .cityManageData_type button {
+        width: 80px;
+        height: 30px;
+        line-height: 30px;
+        outline: none;
+        background: #fff;
+        display: inline-block;
+        border: 1px solid #dddee1;
+        border-radius: 4px;
+        color: #565c6b;
+        text-align: center;
+        margin: 0 5px 10px 5px;
+        cursor: pointer;
     }
-
-    .cancel:hover {
-        border: 1px solid orange;
+    .cityManageData_type button.active {
         color: orange;
+        border: 1px solid orange;
     }
+    .cityManageData_type span:nth-of-type(1) {
+        border: none;
+        margin: 0;
+        float: left;
+        text-align: left;
+        width: 40px;
+        padding: 0;
+    }
+}
+
+#cityManage_table {
+    width: 100%;
+    overflow: hidden;
+    background: #fff;
+    box-sizing: border-box;
+    padding: 20px 10px 20px 10px; // margin-top: 274px;
+    margin-top: 20px;
+    button:nth-of-type(1) {
+        margin-right: 10px;
+    }
+    span:nth-of-type(1) {
+        float: right;
+        color: #ccc;
+        font-size: 13px;
+        line-height: 50px;
+    }
+    .cityManage_table {
+        margin-top: 20px;
+    }
+}
+
+div.ivu-modal {
+    width: 900px;
+}
+
+.editModal_form {
+    div.managerData_upload_month {
+        span:nth-of-type(1) {
+            font-size: 14px;
+            float: left;
+            width: 58px;
+            text-align: right;
+            margin-top: 20px;
+            margin-right: 17px;
+        }
+        .DatePicker {
+            margin-top: 14px;
+        }
+    }
+    div.managerData_upload_uploadFile {
+        margin-top: 20px;
+        span:nth-of-type(1) {
+            font-size: 14px;
+            float: left;
+            line-height: 10px;
+            margin-right: 16px;
+            margin-top: 10px;
+        }
+        .upload {
+            display: inline-block;
+            width: 216px;
+            height: 32px;
+            line-height: 1.5;
+            outline: none;
+            padding: 4px 7px;
+            font-size: 12px;
+            border: 1px solid #dddee1;
+            border-radius: 4px;
+            color: #495060;
+            background-color: #fff;
+            background-image: none;
+            position: relative;
+            cursor: text;
+            transition: border 0.2s ease-in-out, background 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+    }
+    div.managerData_upload_download {
+        font-size: 13px;
+        span:nth-of-type(1) {
+            display: inline-block;
+            margin-left: 76px;
+            margin-top: 10px;
+            color: #888;
+        }
+        span:nth-of-type(2) {
+            display: inline-block;
+            margin-left: 14px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    }
+    p.editModal_head {
+        text-align: left;
+        color: #404040;
+    }
+    div.editModal_content {
+        .city_select {
+            width: 216px;
+        }
+        .big_select {
+            display: inline-block;
+            width: 216px;
+        }
+        .small_select {
+            display: inline-block;
+            width: 216px;
+            position: relative;
+            left: 225px;
+            top: -33px;
+        }
+        .price {
+            margin-top: -30px;
+            width: 296px;
+        }
+        .number {
+            width: 296px;
+        }
+    }
+}
+
+.cancel:hover {
+    border: 1px solid orange;
+    color: orange;
+}
 </style>
 
 <script>
@@ -332,7 +338,7 @@ export default {
     components: {
         "city-select": citySelect
     },
-    data () {
+    data() {
         return {
             page: {
                 'float': 'right',
@@ -359,19 +365,19 @@ export default {
                     { required: true, message: '请选择地区', trigger: 'change' }
                 ],
                 type: [
-                    { required: true, message: '请选择大类', trigger: 'blur'}
+                    { required: true, message: '请选择大类', trigger: 'blur' }
                 ],
                 bigType: [
-                    { required: true, message: '请选择大类', trigger: 'blur'}
+                    { required: true, message: '请选择大类', trigger: 'blur' }
                 ],
                 smallType: [
-                    { required: true, message: '请选择小类', trigger: 'blur'}
+                    { required: true, message: '请选择小类', trigger: 'blur' }
                 ],
                 price: [
-                    { required: true, type: 'number', message: '请输入单价', trigger: 'blur'}
+                    { required: true, type: 'number', message: '请输入单价', trigger: 'blur' }
                 ],
                 num: [
-                    { required: true, type: 'number', message: '请输入数量', trigger: 'blur'}
+                    { required: true, type: 'number', message: '请输入数量', trigger: 'blur' }
                 ]
             },
             columns4: [
@@ -468,22 +474,22 @@ export default {
             delIndex: ''
         }
     },
-    mounted () {
+    mounted() {
     },
     methods: {
-        ok () {
+        ok() {
             this.$Message.info('点击了确定');
         },
-        handleUpload (file) {
+        handleUpload(file) {
             this.file = file;
             var _this = this
             this.isUploadPercent = true
-            var timer = setInterval(function () {
+            var timer = setInterval(function() {
                 _this.uploadPercent++
                 if (_this.uploadPercent === 100) {
                     clearInterval(timer)
                     _this.$Message.success('上传成功');
-                    setTimeout( function () {
+                    setTimeout(function() {
                         _this.isUploadPercent = false
                         _this.exportModal = false
                         _this.uploadPercent = 0
@@ -492,7 +498,7 @@ export default {
             }, 100)
             return false;
         },
-        upload () {
+        upload() {
             this.loadingStatus = true;
             setTimeout(() => {
                 this.file = null;
@@ -500,7 +506,7 @@ export default {
                 this.$Message.success('上传成功')
             }, 1500);
         },
-        show (index, row) {
+        show(index, row) {
             this.editModal = true
             console.log(row)
             this.editMonth = row.month
@@ -513,7 +519,7 @@ export default {
             this.editValidate.num = row.num
             console.log(this.editValidate)
         },
-        remove (index) {
+        remove(index) {
             this.delIndex = index
             // this.$Modal.confirm({
             //     title: 'Warning',
@@ -524,11 +530,11 @@ export default {
             // })
             this.delModal = true
         },
-        closeDelModal () {
+        closeDelModal() {
             this.data1.splice(this.delIndex, 1)
             this.delModal = false
         },
-        handleSubmit (name) {
+        handleSubmit(name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
                     this.$Message.success('提交成功!');
@@ -537,16 +543,78 @@ export default {
                 }
             })
         },
-        handleReset (name) {
+        handleReset(name) {
             this.$refs[name].resetFields();
             this.editModal = false
         },
-        handleClick (e) {
+        handleClick(e) {
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
                 elems[i].setAttribute('class', '')
             }
-            e.target.setAttribute('class', 'active')            
+            e.target.setAttribute('class', 'active')
+        },
+        importExcel(obj) {
+            if (!obj.files) {
+                return;
+            }
+            let file = obj.files[0],
+                types = file.name.split('.')[1],
+                fileType = ["xlsx", "xlc", "xlm", "xls", "xlt", "xlw", "csv"].some(item => item === types);
+            if (!fileType) {
+                alert("格式错误！请重新选择");
+                return;
+            }
+            this.file2Xce(file).then(tabJson => {
+                if (tabJson && tabJson.length > 0) {
+                    // this.tableHeader = Object.keys(tabJson[0]);
+                    // this.tableTbody = tabJson;
+                    console.log(tabJson)
+                    var _this = this
+                    this.axios.get('/baseData/api/v1/importData', {
+                        params: {
+                            data: JSON.stringify(tabJson),
+                            userId: 123424
+                        }
+                    })
+                    .then(function (res) {
+                        console.log(res.data)
+                    })
+                    .catch(function (err) {
+                        console.log('err', err)
+                    });
+                    // this.axios({
+                    //     url: '/baseData/api/v1/importData',
+                    //     method: 'get',
+                    //     headers: {
+                    //         'Content-Type': 'application/x-www-form-urlencoded'
+                    //     },
+                    //     params:{
+                    //         data: JSON.stringify(tabJson),
+                    //         userId: 123424
+                    //     }
+                    // })
+                    // .then((res) => {
+                    //     console.log(res)
+                    // })
+                    // .then( (err) => {
+                    //     console.log(err)
+                    // })
+                }
+            });
+        },
+        file2Xce(file) {
+            return new Promise(function (resolve, reject) {
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    let data = e.target.result;
+                    this.wb = XLSX.read(data, {
+                        type: 'binary'
+                    });
+                    resolve(XLSX.utils.sheet_to_json(this.wb.Sheets[this.wb.SheetNames[0]]));
+                };
+                reader.readAsBinaryString(file);
+            });
         }
     }
 }
