@@ -65,6 +65,10 @@ export default {
         this.axios.get('/beefly/record/api/v1/page',{params:{accessToken:this.$store.state.token}})
         .then(function (res) {
             _this.data = res.data.data.length>0?res.data.data:[]
+            var message = res.data.message;
+            if(message === '用户登录超时'){
+                _this.$router.push('/login')
+            }
             if (res.data.totalPage > 1) {
                 _this.pageShow = true
             }
