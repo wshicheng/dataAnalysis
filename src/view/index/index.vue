@@ -107,7 +107,7 @@ export default {
 }
 
 .layout-content-main {
-    background: #ffffff;
+   
     height:100%;
     border-radius: 4px;
     margin-left: 20px;

@@ -3,7 +3,7 @@
         <div>
             <!--车辆运营状态分布（运营中 非运营）-->
         </div>
-        <div id="container2" style="height:400px"></div>
+        <div id="container2" ></div>
     </div>
 </template>
 <script>
@@ -25,8 +25,14 @@ export default {
                     plotBorderWidth: null,
                     plotShadow: false
                 },
+                credits:{
+                    enabled:false
+                },
+                exporting:{
+                    enabled:false
+                },
                 title: {
-                    text: '车辆运营状态分布'
+                    text: ''
                 },
                 tooltip: {
                     headerFormat: '{series.name}<br>',
@@ -78,9 +84,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-#container {
-    width: 400px;
-    height: 300px;
+#container2 {
+    width: 100%;
+    height: 240px;
 }
 </style>
 

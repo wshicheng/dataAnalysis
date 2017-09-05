@@ -19,7 +19,7 @@
                 <Button type="warning" @click="handleAdd">添加账号</Button>
             </Col>
             <Table :columns="columns" :data="data"></Table>
-            <Page :total="totalListNum" class="tableGrid_page" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
+            <Page :total="totalListNum" class="tableGrid_page" placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </Row>
            <!-- 模态框区域 编辑数据 -->
             <Modal v-model="editModal" width="800px" :styles="{top: '20%'}" class="editModal_form">
@@ -176,7 +176,7 @@ export default {
                             },
                             attrs: {
                                 blank: '_blank',
-                                href: '/index/accountManger/userName/' + params.row.userName
+                                href: '/#/index/accountManger/userName/' + params.row.userName
                             }
                         }, params.row.userName)
                     }
