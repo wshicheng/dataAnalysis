@@ -9,7 +9,7 @@
         </Row>
         <Row class="tableGrid">
             <Table :columns="columns" :data="data"></Table>
-            <Page :total="totalListNum" class="tableGrid_page" placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
+            <Page :total="totalListNum" v-show="pageShow" class="tableGrid_page" placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </Row>
     </Row>
 </template>
@@ -21,7 +21,7 @@ export default {
             columns: [
                 {
                     title: '月份',
-                    key: 'month',
+                    key: 'dataMonth',
                     render: (h, params) => {
                         return h('a', {
                             style: {
@@ -30,9 +30,9 @@ export default {
                             },
                             attrs: {
                                 blank: '_blank',
-                                href: '#/index/cityManagerAnalysis/month/' + params.row.month
+                                href: '#/index/cityManagerAnalysis/month/' + params.row.dataMonth
                             }
-                        }, params.row.month)
+                        }, params.row.dataMonth)
                     }
                 },
                 {
@@ -41,19 +41,53 @@ export default {
                 },
                 {
                     title: '操作人',
-                    key: 'operatingPerson'
+                    key: 'operator'
                 }
             ],
-            data:this.mockTableData(),
+            data:[],
             totalListNum: 100,
             pageSizeOpts: [10, 20, 30, 40],
-            pageSize: 20,
+            pageSize: 10,
             currentPage: 1,
+            pageShow: false
         }
+    },
+    mounted () {
+        var _this = this
+        this.axios.get('/beefly/record/api/v1/page')
+        .then(function (res) {
+            console.log(res.data)
+            console.log(res.data.data)
+            _this.data = res.data.data
+            if (res.data.totalPage > 1) {
+                _this.pageShow = true
+            }
+            _this.totalListNum = res.data.totalItems
+        })
+        .catch(function (err) {
+            console.log('err', err)
+        });
     },
     methods: {
         handleCurrentPage(currentPage) {
             this.currentPage = currentPage
+            var _this = this
+            this.axios.get('/beefly/record/api/v1/page', {
+                params: {
+                    pageNo: currentPage,
+                    pageSize: _this.pageSize
+                }
+            })
+            .then(function (res) {
+                _this.data = res.data.data
+                if (res.data.totalPage > 1) {
+                    _this.pageShow = true
+                }
+                _this.totalListNum = res.data.totalItems
+            })
+            .catch(function (err) {
+                console.log('err', err)
+            });
         },
         handlePageSize(pageSize) {
             this.pageSize = pageSize
