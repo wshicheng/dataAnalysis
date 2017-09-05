@@ -16,7 +16,6 @@ export default {
     },
     methods: {
         generalCharts() {
-            console.log(Highcharts)
             // 创建图表
             var options = {
                 /*Highcharts 配置*/

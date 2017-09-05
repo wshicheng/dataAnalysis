@@ -5,6 +5,7 @@ import router from '../router/router-config'
 
 let baseURL = 'http://192.168.3.78:5080'
 // let baseURL = 'http://192.168.3.49:5080'
+// let baseURL = 'http://192.168.0.121:5080'
 
 // var instance = axios.create({
 //     baseURL: baseURL,
@@ -14,9 +15,10 @@ let baseURL = 'http://192.168.3.78:5080'
 // });
 
 axios.defaults.baseURL = baseURL;
-axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
+//axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
 
 // axios 配置
 // axios.defaults.timeout = 5000;

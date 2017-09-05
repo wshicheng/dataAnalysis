@@ -154,6 +154,9 @@ import vehicleState from '../../components/Vehicle-state-distribution/index.vue'
      components:{
        'vehicle-operateState':vehicleOperatStateDistribute,
        'vehicle-State':vehicleState
+     },
+     mounted(){
+       console.log(this.$store.state.token)
      }
   }
 </script>

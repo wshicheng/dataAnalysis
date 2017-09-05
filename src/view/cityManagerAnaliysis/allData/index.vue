@@ -5,7 +5,7 @@
         </Breadcrumb>
         <Row class="datePick_zone">
             <time class="month">月份：</time>
-            <DatePicker type="date" placeholder="选择日期" style="width: 200px"></DatePicker>
+            <DatePicker @on-change="queryMonth" type="date" :options="options" format="yyyy-MM-dd"  placeholder="选择日期" style="width: 200px"></DatePicker>
         </Row>
         <Row class="tableGrid">
             <Table :columns="columns" :data="data"></Table>
@@ -15,6 +15,7 @@
 </template>
 <script>
 import $ from 'jquery'
+import moment from 'moment'
 export default {
     data() {
         return {
@@ -49,16 +50,21 @@ export default {
             pageSizeOpts: [10, 20, 30, 40],
             pageSize: 10,
             currentPage: 1,
-            pageShow: false
+            pageShow: false,
+            time:'',
+            options:{
+                disabledDate (date) {
+                    return date&&date.valueOf()> Date.now()
+                }
+            }
         }
     },
     mounted () {
+        console.log(this.$store)
         var _this = this
-        this.axios.get('/beefly/record/api/v1/page')
+        this.axios.get('/beefly/record/api/v1/page',{params:{accessToken:this.$store.state.token}})
         .then(function (res) {
-            console.log(res.data)
-            console.log(res.data.data)
-            _this.data = res.data.data
+            _this.data = res.data.data.length>0?res.data.data:[]
             if (res.data.totalPage > 1) {
                 _this.pageShow = true
             }
@@ -69,13 +75,37 @@ export default {
         });
     },
     methods: {
+        queryMonth(value){
+            console.log(value)
+            var _this = this
+            this.axios.get('/beefly/record/api/v1/page', {
+                params: {
+                    pageNo: this.currentPage,
+                    pageSize: this.pageSize,
+                    time: value.length>0?moment(value).format('YYYY-MM'):'',
+                    accessToken:this.$store.state.token
+                    
+                }
+            })
+            .then(function (res) {
+                _this.data = res.data.data
+                if (res.data.totalPage > 1) {
+                    _this.pageShow = true
+                }
+                _this.totalListNum = res.data.totalItems
+            })
+            .catch(function (err) {
+                console.log('err', err)
+            });
+        },
         handleCurrentPage(currentPage) {
             this.currentPage = currentPage
             var _this = this
             this.axios.get('/beefly/record/api/v1/page', {
                 params: {
                     pageNo: currentPage,
-                    pageSize: _this.pageSize
+                    pageSize: _this.pageSize,
+                    accessToken:this.$store.state.token
                 }
             })
             .then(function (res) {
@@ -90,15 +120,36 @@ export default {
             });
         },
         handlePageSize(pageSize) {
+            var _this = this;
             this.pageSize = pageSize
+            this.axios.get('/beefly/record/api/v1/page', {
+                params: {
+                    pageNo:  this.currentPage,
+                    pageSize:  this.pageSize,
+                    accessToken:this.$store.state.token
+                }
+            })
+            .then(function (res) {
+                _this.data = res.data.data
+                if (res.data.totalPage > 1) {
+                    _this.pageShow = true
+                }
+                _this.totalListNum = res.data.totalItems
+            })
+            .catch(function (err) {
+                console.log('err', err)
+            });
+        },
+        queryData(){
+
         },
         mockTableData(){
             var arr = [];
             for(var i=0;i<10;i++){
                 arr.push({
-                    month: '2017-12',
+                    dataMonth: '2017-12',
                     updateTime: '2018-01-01 10:01:01',
-                    operatingPerson: 'zhouyu' + i 
+                    operator: 'zhouyu' + i 
                     })
             }
             return arr;
