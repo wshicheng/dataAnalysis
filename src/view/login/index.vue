@@ -27,6 +27,7 @@
   </div>
 </template>
 <script>
+import {mapActions,mapState} from 'vuex'
     export default {
         data () {
             return {
@@ -45,10 +46,12 @@
                 }
             }
         },
+       
         mounted () {
-
+            console.log(this.$store)
         },
         methods: {
+            ...mapActions(['setToken']),
             handleSubmit(name) {
                 this.$refs[name].validate((valid) => {
                     if (valid) {
@@ -59,13 +62,20 @@
                                 'Content-Type': 'application/x-www-form-urlencoded'
                             },
                             params:{
-                                'userName': 'admin',
-                                'passWord': '456123'
+                                'userName': this.formInline.user,
+                                'passWord': this.formInline.password
                             }
                         })
                         .then((res) => {
                             console.log(res)
-                            window.localStorage.setItem('token', res.data.data.token)
+                            var resultCode = res.data.resultCode
+                            var message = res.data.message
+                            if(resultCode === 1){
+                                this.$router.push('/')
+                                this.setToken(res.data.data.token)
+                                console.log(this.$store)
+                                 window.localStorage.setItem('token', res.data.data.token)
+                            }
                         })
                         .then( (err) => {
                             console.log(err)

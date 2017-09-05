@@ -5,11 +5,24 @@
             <div class="layout-logoInfo">
                 <i class="iconfont icon-zhanghao1"></i>
                 <span class="accountUserName">管理员</span>
-                <i class="iconfont icon-zhuxiao_logout exit" @click="$router.push('/login')"></i>
+                <i class="iconfont icon-zhuxiao_logout exit" @click="handleLoginOut"></i>
             </div>
         </Menu>
     </div>
 </template>
+<script>
+import {mapActions} from 'vuex'
+    export default {
+        methods:{
+            handleLoginOut(){
+                this.$router.push('/login')
+                this.removeToken()
+                window.localStorage.removeItem('token')
+            },
+            ...mapActions(['removeToken'])
+        }
+    }
+</script>
 <style lang="scss" scoped type="text/css">
 .layout-logo {
     height: 30px;

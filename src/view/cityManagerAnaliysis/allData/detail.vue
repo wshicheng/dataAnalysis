@@ -5,7 +5,7 @@
             <time class="currentMonth">
                 {{currentMonth}}       
             </time>
-            <i @click="handleAplusMonth" class="iconfont right icon-right-arrow "></i>
+            <i ref="next" @click="handleAplusMonth" class="iconfont right icon-right-arrow "></i>
             <div class="title">
                 <h3>城市经营分析</h3>
             </div> 
@@ -53,12 +53,34 @@ import pretend from '../../../components/pretend.vue'
         },
         methods:{
             handleMinusMonth(){
-               var time =  moment(this.currentMonth).subtract(1,'month')
+               var time =  moment(this.currentMonth).subtract(1,'M')
                this.currentMonth = moment(time).format('YYYY-MM')
+               var now = moment()
+               var diff = now.diff(this.currentMonth,'month')
+               console.log(diff)
+                this.$refs.next.setAttribute('class','iconfont right icon-right-arrow')
             },
             handleAplusMonth(){
-                var time =  moment(this.currentMonth).add(1,'month')
-               this.currentMonth = moment(time).format('YYYY-MM')
+                var now = moment()
+                var currentMonth = moment(this.currentMonth);
+                var nextMonth = moment(currentMonth).add(1,'M')
+                var diff = now.diff(this.currentMonth,'month')
+                if((diff-1)<=0){
+                    this.$refs.next.setAttribute('class','iconfont right icon-right-arrow disabled')
+                    this.currentMonth = moment().format('YYYY-MM')
+                    return 
+                }else{
+                    this.currentMonth = moment(nextMonth).format('YYYY-MM')
+                    this.$refs.next.setAttribute('class','iconfont right icon-right-arrow')
+                }
+            }
+        },
+        mounted(){
+            var now = moment()
+            var currentMonth = moment(this.currentMonth);
+            var diff = now.diff(currentMonth,'month')
+            if(diff===0){
+                this.$refs.next.setAttribute('class','iconfont right icon-right-arrow disabled')
             }
         }
     }
@@ -79,6 +101,7 @@ $line-height:40px;
        .title{
            h3{font-size:20px; line-height:$line-height;}
        }
+       i.right.disabled{color:#e05f16;cursor:initial;}
    } 
  
 
