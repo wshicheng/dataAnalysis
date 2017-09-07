@@ -47,6 +47,23 @@ if (window.localStorage.getItem('token')) {
 //     }
 // })
 
+// router.beforeEach((route,from,next)=>{
+//     if(route.path === '/login'){
+//         window.localStorage.removeItem('token')
+//         store.commit(types.LOGIN,'')
+//     }
+//     if(!accessToken&&route.path!=='/login'){
+//         next({path:'/login'})
+//     }else{
+//         if(route.name){
+//             next()
+//         }else{
+//             next({
+//                 path:'/nofound'
+//             })
+//         }
+//     }
+// })
 var vm = new Vue({
     el:"#app",
     store,

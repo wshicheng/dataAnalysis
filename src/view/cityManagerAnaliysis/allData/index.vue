@@ -45,7 +45,7 @@ export default {
                     key: 'operator'
                 }
             ],
-            data:[],
+            data:this.mockTableData(),
             totalListNum: 100,
             pageSizeOpts: [10, 20, 30, 40],
             pageSize: 10,

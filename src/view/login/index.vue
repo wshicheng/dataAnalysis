@@ -48,7 +48,13 @@ import {mapActions,mapState} from 'vuex'
         },
        
         mounted () {
-            console.log(this.$store)
+           // console.log(this.$store)
+           var _this = this;
+           document.body.onkeydown=function(e){
+               if(e.keyCode===13){
+                   _this.handleSubmit('formInline')
+               }
+           }
         },
         methods: {
             ...mapActions(['setToken']),
