@@ -60,7 +60,7 @@ export default {
         }
     },
     mounted () {
-        console.log(this.$store)
+       
         var _this = this
         this.axios.get('/beefly/record/api/v1/page',{params:{accessToken:this.$store.state.token}})
         .then(function (res) {
