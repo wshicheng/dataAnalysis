@@ -45,7 +45,7 @@ export default {
                     key: 'operator'
                 }
             ],
-            data:[],
+            data:this.mockTableData(),
             totalListNum: 100,
             pageSizeOpts: [10, 20, 30, 40],
             pageSize: 10,
@@ -60,11 +60,15 @@ export default {
         }
     },
     mounted () {
-        console.log(this.$store)
+       
         var _this = this
         this.axios.get('/beefly/record/api/v1/page',{params:{accessToken:this.$store.state.token}})
         .then(function (res) {
             _this.data = res.data.data.length>0?res.data.data:[]
+            var message = res.data.message;
+            if(message === '用户登录超时'){
+                _this.$router.push('/login')
+            }
             if (res.data.totalPage > 1) {
                 _this.pageShow = true
             }

@@ -38,6 +38,7 @@ import operatingCost  from '../../../components/operatCosts.vue'
 import operatingAnalysis from '../../../components/operatAnalysis.vue'
 import singleBike from '../../../components/singleBikeIncoming.vue'
 import pretend from '../../../components/pretend.vue'
+import {mapActions,mapGetters} from 'vuex'
     export default {
         components:{
             'base-datas':baseDatas,
@@ -48,16 +49,22 @@ import pretend from '../../../components/pretend.vue'
         },
         data(){
             return {
-                currentMonth:moment().format('YYYY-MM')
+                currentMonth:''
             }
         },
+        computed:{
+            ...mapGetters(['dataMonth'])
+        },
         methods:{
+            ...mapActions(['updateMonth']),
             handleMinusMonth(){
                var time =  moment(this.currentMonth).subtract(1,'M')
                this.currentMonth = moment(time).format('YYYY-MM')
                var now = moment()
                var diff = now.diff(this.currentMonth,'month')
                console.log(diff)
+               console.log(this.updateMonth)
+               this.updateMonth(this.currentMonth)
                 this.$refs.next.setAttribute('class','iconfont right icon-right-arrow')
             },
             handleAplusMonth(){
@@ -73,15 +80,19 @@ import pretend from '../../../components/pretend.vue'
                     this.currentMonth = moment(nextMonth).format('YYYY-MM')
                     this.$refs.next.setAttribute('class','iconfont right icon-right-arrow')
                 }
+                this.updateMonth(this.currentMonth)
             }
         },
         mounted(){
+            this.currentMonth = moment().format('YYYY-MM')
             var now = moment()
             var currentMonth = moment(this.currentMonth);
             var diff = now.diff(currentMonth,'month')
             if(diff===0){
                 this.$refs.next.setAttribute('class','iconfont right icon-right-arrow disabled')
             }
+            this.updateMonth(this.currentMonth)
+            
         }
     }
 </script>

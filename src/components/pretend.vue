@@ -1,10 +1,11 @@
 <template>
   <Row class="pretend">
       <Row class="citySelect">
-          <ul>
+          <!-- <ul>
               <li class="active">全部地区</li>
               <li v-bind:key="cityItem.id" v-for="cityItem of cityLists">{{cityItem.cityName}}</li>
-          </ul>
+          </ul> -->
+        <city-select></city-select>
       </Row>
       <Row class="cityBindTable">
           <ul>
@@ -76,7 +77,11 @@
 </template>
 <script>
 import $ from 'jquery'
+import citySelect from './citySelect.vue'
     export default {
+        components: {
+            "city-select": citySelect
+        },
         data(){
             //this.changeWidth()
             return {
@@ -89,16 +94,28 @@ import $ from 'jquery'
         },
         methods:{
             mockTableDatas(){
-                var arr = []
-                for(let i=0;i<20;i++){
-                    arr.push(
-                        {
-                            id: i,
-                            cityName:Math.floor(Math.random()*100) + '城市'
-                         }
-                    )
-                }
-                return arr;
+                // var arr = []
+                // for(let i=0;i<20;i++){
+                //     arr.push(
+                //         {
+                //             id: i,
+                //             cityName:Math.floor(Math.random()*100) + '城市'
+                //          }
+                //     )
+                // }
+                // return arr;
+                var _this = this
+                this.axios.get('/beefly/user/api/v1/city', {
+                    params: {
+                        accessToken: window.localStorage.getItem('token')
+                    }
+                })
+                .then(function (res) {
+                    var arr = res.data.data
+                })
+                .catch(function (err) {
+                    console.log('err', err)
+                });
             },
             mockTableDatas2(){
                 var arr = []

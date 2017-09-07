@@ -9,12 +9,18 @@ import Login from '../view/login/index.vue'
 // 订单管理模块
 import orderAllData from '../view/orderData/orderAllData/index.vue'
 import dateAndArea from '../view/orderData/dateAndArea/index.vue'
+import NotFoundPage from '../view/nofound/index.vue'
 
 let routes = [
     {
         path: '/',
         component: index,
         children:[
+            {
+                path: '/nofound',
+                component: NotFoundPage,
+                name:'notfound'
+            },
             {
                 path:'/',
                 component:Home,
@@ -24,11 +30,13 @@ let routes = [
             },
             {
                 path: '/index/bikeAllData',
-                component: bikeAllData
+                component: bikeAllData,
+                name:'车辆所有数据'
             },
             {
                 path:'/index/orderAllData',
-                component: orderAllData
+                component: orderAllData,
+                name:'订单所有数据'
             },
             {
                 path:'/index/dateAndArea',
@@ -36,25 +44,30 @@ let routes = [
             },
             {
                 path: '/index/managerData',
-                component: managerData
+                component: managerData,
+                name:'管理数据'
             },
             {
                 path:'/index/cityManagerAnalysis',
-                component: cityManagerAnalysis
+                component: cityManagerAnalysis,
+                name:'城市经营分析'
             },
             {
                 path:'/index/accountManager',
-                component: accountManager
+                component: accountManager,
+                name:'账号管理'
             }
         ]
     },
     {
         path:'/index/cityManagerAnalysis/month/:month',
-        component: cityManagerAnalysisByMonth
+        component: cityManagerAnalysisByMonth,
+        name:'经营分析明细'
     },
     {
         path:'/login',
-        component:Login
+        component:Login,
+        name:'登录'
     }
 ]
 

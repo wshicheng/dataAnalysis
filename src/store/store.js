@@ -1,9 +1,13 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
 import * as types from './types'
+import allDataDetailMoudle from './modules/allDataDetail'
 
 Vue.use(Vuex);
 export default new Vuex.Store({
+    modules:{
+        allDataDetailMoudle:allDataDetailMoudle
+    },
     state: {
         user: {},
         token: '',

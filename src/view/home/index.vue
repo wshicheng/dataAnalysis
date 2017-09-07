@@ -1,6 +1,6 @@
 <template>
   <Row>
-      <Row class="block">
+      <Row class="block user">
         <h4>今日用户</h4>
         <Col span="6">
           <div class="container">
@@ -44,6 +44,43 @@
             <!-- <div class="compare">
               <i class="iconfont icon-tubiao101 "></i><i class="compare">较昨日：</i><span class="compare">+300.00</span>
             </div> -->
+          </div>
+        </Col>
+      </Row>
+       <Row class="block order">
+        <h4>今日订单
+          <i class="iconfont icon-gengduo"></i>
+        </h4>
+        <Col span="6">
+          <div class="container">
+            <div class="item">
+              <span class="title">订单数</span>
+              <span class="num">2346</span>
+            </div>
+          </div>
+        </Col>
+         <Col span="6">
+          <div class="container">
+            <div class="item">
+              <span class="title">订单金额</span>
+              <span class="num">2346</span>
+            </div>
+          </div>
+        </Col>
+         <Col span="6">
+          <div class="container">
+            <div class="item">
+              <span class="title">实收率</span>
+              <span class="num">23%</span>
+            </div>
+          </div>
+        </Col>
+         <Col span="6">
+          <div class="container">
+            <div class="item">
+              <span class="title">投产率</span>
+              <span class="num">23%</span>
+            </div>
           </div>
         </Col>
       </Row>
@@ -176,7 +213,10 @@ import vehicleState from '../../components/Vehicle-state-distribution/index.vue'
       font-size:$fontSize;
       font-family:$fontFamily;
       font-weight: $fontWeight;
-      margin-bottom: $marginBottom
+      margin-bottom: $marginBottom;
+      i.icon-gengduo{float:right;cursor:pointer;
+        &:hover{color:green;}
+      }
     }
     .container{
       width:100%;
