@@ -35,8 +35,10 @@
     "webpack-merge": "^4.1.0"
   },
   "devDependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "element-ui": "^1.4.3",
-    "element-upload": "^1.0.0"
+    "element-upload": "^1.0.0",
+    "moment": "^2.18.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

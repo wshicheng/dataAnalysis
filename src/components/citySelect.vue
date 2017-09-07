@@ -1,54 +1,9 @@
 <template>
-    <div class="citySelect_area">
+    <div class="citySelect_area" style="margin-bottom: 5px;">
         <span>地区:</span>
-        <div class="citySelect_area_span" @click.stop.prevent="areaClick">
-            <span class="active" @click.stop.prevent="allAreaClick">全部地区</span>
-            <span>无为</span>
-            <span>禹州</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>北京地区</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
-            <span>庐江</span>
+        <div class="citySelect_area_span" >
+            <span class="active" @click="areaClick">全部地区</span>
+            <span @click="areaClick" v-for="item in cityList" :myId='item.code'>{{item.name}}</span>
         </div>
     </div>
 </template>
@@ -78,7 +33,8 @@
 // }
 .citySelect_area div.citySelect_area_span span:nth-of-type(1) {
     width: 80px;
-    margin-left: 4px;
+    margin-left: 5px;
+    border: 1px solid #dddee1;
     margin-right: 9px;
     text-align: center;
     padding: 0 3px 0 3px;
@@ -99,25 +55,66 @@
 </style>
 <script>
 import $ from 'jquery'
+import {siblings} from '../util/util.js'
 export default {
     data () {
         return {
-
+            cityList: [],
+            citySelect: []
         }
     },
     methods: {
-        areaClick () {
-            $('.citySelect_area_span span').click(function (e) {
-                e.preventDefault();
-                $(this).toggleClass('active')    
-            })
+        areaClick (e) {
+            var that = this
+            var id = e.target.getAttribute('myid')
+            console.log(id)
+            var res = siblings(e.target)
+            if(e.target.innerText==='全部地区'){
+                e.target.setAttribute('class','active')
+                for(var i=0;i<res.length;i++){
+                    res[i].setAttribute('class','')
+                }
+            }else{
+                var id = e.target.getAttribute('myid')
+                if(this.citySelect.indexOf(id)===-1){
+                    this.citySelect.push(id)
+                    console.log(this.citySelect)
+                }else{
+                    var index = this.citySelect.indexOf(id)
+                    console.log(index)
+                    this.citySelect.splice(index,1)
+                    console.log(this.citySelect)
+                }
+                
+                if(e.target.getAttribute('class')){
+                    e.target.setAttribute('class','')
+                }else{
+                    e.target.setAttribute('class','active')
+                }
+                // e.target.setAttribute('class','active') 
+                for(var i=0;i<siblings(e.target).length;i++){
+                    siblings(e.target)[0].setAttribute('class','')
+                }
+            }
+            
+            
+            
         },  
-        allAreaClick () {
-            $('.citySelect_area_span span.active').rmoveClass('active')
-        }
+        
     },
     mounted () {
-        // e.preventDefault()
+        var _this = this
+        this.axios.get('/beefly/user/api/v1/city', {
+            params: {
+                accessToken: window.localStorage.getItem('token')
+            }
+        })
+        .then(function (res) {
+            _this.cityList = res.data.data
+        })
+        .catch(function (err) {
+            console.log('err', err)
+        });
     }
 }
 </script>

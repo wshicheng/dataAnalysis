@@ -1,12 +1,14 @@
 import index from '../view/index/index.vue'
 import bikeAllData from '../view/bikeData/bikeAllData/index.vue'
-import orderAllData from '../view/orderData/orderAllData/index.vue'
 import cityManagerAnalysis from '../view/cityManagerAnaliysis/allData/index.vue'
 import cityManagerAnalysisByMonth from '../view/cityManagerAnaliysis/allData/detail.vue'
 import managerData from '../view/cityManagerAnaliysis/manageData/index.vue'
 import accountManager from '../view/accountManager/indev.vue'
 import Home from '../view/home/index.vue'
 import Login from '../view/login/index.vue'
+// 订单管理模块
+import orderAllData from '../view/orderData/orderAllData/index.vue'
+import dateAndArea from '../view/orderData/dateAndArea/index.vue'
 
 let routes = [
     {
@@ -27,6 +29,10 @@ let routes = [
             {
                 path:'/index/orderAllData',
                 component: orderAllData
+            },
+            {
+                path:'/index/dateAndArea',
+                component: dateAndArea
             },
             {
                 path: '/index/managerData',
