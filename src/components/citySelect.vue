@@ -1,6 +1,6 @@
 <template>
     <div class="citySelect_area" style="margin-bottom: 5px;">
-        <span>地区:</span>
+        <span>城市:</span>
         <div class="citySelect_area_span" >
             <span class="active" @click="areaClick">全部地区</span>
             <span @click="areaClick" v-bind:key="item.name" v-for="item in cityList" :myId='item.code'>{{item.name}}</span>
@@ -71,6 +71,8 @@ export default {
             var res = siblings(e.target)
             if(e.target.innerText==='全部地区'){
                 e.target.setAttribute('class','active')
+                // 点击全部地区，讲选择数组清空，监听到citySelect改变，从而启动vuex的setCityList方法
+                this.citySelect = []
                 for(var i=0;i<res.length;i++){
                     res[i].setAttribute('class','')
                 }
@@ -81,7 +83,6 @@ export default {
                     console.log(this.citySelect)
                 }else{
                     var index = this.citySelect.indexOf(id)
-                    console.log(index)
                     this.citySelect.splice(index,1)
                     console.log(this.citySelect)
                 }
@@ -96,11 +97,10 @@ export default {
                     siblings(e.target)[0].setAttribute('class','')
                 }
             }
-            
-            
-            
         },  
-        
+        citySelectChange () {
+            this.$store.dispatch('setCityList', this.citySelect)
+        }
     },
     mounted () {
         var _this = this
@@ -111,10 +111,15 @@ export default {
         })
         .then(function (res) {
             _this.cityList = res.data.data
+            _this.$store.dispatch('keepCitys', res.data.data)
+
         })
         .catch(function (err) {
             console.log('err', err)
         });
+    },
+    watch: {
+        'citySelect': 'citySelectChange'
     }
 }
 </script>

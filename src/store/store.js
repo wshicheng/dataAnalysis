@@ -11,7 +11,9 @@ export default new Vuex.Store({
     state: {
         user: {},
         token: '',
-        title: ''
+        title: '',
+        cityList: [],
+        keepCitys: []
     },
     mutations: {
         [types.LOGIN](state, data){
@@ -24,6 +26,12 @@ export default new Vuex.Store({
         },
         [types.TITLE](state, data){
             state.title = data;
+        },
+        cityList_mutation(state, list) {
+            state.cityList = list
+        },
+        keepCitys_mutation( state, list) {
+            state.keepCitys = list
         }
     },
     actions:{
@@ -32,6 +40,12 @@ export default new Vuex.Store({
         },
         removeToken({commit}){
             commit(types.LOGOUT)
+        },
+        setCityList ({commit}, list) {
+            commit('cityList_mutation', list)
+        },
+        keepCitys ( {commit}, list) {
+            commit( 'keepCitys_mutation', list)
         }
     }
 })
