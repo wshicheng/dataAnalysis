@@ -24,6 +24,7 @@ let routes = [
             {
                 path:'/',
                 component:Home,
+                name:'home',
                 meta: {
                     requireAuth: true,
                 },

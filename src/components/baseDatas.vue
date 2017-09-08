@@ -1,12 +1,14 @@
 <template>
     <!--基础数据-->
     <div class="fiexedAssets">
+  
         <Table id="fiexedAssets" min-width="1180" height="400" border :columns="columns2" :data="data4"></Table>
     </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
 import $ from 'jquery'
+
 export default {
     data() {
         return {
@@ -611,7 +613,8 @@ export default {
                     }
                 }
             ],
-            data4: []
+            data4: [],
+          
         }
     },
     computed: {
@@ -699,194 +702,202 @@ export default {
                     dataMonth: that.dataMonth,
                     type: 1
                 }
-            }).then((response) => {
-                var data = response.data.data
-                console.log(data)
-                var arr = [];
-                for (var i = 0; i < data.length; i++) {
-                    if (i < data.length - 1) {
-                        arr.push(
-                            {
-                                // 城市
-                                cityName: data[i].city,
-                                //车辆数量
-                                beefly: {
-                                    num: data[i].bikeNum,
-                                    money: data[i].bikeNum,
-                                },
-                                //电池
-                                Battery: {
-                                    num: data[i].battNum,
-                                    money: data[i].battMoney,
-                                },
-                                // 充电站
-                                ChargingStation: {
-                                    build: data[i].chargeBuild,
-                                    cabinet: data[i].chargeCabinet
-                                },
-                                //机动车
-                                Tricycle: {
-                                    num: data[i].truckNum,
-                                    money: data[i].truckMoney
-                                },
-                                //运维工具车
-                                Toolcar: {
-                                    num: data[i].carNum,
-                                    money: data[i].carMoney
-                                },
-                                // 物流成本
-                                transCost: {
-                                    money: data[i].transMoney
-                                },
-                                //办公成本
-                                officeCost: {
-                                    money: data[i].officeMoney
-                                },
-                                // 其他金额
-                                otherCost: {
-                                    money: data[i].otherMoney
-                                },
-                                // 人员成本
-                                personnelCost: {
-                                    money: data[i].personnelMoney
-                                },
-                                // 房租
-                                rentCost: {
-                                    money: data[i].rentMoney
-                                },
-                                //水电
-                                hydropoer: {
-                                    money: data[i].hydropower
-                                },
-                                // 经营费用
-                                manageCost: {
-                                    money: data[i].manageMoney
-                                },
-                                openCost: {
-                                    money: data[i].openMoney
-                                },
-                                total: {
-                                    money: data[i].total
+                }).then((response) => {
+                    var data = response.data.data
+                    console.log(data)
+                    var arr = [];
+                    for (var i = 0; i < data.length; i++) {
+                        if (i < data.length - 1) {
+                            arr.push(
+                                {
+                                    // 城市
+                                    cityName: data[i].city,
+                                    //车辆数量
+                                    beefly: {
+                                        num: data[i].bikeNum,
+                                        money: data[i].bikeNum,
+                                    },
+                                    //电池
+                                    Battery: {
+                                        num: data[i].battNum,
+                                        money: data[i].battMoney,
+                                    },
+                                    // 充电站
+                                    ChargingStation: {
+                                        build: data[i].chargeBuild,
+                                        cabinet: data[i].chargeCabinet
+                                    },
+                                    //机动车
+                                    Tricycle: {
+                                        num: data[i].truckNum,
+                                        money: data[i].truckMoney
+                                    },
+                                    //运维工具车
+                                    Toolcar: {
+                                        num: data[i].carNum,
+                                        money: data[i].carMoney
+                                    },
+                                    // 物流成本
+                                    transCost: {
+                                        money: data[i].transMoney
+                                    },
+                                    //办公成本
+                                    officeCost: {
+                                        money: data[i].officeMoney
+                                    },
+                                    // 其他金额
+                                    otherCost: {
+                                        money: data[i].otherMoney
+                                    },
+                                    // 人员成本
+                                    personnelCost: {
+                                        money: data[i].personnelMoney
+                                    },
+                                    // 房租
+                                    rentCost: {
+                                        money: data[i].rentMoney
+                                    },
+                                    //水电
+                                    hydropoer: {
+                                        money: data[i].hydropower
+                                    },
+                                    // 经营费用
+                                    manageCost: {
+                                        money: data[i].manageMoney
+                                    },
+                                    openCost: {
+                                        money: data[i].openMoney
+                                    },
+                                    total: {
+                                        money: data[i].total
+                                    }
+
                                 }
+                            )
+                        }
+                        if (i === data.length - 1) {
+                            this.countObj = data[data.length - 1]
+                        }
 
-                            }
-                        )
                     }
-                    if (i === data.length - 1) {
-                        this.countObj = data[data.length - 1]
+                    console.log(arr)
+                    console.log(this.countObj)
+                    that.data4 = arr
+                    var html = ''
+                    for (var i = 0; i < 1; i++) {
+                        html += `
+                    <tr class="ivu-table-row">
+                        <td class="middle ivu-table-hidden">
+                            <div class="ivu-table-cell ivu-table-hidden">
+                                <div>城市15</div>
+                            </div>
+                        </td>
+                        <td class="ivu-table-column-center">
+                            <div class="ivu-table-cell">
+                                <div style="height: 30px;">
+                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.bikeNum}</span>
+                                    <span
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.bikeMoney}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="ivu-table-column-center">
+                            <div class="ivu-table-cell">
+                                <div style="height: 30px;">
+                                    <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.battNum}</span>
+                                    <span
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.battMoney}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="ivu-table-column-center">
+                            <div class="ivu-table-cell">
+                                <div style="height: 30px;">
+                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.chargeBuild}</span>
+                                    <span
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.chargeCabinet}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="ivu-table-column-center">
+                            <div class="ivu-table-cell">
+                                <div style="height: 30px;">
+                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.carNum}</span>
+                                    <span
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.carMoney}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="ivu-table-column-center">
+                            <div class="ivu-table-cell">
+                                <div style="height: 30px;">
+                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.truckNum}</span>
+                                    <span
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.truckMoney}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="ivu-table-column-center">
+                            <div class="ivu-table-cell">
+                                <div>${countObj.transMoney}</div>
+                            </div>
+                        </td>
+                        <td class="ivu-table-column-center">
+                            <div class="ivu-table-cell">
+                                <div>${countObj.officeMoney }</div>
+                            </div>
+                        </td>
+                        <td class="ivu-table-column-center">
+                            <div class="ivu-table-cell">
+                                <div>${countObj.otherMoney}</div>
+                            </div>
+                        </td>
+                        <td class="ivu-table-column-center">
+                            <div class="ivu-table-cell">
+                                <div>${countObj.personnelMoney}</div>
+                            </div>
+                        </td>
+                        <td class="ivu-table-column-center">
+                            <div class="ivu-table-cell">
+                                <div>${countObj.rentMoney}</div>
+                            </div>
+                        </td>
+                        <td class="ivu-table-column-center">
+                            <div class="ivu-table-cell">
+                                <div>${countObj.hydropower}</div>
+                            </div>
+                        </td>
+                        <td class="ivu-table-column-center">
+                            <div class="ivu-table-cell">
+                                <div>${countObj.manageMoney}</div>
+                            </div>
+                        </td>
+                        <td class="ivu-table-column-center">
+                            <div class="ivu-table-cell">
+                                <div>${countObj.openMoney}</div>
+                            </div>
+                        </td>
+                    
+                    </tr>
+                    `
                     }
-
-                }
-                console.log(arr)
-                console.log(this.countObj)
-                that.data4 = arr
-                var html = ''
-                for (var i = 0; i < 1; i++) {
-                    html += `
-                   <tr class="ivu-table-row">
-                    <td class="middle ivu-table-hidden">
-                        <div class="ivu-table-cell ivu-table-hidden">
-                            <div>城市15</div>
-                        </div>
-                    </td>
-                    <td class="ivu-table-column-center">
-                        <div class="ivu-table-cell">
-                            <div style="height: 30px;">
-                            <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.bikeNum}</span>
-                                <span
-                                    style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.bikeMoney}</span>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="ivu-table-column-center">
-                        <div class="ivu-table-cell">
-                            <div style="height: 30px;">
-                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.battNum}</span>
-                                <span
-                                    style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.battMoney}</span>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="ivu-table-column-center">
-                        <div class="ivu-table-cell">
-                            <div style="height: 30px;">
-                            <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.chargeBuild}</span>
-                                <span
-                                    style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.chargeCabinet}</span>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="ivu-table-column-center">
-                        <div class="ivu-table-cell">
-                            <div style="height: 30px;">
-                            <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.carNum}</span>
-                                <span
-                                    style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.carMoney}</span>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="ivu-table-column-center">
-                        <div class="ivu-table-cell">
-                            <div style="height: 30px;">
-                            <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.truckNum}</span>
-                                <span
-                                    style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.truckMoney}</span>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="ivu-table-column-center">
-                        <div class="ivu-table-cell">
-                            <div>${countObj.transMoney}</div>
-                        </div>
-                    </td>
-                    <td class="ivu-table-column-center">
-                        <div class="ivu-table-cell">
-                            <div>${countObj.officeMoney }</div>
-                        </div>
-                    </td>
-                    <td class="ivu-table-column-center">
-                        <div class="ivu-table-cell">
-                            <div>${countObj.otherMoney}</div>
-                        </div>
-                    </td>
-                    <td class="ivu-table-column-center">
-                        <div class="ivu-table-cell">
-                            <div>${countObj.personnelMoney}</div>
-                        </div>
-                    </td>
-                    <td class="ivu-table-column-center">
-                        <div class="ivu-table-cell">
-                            <div>${countObj.rentMoney}</div>
-                        </div>
-                    </td>
-                    <td class="ivu-table-column-center">
-                        <div class="ivu-table-cell">
-                            <div>${countObj.hydropower}</div>
-                        </div>
-                    </td>
-                    <td class="ivu-table-column-center">
-                        <div class="ivu-table-cell">
-                            <div>${countObj.manageMoney}</div>
-                        </div>
-                    </td>
-                    <td class="ivu-table-column-center">
-                        <div class="ivu-table-cell">
-                            <div>${countObj.openMoney}</div>
-                        </div>
-                    </td>
+                    if(that.data4.length>0){
+                         $('.ivu-table-body').eq(0).find('table').find('tfoot').remove()
+                        $('.ivu-table-body').eq(0).find('table').append("<tfoot><tr>" + html + "</tr></tfoot>")
+                        $('.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                        $('.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').append('<tfoot><td class="middle"><div class="ivu-table-cell"><div>合计</div></div></td></tfoot>')
+                        $('.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                        $('.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append('<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>'+this.countObj.total+'</div></div></td></tr></tfoot>')
+                    }else{
+                        $('.ivu-table-body').eq(0).find('table').find('tfoot').remove()
+                        $('.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                        $('.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                    }
                    
-                </tr>
-                `
-                }
-                 $('.ivu-table-body').eq(0).find('table').find('tfoot').remove()
-                $('.ivu-table-body').eq(0).find('table').append("<tfoot><tr>" + html + "</tr></tfoot>")
-                $('.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                $('.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').append('<tfoot><td class="middle"><div class="ivu-table-cell"><div>合计</div></div></td></tfoot>')
-                $('.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append('<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>'+this.countObj.battMoney+'</div></div></td></tr></tfoot>')
-            }).catch((error) => {
-                console.log(error)
-            })
-        }, 200)
+                }).catch((error) => {
+                    console.log(error)
+                })
+            }, 200)
         }
     },
     mounted() {

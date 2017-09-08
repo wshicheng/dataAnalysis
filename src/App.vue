@@ -40,13 +40,10 @@ button.ivu-btn.ivu-btn-ghost {
   line-height: 3
 }
 
-.ivu-tabs-nav-scroll {
-  /* text-align: center; */
-}
 
 .ivu-tabs-nav {
   margin: 0 auto;
-  float: initial;
+  line-height: 43px;
   display: inline-block;
 }
 .ivu-tabs-bar {
@@ -55,28 +52,12 @@ button.ivu-btn.ivu-btn-ghost {
 }
 
   .ivu-tabs-nav .ivu-tabs-tab .ivu-icon{margin-right:0;}
-/* .ivu-table {
-  width: inherit;
-  height: 100%;
-  max-width: 100%;
-  overflow: hidden;
-  color: #495060;
-  font-size: 14px;
-  background-color: #fff;
-  box-sizing: border-box;
-} */
+
  .ivu-modal-body { overflow-y: auto;
     max-height: 300px; } 
     button.cancel{background:transparent}
 button.cancel:hover{border-color:orange;color:orange;}
-/* .ivu-page-item-active{background-color: #404040;
-    border-color: #404040;} */
-    /* .ivu-page-next:hover, .ivu-page-prev:hover{color:#404040;border-color:#404040;}
-    .ivu-page-item:hover a{color:#404040;}
-    .ivu-page-item:hover{border-color:#404040}
-    .ivu-page-item-jump-prev:hover a{color:#404040;}
-    .ivu-page-item-jump-prev:hover{border-color:#404040}
-    .ivu-page-next:hover a{color:#404040;} */
+
     
 </style>
 

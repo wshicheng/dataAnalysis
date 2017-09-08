@@ -30,40 +30,25 @@ if (window.localStorage.getItem('token')) {
     store.commit(types.LOGIN, window.localStorage.getItem('token'))
 }
 
-// router.beforeEach((to, from, next) => {
-//     if (to.matched.some(r => r.meta.requireAuth)) {
-//         if (store.state.token) {
-//             next();
-//         }
-//         else {
-//             next({
-//                 path: '/login',
-//                 query: {redirect: to.fullPath}
-//             })
-//         }
-//     }
-//     else {
-//         next();
-//     }
-// })
-
-// router.beforeEach((route,from,next)=>{
-//     if(route.path === '/login'){
-//         window.localStorage.removeItem('token')
-//         store.commit(types.LOGIN,'')
-//     }
-//     if(!accessToken&&route.path!=='/login'){
-//         next({path:'/login'})
-//     }else{
-//         if(route.name){
-//             next()
-//         }else{
-//             next({
-//                 path:'/nofound'
-//             })
-//         }
-//     }
-// })
+const accessToken = window.localStorage.getItem('token')
+router.beforeEach((route,from,next)=>{
+    if(route.path === '/login'){
+        window.localStorage.removeItem('token')
+        store.commit(types.LOGIN,'')
+    }
+    if(!accessToken&&route.path!=='/login'){
+        next({path:'/login'})
+    }else{
+        console.log(route.name)
+        if(route.name){
+            next()
+        }else{
+            next({
+                path:'/nofound'
+            })
+        }
+    }
+})
 var vm = new Vue({
     el:"#app",
     store,

@@ -3,7 +3,7 @@
         <span>地区:</span>
         <div class="citySelect_area_span" >
             <span class="active" @click="areaClick">全部地区</span>
-            <span @click="areaClick" v-for="item in cityList" :myId='item.code'>{{item.name}}</span>
+            <span @click="areaClick" v-bind:key="item.name" v-for="item in cityList" :myId='item.code'>{{item.name}}</span>
         </div>
     </div>
 </template>

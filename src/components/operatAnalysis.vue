@@ -6,9 +6,11 @@
 </template>
 <script>
 import $ from 'jquery'
+import { mapGetters } from 'vuex'
     export default {
         data () {
             return {
+                countObj:{},
                 columns2: [
                     {
                         title: '城市',
@@ -50,7 +52,7 @@ import $ from 'jquery'
                                             borderRight:'1px solid rgb(233, 234, 236)',
                                             boxSizing:'border-box',
                                         }
-                                    },params.row.beefly.num),
+                                    },params.row.monthIncoming.mBillingIncome),
                                     h('span',{
                                         style:{
                                             float:'left',
@@ -60,7 +62,7 @@ import $ from 'jquery'
                                             borderRight:'1px solid rgb(233, 234, 236)',
                                             boxSizing:'border-box',
                                         }
-                                    },params.row.beefly.money),
+                                    },params.row.monthIncoming.mRealityIncome),
                                      h('span',{
                                         style:{
                                             float:'left',
@@ -70,7 +72,7 @@ import $ from 'jquery'
                                             borderRight:'none',
                                             boxSizing:'border-box',
                                         }
-                                    },params.row.beefly.money)
+                                    },params.row.monthIncoming.realIncomeLv )
                                     
                                 ])
                         },
@@ -141,7 +143,7 @@ import $ from 'jquery'
                                             borderRight:'1px solid rgb(233, 234, 236)',
                                             boxSizing:'border-box',
                                         }
-                                    },params.row.beefly.num),
+                                    },params.row.profitStatus. billProfitAndLoss),
                                     h('span',{
                                         style:{
                                             float:'left',
@@ -151,7 +153,7 @@ import $ from 'jquery'
                                             borderRight:'none',
                                             boxSizing:'border-box',
                                         }
-                                    },params.row.beefly.money),
+                                    },params.row.profitStatus. billProfitAndLossLv),
                                 ])
                         },
                         renderHeader:(h,params)=>{
@@ -210,7 +212,7 @@ import $ from 'jquery'
                                             borderRight:'1px solid rgb(233, 234, 236)',
                                             boxSizing:'border-box',
                                         }
-                                    },params.row.beefly.num),
+                                    },params.row.actualProfit.realProfitAndLoss),
                                     h('span',{
                                         style:{
                                             float:'left',
@@ -220,7 +222,7 @@ import $ from 'jquery'
                                             borderRight:'none',
                                             boxSizing:'border-box',
                                         }
-                                    },params.row.beefly.money),
+                                    },params.row.actualProfit.realProfitAndLossLv),
                                 ])
                         },
                         renderHeader:(h,params)=>{
@@ -279,7 +281,7 @@ import $ from 'jquery'
                                             borderRight:'1px solid rgb(233, 234, 236)',
                                             boxSizing:'border-box',
                                         }
-                                    },params.row.beefly.num),
+                                    },params.row.singleCar.oBilling),
                                     h('span',{
                                         style:{
                                             float:'left',
@@ -289,7 +291,7 @@ import $ from 'jquery'
                                             borderRight:'none',
                                             boxSizing:'border-box',
                                         }
-                                    },params.row.beefly.money),
+                                    },params.row.singleCar.oReality),
                                 ])
                         },
                         renderHeader:(h,params)=>{
@@ -328,30 +330,33 @@ import $ from 'jquery'
                             ])
                         }
                     },
-                     {
-                        title: '合计',
-                        key: 'total',
-                        width: 100,
-                        fixed: 'right',
-                        className:'middle',
-                         render:(h,params)=>{
-                            return h('div',params.row.total.money)
-                        },
-                        renderHeader:(h,params)=>{
-                            return h('div',[
-                                h('div',{
-                                    style:{
-                                        width:'100%',
+                    //  {
+                    //     title: '合计',
+                    //     key: 'total',
+                    //     width: 100,
+                    //     fixed: 'right',
+                    //     className:'middle',
+                    //      render:(h,params)=>{
+                    //         return h('div',params.row.total.money)
+                    //     },
+                    //     renderHeader:(h,params)=>{
+                    //         return h('div',[
+                    //             h('div',{
+                    //                 style:{
+                    //                     width:'100%',
                                        
-                                    }
-                                },'合计')
+                    //                 }
+                    //             },'合计')
                                
-                            ])
-                        }
-                    }
+                    //         ])
+                    //     }
+                    // }
                 ],
                 data4:this.mockTableData()
             }
+        },
+        computed:{
+            ...mapGetters(['dataMonth'])
         },
         methods:{
             mockTableData(){
@@ -360,53 +365,78 @@ import $ from 'jquery'
                     data.push(
                          {
                             cityName: '城市' + Math.floor(Math.random () * 100 + 1),
-                            beefly:{
-                                num:Math.floor(Math.random () * 3 + 1),
-                                money:Math.floor(Math.random () * 4 + 1),
+                            monthIncoming:{
+                                mBillingIncome:Math.floor(Math.random () * 3 + 1),//月收入-计费
+                                mRealityIncome:Math.floor(Math.random () * 4 + 1),//月收入-实收
+                                realIncomeLv:1//月收入-实收率
                             },
-                            Tricycle:{
-                                num:Math.floor(Math.random () * 5 + 1),
-                                money:Math.floor(Math.random () * 6 + 1),
+                            profitStatus:{
+                                billProfitAndLoss:Math.floor(Math.random () * 5 + 1),//盈亏状态(计费)-计费盈亏
+                                billProfitAndLossLv:Math.floor(Math.random () * 6 + 1),//盈亏状态(计费)-计费盈亏率
                             },
-                            Toolcar:{
-                                num:Math.floor(Math.random () * 5 + 1),
-                                money:Math.floor(Math.random () * 6 + 1),
+                            actualProfit:{
+                                realProfitAndLoss:1,//盈亏状态(实收)-实收盈亏
+                                realProfitAndLossLv:1,//盈亏状态(实收)-实收盈亏率
                             },
-                            Battery:{
-                                num:Math.floor(Math.random () * 7 + 1),
-                                money:Math.floor(Math.random () * 8 + 1),
-                            },
-                            ChargingStation:{
-                                build:Math.floor(Math.random () * 9 + 1),
-                                cabinet:Math.floor(Math.random () * 10 + 1)
-                            },
-                            rentCost:{
-                                money:Math.floor(Math.random () * 11 + 1)
-                            },
-                            salary:{
-                                money:Math.floor(Math.random () * 12 + 1)
-                            },
-                            expenses:{
-                                money:Math.floor(Math.random () * 13 + 1)
-                            },
-                            total:{
-                                money:Math.floor(Math.random () * 14 + 1)
+                            singleCar:{
+                                oBilling:Math.floor(Math.random () * 7 + 1),//单车产出-计费
+                                oReality:Math.floor(Math.random () * 8 + 1),//单车产出-实收
                             }
                         }
                     )
                 }
                 return data
             },
-            changePage () {
+            changePage() {
                 // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
-                this.tableData1 = this.mockTableData1();
-            }
-        },
-        mounted(){
-            var html = ''
-            for(var i=0;i<1;i++){
-                html += `
-                    <tr class="ivu-table-row">
+                var that =  this
+                setTimeout(function() {
+                    console.log(that.dataMonth)
+                    that.axios('/monthDataDetail/api/v1/monthDataDetail', {
+                    params: {
+                        dataMonth: that.dataMonth,
+                        type: 3
+                    }
+                    }).then((response) => {
+                        var data = response.data.data
+                        var arr = [];
+                        for (var i = 0; i < data.length; i++) {
+                            if (i <= data.length-1) {
+                                arr.push(
+                                    {
+                                        cityName: data[i].city,
+                                        monthIncoming: {
+                                            mBillingIncome: data[i].mBillingIncome,//月收入-计费
+                                            mRealityIncome: data[i].mRealityIncome,//月收入-实收
+                                            realIncomeLv: data[i].realIncomeLv//月收入-实收率
+                                        },
+                                        profitStatus: {
+                                            billProfitAndLoss: data[i].billProfitAndLoss,//盈亏状态(计费)-计费盈亏
+                                            billProfitAndLossLv: data[i].billProfitAndLossLv,//盈亏状态(计费)-计费盈亏率
+                                        },
+                                        actualProfit: {
+                                            realProfitAndLoss: data[i].realProfitAndLoss,//盈亏状态(实收)-实收盈亏
+                                            realProfitAndLossLv: data[i].realProfitAndLossLv,//盈亏状态(实收)-实收盈亏率
+                                        },
+                                        singleCar: {
+                                            oBilling: data[i].oBilling,//单车产出-计费
+                                            oReality: data[i].oReality,//单车产出-实收
+                                        }
+                                    }
+                                )
+                            }
+                            if (i === data.length - 1) {
+                                this.countObj = data[data.length - 1]
+                            }
+
+                        }
+                        console.log(arr)
+                        console.log(this.countObj)
+                        that.data4 = arr
+                        var html = ''
+                        for (var i = 0; i < 1; i++) {
+                            html += `
+                           <tr class="ivu-table-row">
                         <td class="middle ivu-table-hidden">
                             <div class="ivu-table-cell ivu-table-hidden">
                                 <div>城市83</div>
@@ -414,32 +444,32 @@ import $ from 'jquery'
                         </td>
                         <td class="ivu-table-column-center">
                             <div class="ivu-table-cell">
-                                <div style="height: 30px;"><span style="float: left; width: 33.3%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">3</span>
+                                <div style="height: 30px;"><span style="float: left; width: 33.3%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.mBillingIncome}</span>
                                     <span
-                                        style="float: left; width: 33.3%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span><span style="float: left; width: 33.3%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span></div>
+                                        style="float: left; width: 33.3%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.mRealityIncome}</span><span style="float: left; width: 33.3%; height: 30px; line-height: 30px;  box-sizing: border-box;">${countObj.realIncomeLv}</span></div>
                             </div>
                         </td>
                         <td class="ivu-table-column-center">
                             <div class="ivu-table-cell">
-                                <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">3</span>
+                                <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.billProfitAndLoss }</span>
                                     <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span>
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px;box-sizing: border-box;">${countObj.billProfitAndLossLv}</span>
                                 </div>
                             </div>
                         </td>
                         <td class="ivu-table-column-center">
                             <div class="ivu-table-cell">
-                                <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">3</span>
+                                <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.realProfitAndLoss}</span>
                                     <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span>
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.realProfitAndLossLv}</span>
                                 </div>
                             </div>
                         </td>
                         <td class="ivu-table-column-center">
                             <div class="ivu-table-cell">
-                                <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">3</span>
+                                <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.oBilling}</span>
                                     <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span>
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.oReality}</span>
                                 </div>
                             </div>
                         </td>
@@ -449,13 +479,89 @@ import $ from 'jquery'
                             </div>
                         </td>
                     </tr>
-                `
+                        `
+                        }
+                    if(that.data4.length>0){
+                            $('.ivu-table-body').eq(2).find('table').find('tfoot').remove()
+                            $('.ivu-table-body').eq(2).find('table').append("<tfoot><tr>" + html + "</tr></tfoot>")
+                            $('.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                            $('.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').append('<tfoot><td class="middle"><div class="ivu-table-cell"><div>合计</div></div></td></tfoot>')
+                            $('.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                            $('.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append('<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>'+this.countObj.total+'</div></div></td></tr></tfoot>')
+                        }else{
+                            $('.ivu-table-body').eq(2).find('table').find('tfoot').remove()
+                            $('.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                            $('.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                        }
+                    }).catch((error) => {
+                        console.log(error)
+                    })
+                }, 200)
             }
-            $('.ivu-table-body').eq(2).find('table').append("<tfoot><tr>" + html + "</tr></tfoot>")
-            $('.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').append('<tfoot><td class="middle"><div class="ivu-table-cell"><div>合计</div></div></td></tfoot>')
-            $('.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append( '<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>6</div></div></td></tr></tfoot>')
+        },
+        mounted(){
+            this.changePage()
+            // var html = ''
+            // for(var i=0;i<1;i++){
+            //     html += `
+            //         <tr class="ivu-table-row">
+            //             <td class="middle ivu-table-hidden">
+            //                 <div class="ivu-table-cell ivu-table-hidden">
+            //                     <div>城市83</div>
+            //                 </div>
+            //             </td>
+            //             <td class="ivu-table-column-center">
+            //                 <div class="ivu-table-cell">
+            //                     <div style="height: 30px;"><span style="float: left; width: 33.3%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">3</span>
+            //                         <span
+            //                             style="float: left; width: 33.3%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span><span style="float: left; width: 33.3%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span></div>
+            //                 </div>
+            //             </td>
+            //             <td class="ivu-table-column-center">
+            //                 <div class="ivu-table-cell">
+            //                     <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">3</span>
+            //                         <span
+            //                             style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span>
+            //                     </div>
+            //                 </div>
+            //             </td>
+            //             <td class="ivu-table-column-center">
+            //                 <div class="ivu-table-cell">
+            //                     <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">3</span>
+            //                         <span
+            //                             style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span>
+            //                     </div>
+            //                 </div>
+            //             </td>
+            //             <td class="ivu-table-column-center">
+            //                 <div class="ivu-table-cell">
+            //                     <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">3</span>
+            //                         <span
+            //                             style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span>
+            //                     </div>
+            //                 </div>
+            //             </td>
+            //             <td class="middle ivu-table-hidden">
+            //                 <div class="ivu-table-cell ivu-table-hidden">
+            //                     <div>5</div>
+            //                 </div>
+            //             </td>
+            //         </tr>
+            //     `
+            // }
+            // $('.ivu-table-body').eq(2).find('table').append("<tfoot><tr>" + html + "</tr></tfoot>")
+            // $('.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').append('<tfoot><td class="middle"><div class="ivu-table-cell"><div>合计</div></div></td></tfoot>')
+            // $('.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append( '<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>6</div></div></td></tr></tfoot>')
             
+        },
+        watch:{
+        'dataMonth':{
+            handler:function(val){
+                this.changePage()
+            },
+            deep:true
         }
+    }
     }
 </script>
 <style lang="scss" scoped type="text/css">
