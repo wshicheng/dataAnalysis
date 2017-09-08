@@ -19,27 +19,12 @@
 
         <div id="cityManage_table">
             <Button type="warning" @click="exportModal = true">导入数据</Button>
-            <Button class="cancel">删除</Button>
+            <Button class="cancel" @click="delTableByGroup">删除</Button>
             <span>*每月10号后，不可编辑和删除上月数据</span>
 
-            <Table 
-                    class="cityManage_table" 
-                    border size='small' 
-                    :columns="columns4" 
-                    :data="data1"
-                    @on-select="selectGroup"
-                    @on-select-all="selectAll"
-                    @on-selection-change="selectChange"
-                    ></Table>
-            <Page :total="totalListNum"
-                   show-sizer 
-                   show-elevator 
-                   :styles='page' 
-                   placement="top" 
-                   @on-change="handleCurrentPage" 
-                   @on-page-size-change="handlePageSize"
-                   show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'
-                   ></Page>
+            <Table  :row-class-name="rowClassName" class="cityManage_table" border size='small' :columns="columns4" :data="data1" @on-select="selectGroup" @on-select-all="selectAll" @on-selection-change="selectChange">
+            </Table>
+            <Page :total="totalListNum" show-sizer show-elevator :styles='page' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
 
             <!-- 模态框区域 -->
             <Modal v-model="editModal" width="800px" :styles="{top: '20%'}" class="editModal_form">
@@ -53,11 +38,7 @@
                         </FormItem>
                         <FormItem label="城市" prop="city">
                             <Select class="city_select" :model="editValidate.city" :placeholder="editArea">
-                                <Option value="beijing">北京市</Option>
-                                <Option value="shanghai">上海市</Option>
-                                <Option value="shenzhen">深圳市</Option>
-                                <Option value="shenzhen">深圳市</Option>
-                                <Option value="shenzhen">深圳市</Option>
+                                <Option v-for="item in $store.state.keepCitys" :value="item.name" :key="item.code">{{ item.name }}</Option>
                             </Select>
                         </FormItem>
                         <FormItem label="类别">
@@ -96,7 +77,7 @@
                 </p>
                 <div class="managerData_upload_month">
                     <span>月份:</span>
-                    <DatePicker type="date" class="DatePicker" placeholder="选择日期" style="width: 216px;"></DatePicker>
+                    <DatePicker type="month" v-model='exportMonth' :options='options' class="DatePicker" placeholder="选择日期" style="width: 216px;"></DatePicker>
                 </div>
                 <div class="managerData_upload_uploadFile">
                     <span>选择文件:</span>
@@ -104,12 +85,13 @@
                 </div>
                 <div class="managerData_upload_download">
                     <span>*请选择xls、xlsx格式文件</span>
-                    <span>模板下载</span>
+                    <span @click="downloadExl">模板下载</span>
+                    <a href="" download="这里是下载的文件名.xlsx" id="hf"></a>
                 </div>
                 <Progress class="my_page" :percent="uploadPercent" v-show="isUploadPercent" status="active"></Progress>
                 <div slot="footer">
                     <Button class="cancel" @click="exportModal = false" style="margin-left: 8px">取消</Button>
-                    <Button type="warning" class="confirm">确认</Button>
+                    <Button type="warning" class="confirm" @click="confirmExport">确认</Button>
                 </div>
             </Modal>
 
@@ -129,221 +111,247 @@
 </template>
 
 <style lang='scss' scoped type="text/css">
-    #cityManagerData_body {
-        width: 100%; // border: 1px solid #dddee1;
-        background: #ececec;
-        border-radius: 4px;
-        .Breadcrumb {
-            width: 100%;
-            height: 30px;
-            font-size: 16px;
-            line-height: 30px;
-        }
-    }
 
-    #cityManagerData_head {
-        -moz-box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
-        -webkit-box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
-        box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
-        display: block; // width: 79%;
-        // position: fixed;
-        // right: 2.3%;
-        // top: 12%;
-        z-index: 10;
-        font-size: 14px;
-        background: #fff;
-        overflow: hidden;
-        box-sizing: border-box;
-        border: 1px solid #eee;
-        padding: 10px 10px 0px 10px;
-        .cityManageData_month {
-            span:nth-of-type(1) {
-                margin-right: 10px;
-            }
-            margin-bottom: 10px;
-        }
-        .cityManageData_area span {
-            width: 70px;
-            height: 30px;
-            line-height: 30px;
-            cursor: pointer;
-            display: inline-block;
-            border: 1px solid #dddee1;
-            border-radius: 4px;
-            text-align: center;
-            margin: 0 5px 10px 5px;
-        }
-        .cityManageData_area span:nth-of-type(1) {
-            border: none;
-            margin: 0;
-            float: left;
-            text-align: left;
-            width: 3%;
-            padding: 0;
-        } // .cityManageData_area span:nth-of-type(1):active {
-        //     color: #f60;
-        // }
-        .cityManageData_area div.cityManageData_area_span span:nth-of-type(1) {
-            width: 70px;
-            margin-left: 4px;
-            margin-right: 9px;
-            text-align: center;
-            padding: 0 3px 0 3px;
-        }
-        .cityManageData_area div.cityManageData_area_span {
-            span.active {
-                background: orange;
-                color: #fff;
-                border: 1px solid #fff;
-                transition: all .1s linear 0s;
-            }
-        }
-        .cityManageData_area div {
-            max-width: 97%;
-            float: left;
-        }
-        .cityManageData_type button {
-            width: 80px;
-            height: 30px;
-            line-height: 30px;
-            outline: none;
-            background: #fff;
-            display: inline-block;
-            border: 1px solid #dddee1;
-            border-radius: 4px;
-            color: #565c6b;
-            text-align: center;
-            margin: 0 5px 10px 5px;
-            cursor: pointer;
-        }
-        .cityManageData_type button.active {
-            color: orange;
-            border: 1px solid orange;
-        }
-        .cityManageData_type span:nth-of-type(1) {
-            border: none;
-            margin: 0;
-            float: left;
-            text-align: left;
-            width: 40px;
-            padding: 0;
-        }
-    }
-
-    #cityManage_table {
+#cityManagerData_body {
+    width: 100%; // border: 1px solid #dddee1;
+    background: #ececec;
+    border-radius: 4px;
+    .Breadcrumb {
         width: 100%;
-        overflow: hidden;
-        background: #fff;
-        box-sizing: border-box;
-        padding: 20px 10px 20px 10px; // margin-top: 274px;
-        margin-top: 20px;
-        button:nth-of-type(1) {
+        height: 30px;
+        font-size: 16px;
+        line-height: 30px;
+    }
+}
+
+#cityManagerData_head {
+    -moz-box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
+    -webkit-box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
+    box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
+    display: block; // width: 79%;
+    // position: fixed;
+    // right: 2.3%;
+    // top: 12%;
+    z-index: 10;
+    font-size: 14px;
+    background: #fff;
+    overflow: hidden;
+    box-sizing: border-box;
+    border: 1px solid #eee;
+    padding: 10px 10px 0px 10px;
+    .cityManageData_month {
+        span:nth-of-type(1) {
             margin-right: 10px;
         }
-        span:nth-of-type(1) {
-            float: right;
-            color: #ccc;
-            font-size: 13px;
-            line-height: 50px;
-        }
-        .cityManage_table {
-            margin-top: 20px;
+        margin-bottom: 10px;
+    }
+    .cityManageData_area span {
+        width: 70px;
+        height: 30px;
+        line-height: 30px;
+        cursor: pointer;
+        display: inline-block;
+        border: 1px solid #dddee1;
+        border-radius: 4px;
+        text-align: center;
+        margin: 0 5px 10px 5px;
+    }
+    .cityManageData_area span:nth-of-type(1) {
+        border: none;
+        margin: 0;
+        float: left;
+        text-align: left;
+        width: 3%;
+        padding: 0;
+    } // .cityManageData_area span:nth-of-type(1):active {
+    //     color: #f60;
+    // }
+    .cityManageData_area div.cityManageData_area_span span:nth-of-type(1) {
+        width: 70px;
+        margin-left: 4px;
+        margin-right: 9px;
+        text-align: center;
+        padding: 0 3px 0 3px;
+    }
+    .cityManageData_area div.cityManageData_area_span {
+        span.active {
+            background: orange;
+            color: #fff;
+            border: 1px solid #fff;
+            transition: all .1s linear 0s;
         }
     }
-
-    div.ivu-modal {
-        width: 900px;
+    .cityManageData_area div {
+        max-width: 97%;
+        float: left;
     }
-
-    .editModal_form {
-        div.managerData_upload_month {
-            span:nth-of-type(1) {
-                font-size: 14px;
-                float: left;
-                width: 58px;
-                text-align: right;
-                margin-top: 20px;
-                margin-right: 17px;
-            }
-            .DatePicker {
-                margin-top: 14px;
-            }
-        }
-        div.managerData_upload_uploadFile {
-            margin-top: 20px;
-            span:nth-of-type(1) {
-                font-size: 14px;
-                float: left;
-                line-height: 10px;
-                margin-right: 16px;
-                margin-top: 10px;
-            }
-            .upload {
-                display: inline-block;
-                width: 216px;
-                height: 32px;
-                line-height: 1.5;
-                outline: none;
-                padding: 4px 7px;
-                font-size: 12px;
-                border: 1px solid #dddee1;
-                border-radius: 4px;
-                color: #495060;
-                background-color: #fff;
-                background-image: none;
-                position: relative;
-                cursor: text;
-                transition: border 0.2s ease-in-out, background 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            }
-        }
-        div.managerData_upload_download {
-            font-size: 13px;
-            span:nth-of-type(1) {
-                display: inline-block;
-                margin-left: 76px;
-                margin-top: 10px;
-                color: #888;
-            }
-            span:nth-of-type(2) {
-                display: inline-block;
-                margin-left: 14px;
-                cursor: pointer;
-                text-decoration: underline;
-            }
-        }
-        p.editModal_head {
-            text-align: left;
-            color: #404040;
-        }
-        div.editModal_content {
-            .city_select {
-                width: 216px;
-            }
-            .big_select {
-                display: inline-block;
-                width: 216px;
-            }
-            .small_select {
-                display: inline-block;
-                width: 216px;
-                position: relative;
-                left: 225px;
-                top: -33px;
-            }
-            .price {
-                margin-top: -30px;
-                width: 296px;
-            }
-            .number {
-                width: 296px;
-            }
-        }
+    .cityManageData_type button {
+        width: 80px;
+        height: 30px;
+        line-height: 30px;
+        outline: none;
+        background: #fff;
+        display: inline-block;
+        border: 1px solid #dddee1;
+        border-radius: 4px;
+        color: #565c6b;
+        text-align: center;
+        margin: 0 5px 10px 5px;
+        cursor: pointer;
     }
-
-    .cancel:hover {
-        border: 1px solid orange;
+    .cityManageData_type button.active {
         color: orange;
+        border: 1px solid orange;
     }
+    .cityManageData_type span:nth-of-type(1) {
+        border: none;
+        margin: 0;
+        float: left;
+        text-align: left;
+        width: 40px;
+        line-height: 30px;
+        padding: 0;
+    }
+}
+
+#cityManage_table {
+    width: 100%;
+    overflow: hidden;
+    background: #fff;
+    box-sizing: border-box;
+    padding: 20px 10px 20px 10px; // margin-top: 274px;
+    margin-top: 20px;
+    button:nth-of-type(1) {
+        margin-right: 10px;
+    }
+    span:nth-of-type(1) {
+        float: right;
+        color: #ccc;
+        font-size: 13px;
+        line-height: 50px;
+    }
+    .cityManage_table {
+        margin-top: 20px;
+        position: relative;
+    }
+}
+
+div.ivu-modal {
+    width: 900px;
+}
+
+.editModal_form {
+    div.managerData_upload_month {
+        span:nth-of-type(1) {
+            font-size: 14px;
+            float: left;
+            width: 58px;
+            text-align: right;
+            margin-top: 20px;
+            margin-right: 17px;
+        }
+        .DatePicker {
+            margin-top: 14px;
+        }
+    }
+    div.managerData_upload_uploadFile {
+        margin-top: 20px;
+        span:nth-of-type(1) {
+            font-size: 14px;
+            float: left;
+            line-height: 10px;
+            margin-right: 16px;
+            margin-top: 10px;
+        }
+        .upload {
+            display: inline-block;
+            width: 216px;
+            height: 32px;
+            line-height: 1.5;
+            outline: none;
+            padding: 4px 7px;
+            font-size: 12px;
+            border: 1px solid #dddee1;
+            border-radius: 4px;
+            color: #495060;
+            background-color: #fff;
+            background-image: none;
+            position: relative;
+            cursor: text;
+            transition: border 0.2s ease-in-out, background 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+    }
+    div.managerData_upload_download {
+        font-size: 13px;
+        span:nth-of-type(1) {
+            display: inline-block;
+            margin-left: 76px;
+            margin-top: 10px;
+            color: #888;
+        }
+        span:nth-of-type(2) {
+            display: inline-block;
+            margin-left: 14px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    }
+    p.editModal_head {
+        text-align: left;
+        color: #404040;
+    }
+    div.editModal_content {
+        .city_select {
+            width: 216px;
+        }
+        .big_select {
+            display: inline-block;
+            width: 216px;
+        }
+        .small_select {
+            display: inline-block;
+            width: 216px;
+            position: relative;
+            left: 225px;
+            top: -33px;
+        }
+        .price {
+            margin-top: -30px;
+            width: 296px;
+        }
+        .number {
+            width: 296px;
+        }
+    }
+}
+
+.cancel:hover {
+    border: 1px solid orange;
+    color: orange;
+}
+
+.demo-spin-icon-load {
+    animation: ani-demo-spin 1s linear infinite;
+}
+
+@keyframes ani-demo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.demo-spin-col{
+    height: 100px;
+    position: relative;
+    border: 1px solid #eee;
+}
+
 </style>
 
 <script>
@@ -495,27 +503,41 @@ export default {
             pageSizeOpts: [10, 20, 30, 40],
             pageSize: 10,
             currentPage: 1,
-            options:{
-                disabledDate (date) {
-                    return date&&date.valueOf()> Date.now()
+            options: {
+                disabledDate(date) {
+                    return date && date.valueOf() > Date.now()
                 }
             },
             checkList: [],
-            selectTime: ''
+            selectTime: '',
+            exportMonth: '',
+            exportedData: ''
         }
     },
     mounted() {
         this.loadData('固定资产')
     },
     methods: {
+        rowClassName (row, index) {
+            console.log(row)
+            if (row.status === 0) {
+                return '';
+            } else {
+                return 'demo-table-error-row';
+            }
+            return '';
+        },
         loadData(type) {
-            this.axios.get('/baseData/api/v1/page', {
+            this.currentPage = 1
+            this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
                     accessToken: this.$store.state.token,
+                    time: this.selectTime === '' ? '' : moment(this.selectTime).format('YYYY-MM'),
                     type: type
                 }
             })
                 .then((res) => {
+                    this.checkLogin(res)
                     var data = res.data.data
                     var dataDeled = this.tableDataDel(data)
                     this.data1 = dataDeled
@@ -528,15 +550,16 @@ export default {
                     console.log('err', err)
                 })
         },
-        dateChange () {
-            this.axios.get('/baseData/api/v1/page', {
-                    params: {
-                        accessToken: this.$store.state.token,
-                        time: moment(this.selectTime).format('YYYY-MM'),
-                        type: $('.cityManageData_type button.active')[0].innerHTML
-                    }
-                })
-                .then( (res) => {
+        dateChange() {
+            this.axios.get('/beefly/baseData/api/v1/page', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    time: moment(this.selectTime).format('YYYY-MM'),
+                    type: $('.cityManageData_type button.active')[0].innerHTML
+                }
+            })
+                .then((res) => {
+                    this.checkLogin(res)
                     var data = res.data.data
                     var dataDeled = this.tableDataDel(data)
                     this.data1 = dataDeled
@@ -550,52 +573,58 @@ export default {
                 })
         },
         handleCurrentPage(currentPage) {
+            this.currentPage = 1
             this.currentPage = currentPage
             var _this = this
-            this.axios.get('/baseData/api/v1/page', {
+            this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
                     pageNo: currentPage,
                     pageSize: _this.pageSize,
-                    accessToken:this.$store.state.token
+                    cityCode: this.$store.state.cityList.toString(),
+                    accessToken: this.$store.state.token
                 }
             })
-            .then( (res) => {
-                var data = res.data.data
-                var dataDeled = this.tableDataDel(data)
+                .then((res) => {
+                    this.checkLogin(res)
+                    var data = res.data.data
+                    var dataDeled = this.tableDataDel(data)
 
-                this.data1 = dataDeled
-                if (res.data.totalPage > 1) {
-                    this.pageShow = true
-                }
-                this.totalListNum = res.data.totalItems
-            })
-            .catch(function (err) {
-                console.log('err', err)
-            });
+                    this.data1 = dataDeled
+                    if (res.data.totalPage > 1) {
+                        this.pageShow = true
+                    }
+                    this.totalListNum = res.data.totalItems
+                })
+                .catch(function(err) {
+                    console.log('err', err)
+                });
         },
         handlePageSize(pageSize) {
+            this.currentPage = 1
             var _this = this;
             this.pageSize = pageSize
-            this.axios.get('/baseData/api/v1/page', {
+            this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
-                    pageNo:  this.currentPage,
-                    pageSize:  this.pageSize,
-                    accessToken:this.$store.state.token
+                    pageNo: this.currentPage,
+                    cityCode: this.$store.state.cityList.toString(),
+                    pageSize: this.pageSize,
+                    accessToken: this.$store.state.token
                 }
             })
-            .then( (res) => {
-                var data = res.data.data
-                var dataDeled = this.tableDataDel(data)
+                .then((res) => {
+                    this.checkLogin(res)
+                    var data = res.data.data
+                    var dataDeled = this.tableDataDel(data)
 
-                this.data1 = dataDeled
-                if (res.data.totalPage > 1) {
-                    this.pageShow = true
-                }
-                this.totalListNum = res.data.totalItems
-            })
-            .catch(function (err) {
-                console.log('err', err)
-            });
+                    this.data1 = dataDeled
+                    if (res.data.totalPage > 1) {
+                        this.pageShow = true
+                    }
+                    this.totalListNum = res.data.totalItems
+                })
+                .catch(function(err) {
+                    console.log('err', err)
+                });
         },
         tableDataDel(data) {
             // 处理大类小类数据
@@ -614,9 +643,10 @@ export default {
                 obj.dataMonth = data[i].dataMonth
                 obj.number = data[i].number
                 obj.unitPrice = data[i].unitPrice
-                obj.id = data[i].id  
-                
-                newData.push(obj)       
+                obj.id = data[i].id
+                obj.status = data[i].status
+
+                newData.push(obj)
             }
             return newData
         },
@@ -625,20 +655,7 @@ export default {
         },
         handleUpload(file) {
             this.file = file;
-            var _this = this
-            this.isUploadPercent = true
-            var timer = setInterval(function() {
-                _this.uploadPercent++
-                if (_this.uploadPercent === 100) {
-                    clearInterval(timer)
-                    _this.$Message.success('上传成功');
-                    setTimeout(function() {
-                        _this.isUploadPercent = false
-                        _this.exportModal = false
-                        _this.uploadPercent = 0
-                    }, 1000)
-                }
-            }, 100)
+
             return false;
         },
         upload() {
@@ -673,33 +690,32 @@ export default {
             this.delModal = true
         },
         closeDelModal() {
-            this.axios.get('/baseData/api/v1/deleteBaseData', {
-                    params: {
-                        accessToken: this.$store.state.token,
-                        id: this.delId
-                    }
-                })
-                .then( (res) => {
-                    console.log(res.data)
-                    if (res.data.resultCode === 1) {
-                        this.$Message.success('删除成功!');
-                        this.data1.splice(this.delIndex, 1)
-                        this.loadData('固定资产')
-                        this.delModal = false;
-                    } else {
-                        this.$Message.error('删除失败!');
-                    }
-                })
-                .catch((err) => {
-                    console.log('err', err)
-                })
+            this.axios.get('/beefly/baseData/api/v1/deleteBaseData', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    id: this.delId
+                }
+            })
+            .then((res) => {
+                this.checkLogin(res)
+                console.log(res.data)
+                if (res.data.resultCode === 1) {
+                    this.$Message.success('删除成功!');
+                    this.data1.splice(this.delIndex, 1)
+                    this.loadData('固定资产')
+                    this.delModal = false;
+                } else {
+                    this.$Message.error('删除失败!');
+                }
+            })
+            .catch((err) => {
+                console.log('err', err)
+            })
         },
         handleSubmit(name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
-                    console.log(this.editValidate)
-                    console.log(this.editMonth,this.editArea,this.editBigType,this.editSmallType)
-                    this.axios.get('/baseData/api/v1/updateBaseData', {
+                    this.axios.get('/beefly/baseData/api/v1/updateBaseData', {
                         params: {
                             data: {
                                 dataMonth: this.editValidate.dataMonth,
@@ -713,7 +729,8 @@ export default {
                             accessToken: this.$store.state.token
                         }
                     })
-                    .then ( (res) => {
+                    .then((res) => {
+                        this.checkLogin(res)
                         console.log(res.data)
                         if (res.data.resultCode === 1) {
                             this.$Message.success('修改成功!');
@@ -723,7 +740,7 @@ export default {
                             this.$Message.error('修改失败!');
                         }
                     })
-                    .catch( (err) => {
+                    .catch((err) => {
                         console.log(err)
                     })
                 } else {
@@ -736,6 +753,7 @@ export default {
             this.editModal = false
         },
         handleClick(e) {
+            this.currentPage = 1
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
                 elems[i].setAttribute('class', '')
@@ -755,45 +773,13 @@ export default {
                 types = file.name.split('.')[1],
                 fileType = ["xlsx", "xlc", "xlm", "xls", "xlt", "xlw", "csv"].some(item => item === types);
             if (!fileType) {
-                alert("格式错误！请重新选择");
+                this.$Message.error('格式错误！请重新选择!');
                 return;
             }
             this.file2Xce(file).then(tabJson => {
                 if (tabJson && tabJson.length > 0) {
-                    // this.tableHeader = Object.keys(tabJson[0]);
-                    // this.tableTbody = tabJson;
                     console.log(tabJson)
-                    var _this = this
-                    this.axios.get('/baseData/api/v1/importData', {
-                        params: {
-                            data: JSON.stringify(tabJson),
-                            userId: 123424,
-                            accessToken: this.$store.state.token
-                        }
-                    })
-                        .then(function(res) {
-                            console.log(res.data)
-                        })
-                        .catch(function(err) {
-                            console.log('err', err)
-                        });
-                    // this.axios({
-                    //     url: '/baseData/api/v1/importData',
-                    //     method: 'get',
-                    //     headers: {
-                    //         'Content-Type': 'application/x-www-form-urlencoded'
-                    //     },
-                    //     params:{
-                    //         data: JSON.stringify(tabJson),
-                    //         userId: 123424
-                    //     }
-                    // })
-                    // .then((res) => {
-                    //     console.log(res)
-                    // })
-                    // .then( (err) => {
-                    //     console.log(err)
-                    // })
+                    this.exportedData = tabJson
                 }
             });
         },
@@ -810,29 +796,193 @@ export default {
                 reader.readAsBinaryString(file);
             });
         },
-        selectGroup (selection, row) {
-            selection.map( (element) => {
-                for (var i = 0; i < this.checkList.length; i++) {
-                    console.log(this.checkList[i])
-                    if (this.checkList[i] === element.id) {
-                        return
-                    } else {    
-                        this.checkList.push(element.id)
+        confirmExport() {
+            if (this.exportedData.length === 0) {
+                this.$Message.warning('请导入excel文件！')
+            } else if (this.exportMonth === '') {
+                this.$Message.warning('请选择日期！')
+            } else {
+                // // 打开遮罩层，防止用户对导入界面进行操作。
+                // this.cover = true
+                var _this = this
+                this.isUploadPercent = true
+                this.axios.get('/beefly/baseData/api/v1/importData', {
+                    params: {
+                        data: JSON.stringify(this.exportedData),
+                        userId: 123424,
+                        dataMonth: moment(this.exportMonth).format('YYYY-MM'),
+                        accessToken: this.$store.state.token
                     }
+                })
+                .then(function(res) {
+                    _this.checkLogin(res)
+                    // 上传响应回来后打开进度条
+                    var timer = setInterval(function() {
+                        _this.uploadPercent++
+                        if (_this.uploadPercent === 100 && res.data.resultCode === 1) {
+                            clearInterval(timer)
+                            _this.$Message.success('上传成功');
+                            setTimeout(function() {
+                                _this.isUploadPercent = false
+                                // 关闭遮罩层
+                                // _this.cover = false
+                                _this.exportModal = false
+                                _this.uploadPercent = 0
+                                _this.loadData()
+                            }, 1000)
+                        }
+                    }, 100)
+                })
+                .catch(function(err) {
+                    _this.$Message.success(err.message);
+                    console.log('err', err)
+                })
+
+            }
+        },
+        cityChange() {
+            this.currentPage = 1
+            console.log(this.selectTime)
+            console.log(moment(this.selectTime).format('YYYY-MM'))
+            this.axios.get('/beefly/baseData/api/v1/page', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    type: $('.cityManageData_type button.active')[0].innerHTML,
+                    cityCode: this.$store.state.cityList.toString(),
+                    time: this.selectTime === '' ? '' : moment(this.selectTime).format('YYYY-MM')
                 }
             })
-
+            .then((res) => {
+                this.checkLogin(res)
+                var data = res.data.data
+                var dataDeled = this.tableDataDel(data)
+                this.data1 = dataDeled
+                if (res.data.totalPage > 1) {
+                    this.pageShow = true
+                }
+                this.totalListNum = res.data.totalItems
+            })
+            .catch(function(err) {
+                console.log('err', err)
+            })
+        },
+        selectGroup(selection, row) {
+            // this.checkList.push(row.id)
+        },
+        selectAll(selection) {
+            this.checkList = []
+            // console.log(selection)
+            selection.map( (item) => {
+                this.checkList.push(item.id)
+            })
+        },
+        selectChange(selection) {
+            console.log(selection)
+            this.checkList = []
+            // console.log(selection)
+            selection.map( (item) => {
+                this.checkList.push(item.id)
+            })
             console.log(this.checkList)
         },
-        selectAll (selection) {
-            // console.log('this is selectAll')
+        delTableByGroup () {
+            if (this.checkList.length === 0) {
+                this.$Message.warning('请至少勾选一条数据进行删除');
+            } else {
+                this.axios.get('/beefly/baseData/api/v1/batchDeleteBaseData', {
+                    params: {
+                        accessToken: this.$store.state.token,
+                        ids: this.checkList.toString()
+                    }
+                })
+                .then((res) => {
+                    this.checkLogin(res)
+                    console.log(res.data)
+                    if (res.data.resultCode === 1) {
+                        this.$Message.success('删除成功!');
+                        this.loadData($('.cityManageData_type button.active')[0].innerHTML)
+                        this.delModal = false;
+                    } else {
+                        this.$Message.error('删除失败!');
+                    }
+                })
+                .catch((err) => {
+                    console.log('err', err)
+                })
+            }
         },
-        selectChange (selection) {
-            // console.log('this is selectChange')
+        getCharCol(n) {
+            let temCol = '',
+            s = '',
+            m = 0
+            while (n > 0) {
+                m = n % 26 + 1
+                s = String.fromCharCode(m + 64) + s
+                n = (n - m) / 26
+            }
+            return s
+        },
+        s2ab(s) { //字符串转字符流
+            var buf = new ArrayBuffer(s.length);
+            var view = new Uint8Array(buf);
+            for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+            return buf;
+        },
+        downloadExl(json, type) {
+            json = [{
+                "城市": '北京市',
+                "大类": '固定资产',
+                '小类': '车辆',
+                '数量':  29,
+                '单价':  200
+            }]
+            var tmpDown; //导出的二进制对象
+            var tmpdata = json[0];
+            json.unshift({});
+            var keyMap = []; //获取keys
+            for (var k in tmpdata) {
+                keyMap.push(k);
+                json[0][k] = k;
+            }
+          var tmpdata = [];//用来保存转换好的json 
+                json.map((v, i) => keyMap.map((k, j) => Object.assign({}, {
+                    v: v[k],
+                    position: (j > 25 ? this.getCharCol(j) : String.fromCharCode(65 + j)) + (i + 1)
+                }))).reduce((prev, next) => prev.concat(next)).forEach((v, i) => tmpdata[v.position] = {
+                    v: v.v
+                });
+                var outputPos = Object.keys(tmpdata); //设置区域,比如表格从A1到D10
+                var tmpWB = {
+                    SheetNames: ['mySheet'], //保存的表标题
+                    Sheets: {
+                        'mySheet': Object.assign({},
+                            tmpdata, //内容
+                            {
+                                '!ref': outputPos[0] + ':' + outputPos[outputPos.length - 1] //设置填充区域
+                            })
+                    }
+                };
+                tmpDown = new Blob([this.s2ab(XLSX.write(tmpWB, 
+                    {bookType: (type == undefined ? 'xlsx':type),bookSST: false, type: 'binary'}//这里的数据是用来定义导出的格式类型
+                    ))], {
+                    type: ""
+                }); //创建二进制对象写入转换好的字节流
+            var href = URL.createObjectURL(tmpDown); //创建对象超链接
+            document.getElementById("hf").href = href; //绑定a标签
+            document.getElementById("hf").click(); //模拟点击实现下载
+            setTimeout(function() { //延时释放
+                URL.revokeObjectURL(tmpDown); //用URL.revokeObjectURL()来释放这个object URL
+            }, 100);
+        },
+        checkLogin (res) {
+           if (res.data.message === '用户登录超时') {
+                this.$router.push('/login')
+           }
         }
     },
     watch: {
-        'selectTime': 'dateChange'
+        'selectTime': 'dateChange',
+        '$store.state.cityList': 'cityChange'
     }
 }
 </script>
