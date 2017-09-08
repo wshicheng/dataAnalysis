@@ -5,6 +5,7 @@
               <li class="active">全部地区</li>
               <li v-bind:key="cityItem.id" v-for="cityItem of cityLists">{{cityItem.cityName}}</li>
           </ul> -->
+          {{$store.state.cityList}}
         <city-select></city-select>
       </Row>
       <Row class="cityBindTable">
@@ -60,7 +61,7 @@
                                         <div class="progress-outer">
                                             <span class="progress-text">{{item.winRate}}</span>  
                                             <div class="progress-inner">
-                                                <div :class="{'progress-bg':common}" :percent="item.winRate">
+                                                <div  :class="{'progress-bg':common}" :percent="item.winRate">
                                                 </div>
                                             </div>
                                         </div> 
@@ -77,13 +78,14 @@
 </template>
 <script>
 import $ from 'jquery'
+import { mapGetters } from 'vuex'
 import citySelect from './citySelect.vue'
     export default {
         components: {
             "city-select": citySelect
         },
         data(){
-            //this.changeWidth()
+          
             return {
                 cityLists:this.mockTableDatas(),
                 items:this.mockTableDatas2(),
@@ -92,18 +94,18 @@ import citySelect from './citySelect.vue'
                 isWin:true
             }
         },
+        computed:{
+            ...mapGetters(['dataMonth'])
+        },
+        mounted(){
+            console.log(this.$store)
+              setTimeout(()=>{
+                  this.changeWidth()
+              },1000)
+              this.changePage()
+        },
         methods:{
             mockTableDatas(){
-                // var arr = []
-                // for(let i=0;i<20;i++){
-                //     arr.push(
-                //         {
-                //             id: i,
-                //             cityName:Math.floor(Math.random()*100) + '城市'
-                //          }
-                //     )
-                // }
-                // return arr;
                 var _this = this
                 this.axios.get('/beefly/user/api/v1/city', {
                     params: {
@@ -174,17 +176,76 @@ import citySelect from './citySelect.vue'
             changeWidth(){
                 var $proress = $('.progress-bg');
                var res =  Array.prototype.slice.call($proress)
-               console.log(res,2222)
-               //return 
                res.forEach(function(item,index){
                    var $percent = $(item).attr('percent')
                     console.log($percent)
-                    $($(item)[0]).css(
-                        {
-                            width:20
-                        }
-                    )
+                    $(item).css({
+                        width:$percent,
+                    })
+                   if($percent!=='100%'){
+                       $(item).parent().prev().css({
+                           color:'#000'
+                       })
+                   }else{
+                       $(item).parent().prev().css({
+                           color:'#fff'
+                       })
+                   }
                })
+            },
+             changePage() {
+                   // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
+                   var that =  this
+                   console.log(that.$store.state.cityLists)
+                   setTimeout(function() {
+                       console.log(that.dataMonth)
+                       that.axios('/monthDataDetail/api/v1/monthDataDetail', {
+                           params: {
+                               dataMonth: that.dataMonth,
+                               type: 5,
+                               cityCode:that.$store.state.cityList.length===0?'':that.$store.state.cityList.join('')
+                           }
+                           }).then((response) => {
+                               var data = response.data.data
+                               var arr = [];
+                               for (var i = 0; i < data.length; i++) {
+                                   if (i <= data.length - 1) {
+                                       arr.push(
+                                            {
+                                               cityName: data[i].city,
+                                               singleProduce: {
+                                                   outPutBilling: data[i].outPutBilling,//单车产出-计费
+                                                   outPutReality: data[i].outPutReality,//单车产出-实收
+                                               },
+                                               singleCost: {
+                                                   oBikeCost: data[i].oBikeCost,//单车成本
+                                               },
+                                               singleProfit: {
+                                                   inPutBilling: data[i].inPutBilling,//单车盈收-计费
+                                                   inPutReality: data[i].inPutReality,//单车盈收-实收
+                                               },
+                                               singleProfitRate: {
+                                                   inPutBillingLv: data[i].inPutBillingLv,//单车盈收率-计费
+                                                   inPutRealityLv: data[i].inPutRealityLv,//单车盈收率-实收
+                                               }
+                                           }
+                                       )
+                                   }
+                               }
+                               console.log(arr)
+                               that.data4 = arr
+                           }).catch((error) => {
+                               console.log(error)
+                           })
+                       }, 200)
+               }
+        },
+        watch: {
+            'dataMonth': {
+                handler: function(val) {
+                    this.changePage()
+                },
+                deep: true
             }
         }
     }
