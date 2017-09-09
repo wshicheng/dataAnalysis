@@ -203,7 +203,7 @@
 <script>
 import vehicleOperatStateDistribute from '../../components/Vehicle-operating-state-distribution/index.vue'
 import vehicleState from '../../components/Vehicle-state-distribution/index.vue'
-var XLSX = require('xlsx')
+// var XLSX = require('xlsx')
 export default {
   components: {
     'vehicle-operateState': vehicleOperatStateDistribute,

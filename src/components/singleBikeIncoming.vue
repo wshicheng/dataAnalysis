@@ -484,9 +484,10 @@
                    var that =  this
                    setTimeout(function() {
                        console.log(that.dataMonth)
-                       that.axios('/monthDataDetail/api/v1/monthDataDetail', {
+                       that.axios('/beefly/monthDataDetail/api/v1/monthDataDetail', {
                            params: {
                                dataMonth: that.dataMonth,
+                               accessToken: that.$store.state.token,
                                type: 4
                            }
                            }).then((response) => {

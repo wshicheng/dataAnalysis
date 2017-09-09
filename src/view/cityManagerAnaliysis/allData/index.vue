@@ -1,7 +1,7 @@
 <template>
     <Row class="allData">
         <Breadcrumb class="Breadcrumb">
-            <BreadcrumbItem>城市经营分析</BreadcrumbItem>
+            <BreadcrumbItem>整体数据</BreadcrumbItem>
         </Breadcrumb>
         <Row class="datePick_zone">
             <time class="month">月份：</time>

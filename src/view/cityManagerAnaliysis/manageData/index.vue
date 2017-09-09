@@ -22,8 +22,12 @@
             <Button class="cancel" @click="delTableByGroup">删除</Button>
             <span>*每月10号后，不可编辑和删除上月数据</span>
 
-            <Table  :row-class-name="rowClassName" class="cityManage_table" border size='small' :columns="columns4" :data="data1" @on-select="selectGroup" @on-select-all="selectAll" @on-selection-change="selectChange">
-            </Table>
+            <div style="position:relative;">
+                          
+                <Spin fix  size="large" v-if='data1 === []'></Spin>
+                <Table v-else :row-class-name="rowClassName" class="cityManage_table" border size='small' :columns="columns4" :data="data1" @on-select="selectGroup" @on-select-all="selectAll" @on-selection-change="selectChange">                
+                </Table>
+            </div>
             <Page :total="totalListNum" show-sizer show-elevator :styles='page' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
 
             <!-- 模态框区域 -->
@@ -43,16 +47,13 @@
                         </FormItem>
                         <FormItem label="类别">
                             <FormItem prop='bigKind'>
-                                <Select class="big_select" :model="editValidate.bigKind" :placeholder="editBigType">
-                                    <Option value="beijing">固定资产</Option>
-                                    <Option value="shanghai">运维费用</Option>
+                                <Select class="big_select" v-model="editValidate.bigKind" :placeholder="editBigType">
+                                    <Option v-for="item in bigList" :value="item.name" :key="item.index">{{ item.name }}</Option>
                                 </Select>
                             </FormItem>
                             <FormItem prop='smallKind'>
-                                <Select class="small_select" :model="editValidate.smallKind" :placeholder="editSmallType">
-                                    <Option value="beijing">车辆</Option>
-                                    <Option value="shanghai">电池</Option>
-                                    <Option value="shenzhen">充电站</Option>
+                                <Select class="small_select" v-model="editValidate.smallKind" :placeholder="editSmallType">
+                                    <Option v-for="item in listChose" :value="item.name" :key="item.index">{{ item.name }}</Option>
                                 </Select>
                             </FormItem>
                         </FormItem>
@@ -112,7 +113,7 @@
 
 <style lang='scss' scoped type="text/css">
 
-#cityManagerData_body {
+    #cityManagerData_body {
     width: 100%; // border: 1px solid #dddee1;
     background: #ececec;
     border-radius: 4px;
@@ -365,6 +366,64 @@ export default {
     },
     data() {
         return {
+            listChose: [],
+            smallList_one: [
+                {
+                    name: '车辆',
+                    index: 0
+                }, {
+                    name: '电池',
+                    index: 1
+                }, {
+                    name: '充电站建设',
+                    index: 2
+                }, {
+                    name: '充电站电柜',
+                    index: 3
+                }, {
+                    name: '机动车',
+                    index: 4
+                }, {
+                    name: '物流成本',
+                    index: 5
+                }, {
+                    name: '办公成本',
+                    index: 6
+                }, {
+                    name: '其他',
+                    index: 7
+                }
+            ],
+            smallList_two: [
+                {
+                    name: '人员成本',
+                    index: 0
+                }, {
+                    name: '经营费用',
+                    index: 1
+                }, {
+                    name: '开城费用',
+                    index: 2
+                }, {
+                    name: '房租(生产)',
+                    index: 3
+                }, {
+                    name: '水电(生产)',
+                    index: 4
+                }
+            ],
+            bigList: [
+                {
+                    name: '固定资产',
+                    index: 0
+                }, {
+                    name: '运维费用',
+                    index: 1
+                }, {
+                    name: '222',
+                    index: 1
+                }
+            ],
             page: {
                 'float': 'right',
                 'margin-top': '20px'
@@ -519,7 +578,6 @@ export default {
     },
     methods: {
         rowClassName (row, index) {
-            console.log(row)
             if (row.status === 0) {
                 return '';
             } else {
@@ -528,12 +586,15 @@ export default {
             return '';
         },
         loadData(type) {
+            // 清空多选删除的数组容器。
+            this.checkList = []
             this.currentPage = 1
             this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
                     accessToken: this.$store.state.token,
                     time: this.selectTime === '' ? '' : moment(this.selectTime).format('YYYY-MM'),
-                    type: type
+                    type: type,
+                    cityCode: this.$store.state.cityList.toString()
                 }
             })
                 .then((res) => {
@@ -551,10 +612,14 @@ export default {
                 })
         },
         dateChange() {
+            // 清空多选删除的数组容器。
+            this.checkList = []
+            this.currentPage = 1
             this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
+                    cityCode: this.$store.state.cityList.toString(),
                     accessToken: this.$store.state.token,
-                    time: moment(this.selectTime).format('YYYY-MM'),
+                    time: this.selectTime === '' ? '' : moment(this.selectTime).format('YYYY-MM'),
                     type: $('.cityManageData_type button.active')[0].innerHTML
                 }
             })
@@ -573,6 +638,8 @@ export default {
                 })
         },
         handleCurrentPage(currentPage) {
+            // 清空多选删除的数组容器。
+            this.checkList = []
             this.currentPage = 1
             this.currentPage = currentPage
             var _this = this
@@ -581,7 +648,9 @@ export default {
                     pageNo: currentPage,
                     pageSize: _this.pageSize,
                     cityCode: this.$store.state.cityList.toString(),
-                    accessToken: this.$store.state.token
+                    accessToken: this.$store.state.token,
+                    time: this.selectTime === '' ? '' : moment(this.selectTime).format('YYYY-MM'),
+                    type: $('.cityManageData_type button.active')[0].innerHTML
                 }
             })
                 .then((res) => {
@@ -600,6 +669,8 @@ export default {
                 });
         },
         handlePageSize(pageSize) {
+            // 清空多选删除的数组容器。
+            this.checkList = []
             this.currentPage = 1
             var _this = this;
             this.pageSize = pageSize
@@ -608,7 +679,9 @@ export default {
                     pageNo: this.currentPage,
                     cityCode: this.$store.state.cityList.toString(),
                     pageSize: this.pageSize,
-                    accessToken: this.$store.state.token
+                    accessToken: this.$store.state.token,
+                    time: this.selectTime === '' ? '' : moment(this.selectTime).format('YYYY-MM'),
+                    type: $('.cityManageData_type button.active')[0].innerHTML
                 }
             })
                 .then((res) => {
@@ -667,27 +740,35 @@ export default {
             }, 1500);
         },
         show(index, row) {
-            this.editModal = true
             console.log(row)
-            this.editMonth = row.dataMonth
-            this.editValidate.dataMonth = row.dataMonth
-            this.editArea = row.city
-            this.editValidate.city = row.city
-            var type = row.type.split('/')
-            // this.$set(this.editValidate.bigType,type[0],0) 
-            this.editBigType = type[0]
-            this.editValidate.bigKind = type[0]
-            this.editSmallType = type[1]
-            this.editValidate.smallKind = type[1]
-            this.editValidate.unitPrice = row.unitPrice
-            this.editValidate.number = row.number
-            this.editValidate.id = row.id
-            console.log(this.editValidate)
+            if (row.status === 1) {
+                this.$Message.warning('每月10号后，不可编辑和删除上月数据')
+            } else {     
+                this.editModal = true
+                this.editMonth = row.dataMonth
+                this.editValidate.dataMonth = row.dataMonth
+                this.editArea = row.city
+                this.editValidate.city = row.city
+                var type = row.type.split('/')
+                // this.$set(this.editValidate.bigType,type[0],0) 
+                this.editBigType = type[0]
+                this.editValidate.bigKind = type[0]
+                this.editSmallType = type[1]
+                this.editValidate.smallKind = type[1]
+                this.editValidate.unitPrice = row.unitPrice
+                this.editValidate.number = row.number
+                this.editValidate.id = row.id
+                console.log(this.editValidate)
+            }
         },
         remove(index, row) {
-            this.delId = row.id
-            this.delIndex = index
-            this.delModal = true
+            if (row.status === 1) {
+                this.$Message.warning('每月10号后，不可编辑和删除上月数据!');
+            } else {
+                this.delId = row.id
+                this.delIndex = index
+                this.delModal = true
+            }
         },
         closeDelModal() {
             this.axios.get('/beefly/baseData/api/v1/deleteBaseData', {
@@ -830,10 +911,19 @@ export default {
                                 _this.uploadPercent = 0
                                 _this.loadData()
                             }, 1000)
+                        } else if (_this.uploadPercent === 100) {
+                            _this.$Message.warning(res.data.message);
+                            _this.isUploadPercent = false
+                            clearInterval(timer)
+                            _this.uploadPercent = 0
                         }
                     }, 100)
                 })
                 .catch(function(err) {
+                    _this.isUploadPercent = false
+                    _this.uploadPercent = 0
+                    // 关闭遮罩层
+                    // _this.cover = false
                     _this.$Message.success(err.message);
                     console.log('err', err)
                 })
@@ -841,6 +931,8 @@ export default {
             }
         },
         cityChange() {
+            // 清空多选删除的数组容器。
+            this.checkList = []
             this.currentPage = 1
             console.log(this.selectTime)
             console.log(moment(this.selectTime).format('YYYY-MM'))
@@ -873,15 +965,22 @@ export default {
             this.checkList = []
             // console.log(selection)
             selection.map( (item) => {
-                this.checkList.push(item.id)
+                if (item.status === 1) {
+                    this.$Message.warning('每月10号后，不可编辑和删除上月数据')
+                } else {
+                    this.checkList.push(item.id)
+                }
             })
         },
         selectChange(selection) {
-            console.log(selection)
             this.checkList = []
             // console.log(selection)
             selection.map( (item) => {
-                this.checkList.push(item.id)
+                if (item.status === 1) {
+                    this.$Message.warning('每月10号后，不可编辑和删除上月数据')
+                } else {
+                    this.checkList.push(item.id)
+                }
             })
             console.log(this.checkList)
         },
@@ -974,6 +1073,16 @@ export default {
                 URL.revokeObjectURL(tmpDown); //用URL.revokeObjectURL()来释放这个object URL
             }, 100);
         },
+        bigListWatch () {
+            console.log(this.editValidate.bigKind)
+            if (this.editValidate.bigKind === '固定资产') {
+                this.listChose = []
+                this.listChose = this.smallList_one
+            } else {
+                this.listChose = []
+                this.listChose = this.smallList_two
+            }
+        },
         checkLogin (res) {
            if (res.data.message === '用户登录超时') {
                 this.$router.push('/login')
@@ -982,7 +1091,8 @@ export default {
     },
     watch: {
         'selectTime': 'dateChange',
-        '$store.state.cityList': 'cityChange'
+        '$store.state.cityList': 'cityChange',
+        'editValidate.bigKind': 'bigListWatch'
     }
 }
 </script>

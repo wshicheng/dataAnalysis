@@ -17,7 +17,7 @@
               </Input>
           </FormItem>
           <FormItem>
-              <button type="button" @click="handleSubmit('formInline')">登录</button>
+              <button type="button" @click="handleSubmit('formInline')" style="font-weight: bolder;">登录</button>
           </FormItem>
       </Form>
     </div>
@@ -37,11 +37,11 @@ import {mapActions,mapState} from 'vuex'
                 },
                 ruleInline: {
                     user: [
-                        { required: true, message: '请填写用户名', trigger: 'blur' }
+                        { required: true, message: '请填写用户名', trigger: 'changes' }
                     ],
                     password: [
-                        { required: true, message: '请填写密码', trigger: 'blur' },
-                        { type: 'string', min: 6, message: '密码长度不能小于6位', trigger: 'blur' }
+                        { required: true, message: '请填写密码', trigger: 'change' },
+                        { type: 'string', min: 6, message: '密码长度不能小于6位', trigger: 'change' }
                     ]
                 }
             }
@@ -73,26 +73,17 @@ import {mapActions,mapState} from 'vuex'
                             }
                         })
                         .then((res) => {
-                            console.log(res)
                             var resultCode = res.data.resultCode
                             var message = res.data.message
                             if(resultCode === 1){
                                 this.$router.push('/')
                                 this.setToken(res.data.data.token)
-                                console.log(this.$store)
-                                 window.localStorage.setItem('token', res.data.data.token)
+                                window.localStorage.setItem('token', res.data.data.token)
                             }
                         })
                         .then( (err) => {
                             console.log(err)
                         })
-                        // this.axios.post('/system/login', params:{
-                        //         'userName':'admin',
-                        //         'passWord':'456123'
-                        //     })
-                        
-                        // this.$Message.success('登录成功!');
-                        // this.$router.push('/')
                     } else {
                         // this.$Message.error('表单验证失败!');
                     }

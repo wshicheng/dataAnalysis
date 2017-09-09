@@ -151,7 +151,7 @@ import {mapActions,mapGetters} from 'vuex'
             }
         },
         mounted(){
-            this.currentMonth = moment().format('YYYY-MM')
+            this.currentMonth = moment(this.$route.params.month).format('YYYY-MM')
             var now = moment()
             var currentMonth = moment(this.currentMonth);
             var diff = now.diff(currentMonth,'month')
