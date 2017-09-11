@@ -394,8 +394,11 @@ export default {
                     name: '办公成本',
                     index: 6
                 }, {
-                    name: '其他',
+                    name: '运维工具车',
                     index: 7
+                }, {
+                    name: '其他',
+                    index: 8
                 }
             ],
             smallList_two: [
@@ -578,6 +581,8 @@ export default {
         }
     },
     mounted() {
+        this.$store.dispatch('menuActiveName', '/index/managerData')
+        document.title = '数据运营平台 - 我管理的数据'
         this.loadData('固定资产')
     },
     methods: {
@@ -978,23 +983,22 @@ export default {
             
             // console.log(selection)
             selection.map( (item) => {
-                 this.checkList.push(item.id)
-                // if (item.status === 1) {
-                //     this.$Message.warning('每月10号后，不可编辑和删除上月数据')
-                // } else {
-                //     this.checkList.push(item.id)
-                // }
+                if (item.status === 1) {
+                    this.$Message.warning('每月10号后，不可编辑和删除上月数据')
+                } else {
+                    this.checkList.push(item.id)
+                }
             })
         },
         selectChange(selection) {
             console.log(selection)
             selection.map( (item) => {
-                this.checkList.push(item.id)
-                // if (item.status === 1) {
-                //     this.$Message.warning('每月10号后，不可编辑和删除上月数据')
-                // } else {
-                //     this.checkList.push(item.id)
-                // }
+                // this.checkList.push(item.id)
+                if (item.status === 1) {
+                    this.$Message.warning('每月10号后，不可编辑和删除上月数据')
+                } else {
+                    this.checkList.push(item.id)
+                }
             })
             var res = this.checkList.unique()
             this.checkList = res

@@ -1,6 +1,6 @@
 <template>
     <div class="menu">
-        <Menu v-on:on-select="handleRoute" id="ul" :theme="theme2" :open-names="['1']" accordion width="auto">
+        <Menu v-on:on-select="handleRoute" :active-name='menuActiveName' id="ul" :theme="theme2" :open-names="['9','/index/cityManagerAnalysis']" :accordion='accord' width="auto">
             <!-- <Menu-item name="/">首页</Menu-item>
             <Submenu name="orderData">
                 <template slot="title">
@@ -81,13 +81,21 @@ import $ from 'jquery'
 export default {
     data() {
         return {
-            theme2: 'dark'
+            theme2: 'dark',
+            menuActiveName: "",
+            accord: true
         }
     },
     methods: {
         handleRoute(name) {
             this.$router.push({ path: name })
+        },
+        changeMenuActiveName () {
+            this.menuActiveName = this.$store.state.menuActiveName
         }
+    },
+    watch: {
+        '$store.state.menuActiveName': 'changeMenuActiveName'
     }
 }
 </script>

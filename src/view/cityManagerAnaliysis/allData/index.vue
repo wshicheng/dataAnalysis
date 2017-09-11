@@ -5,7 +5,7 @@
         </Breadcrumb>
         <Row class="datePick_zone">
             <time class="month">月份：</time>
-            <DatePicker @on-change="queryMonth" type="month" :options="options" format="yyyy-MM"  placeholder="选择日期" style="width: 200px"></DatePicker>
+            <DatePicker @on-change="queryMonth"  type="month" :options="options" format="yyyy-MM"  placeholder="选择日期" style="width: 216px"></DatePicker>
         </Row>
         <Row class="tableGrid">
             <Table :columns="columns" :data="data"></Table>
@@ -60,7 +60,8 @@ export default {
         }
     },
     mounted () {
-       
+        this.$store.dispatch('menuActiveName', '/index/cityManagerAnalysis')
+        document.title = '数据运营平台 - 整体数据'
         var _this = this
         this.axios.get('/beefly/record/api/v1/page',{params:{accessToken:this.$store.state.token}})
         .then(function (res) {
