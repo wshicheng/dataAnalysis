@@ -29,8 +29,10 @@ export default {
                                 color: '#2d8cf0',
                                 cursor: 'pointer'
                             },
-                            attrs: {
+                            props: {
                                 blank: '_blank',
+                            },
+                            attrs: {
                                 href: '#/index/cityManagerAnalysis/month/' + params.row.dataMonth
                             }
                         }, params.row.dataMonth)

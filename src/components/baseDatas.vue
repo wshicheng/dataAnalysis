@@ -716,7 +716,7 @@ export default {
                                     //车辆数量
                                     beefly: {
                                         num: data[i].bikeNum,
-                                        money: data[i].bikeNum,
+                                        money: data[i].bikeMoney,
                                     },
                                     //电池
                                     Battery: {
