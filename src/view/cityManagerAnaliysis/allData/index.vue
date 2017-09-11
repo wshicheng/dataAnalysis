@@ -81,7 +81,6 @@ export default {
     },
     methods: {
         queryMonth(value){
-            console.log(value)
             var _this = this
             this.axios.get('/beefly/record/api/v1/page', {
                 params: {
