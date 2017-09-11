@@ -9,7 +9,7 @@
       </Row>
       <Row class="cityBindTable">
           <ul>
-              <li class="total" v-show="totalMoneyTbale">
+              <li class="total" v-show="allCount">
                   <h3>合计</h3>
                   <div class="total">
                       <table>
@@ -22,14 +22,14 @@
                           </thead>
                           <tbody>
                               <tr :key="item.actualYield" v-for="item of items">
-                                  <td>{{item.actualactualYield}}</td>
+                                  <td>{{item.actualYield}}</td>
                                   <td>{{item.profitLossStatus}}</td>
                                   <td>
                                       <div class="progress">
                                         <div class="progress-outer">
                                             <span class="progress-text">{{item.profitAndLossLv}}</span>  
                                             <div class="progress-inner">
-                                                <div :class="{'progress-bg':common }" percent="0%">
+                                                <div :class="{'progress-bg':common }" :percent="item.profitAndLossLv">
                                                 </div>
                                             </div>
                                         </div> 
@@ -40,8 +40,8 @@
                       </table>
                   </div>
               </li>
-              <li class="cityBind" v-bind:key="list.city" v-for="list of allCityTables">
-                  <h3>{{list.city}}</h3>
+              <li class="cityBind" v-bind:key="index" v-for="(item,index) of allCityTables">
+                  <h3>{{item[0].city}}</h3>
                   <div class="total">
                       <table>
                           <thead>
@@ -52,15 +52,15 @@
                             </tr>
                           </thead>
                           <tbody>
-                              <tr :key="item.id" v-for="item of list.tableItem">
-                                  <td>{{item.actualYield}}</td>
-                                  <td>{{item.profitLossStatus}}</td>
+                              <tr :key="list.id" v-for="list of item">
+                                  <td>{{list.actualYield}}</td>
+                                  <td>{{list.profitLossStatus}}</td>
                                   <td>
                                       <div class="progress">
                                         <div class="progress-outer">
-                                            <span class="progress-text">{{item.profitAndLossLv}}</span>  
+                                            <span class="progress-text">{{list.profitAndLossLv}}</span>  
                                             <div class="progress-inner">
-                                                <div  :class="{'progress-bg':common}" :percent="item.profitAndLossLv">
+                                                <div  :class="{'progress-bg':common}" :percent="list.profitAndLossLv">
                                                 </div>
                                             </div>
                                         </div> 
@@ -99,13 +99,11 @@ import citySelect from './citySelect.vue'
             "city-select": citySelect
         },
         data(){
-          
             return {
+                allCount:false,
                 cityLists:this.cityList,
-                // items:this.mockTableDatas2(),
+                allCityTables:[],
                 items:[],
-                // allCityTables:this.mockTableDatas3(),
-                allCityTables: [],
                 common:true,
                 isWin:true,
                 totalMoneyTbale: false
@@ -114,65 +112,12 @@ import citySelect from './citySelect.vue'
         computed:{
             ...mapGetters(['dataMonth','cityList'])
         },
-        mounted(){
+        updated(){
               setTimeout(()=>{
-                  this.mountedWay()
-              },1000)
-             // this.mountedWay()
+                  this.changeWidth()
+              },500)
         },
         methods:{
-            // mockTableDatas(){
-            //     var _this = this
-            //     this.axios.get('/beefly/user/api/v1/city', {
-            //         params: {
-            //             accessToken: window.localStorage.getItem('token')
-            //         }
-            //     })
-            //     .then(function (res) {
-            //         var arr = res.data.data
-            //     })
-            //     .catch(function (err) {
-            //         console.log('err', err)
-            //     });
-            // },
-            mockTableDatas2(){
-                var arr = []
-                for(let i=0;i<5;i++){
-                    arr.push(
-                        {
-                            id: i,
-                            actualYield:Math.floor(Math.random()*100) + '%',
-                            profitLossStatus:Math.floor(Math.random()*100-8)>2?'赢':'亏',
-                            profitAndLossLv:Math.floor(Math.random()*100) + '%',
-                        }
-                    )
-                    
-                }
-                var res = arr.map((item)=>{
-                        if(item.profitLossStatus==='赢'){
-                            item.isWin = true
-                        }else{
-                            item.isWin = false
-                        }
-                        return Object.assign({},item,{isWin:item.isWin})
-                    })
-                return  res;
-            },
-            mockTableDatas3(data){
-                var arr = []
-                console.log('bBBB')
-                data.map( (item) => {
-                    var temp = item
-                    console.log(item)
-                    arr.push(
-                        {
-                            tableItem:temp,
-                            city: temp[0].city
-                        }
-                    )
-                })
-                return arr
-            },
             changeWidth(){
                 var $proress = $('.progress-bg');
                var res =  Array.prototype.slice.call($proress)
@@ -182,7 +127,7 @@ import citySelect from './citySelect.vue'
                     $(item).css({
                         width:$percent,
                     })
-                   if($percent!=='100%'){
+                   if($percent.fixed(2)!=='100%'){
                        $(item).parent().prev().css({
                            color:'#000'
                        })
@@ -207,56 +152,18 @@ import citySelect from './citySelect.vue'
                            }
                            }).then((response) => {
                                var data = response.data.data
-                            //    for (var i = 0; i < data.length; i++) {
-                            //        if (i <= data.length - 1) {
-                            //            arr.push(
-                            //                 {
-                            //                    city: data[i].city,
-                            //                    singleProduce: {
-                            //                        outPutBilling: data[i].outPutBilling,//单车产出-计费
-                            //                        outPutReality: data[i].outPutReality,//单车产出-实收
-                            //                    },
-                            //                    singleCost: {
-                            //                        oBikeCost: data[i].oBikeCost,//单车成本
-                            //                    },
-                            //                    singleProfit: {
-                            //                        inPutBilling: data[i].inPutBilling,//单车盈收-计费
-                            //                        inPutReality: data[i].inPutReality,//单车盈收-实收
-                            //                    },
-                            //                    singleProfitRate: {
-                            //                        inPutBillingLv: data[i].inPutBillingLv,//单车盈收率-计费
-                            //                        inPutRealityLv: data[i].inPutRealityLv,//单车盈收率-实收
-                            //                    }
-                            //                }
-                            //            )
-                            //        }
-                            //    }
-                                // that.items = data[0]
-                                // data.shift()
-                                // var newData = that.mockTableDatas3(data)
-                                // that.allCityTables = newData
-                            if (that.$store.state.cityList.length > 1) {
-                                this.totalMoneyTbale = true
-                                that.items = data[0]
-                                data.shift()
-                                var newData = that.mockTableDatas3(data)
-                                that.allCityTables = newData
-                                
-                                // data.shift()
-                                // var newData = that.mockTableDatas3(data)
-                                // that.allCityTables = newData
-                            } else {
-                                this.totalMoneyTbale = false
-                                console.log(data)
-                                console.log(that.mockTableDatas3(data))
-                                that.items = that.mockTableDatas3(data)
-                                // that.items = data[0]
-                                // data.shift()
-                                // var newData = that.mockTableDatas3(data)
-                                // that.allCityTables = newData
-                                // var newData = that.mockTableDatas3(data)
-                                // that.allCityTables = newData
-                            }
+                                 that.items = data[0]
+                                 if(data.length>1){
+                                      that.allCount = true
+                                      that.items = data[0]
+                                      data.splice(0,1)
+                                     console.log(data)
+                                     that.allCityTables = data
+                                 }else{
+                                     that.allCount = false
+                                     that.allCityTables = data
+
+                                 }
 
                            }).catch((error) => {
                                console.log(error)
@@ -277,30 +184,6 @@ import citySelect from './citySelect.vue'
                            }
                            }).then((response) => {
                                var data = response.data.data
-                            //    for (var i = 0; i < data.length; i++) {
-                            //        if (i <= data.length - 1) {
-                            //            arr.push(
-                            //                 {
-                            //                    city: data[i].city,
-                            //                    singleProduce: {
-                            //                        outPutBilling: data[i].outPutBilling,//单车产出-计费
-                            //                        outPutReality: data[i].outPutReality,//单车产出-实收
-                            //                    },
-                            //                    singleCost: {
-                            //                        oBikeCost: data[i].oBikeCost,//单车成本
-                            //                    },
-                            //                    singleProfit: {
-                            //                        inPutBilling: data[i].inPutBilling,//单车盈收-计费
-                            //                        inPutReality: data[i].inPutReality,//单车盈收-实收
-                            //                    },
-                            //                    singleProfitRate: {
-                            //                        inPutBillingLv: data[i].inPutBillingLv,//单车盈收率-计费
-                            //                        inPutRealityLv: data[i].inPutRealityLv,//单车盈收率-实收
-                            //                    }
-                            //                }
-                            //            )
-                            //        }
-                            //    }
                                 //合计
                                 this.totalMoneyTbale = true
                                 console.log('jjjjj', data)
@@ -323,7 +206,12 @@ import citySelect from './citySelect.vue'
                 },
                 deep: true
             },
-            '$store.state.cityList': 'changePage'
+            '$store.state.cityList': {
+                handler: function(){
+                    this.changePage()
+                },
+                deep: true
+            }
         }
     }
 </script>

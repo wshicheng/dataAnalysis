@@ -23,7 +23,6 @@ let routes = [
 ]
 
 function generateRoutesFromMenu(menu = [], routes = []){
-    console.log(routes)
     return routes
  }
  

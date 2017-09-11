@@ -1,6 +1,5 @@
 import * as types from '../types.js'
 import staticRoute from '../../router/staticRoute.js'
-console.log(staticRoute)
 const state = {
     items:[],
     isLoadRoutes: false,
@@ -11,7 +10,6 @@ const mutations= {
         if(!token){
             state.items = []
         }else{
-            console.log('addRoute')
             generateMenuItems(state)
         }
     },
@@ -35,8 +33,6 @@ const getters = {
 }
 function generateMenuItems(state){
     var arr = state.staticRoute
-    console.log('生产菜单')
-    console.log(arr)
     state.items = arr
     return
 }
