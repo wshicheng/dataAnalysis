@@ -615,7 +615,7 @@ export default {
                     }
                 }
             ],
-            data4: this.mockTableData()
+            data4: []
         }
     },
     computed:{
