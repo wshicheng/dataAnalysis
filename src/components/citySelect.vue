@@ -106,7 +106,7 @@ export default {
         var _this = this
         this.axios.get('/beefly/user/api/v1/city', {
             params: {
-                accessToken: window.localStorage.getItem('token')
+                accessToken: this.$store.state.token,
             }
         })
         .then(function (res) {

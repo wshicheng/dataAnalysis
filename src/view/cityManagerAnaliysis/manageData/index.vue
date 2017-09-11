@@ -85,7 +85,7 @@
                 </div>
                 <div class="managerData_upload_uploadFile">
                     <span>选择文件:</span>
-                    <input class="upload" type="file" @change="importExcel($event.target)" placeholder="" />
+                    <input id='fileupload' class="upload" type="file" @change="importExcel($event.target)" placeholder="" />
                 </div>
                 <div class="managerData_upload_download">
                     <span>*请选择xls、xlsx格式文件</span>
@@ -923,6 +923,10 @@ export default {
                         if (_this.uploadPercent === 100 && res.data.resultCode === 1) {
                             clearInterval(timer)
                             _this.$Message.success('上传成功');
+                            // 清除上传excel文件流
+                            var obj = document.getElementById('fileupload') ; 
+                            obj.select();
+                            document.selection.clear(); 
                             setTimeout(function() {
                                 _this.isUploadPercent = false
                                 // 关闭遮罩层
@@ -931,6 +935,7 @@ export default {
                                 _this.exportModal = false
                                 _this.uploadPercent = 0
                             }, 1000)
+                            
                         } else if (_this.uploadPercent === 100) {
                             _this.$Message.warning(res.data.message);
                             _this.isUploadPercent = false
