@@ -1014,6 +1014,8 @@ export default {
                     console.log(res.data)
                     if (res.data.resultCode === 1) {
                         this.$Message.success('删除成功!');
+                        // 批量删除成功后，清空checkList数组
+                        this.checkList = []
                         this.current = 1
                         this.loadData($('.cityManageData_type button.active')[0].innerHTML)
                         this.delModal = false;

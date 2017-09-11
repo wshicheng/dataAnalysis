@@ -826,18 +826,18 @@ export default {
                         <td class="ivu-table-column-center">
                             <div class="ivu-table-cell">
                                 <div style="height: 30px;">
-                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.carNum}</span>
+                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.truckNum}</span>
                                     <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.carMoney}</span>
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.truckMoney}</span>
                                 </div>
                             </div>
                         </td>
                         <td class="ivu-table-column-center">
                             <div class="ivu-table-cell">
                                 <div style="height: 30px;">
-                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.truckNum}</span>
+                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.carNum}</span>
                                     <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.truckMoney}</span>
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.carMoney }</span>
                                 </div>
                             </div>
                         </td>
