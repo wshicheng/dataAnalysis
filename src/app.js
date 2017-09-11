@@ -25,12 +25,11 @@ Vue.use(iView)
 
 Vue.prototype.axios = axios
 let token = window.sessionStorage.getItem('token')
-console.log(store)
+
 //页面刷新时，重新赋值token
 if (token) {
     store.commit(types.LOGIN, token)
     store.commit(types.ADD_MENU, token)
-    console.log(store)
     router.addRoutes(store.state.menus.items)
 }
 
@@ -41,13 +40,9 @@ router.beforeEach((route,redirect,next) => {
         store.commit(types.ADD_MENU, null)
     }
     let accessToken = window.sessionStorage.getItem('token')
-    console.log('accessToken:' + accessToken)
-    console.log(!accessToken)
     if(!accessToken&&route.path!=='/login'){
         next({path:'/login'})
     }else{
-        console.log(route)
-        console.log(route.name)
         if(route.name){
             next()
         }else{

@@ -604,7 +604,6 @@ export default {
                     this.checkLogin(res)
                     var data = res.data.data
                     var dataDeled = this.tableDataDel(data)
-                    console.log('哈哈哈', dataDeled)
                     this.data1 = dataDeled
                     if (res.data.totalPage > 1) {
                         this.pageShow = true
@@ -699,53 +698,19 @@ export default {
         },
         tableDataDel(data) {
             // 处理大类小类数据
-            var typeArr = []
-            var newType = []
-            for (var i = 0; i < data.length; i++) {
-                newType[i] = data[i].bigKind + '/' + data[i].smallKind
-                typeArr.push(newType[i])
-            }
             var newData = []
             for (var i = 0; i < data.length; i++) {
-                var obj = {}
-                obj.type = typeArr[i]
-                obj.city = data[i].city
-                obj.dataMonth = data[i].dataMonth
-                obj.number = data[i].number
-                obj.unitPrice = data[i].unitPrice
-                obj.id = data[i].id
-                obj.status = data[i].status
-                if (obj.status === 1) {
-                    obj._disabled = true
-                } else {
-                    obj._disabled = false
+                 var obj = {}
+                 obj.type = data[i].bigKind + '/' + data[i].smallKind
+                 newData[i] =  Object.assign({},data[i],{type: obj.type},{_disabled:obj.status===1?true:false})   
+                 if(this.checkList.length>0){
+                   this.checkList.map(id=>{
+                       if(id=== newData[i].id){
+                            newData[i] =  Object.assign({},data[i],{type: obj.type},{_disabled:obj.status===1?true:false},{_checked:true}) 
+                       }
+                   })
                 }
-
-                // var list = this.checkList
-                // for (var i= 0; i < list.length; i++) {
-                //     if (data[i].id === list[i]) {
-                //         obj._checked = true
-                //     } else {
-                //         obj._checked = false
-                //     }
-                // }
-                // obj._checked = true
-
-                newData.push(obj)
             }
-
-
-            // var arr = newData.map( (item) => {
-            //     for (var i = 0; i < this.checkList.length; i++) {
-            //         if (item.id === this.checkList[i]) {
-            //             Object.assign({}, item, {_checked: true})
-            //         } else {
-            //             Object.assign({}, item, {_checked: false})
-            //         }
-            //     }
-
-            //     return newData
-            // })
             return newData
         },
         ok() {
@@ -1022,13 +987,14 @@ export default {
         },
         selectChange(selection) {
             this.checkList = []
-            // console.log(selection)
+            console.log(selection)
             selection.map( (item) => {
-                if (item.status === 1) {
-                    this.$Message.warning('每月10号后，不可编辑和删除上月数据')
-                } else {
-                    this.checkList.push(item.id)
-                }
+                this.checkList.push(item.id)
+                // if (item.status === 1) {
+                //     this.$Message.warning('每月10号后，不可编辑和删除上月数据')
+                // } else {
+                //     this.checkList.push(item.id)
+                // }
             })
             console.log(this.checkList)
         },
