@@ -4,17 +4,18 @@
       <h1>蜜蜂出行数据运营平台</h1>
     </div>
     <div id="login_form">
-      <Form class="form" ref="formInline" :model="formInline" :rules="ruleInline">
+      <Form class="form" ref="formInline" :model="formInline" >
           <h1>登录</h1>
           <FormItem prop="user">
-              <Input type="text" v-model="formInline.user" placeholder="请输入用户名">
+              <Input type="text" autofocus v-on:on-change="handleCheck" v-model="formInline.user" placeholder="请输入用户名">
                   <Icon type="ios-person-outline" slot="prepend"></Icon>
               </Input>
           </FormItem>
           <FormItem prop="password">
-              <Input type="password" v-model="formInline.password" placeholder="请输入密码">
+              <Input type="password" v-on:on-change="handleCheck"  v-model="formInline.password" placeholder="请输入密码">
                   <Icon type="ios-locked-outline" slot="prepend"></Icon>
               </Input>
+               <div class="ivu-form-item-error-tip" v-show="errorTextShow">{{errorText}}</div>
           </FormItem>
           <FormItem>
               <button type="button" @click="handleSubmit('formInline')" style="font-weight: bolder;">登录</button>
@@ -27,10 +28,12 @@
   </div>
 </template>
 <script>
-import {mapActions,mapState} from 'vuex'
+import {mapActions,mapState,mapGetters} from 'vuex'
     export default {
         data () {
             return {
+                errorText:'',
+                errorTextShow:false,
                 formInline: {
                     user: '',
                     password: ''
@@ -46,7 +49,9 @@ import {mapActions,mapState} from 'vuex'
                 }
             }
         },
-       
+       computed:{
+           ...mapGetters(['isLoadRoutes','menuitems'])
+       },
         mounted () {
            // console.log(this.$store)
            var _this = this;
@@ -57,37 +62,76 @@ import {mapActions,mapState} from 'vuex'
            }
         },
         methods: {
-            ...mapActions(['setToken']),
+            handleCheck(){
+                if(this.formInline.user.trim().length!=0){
+                    this.errorTextShow = false
+                }
+                if(this.formInline.password.trim().length!=0){
+                    this.errorTextShow = false
+                }
+                if(this.formInline.password.trim.length===0&&this.formInline.user.trim().length===0){
+                    this.errorText = '请输入用户名和密码'
+                    this.errorTextShow = true
+                }
+            },
+            ...mapActions(['setToken','addMenu','loadRoutes']),
             handleSubmit(name) {
-                this.$refs[name].validate((valid) => {
-                    if (valid) {
-                        this.axios({
-                            url:'/system/login',
-                            method: 'post',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded'
-                            },
-                            params:{
-                                'userName': this.formInline.user,
-                                'passWord': this.formInline.password
-                            }
-                        })
-                        .then((res) => {
-                            var resultCode = res.data.resultCode
-                            var message = res.data.message
-                            if(resultCode === 1){
-                                this.$router.push('/')
-                                this.setToken(res.data.data.token)
-                                window.localStorage.setItem('token', res.data.data.token)
-                            }
-                        })
-                        .then( (err) => {
-                            console.log(err)
-                        })
-                    } else {
-                        // this.$Message.error('表单验证失败!');
-                    }
-                })
+                var that = this
+                if(this.formInline.user.trim().length===0&&this.formInline.password.trim().length>0){
+                    this.errorText = '请输入用户名'
+                    this.errorTextShow = true
+                    return
+                }
+                if(this.formInline.password.trim().length===0&&this.formInline.user.trim().length>0){
+                    this.errorText = '请输入密码'
+                    this.errorTextShow = true
+                    return
+                }
+                if(this.formInline.password.trim().length===0&&this.formInline.user.trim().length===0){
+                    this.errorText = '请输入密码或者用户名'
+                    this.errorTextShow = true
+                    return
+                }
+                if(this.formInline.user.trim().length>0&&this.formInline.password.trim().length>0){
+                    this.$refs[name].validate((valid) => {
+                        if (valid) {
+                            this.axios({
+                                url:'/system/login',
+                                method: 'post',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded'
+                                },
+                                params:{
+                                    'userName': this.formInline.user,
+                                    'passWord': this.formInline.password
+                                }
+                            })
+                            .then((res) => {
+                                var resultCode = res.data.resultCode
+                                var message = res.data.message
+                                if(resultCode === 1){
+                                    this.setToken(res.data.data.token)
+                                    this.addMenu(res.data.data.token)
+                                    console.log(this.$store)
+                                    if (!this.isLoadRoutes) {  
+                                        this.$router.addRoutes(this.menuitems)
+                                        this.loadRoutes()  
+                                    }
+                                    this.$router.push({path:'/index/cityManagerAnalysis'})
+                                }else{
+                                    this.errorTextShow = true
+                                     this.errorText = message
+                                }
+                            })
+                            .then( (err) => {
+                                console.log(err)
+                                //this.errorText = err
+                            })
+                        } else {
+                            // this.$Message.error('表单验证失败!');
+                        }
+                    })
+                }
             }
         }
     }

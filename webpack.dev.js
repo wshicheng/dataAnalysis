@@ -5,6 +5,7 @@
    devtool: 'inline-source-map',
    devServer: {
      contentBase: './dist',
-     inline: true
+     inline: true,
+     historyApiFallback: true
    }
  });

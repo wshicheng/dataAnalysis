@@ -132,7 +132,7 @@ import {mapActions,mapGetters} from 'vuex'
                console.log(diff)
                console.log(this.updateMonth)
                this.updateMonth(this.currentMonth)
-                //this.$refs.next.setAttribute('class','iconfont right icon-right-arrow')
+                this.$refs.next.setAttribute('class','iconfont right icon-right-arrow')
             },
             handleAplusMonth(){
                 var now = moment()
@@ -140,12 +140,12 @@ import {mapActions,mapGetters} from 'vuex'
                 var nextMonth = moment(currentMonth).add(1,'M')
                 var diff = now.diff(this.currentMonth,'month')
                 if((diff-1)<=0){
-                    //this.$refs.next.setAttribute('class','iconfont right icon-right-arrow disabled')
+                    this.$refs.next.setAttribute('class','iconfont right icon-right-arrow disabled')
                     this.currentMonth = moment().format('YYYY-MM')
                     return 
                 }else{
                     this.currentMonth = moment(nextMonth).format('YYYY-MM')
-                    //this.$refs.next.setAttribute('class','iconfont right icon-right-arrow')
+                    this.$refs.next.setAttribute('class','iconfont right icon-right-arrow')
                 }
                 this.updateMonth(this.currentMonth)
             }
@@ -156,7 +156,7 @@ import {mapActions,mapGetters} from 'vuex'
             var currentMonth = moment(this.currentMonth);
             var diff = now.diff(currentMonth,'month')
             if(diff===0){
-                //this.$refs.next.setAttribute('class','iconfont right icon-right-arrow disabled')
+                this.$refs.next.setAttribute('class','iconfont right icon-right-arrow disabled')
             }
             this.updateMonth(this.currentMonth)
             
