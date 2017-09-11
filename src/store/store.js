@@ -16,6 +16,9 @@ export default new Vuex.Store({
         cityList: [],
         keepCitys: []
     },
+    getters:{
+        cityList: state => {return state.cityList}
+    },
     mutations: {
         [types.LOGIN](state, data){
             state.token = data;

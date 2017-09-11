@@ -101,7 +101,7 @@ import citySelect from './citySelect.vue'
         data(){
           
             return {
-                cityLists:this.mockTableDatas(),
+                cityLists:this.cityList,
                 // items:this.mockTableDatas2(),
                 items:[],
                 // allCityTables:this.mockTableDatas3(),
@@ -112,29 +112,29 @@ import citySelect from './citySelect.vue'
             }
         },
         computed:{
-            ...mapGetters(['dataMonth'])
+            ...mapGetters(['dataMonth','cityList'])
         },
         mounted(){
               setTimeout(()=>{
                   this.mountedWay()
               },1000)
-              this.mountedWay()
+             // this.mountedWay()
         },
         methods:{
-            mockTableDatas(){
-                var _this = this
-                this.axios.get('/beefly/user/api/v1/city', {
-                    params: {
-                        accessToken: window.localStorage.getItem('token')
-                    }
-                })
-                .then(function (res) {
-                    var arr = res.data.data
-                })
-                .catch(function (err) {
-                    console.log('err', err)
-                });
-            },
+            // mockTableDatas(){
+            //     var _this = this
+            //     this.axios.get('/beefly/user/api/v1/city', {
+            //         params: {
+            //             accessToken: window.localStorage.getItem('token')
+            //         }
+            //     })
+            //     .then(function (res) {
+            //         var arr = res.data.data
+            //     })
+            //     .catch(function (err) {
+            //         console.log('err', err)
+            //     });
+            // },
             mockTableDatas2(){
                 var arr = []
                 for(let i=0;i<5;i++){
@@ -231,20 +231,31 @@ import citySelect from './citySelect.vue'
                             //            )
                             //        }
                             //    }
-                                that.items = data[0]
-                                data.shift()
-                                var newData = that.mockTableDatas3(data)
-                                that.allCityTables = newData
+                                // that.items = data[0]
+                                // data.shift()
+                                // var newData = that.mockTableDatas3(data)
+                                // that.allCityTables = newData
                             if (that.$store.state.cityList.length > 1) {
                                 this.totalMoneyTbale = true
                                 that.items = data[0]
                                 data.shift()
                                 var newData = that.mockTableDatas3(data)
                                 that.allCityTables = newData
+                                
+                                // data.shift()
+                                // var newData = that.mockTableDatas3(data)
+                                // that.allCityTables = newData
                             } else {
                                 this.totalMoneyTbale = false
-                                var newData = that.mockTableDatas3(data)
-                                that.allCityTables = newData
+                                console.log(data)
+                                console.log(that.mockTableDatas3(data))
+                                that.items = that.mockTableDatas3(data)
+                                // that.items = data[0]
+                                // data.shift()
+                                // var newData = that.mockTableDatas3(data)
+                                // that.allCityTables = newData
+                                // var newData = that.mockTableDatas3(data)
+                                // that.allCityTables = newData
                             }
 
                            }).catch((error) => {
@@ -290,10 +301,12 @@ import citySelect from './citySelect.vue'
                             //            )
                             //        }
                             //    }
+                                //合计
                                 this.totalMoneyTbale = true
                                 console.log('jjjjj', data)
                                 that.items = data[0]
                                 data.shift()
+                                console.log(data)
                                 var newData = that.mockTableDatas3(data)
                                 that.allCityTables = newData
 

@@ -30,7 +30,7 @@ export default {
                                 cursor: 'pointer'
                             },
                             attrs: {
-                                blank: '_blank',
+                                target: '_blank',
                                 href: '/index/cityManagerAnalysis/month/' + params.row.dataMonth
                             }
                         }, params.row.dataMonth)
