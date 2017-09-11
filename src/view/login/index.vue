@@ -53,6 +53,7 @@ import {mapActions,mapState,mapGetters} from 'vuex'
            ...mapGetters(['isLoadRoutes','menuitems'])
        },
         mounted () {
+            document.title = '数据运营平台 - 登录'
            // console.log(this.$store)
            var _this = this;
            document.body.onkeydown=function(e){

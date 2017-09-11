@@ -14,7 +14,8 @@ export default new Vuex.Store({
         token: '',
         title: '',
         cityList: [],
-        keepCitys: []
+        keepCitys: [],
+        menuActiveName: ''
     },
     getters:{
         cityList: state => {return state.cityList}
@@ -36,6 +37,9 @@ export default new Vuex.Store({
         },
         keepCitys_mutation( state, list) {
             state.keepCitys = list
+        },
+        menuActiveName_mutation( state, text) {
+            state.menuActiveName = text
         }
     },
     actions:{
@@ -50,6 +54,9 @@ export default new Vuex.Store({
         },
         keepCitys ( {commit}, list) {
             commit( 'keepCitys_mutation', list)
+        },
+        menuActiveName ( { commit }, text) {
+            commit( 'menuActiveName_mutation', text)
         }
     }
 })
