@@ -975,18 +975,18 @@ export default {
             // this.checkList.push(row.id)
         },
         selectAll(selection) {
-            this.checkList = []
+            
             // console.log(selection)
             selection.map( (item) => {
-                if (item.status === 1) {
-                    this.$Message.warning('每月10号后，不可编辑和删除上月数据')
-                } else {
-                    this.checkList.push(item.id)
-                }
+                 this.checkList.push(item.id)
+                // if (item.status === 1) {
+                //     this.$Message.warning('每月10号后，不可编辑和删除上月数据')
+                // } else {
+                //     this.checkList.push(item.id)
+                // }
             })
         },
         selectChange(selection) {
-            this.checkList = []
             console.log(selection)
             selection.map( (item) => {
                 this.checkList.push(item.id)
@@ -996,7 +996,8 @@ export default {
                 //     this.checkList.push(item.id)
                 // }
             })
-            console.log(this.checkList)
+            var res = this.checkList.unique()
+            this.checkList = res
         },
         delTableByGroup () {
             if (this.checkList.length === 0) {
