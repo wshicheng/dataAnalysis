@@ -2,11 +2,12 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 import * as types from './types'
 import allDataDetailMoudle from './modules/allDataDetail'
-
+import MenuModule from './modules/menuModule.js'
 Vue.use(Vuex);
 export default new Vuex.Store({
     modules:{
-        allDataDetailMoudle:allDataDetailMoudle
+        allDataDetailMoudle:allDataDetailMoudle,
+        menus:MenuModule
     },
     state: {
         user: {},
@@ -17,12 +18,12 @@ export default new Vuex.Store({
     },
     mutations: {
         [types.LOGIN](state, data){
-            sessionStorage.token = data;
             state.token = data;
+            window.sessionStorage.setItem('token',data)
         },
         [types.LOGOUT](state){
-            sessionStorage.removeItem('token');
             state.token = ''
+            window.sessionStorage.removeItem('token')
         },
         [types.TITLE](state, data){
             state.title = data;

@@ -423,27 +423,27 @@
                        //         ])
                        //     }
                        // },
-                        {
-                           title: '合计',
-                           key: 'total',
-                           width: 100,
-                           fixed: 'right',
-                           className:'middle',
-                            render:(h,params)=>{
-                               return h('div','')
-                           },
-                           renderHeader:(h,params)=>{
-                               return h('div',[
-                                   h('div',{
-                                       style:{
-                                           width:'100%',
+                    //     {
+                    //        title: '合计',
+                    //        key: 'total',
+                    //        width: 100,
+                    //        fixed: 'right',
+                    //        className:'middle',
+                    //         render:(h,params)=>{
+                    //            return h('div','')
+                    //        },
+                    //        renderHeader:(h,params)=>{
+                    //            return h('div',[
+                    //                h('div',{
+                    //                    style:{
+                    //                        width:'100%',
                                           
-                                       }
-                                   },'合计')
+                    //                    }
+                    //                },'合计')
                                   
-                               ])
-                           }
-                       }
+                    //            ])
+                    //        }
+                    //    }
                    ],
                    data4:this.mockTableData(),
                    countObj:{}

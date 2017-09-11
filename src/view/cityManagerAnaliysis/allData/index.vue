@@ -31,7 +31,7 @@ export default {
                             },
                             attrs: {
                                 blank: '_blank',
-                                href: '#/index/cityManagerAnalysis/month/' + params.row.dataMonth
+                                href: '/index/cityManagerAnalysis/month/' + params.row.dataMonth
                             }
                         }, params.row.dataMonth)
                     }

@@ -10,6 +10,7 @@ import { mapGetters } from 'vuex'
     export default {
         data () {
             return {
+                dynamicWidth:'',
                 countObj:{},
                 columns2: [
                     {
@@ -501,6 +502,8 @@ import { mapGetters } from 'vuex'
             }
         },
         mounted(){
+            console.log('屏幕工作区可用宽度:' + window.screen.availWidth)
+            console.log('屏幕分辨率的宽:'  + window.screen.width)
             this.changePage()
             // var html = ''
             // for(var i=0;i<1;i++){
