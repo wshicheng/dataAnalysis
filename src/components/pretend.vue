@@ -5,7 +5,6 @@
               <li class="active">全部地区</li>
               <li v-bind:key="cityItem.id" v-for="cityItem of cityLists">{{cityItem.city}}</li>
           </ul> -->
-          {{$store.state.cityList}}
         <city-select></city-select>
       </Row>
       <Row class="cityBindTable">

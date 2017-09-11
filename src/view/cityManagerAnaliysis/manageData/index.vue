@@ -38,10 +38,10 @@
                 <div class="editModal_content">
                     <Form ref="editValidate" :model="editValidate" :rules="editValidateRule" :label-width="80">
                         <FormItem label="月份" prop="dataMonth">
-                            <DatePicker :model="editValidate.dataMonth" type="month" :options='options' format='yyyy-MM' style=" width:216px;" :placeholder="editMonth"></DatePicker>
+                            <DatePicker v-model="editValidate.dataMonth" type="month" :options='options' format='yyyy-MM' style=" width:216px;" :placeholder="editMonth"></DatePicker>
                         </FormItem>
                         <FormItem label="城市" prop="city">
-                            <Select class="city_select" :model="editValidate.city" :placeholder="editArea">
+                            <Select class="city_select" v-model="editValidate.city" :placeholder="editArea">
                                 <Option v-for="item in $store.state.keepCitys" :value="item.name" :key="item.code">{{ item.name }}</Option>
                             </Select>
                         </FormItem>
@@ -52,8 +52,11 @@
                                 </Select>
                             </FormItem>
                             <FormItem prop='smallKind'>
-                                <Select class="small_select" v-model="editValidate.smallKind" :placeholder="editSmallType">
-                                    <Option v-for="item in listChose" :value="item.name" :key="item.index">{{ item.name }}</Option>
+                                <Select class="small_select" v-show="smallList_one_show" v-model="editValidate.smallKind" :placeholder="editSmallType">
+                                    <Option v-for="item in smallList_one" :value="item.name" :key="item.index">{{ item.name }}</Option>
+                                </Select>
+                                <Select class="small_select" :placeholder="little" v-show="smallList_two_show" v-model="editValidate.smallKind">
+                                    <Option v-for="item in smallList_two" :value="item.name" :key="item.index">{{ item.name }}</Option>
                                 </Select>
                             </FormItem>
                         </FormItem>
@@ -367,6 +370,7 @@ export default {
     data() {
         return {
             listChose: [],
+            little: '请选择小类',
             smallList_one: [
                 {
                     name: '车辆',
@@ -419,11 +423,10 @@ export default {
                 }, {
                     name: '运维费用',
                     index: 1
-                }, {
-                    name: '222',
-                    index: 1
                 }
             ],
+            smallList_one_show: true,
+            smallList_two_show: false,
             page: {
                 'float': 'right',
                 'margin-top': '20px'
@@ -594,6 +597,7 @@ export default {
                     accessToken: this.$store.state.token,
                     time: this.selectTime === '' ? '' : moment(this.selectTime).format('YYYY-MM'),
                     type: type,
+                    pageSize: this.pageSize,
                     cityCode: this.$store.state.cityList.toString()
                 }
             })
@@ -619,6 +623,7 @@ export default {
                 params: {
                     cityCode: this.$store.state.cityList.toString(),
                     accessToken: this.$store.state.token,
+                    pageSize: this.pageSize,
                     time: this.selectTime === '' ? '' : moment(this.selectTime).format('YYYY-MM'),
                     type: $('.cityManageData_type button.active')[0].innerHTML
                 }
@@ -748,6 +753,7 @@ export default {
                 this.editMonth = row.dataMonth
                 this.editValidate.dataMonth = row.dataMonth
                 this.editArea = row.city
+                // console.log('editArea',this.editArea)
                 this.editValidate.city = row.city
                 var type = row.type.split('/')
                 // this.$set(this.editValidate.bigType,type[0],0) 
@@ -799,7 +805,7 @@ export default {
                     this.axios.get('/beefly/baseData/api/v1/updateBaseData', {
                         params: {
                             data: {
-                                dataMonth: this.editValidate.dataMonth,
+                                dataMonth: moment(this.editValidate.dataMonth).format('YYYY-MM'),
                                 city: this.editValidate.city,
                                 bigKind: this.editValidate.bigKind,
                                 smallKind: this.editValidate.smallKind,
@@ -843,6 +849,7 @@ export default {
             if (e.target.innerHTML === '固定资产') {
                 this.loadData('固定资产')
             } else {
+                // this.editValidate.number = ''
                 this.loadData('运维费用')
             }
         },
@@ -939,6 +946,7 @@ export default {
             this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
                     accessToken: this.$store.state.token,
+                    pageSize: this.pageSize,
                     type: $('.cityManageData_type button.active')[0].innerHTML,
                     cityCode: this.$store.state.cityList.toString(),
                     time: this.selectTime === '' ? '' : moment(this.selectTime).format('YYYY-MM')
@@ -1076,11 +1084,11 @@ export default {
         bigListWatch () {
             console.log(this.editValidate.bigKind)
             if (this.editValidate.bigKind === '固定资产') {
-                this.listChose = []
-                this.listChose = this.smallList_one
+                this.smallList_one_show = true
+                this.smallList_two_show = false
             } else {
-                this.listChose = []
-                this.listChose = this.smallList_two
+                this.smallList_one_show = false
+                this.smallList_two_show = true
             }
         },
         checkLogin (res) {
