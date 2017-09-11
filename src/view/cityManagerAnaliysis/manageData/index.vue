@@ -590,8 +590,6 @@ export default {
             return '';
         },
         loadData(type) {
-            // 清空多选删除的数组容器。
-            this.checkList = []
             this.current = 1
             this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
@@ -606,6 +604,7 @@ export default {
                     this.checkLogin(res)
                     var data = res.data.data
                     var dataDeled = this.tableDataDel(data)
+                    console.log('哈哈哈', dataDeled)
                     this.data1 = dataDeled
                     if (res.data.totalPage > 1) {
                         this.pageShow = true
@@ -617,8 +616,6 @@ export default {
                 })
         },
         dateChange() {
-            // 清空多选删除的数组容器。
-            this.checkList = []
             this.current = 1
             this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
@@ -632,7 +629,7 @@ export default {
                 .then((res) => {
                     this.checkLogin(res)
                     var data = res.data.data
-                    var dataDeled = this.tableDataDel(data)
+                    var dataDesled = this.tableDataDel(data)
                     this.data1 = dataDeled
                     if (res.data.totalPage > 1) {
                         this.pageShow = true
@@ -644,8 +641,6 @@ export default {
                 })
         },
         handleCurrentPage(currentPage) {
-            // 清空多选删除的数组容器。
-            this.checkList = []
             this.current = 1
             this.current = currentPage
             var _this = this
@@ -675,8 +670,6 @@ export default {
                 });
         },
         handlePageSize(pageSize) {
-            // 清空多选删除的数组容器。
-            this.checkList = []
             this.current = 1
             var _this = this;
             this.pageSize = pageSize
@@ -694,7 +687,6 @@ export default {
                     this.checkLogin(res)
                     var data = res.data.data
                     var dataDeled = this.tableDataDel(data)
-
                     this.data1 = dataDeled
                     if (res.data.totalPage > 1) {
                         this.pageShow = true
@@ -713,7 +705,6 @@ export default {
                 newType[i] = data[i].bigKind + '/' + data[i].smallKind
                 typeArr.push(newType[i])
             }
-
             var newData = []
             for (var i = 0; i < data.length; i++) {
                 var obj = {}
@@ -724,9 +715,37 @@ export default {
                 obj.unitPrice = data[i].unitPrice
                 obj.id = data[i].id
                 obj.status = data[i].status
+                if (obj.status === 1) {
+                    obj._disabled = true
+                } else {
+                    obj._disabled = false
+                }
+
+                // var list = this.checkList
+                // for (var i= 0; i < list.length; i++) {
+                //     if (data[i].id === list[i]) {
+                //         obj._checked = true
+                //     } else {
+                //         obj._checked = false
+                //     }
+                // }
+                // obj._checked = true
 
                 newData.push(obj)
             }
+
+
+            // var arr = newData.map( (item) => {
+            //     for (var i = 0; i < this.checkList.length; i++) {
+            //         if (item.id === this.checkList[i]) {
+            //             Object.assign({}, item, {_checked: true})
+            //         } else {
+            //             Object.assign({}, item, {_checked: false})
+            //         }
+            //     }
+
+            //     return newData
+            // })
             return newData
         },
         ok() {
@@ -924,9 +943,12 @@ export default {
                             clearInterval(timer)
                             _this.$Message.success('上传成功');
                             // 清除上传excel文件流
-                            var obj = document.getElementById('fileupload') ; 
-                            obj.select();
-                            document.selection.clear(); 
+                            var obj = document.getElementById('fileupload');
+                            obj.outerHTML=obj.outerHTML;
+                            // 清空上传存储的数组
+                            _this.exportedData = []
+                            _this.exportMonth = '' 
+                            
                             setTimeout(function() {
                                 _this.isUploadPercent = false
                                 // 关闭遮罩层
