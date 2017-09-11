@@ -705,6 +705,13 @@ export default {
                 }
                 }).then((response) => {
                     var data = response.data.data
+                    var message = response.data.message
+                    console.log(message)
+                    if(message === '用户登录超时'){
+                        console.log('login')
+                        console.log(that.$router)
+                        that.$router.push({path:'/login'})
+                    }
                     console.log(data)
                     var arr = [];
                     for (var i = 0; i < data.length; i++) {

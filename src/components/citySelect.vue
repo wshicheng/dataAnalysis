@@ -104,9 +104,10 @@ export default {
     },
     mounted () {
         var _this = this
+        console.log('citySelect this.$store.state.token' + this.$store.state.token)
         this.axios.get('/beefly/user/api/v1/city', {
             params: {
-                accessToken: this.$store.state.token,
+                accessToken: this.$store.state.token
             }
         })
         .then(function (res) {
