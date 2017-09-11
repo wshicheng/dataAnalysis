@@ -1,275 +1,573 @@
 <template>
-    <Table :columns="columns8" :data="data7" size="small" ref="table"></Table>
+ <!--运营成本分析-->
+  <div class="fiexedAssets">
+       <Table id="fiexedAssets" min-width="1180" height="400" border :columns="columns2" :data="data4"></Table>
+  </div>
 </template>
 <script>
+import $ from 'jquery'
+import { mapGetters } from 'vuex'
     export default {
         data () {
             return {
-                columns8: [
+                dynamicWidth:'',
+                countObj:{},
+                columns2: [
                     {
-                        "title": "名称",
-                        "key": "name",
-                        "fixed": "left",
-                        "width": 200
-                    },
-                    {
-                        "title": "展示",
-                        "key": "show",
-                        "width": 150,
-                        "sortable": true,
-                        filters: [
-                            {
-                                label: '大于4000',
-                                value: 1
-                            },
-                            {
-                                label: '小于4000',
-                                value: 2
-                            }
-                        ],
-                        filterMultiple: false,
-                        filterMethod (value, row) {
-                            if (value === 1) {
-                                return row.show > 4000;
-                            } else if (value === 2) {
-                                return row.show < 4000;
-                            }
+                        title: '城市',
+                        key: 'name',
+                        width: 100,
+                        fixed: 'left',
+                        className:'middle',
+                        render:(h,params)=>{
+                            return h('div',params.row.cityName)
+                        },
+                        renderHeader:(h,params)=>{
+                            return h('div',[
+                                h('div',{
+                                    style:{
+                                        width:'100%',
+                                    }
+                                },'城市'),
+                               
+                            ])
                         }
                     },
                     {
-                        "title": "唤醒",
-                        "key": "weak",
-                        "width": 150,
-                        "sortable": true
+                        title: '月收入）',
+                        key: 'age',
+                        width: 420,
+                        align:'center',
+                        render:(h,params)=>{
+                            return  h('div',{
+                               style:{
+                                    height:'30px'
+                               }
+                            },[
+                                    h('span',{
+                                        style:{
+                                            float:'left',
+                                           width:'33.3%',
+                                            height:'30px',
+                                            lineHeight:'30px',
+                                            borderRight:'1px solid rgb(233, 234, 236)',
+                                            boxSizing:'border-box',
+                                        }
+                                    },params.row.monthIncoming.mBillingIncome),
+                                    h('span',{
+                                        style:{
+                                            float:'left',
+                                           width:'33.3%',
+                                            height:'30px',
+                                            lineHeight:'30px',
+                                            borderRight:'1px solid rgb(233, 234, 236)',
+                                            boxSizing:'border-box',
+                                        }
+                                    },params.row.monthIncoming.mRealityIncome),
+                                     h('span',{
+                                        style:{
+                                            float:'left',
+                                          width:'33.3%',
+                                            height:'30px',
+                                            lineHeight:'30px',
+                                            borderRight:'none',
+                                            boxSizing:'border-box',
+                                        }
+                                    },params.row.monthIncoming.realIncomeLv )
+                                    
+                                ])
+                        },
+                        renderHeader:(h,params)=>{
+                            return h('div',[
+                                h('div',{
+                                     style:{
+                                        dispaly:'block',
+                                        width:'100%',
+                                        lineHeight:'30px',
+                                        borderBottom:'none ',
+                                        background:'#b2b2cc',
+                                        color:'#fff'
+                                    }
+                                },'月收入'),
+                                h('div',{
+                                   style:{
+                                        width:'100%',
+                                        lineHeight:'30px',
+                                        borderBottom:'1px solid #e9eaec '
+                                    } 
+                                },[
+                                    h('span',{
+                                        style:{
+                                            float:'left',
+                                           width:'33.3%',
+                                            borderRight:'1px solid rgb(233, 234, 236)',
+                                            boxSizing:'border-box',
+                                        }
+                                    },'计费收入'),
+                                    h('span',{
+                                        style:{
+                                            float:'left',
+                                           width:'33.3%',
+                                            borderRight:'1px solid rgb(233, 234, 236)',
+                                            boxSizing:'border-box',
+                                        }
+                                    },'实际收入'),
+                                    h('span',{
+                                        style:{
+                                            float:'left',
+                                            width:'33.3%',
+                                            borderRight:'none',
+                                            boxSizing:'border-box',
+                                        }
+                                    },'实收率')
+                                    
+                                ])
+                            ])
+                        }
                     },
                     {
-                        "title": "登录",
-                        "key": "signin",
-                        "width": 150,
-                        "sortable": true
+                        title: '盈亏状态（计费）',
+                        key: 'age',
+                        width: 420,
+                        align:'center',
+                        render:(h,params)=>{
+                            return  h('div',{
+                               style:{
+                                    height:'30px'
+                               }
+                            },[
+                                    h('span',{
+                                        style:{
+                                            float:'left',
+                                           width:'50%',
+                                            height:'30px',
+                                            lineHeight:'30px',
+                                            borderRight:'1px solid rgb(233, 234, 236)',
+                                            boxSizing:'border-box',
+                                        }
+                                    },params.row.profitStatus. billProfitAndLoss),
+                                    h('span',{
+                                        style:{
+                                            float:'left',
+                                           width:'50%',
+                                            height:'30px',
+                                            lineHeight:'30px',
+                                            borderRight:'none',
+                                            boxSizing:'border-box',
+                                        }
+                                    },params.row.profitStatus. billProfitAndLossLv),
+                                ])
+                        },
+                        renderHeader:(h,params)=>{
+                            return h('div',[
+                                h('div',{
+                                     style:{
+                                        width:'100%',
+                                        lineHeight:'30px',
+                                        borderBottom:'none ',
+                                    }
+                                },'盈亏状态（计费）'),
+                                h('div',{
+                                   style:{
+                                        width:'100%',
+                                        lineHeight:'30px',
+                                        borderBottom:'1px solid #e9eaec '
+                                    } 
+                                },[
+                                    h('span',{
+                                        style:{
+                                            float:'left',
+                                           width:'50%',
+                                            borderRight:'1px solid rgb(233, 234, 236)',
+                                            boxSizing:'border-box',
+                                        }
+                                    },'计费盈亏'),
+                                    h('span',{
+                                        style:{
+                                            float:'left',
+                                            width:'50%',
+                                            borderRight:'none',
+                                            boxSizing:'border-box',
+                                        }
+                                    },'计费盈亏率')
+                                ])
+                            ])
+                        }
                     },
-                    {
-                        "title": "点击",
-                        "key": "click",
-                        "width": 150,
-                        "sortable": true
+                     {
+                        title: '盈亏状态（实收）',
+                        key: 'age',
+                        width: 420,
+                        align:'center',
+                        render:(h,params)=>{
+                            return  h('div',{
+                               style:{
+                                    height:'30px'
+                               }
+                            },[
+                                    h('span',{
+                                        style:{
+                                            float:'left',
+                                           width:'50%',
+                                            height:'30px',
+                                            lineHeight:'30px',
+                                            borderRight:'1px solid rgb(233, 234, 236)',
+                                            boxSizing:'border-box',
+                                        }
+                                    },params.row.actualProfit.realProfitAndLoss),
+                                    h('span',{
+                                        style:{
+                                            float:'left',
+                                           width:'50%',
+                                            height:'30px',
+                                            lineHeight:'30px',
+                                            borderRight:'none',
+                                            boxSizing:'border-box',
+                                        }
+                                    },params.row.actualProfit.realProfitAndLossLv),
+                                ])
+                        },
+                        renderHeader:(h,params)=>{
+                            return h('div',[
+                                h('div',{
+                                     style:{
+                                        width:'100%',
+                                        lineHeight:'30px',
+                                        borderBottom:'none',
+                                    }
+                                },'盈亏状态（实收）'),
+                                h('div',{
+                                   style:{
+                                        width:'100%',
+                                        lineHeight:'30px',
+                                        borderBottom:'1px solid #e9eaec '
+                                    } 
+                                },[
+                                    h('span',{
+                                        style:{
+                                            float:'left',
+                                           width:'50%',
+                                            borderRight:'1px solid rgb(233, 234, 236)',
+                                            boxSizing:'border-box',
+                                        }
+                                    },'实收盈亏'),
+                                    h('span',{
+                                        style:{
+                                            float:'left',
+                                            width:'50%',
+                                            borderRight:'1px solid rgb(233, 234, 236)',
+                                            boxSizing:'border-box',
+                                        }
+                                    },'实收盈亏率')
+                                ])
+                            ])
+                        }
                     },
-                    {
-                        "title": "激活",
-                        "key": "active",
-                        "width": 150,
-                        "sortable": true
+                       {
+                        title: '单车产出',
+                        key: 'age',
+                        width: 420,
+                        align:'center',
+                        render:(h,params)=>{
+                            return  h('div',{
+                               style:{
+                                    height:'30px'
+                               }
+                            },[
+                                    h('span',{
+                                        style:{
+                                            float:'left',
+                                           width:'50%',
+                                            height:'30px',
+                                            lineHeight:'30px',
+                                            borderRight:'1px solid rgb(233, 234, 236)',
+                                            boxSizing:'border-box',
+                                        }
+                                    },params.row.singleCar.oBilling),
+                                    h('span',{
+                                        style:{
+                                            float:'left',
+                                           width:'50%',
+                                            height:'30px',
+                                            lineHeight:'30px',
+                                            borderRight:'none',
+                                            boxSizing:'border-box',
+                                        }
+                                    },params.row.singleCar.oReality),
+                                ])
+                        },
+                        renderHeader:(h,params)=>{
+                            return h('div',[
+                                h('div',{
+                                     style:{
+                                        width:'100%',
+                                        lineHeight:'30px',
+                                        borderBottom:'none ',
+                                    }
+                                },'单车产出'),
+                                h('div',{
+                                   style:{
+                                        width:'100%',
+                                        lineHeight:'30px',
+                                        borderBottom:'1px solid #e9eaec '
+                                    } 
+                                },[
+                                    h('span',{
+                                        style:{
+                                            float:'left',
+                                           width:'50%',
+                                            borderRight:'1px solid rgb(233, 234, 236)',
+                                            boxSizing:'border-box',
+                                        }
+                                    },'计费'),
+                                    h('span',{
+                                        style:{
+                                            float:'left',
+                                            width:'50%',
+                                            borderRight:'1px solid rgb(233, 234, 236)',
+                                            boxSizing:'border-box',
+                                        }
+                                    },'实收')
+                                ])
+                            ])
+                        }
                     },
-                    {
-                        "title": "7日留存",
-                        "key": "day7",
-                        "width": 150,
-                        "sortable": true
-                    },
-                    {
-                        "title": "30日留存",
-                        "key": "day30",
-                        "width": 150,
-                        "sortable": true
-                    },
-                    {
-                        "title": "次日留存",
-                        "key": "tomorrow",
-                        "width": 150,
-                        "sortable": true
-                    },
-                    {
-                        "title": "日活跃",
-                        "key": "day",
-                        "width": 150,
-                        "sortable": true
-                    },
-                    {
-                        "title": "周活跃",
-                        "key": "week",
-                        "width": 150,
-                        "sortable": true
-                    },
-                    {
-                        "title": "月活跃",
-                        "key": "month",
-                        "width": 150,
-                        "sortable": true
-                    }
+                    //  {
+                    //     title: '合计',
+                    //     key: 'total',
+                    //     width: 100,
+                    //     fixed: 'right',
+                    //     className:'middle',
+                    //      render:(h,params)=>{
+                    //         return h('div',params.row.total.money)
+                    //     },
+                    //     renderHeader:(h,params)=>{
+                    //         return h('div',[
+                    //             h('div',{
+                    //                 style:{
+                    //                     width:'100%',
+                                       
+                    //                 }
+                    //             },'合计')
+                               
+                    //         ])
+                    //     }
+                    // }
                 ],
-                data7: [
-                    {
-                        "name": "推广名称1",
-                        "fav": 0,
-                        "show": 7302,
-                        "weak": 5627,
-                        "signin": 1563,
-                        "click": 4254,
-                        "active": 1438,
-                        "day7": 274,
-                        "day30": 285,
-                        "tomorrow": 1727,
-                        "day": 558,
-                        "week": 4440,
-                        "month": 5610
-                    },
-                    {
-                        "name": "推广名称2",
-                        "fav": 0,
-                        "show": 4720,
-                        "weak": 4086,
-                        "signin": 3792,
-                        "click": 8690,
-                        "active": 8470,
-                        "day7": 8172,
-                        "day30": 5197,
-                        "tomorrow": 1684,
-                        "day": 2593,
-                        "week": 2507,
-                        "month": 1537
-                    },
-                    {
-                        "name": "推广名称3",
-                        "fav": 0,
-                        "show": 7181,
-                        "weak": 8007,
-                        "signin": 8477,
-                        "click": 1879,
-                        "active": 16,
-                        "day7": 2249,
-                        "day30": 3450,
-                        "tomorrow": 377,
-                        "day": 1561,
-                        "week": 3219,
-                        "month": 1588
-                    },
-                    {
-                        "name": "推广名称4",
-                        "fav": 0,
-                        "show": 9911,
-                        "weak": 8976,
-                        "signin": 8807,
-                        "click": 8050,
-                        "active": 7668,
-                        "day7": 1547,
-                        "day30": 2357,
-                        "tomorrow": 7278,
-                        "day": 5309,
-                        "week": 1655,
-                        "month": 9043
-                    },
-                    {
-                        "name": "推广名称5",
-                        "fav": 0,
-                        "show": 934,
-                        "weak": 1394,
-                        "signin": 6463,
-                        "click": 5278,
-                        "active": 9256,
-                        "day7": 209,
-                        "day30": 3563,
-                        "tomorrow": 8285,
-                        "day": 1230,
-                        "week": 4840,
-                        "month": 9908
-                    },
-                    {
-                        "name": "推广名称6",
-                        "fav": 0,
-                        "show": 6856,
-                        "weak": 1608,
-                        "signin": 457,
-                        "click": 4949,
-                        "active": 2909,
-                        "day7": 4525,
-                        "day30": 6171,
-                        "tomorrow": 1920,
-                        "day": 1966,
-                        "week": 904,
-                        "month": 6851
-                    },
-                    {
-                        "name": "推广名称7",
-                        "fav": 0,
-                        "show": 5107,
-                        "weak": 6407,
-                        "signin": 4166,
-                        "click": 7970,
-                        "active": 1002,
-                        "day7": 8701,
-                        "day30": 9040,
-                        "tomorrow": 7632,
-                        "day": 4061,
-                        "week": 4359,
-                        "month": 3676
-                    },
-                    {
-                        "name": "推广名称8",
-                        "fav": 0,
-                        "show": 862,
-                        "weak": 6520,
-                        "signin": 6696,
-                        "click": 3209,
-                        "active": 6801,
-                        "day7": 6364,
-                        "day30": 6850,
-                        "tomorrow": 9408,
-                        "day": 2481,
-                        "week": 1479,
-                        "month": 2346
-                    },
-                    {
-                        "name": "推广名称9",
-                        "fav": 0,
-                        "show": 567,
-                        "weak": 5859,
-                        "signin": 128,
-                        "click": 6593,
-                        "active": 1971,
-                        "day7": 7596,
-                        "day30": 3546,
-                        "tomorrow": 6641,
-                        "day": 1611,
-                        "week": 5534,
-                        "month": 3190
-                    },
-                    {
-                        "name": "推广名称10",
-                        "fav": 0,
-                        "show": 3651,
-                        "weak": 1819,
-                        "signin": 4595,
-                        "click": 7499,
-                        "active": 7405,
-                        "day7": 8710,
-                        "day30": 5518,
-                        "tomorrow": 428,
-                        "day": 9768,
-                        "week": 2864,
-                        "month": 5811
-                    }
-                ]
+                data4:[]
             }
         },
-        methods: {
-            exportData (type) {
-                if (type === 1) {
-                    this.$refs.table.exportCsv({
-                        filename: '原始数据'
-                    });
-                } else if (type === 2) {
-                    this.$refs.table.exportCsv({
-                        filename: '排序和过滤后的数据',
-                        original: false
-                    });
-                } else if (type === 3) {
-                    this.$refs.table.exportCsv({
-                        filename: '自定义数据',
-                        columns: this.columns8.filter((col, index) => index < 4),
-                        data: this.data7.filter((data, index) => index < 4)
-                    });
+        computed:{
+            ...mapGetters(['dataMonth'])
+        },
+        methods:{
+            mockTableData(){
+                let data = [];
+                for(let i=0;i<10;i++){
+                    data.push(
+                         {
+                            cityName: '城市' + Math.floor(Math.random () * 100 + 1),
+                            monthIncoming:{
+                                mBillingIncome:Math.floor(Math.random () * 3 + 1),//月收入-计费
+                                mRealityIncome:Math.floor(Math.random () * 4 + 1),//月收入-实收
+                                realIncomeLv:1//月收入-实收率
+                            },
+                            profitStatus:{
+                                billProfitAndLoss:Math.floor(Math.random () * 5 + 1),//盈亏状态(计费)-计费盈亏
+                                billProfitAndLossLv:Math.floor(Math.random () * 6 + 1),//盈亏状态(计费)-计费盈亏率
+                            },
+                            actualProfit:{
+                                realProfitAndLoss:1,//盈亏状态(实收)-实收盈亏
+                                realProfitAndLossLv:1,//盈亏状态(实收)-实收盈亏率
+                            },
+                            singleCar:{
+                                oBilling:Math.floor(Math.random () * 7 + 1),//单车产出-计费
+                                oReality:Math.floor(Math.random () * 8 + 1),//单车产出-实收
+                            }
+                        }
+                    )
                 }
-            }        
+                return data
+            },
+            changePage() {
+                // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
+                var that =  this
+                setTimeout(function() {
+                    that.axios('/beefly/monthDataDetail/api/v1/monthDataDetail', {
+                    params: {
+                        dataMonth: that.dataMonth,
+                        accessToken: that.$store.state.token,
+                        type: 3
+                    }
+                    }).then((response) => {
+                        var data = response.data.data
+                        var arr = [];
+                        for (var i = 0; i < data.length; i++) {
+                            if (i <= data.length-1) {
+                                arr.push(
+                                    {
+                                        cityName: data[i].city,
+                                        monthIncoming: {
+                                            mBillingIncome: data[i].mBillingIncome,//月收入-计费
+                                            mRealityIncome: data[i].mRealityIncome,//月收入-实收
+                                            realIncomeLv: data[i].realIncomeLv//月收入-实收率
+                                        },
+                                        profitStatus: {
+                                            billProfitAndLoss: data[i].billProfitAndLoss,//盈亏状态(计费)-计费盈亏
+                                            billProfitAndLossLv: data[i].billProfitAndLossLv,//盈亏状态(计费)-计费盈亏率
+                                        },
+                                        actualProfit: {
+                                            realProfitAndLoss: data[i].realProfitAndLoss,//盈亏状态(实收)-实收盈亏
+                                            realProfitAndLossLv: data[i].realProfitAndLossLv,//盈亏状态(实收)-实收盈亏率
+                                        },
+                                        singleCar: {
+                                            oBilling: data[i].oBilling,//单车产出-计费
+                                            oReality: data[i].oReality,//单车产出-实收
+                                        }
+                                    }
+                                )
+                            }
+                            if (i === data.length - 1) {
+                                this.countObj = data[data.length - 1]
+                            }
+
+                        }
+                        that.data4 = arr
+                        var html = ''
+                        for (var i = 0; i < 1; i++) {
+                            html += `
+                           <tr class="ivu-table-row">
+                        <td class="middle ivu-table-hidden">
+                            <div class="ivu-table-cell ivu-table-hidden">
+                                <div>城市83</div>
+                            </div>
+                        </td>
+                        <td class="ivu-table-column-center">
+                            <div class="ivu-table-cell">
+                                <div style="height: 30px;"><span style="float: left; width: 33.3%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.mBillingIncome}</span>
+                                    <span
+                                        style="float: left; width: 33.3%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.mRealityIncome}</span><span style="float: left; width: 33.3%; height: 30px; line-height: 30px;  box-sizing: border-box;">${countObj.realIncomeLv}</span></div>
+                            </div>
+                        </td>
+                        <td class="ivu-table-column-center">
+                            <div class="ivu-table-cell">
+                                <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.billProfitAndLoss }</span>
+                                    <span
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px;box-sizing: border-box;">${countObj.billProfitAndLossLv}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="ivu-table-column-center">
+                            <div class="ivu-table-cell">
+                                <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.realProfitAndLoss}</span>
+                                    <span
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.realProfitAndLossLv}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="ivu-table-column-center">
+                            <div class="ivu-table-cell">
+                                <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.oBilling}</span>
+                                    <span
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.oReality}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="middle ivu-table-hidden">
+                            <div class="ivu-table-cell ivu-table-hidden">
+                                <div>5</div>
+                            </div>
+                        </td>
+                    </tr>
+                        `
+                        }
+                    if(that.data4.length>0){
+                            $('.ivu-table-body').eq(2).find('table').find('tfoot').remove()
+                            $('.ivu-table-body').eq(2).find('table').append("<tfoot><tr>" + html + "</tr></tfoot>")
+                            $('.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                            $('.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').append('<tfoot><td class="middle"><div class="ivu-table-cell"><div>合计</div></div></td></tfoot>')
+                            $('.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                            $('.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append('<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>'+this.countObj.total+'</div></div></td></tr></tfoot>')
+                        }else{
+                            $('.ivu-table-body').eq(2).find('table').find('tfoot').remove()
+                            $('.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                            $('.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                        }
+                    }).catch((error) => {
+                        console.log(error)
+                    })
+                }, 200)
+            }
+        },
+        mounted(){
+            console.log('屏幕工作区可用宽度:' + window.screen.availWidth)
+            console.log('屏幕分辨率的宽:'  + window.screen.width)
+            this.changePage()
+            // var html = ''
+            // for(var i=0;i<1;i++){
+            //     html += `
+            //         <tr class="ivu-table-row">
+            //             <td class="middle ivu-table-hidden">
+            //                 <div class="ivu-table-cell ivu-table-hidden">
+            //                     <div>城市83</div>
+            //                 </div>
+            //             </td>
+            //             <td class="ivu-table-column-center">
+            //                 <div class="ivu-table-cell">
+            //                     <div style="height: 30px;"><span style="float: left; width: 33.3%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">3</span>
+            //                         <span
+            //                             style="float: left; width: 33.3%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span><span style="float: left; width: 33.3%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span></div>
+            //                 </div>
+            //             </td>
+            //             <td class="ivu-table-column-center">
+            //                 <div class="ivu-table-cell">
+            //                     <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">3</span>
+            //                         <span
+            //                             style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span>
+            //                     </div>
+            //                 </div>
+            //             </td>
+            //             <td class="ivu-table-column-center">
+            //                 <div class="ivu-table-cell">
+            //                     <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">3</span>
+            //                         <span
+            //                             style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span>
+            //                     </div>
+            //                 </div>
+            //             </td>
+            //             <td class="ivu-table-column-center">
+            //                 <div class="ivu-table-cell">
+            //                     <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">3</span>
+            //                         <span
+            //                             style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span>
+            //                     </div>
+            //                 </div>
+            //             </td>
+            //             <td class="middle ivu-table-hidden">
+            //                 <div class="ivu-table-cell ivu-table-hidden">
+            //                     <div>5</div>
+            //                 </div>
+            //             </td>
+            //         </tr>
+            //     `
+            // }
+            // $('.ivu-table-body').eq(2).find('table').append("<tfoot><tr>" + html + "</tr></tfoot>")
+            // $('.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').append('<tfoot><td class="middle"><div class="ivu-table-cell"><div>合计</div></div></td></tfoot>')
+            // $('.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append( '<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>6</div></div></td></tr></tfoot>')
+            
+        },
+        watch:{
+        'dataMonth':{
+            handler:function(val){
+                this.changePage()
+            },
+            deep:true
         }
     }
+    }
 </script>
+<style lang="scss" scoped type="text/css">
+div.ivu-table-wrapper{margin:0 auto;}
+div.fiexedAssets{padding:0 16px 16px 16px;}
+</style>
+

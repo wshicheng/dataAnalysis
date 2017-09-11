@@ -671,7 +671,6 @@ export default {
             // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
             var that =  this
              setTimeout(function() {
-            console.log(that.dataMonth)
             that.axios('/beefly/monthDataDetail/api/v1/monthDataDetail', {
                 params: {
                     dataMonth: that.dataMonth,
@@ -679,7 +678,7 @@ export default {
                     type: 2
                 }
                 }).then((response) => {
-                    var data = response.data.data
+                    var data = response.data.data||[]
                     var arr = [];
                     for (var i = 0; i < data.length; i++) {
                         if (i < data.length - 1) {
@@ -724,12 +723,10 @@ export default {
                             )
                         }
                         if (i === data.length - 1) {
-                            this.countObj = data[data.length - 1]
+                            this.countObj = data[data.length - 1]||{}
                         }
 
                     }
-                    console.log(arr)
-                    console.log(this.countObj)
                     that.data4 = arr
                     var html = ''
                     for (var i = 0; i < 1; i++) {

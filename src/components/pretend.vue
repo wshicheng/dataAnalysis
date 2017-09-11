@@ -123,7 +123,6 @@ import citySelect from './citySelect.vue'
                var res =  Array.prototype.slice.call($proress)
                res.forEach(function(item,index){
                    var $percent = $(item).attr('percent')
-                    console.log($percent)
                     $(item).css({
                         width:$percent,
                     })
@@ -142,7 +141,6 @@ import citySelect from './citySelect.vue'
                    // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
                    var that =  this
                    setTimeout(function() {
-                       console.log(that.dataMonth)
                        that.axios('/beefly/monthDataDetail/api/v1/monthDataDetail', {
                            params: {
                                dataMonth: that.dataMonth,
@@ -157,7 +155,6 @@ import citySelect from './citySelect.vue'
                                       that.allCount = true
                                       that.items = data[0]
                                       data.splice(0,1)
-                                     console.log(data)
                                      that.allCityTables = data
                                  }else{
                                      that.allCount = false
@@ -174,7 +171,6 @@ import citySelect from './citySelect.vue'
                    // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
                    var that =  this
                    setTimeout(function() {
-                       console.log(that.dataMonth)
                        that.axios('/beefly/monthDataDetail/api/v1/monthDataDetail', {
                            params: {
                                dataMonth: that.dataMonth,
@@ -183,13 +179,11 @@ import citySelect from './citySelect.vue'
                                cityCode:that.$store.state.cityList.length===0?'':that.$store.state.cityList.join(',')
                            }
                            }).then((response) => {
-                               var data = response.data.data
+                               var data = response.data.data||[]
                                 //合计
                                 this.totalMoneyTbale = true
-                                console.log('jjjjj', data)
                                 that.items = data[0]
                                 data.shift()
-                                console.log(data)
                                 var newData = that.mockTableDatas3(data)
                                 that.allCityTables = newData
 

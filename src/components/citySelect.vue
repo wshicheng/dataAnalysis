@@ -67,7 +67,6 @@ export default {
         areaClick (e) {
             var that = this
             var id = e.target.getAttribute('myid')
-            console.log(id)
             var res = siblings(e.target)
             if(e.target.innerText==='全部地区'){
                 e.target.setAttribute('class','active')
@@ -80,11 +79,9 @@ export default {
                 var id = e.target.getAttribute('myid')
                 if(this.citySelect.indexOf(id)===-1){
                     this.citySelect.push(id)
-                    console.log(this.citySelect)
                 }else{
                     var index = this.citySelect.indexOf(id)
                     this.citySelect.splice(index,1)
-                    console.log(this.citySelect)
                 }
                 
                 if(e.target.getAttribute('class')){
@@ -104,14 +101,13 @@ export default {
     },
     mounted () {
         var _this = this
-        console.log('citySelect this.$store.state.token' + this.$store.state.token)
         this.axios.get('/beefly/user/api/v1/city', {
             params: {
                 accessToken: this.$store.state.token
             }
         })
         .then(function (res) {
-            _this.cityList = res.data.data
+            _this.cityList = res.data.data||[]
             _this.$store.dispatch('keepCitys', res.data.data)
 
         })

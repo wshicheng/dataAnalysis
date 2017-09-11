@@ -57,7 +57,7 @@ button.ivu-btn.ivu-btn-ghost {
     max-height: 300px; } 
     button.cancel{background:transparent}
 button.cancel:hover{border-color:orange;color:orange;}
-
+div.ivu-table-header th div.ivu-table-cell{display:block;padding:0;}
     
 </style>
 

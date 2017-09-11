@@ -696,7 +696,6 @@ export default {
             // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
             var that =  this
              setTimeout(function() {
-            console.log(that.dataMonth)
             that.axios('/beefly/monthDataDetail/api/v1/monthDataDetail', {
                 params: {
                     dataMonth: that.dataMonth,
@@ -704,92 +703,89 @@ export default {
                     type: 1
                 }
                 }).then((response) => {
-                    var data = response.data.data
+                    var data = response.data.data||[]
                     var message = response.data.message
-                    console.log(message)
                     if(message === '用户登录超时'){
-                        console.log('login')
-                        console.log(that.$router)
                         that.$router.push({path:'/login'})
                     }
-                    console.log(data)
                     var arr = [];
-                    for (var i = 0; i < data.length; i++) {
-                        if (i < data.length - 1) {
-                            arr.push(
-                                {
-                                    // 城市
-                                    cityName: data[i].city,
-                                    //车辆数量
-                                    beefly: {
-                                        num: data[i].bikeNum,
-                                        money: data[i].bikeMoney,
-                                    },
-                                    //电池
-                                    Battery: {
-                                        num: data[i].battNum,
-                                        money: data[i].battMoney,
-                                    },
-                                    // 充电站
-                                    ChargingStation: {
-                                        build: data[i].chargeBuild,
-                                        cabinet: data[i].chargeCabinet
-                                    },
-                                    //机动车
-                                    Tricycle: {
-                                        num: data[i].truckNum,
-                                        money: data[i].truckMoney
-                                    },
-                                    //运维工具车
-                                    Toolcar: {
-                                        num: data[i].carNum,
-                                        money: data[i].carMoney
-                                    },
-                                    // 物流成本
-                                    transCost: {
-                                        money: data[i].transMoney
-                                    },
-                                    //办公成本
-                                    officeCost: {
-                                        money: data[i].officeMoney
-                                    },
-                                    // 其他金额
-                                    otherCost: {
-                                        money: data[i].otherMoney
-                                    },
-                                    // 人员成本
-                                    personnelCost: {
-                                        money: data[i].personnelMoney
-                                    },
-                                    // 房租
-                                    rentCost: {
-                                        money: data[i].rentMoney
-                                    },
-                                    //水电
-                                    hydropoer: {
-                                        money: data[i].hydropower
-                                    },
-                                    // 经营费用
-                                    manageCost: {
-                                        money: data[i].manageMoney
-                                    },
-                                    openCost: {
-                                        money: data[i].openMoney
-                                    },
-                                    total: {
-                                        money: data[i].total
+                    if (data.length > 0) {
+                        for (var i = 0; i < data.length; i++) {
+                            if (i < data.length - 1) {
+                                arr.push(
+                                    {
+                                        // 城市
+                                        cityName: data[i].city,
+                                        //车辆数量
+                                        beefly: {
+                                            num: data[i].bikeNum,
+                                            money: data[i].bikeMoney,
+                                        },
+                                        //电池
+                                        Battery: {
+                                            num: data[i].battNum,
+                                            money: data[i].battMoney,
+                                        },
+                                        // 充电站
+                                        ChargingStation: {
+                                            build: data[i].chargeBuild,
+                                            cabinet: data[i].chargeCabinet
+                                        },
+                                        //机动车
+                                        Tricycle: {
+                                            num: data[i].truckNum,
+                                            money: data[i].truckMoney
+                                        },
+                                        //运维工具车
+                                        Toolcar: {
+                                            num: data[i].carNum,
+                                            money: data[i].carMoney
+                                        },
+                                        // 物流成本
+                                        transCost: {
+                                            money: data[i].transMoney
+                                        },
+                                        //办公成本
+                                        officeCost: {
+                                            money: data[i].officeMoney
+                                        },
+                                        // 其他金额
+                                        otherCost: {
+                                            money: data[i].otherMoney
+                                        },
+                                        // 人员成本
+                                        personnelCost: {
+                                            money: data[i].personnelMoney
+                                        },
+                                        // 房租
+                                        rentCost: {
+                                            money: data[i].rentMoney
+                                        },
+                                        //水电
+                                        hydropoer: {
+                                            money: data[i].hydropower
+                                        },
+                                        // 经营费用
+                                        manageCost: {
+                                            money: data[i].manageMoney
+                                        },
+                                        openCost: {
+                                            money: data[i].openMoney
+                                        },
+                                        total: {
+                                            money: data[i].total
+                                        }
+
                                     }
+                                )
+                            }
+                            if (i === data.length - 1) {
+                                this.countObj = data[data.length - 1]
+                            }
 
-                                }
-                            )
                         }
-                        if (i === data.length - 1) {
-                            this.countObj = data[data.length - 1]
-                        }
-
                     }
-                    console.log(arr)
-                    console.log(this.countObj)
+                  
                     that.data4 = arr
                     var html = ''
                     for (var i = 0; i < 1; i++) {
