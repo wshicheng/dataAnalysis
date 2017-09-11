@@ -28,7 +28,7 @@
                 <Table v-else :row-class-name="rowClassName" class="cityManage_table" border size='small' :columns="columns4" :data="data1" @on-select="selectGroup" @on-select-all="selectAll" @on-selection-change="selectChange">                
                 </Table>
             </div>
-            <Page :total="totalListNum" show-sizer show-elevator :styles='page' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
+            <Page :total="totalListNum" show-sizer show-elevator :styles='page' :current='current' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
 
             <!-- 模态框区域 -->
             <Modal v-model="editModal" width="800px" :styles="{top: '20%'}" class="editModal_form">
@@ -63,7 +63,7 @@
                         <FormItem label="单价" class="price" prop="unitPrice">
                             <Input v-model.number="editValidate.unitPrice" placeholder="请输入单价"></Input>
                         </FormItem>
-                        <FormItem label="数量" class="number" prop="number">
+                        <FormItem label="数量" class="number" prop="number" v-show="numberShow">
                             <Input v-model.number="editValidate.number" placeholder="请输入数量"></Input>
                         </FormItem>
                     </Form>
@@ -74,7 +74,7 @@
                 </div>
             </Modal>
 
-            <!-- 导出模态框 -->
+            <!-- 导入模态框 -->
             <Modal v-model="exportModal" width="800px" :styles="{width: '600px', top: '20%'}" class="editModal_form">
                 <p slot="header" class="editModal_head">
                     <span>导入数据</span>
@@ -564,7 +564,7 @@ export default {
             totalListNum: 100,
             pageSizeOpts: [10, 20, 30, 40],
             pageSize: 10,
-            currentPage: 1,
+            current: 1,
             options: {
                 disabledDate(date) {
                     return date && date.valueOf() > Date.now()
@@ -573,7 +573,8 @@ export default {
             checkList: [],
             selectTime: '',
             exportMonth: '',
-            exportedData: ''
+            exportedData: '',
+            numberShow: true
         }
     },
     mounted() {
@@ -591,7 +592,7 @@ export default {
         loadData(type) {
             // 清空多选删除的数组容器。
             this.checkList = []
-            this.currentPage = 1
+            this.current = 1
             this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
                     accessToken: this.$store.state.token,
@@ -618,7 +619,7 @@ export default {
         dateChange() {
             // 清空多选删除的数组容器。
             this.checkList = []
-            this.currentPage = 1
+            this.current = 1
             this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
                     cityCode: this.$store.state.cityList.toString(),
@@ -645,8 +646,8 @@ export default {
         handleCurrentPage(currentPage) {
             // 清空多选删除的数组容器。
             this.checkList = []
-            this.currentPage = 1
-            this.currentPage = currentPage
+            this.current = 1
+            this.current = currentPage
             var _this = this
             this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
@@ -676,12 +677,12 @@ export default {
         handlePageSize(pageSize) {
             // 清空多选删除的数组容器。
             this.checkList = []
-            this.currentPage = 1
+            this.current = 1
             var _this = this;
             this.pageSize = pageSize
             this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
-                    pageNo: this.currentPage,
+                    pageNo: this.current,
                     cityCode: this.$store.state.cityList.toString(),
                     pageSize: this.pageSize,
                     accessToken: this.$store.state.token,
@@ -745,22 +746,33 @@ export default {
             }, 1500);
         },
         show(index, row) {
-            console.log(row)
+            var type = row.type.split('/')
+            this.editBigType = type[0]
+            this.editValidate.bigKind = type[0]
+            this.editSmallType = type[1]
+            this.editValidate.smallKind = type[1]
             if (row.status === 1) {
                 this.$Message.warning('每月10号后，不可编辑和删除上月数据')
-            } else {     
+            } else if (type[1] != ('车辆' || '电池' || '机动车' || '运维工具车')) {
+                this.numberShow = false
                 this.editModal = true
                 this.editMonth = row.dataMonth
                 this.editValidate.dataMonth = row.dataMonth
                 this.editArea = row.city
                 // console.log('editArea',this.editArea)
                 this.editValidate.city = row.city
-                var type = row.type.split('/')
-                // this.$set(this.editValidate.bigType,type[0],0) 
-                this.editBigType = type[0]
-                this.editValidate.bigKind = type[0]
-                this.editSmallType = type[1]
-                this.editValidate.smallKind = type[1]
+                this.editValidate.unitPrice = row.unitPrice
+                this.editValidate.number = row.number
+                this.editValidate.id = row.id
+                console.log(this.editValidate)
+            } else {
+                this.numberShow = true
+                this.editModal = true
+                this.editMonth = row.dataMonth
+                this.editValidate.dataMonth = row.dataMonth
+                this.editArea = row.city
+                // console.log('editArea',this.editArea)
+                this.editValidate.city = row.city
                 this.editValidate.unitPrice = row.unitPrice
                 this.editValidate.number = row.number
                 this.editValidate.id = row.id
@@ -788,6 +800,7 @@ export default {
                 console.log(res.data)
                 if (res.data.resultCode === 1) {
                     this.$Message.success('删除成功!');
+                    this.current = 1
                     this.data1.splice(this.delIndex, 1)
                     this.loadData('固定资产')
                     this.delModal = false;
@@ -840,7 +853,7 @@ export default {
             this.editModal = false
         },
         handleClick(e) {
-            this.currentPage = 1
+            this.current = 1
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
                 elems[i].setAttribute('class', '')
@@ -914,9 +927,9 @@ export default {
                                 _this.isUploadPercent = false
                                 // 关闭遮罩层
                                 // _this.cover = false
+                                _this.loadData('固定资产')
                                 _this.exportModal = false
                                 _this.uploadPercent = 0
-                                _this.loadData()
                             }, 1000)
                         } else if (_this.uploadPercent === 100) {
                             _this.$Message.warning(res.data.message);
@@ -940,7 +953,7 @@ export default {
         cityChange() {
             // 清空多选删除的数组容器。
             this.checkList = []
-            this.currentPage = 1
+            this.current = 1
             console.log(this.selectTime)
             console.log(moment(this.selectTime).format('YYYY-MM'))
             this.axios.get('/beefly/baseData/api/v1/page', {
@@ -1007,6 +1020,7 @@ export default {
                     console.log(res.data)
                     if (res.data.resultCode === 1) {
                         this.$Message.success('删除成功!');
+                        this.current = 1
                         this.loadData($('.cityManageData_type button.active')[0].innerHTML)
                         this.delModal = false;
                     } else {
