@@ -1,7 +1,10 @@
 <template>
     <!--单车日营收-->
      <div class="fiexedAssets">
-          <Table id="fiexedAssets" min-width="1180" height="420" border :columns="columns2" :data="data4"></Table>
+          <div class="nodata" v-show="isNoData">
+            <i class="iconfont icon-zanwushuju"></i>
+        </div>
+          <Table v-show="!isNoData" id="fiexedAssets" min-width="1180" height="420" border :columns="columns2" :data="data4"></Table>
      </div>
    </template>
    <script>
@@ -10,6 +13,7 @@
        export default {
            data () {
                return {
+                   isNoData:true,
                    columns2: [
                        {
                            title: '城市',
@@ -492,8 +496,14 @@
                            }).then((response) => {
                                var data = response.data.data||[]
                                var arr = [];
+                                if(data.length>0){
+                                    that.isNoData = false
+                                }else{
+                                    that.isNoData = true
+                                     return
+                                }
                                for (var i = 0; i < data.length; i++) {
-                                   if (i <= data.length - 1) {
+                                   if (i < data.length - 1) {
                                        arr.push(
                                             {
                                                cityName: data[i].city,
@@ -661,6 +671,8 @@
    <style lang="scss" scoped type="text/css">
    div.ivu-table-wrapper{margin:0 auto;}
    div.fiexedAssets{padding:0 16px 16px 16px;}
+   div.nodata{text-align:center;}
+div.nodata i{font-size:400px}
    </style>
    
    

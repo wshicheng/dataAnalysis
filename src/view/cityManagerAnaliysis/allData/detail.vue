@@ -87,7 +87,7 @@ import {mapActions,mapGetters} from 'vuex'
                                     style:'vertical-align:middle;margin-right:10px;'
                                 })
                             ]),
-                        h('span','运营成本分析')
+                        h('span','运营经营分析')
                     ])
                 },
                 label4:(h)=>{
@@ -129,8 +129,6 @@ import {mapActions,mapGetters} from 'vuex'
                this.currentMonth = moment(time).format('YYYY-MM')
                var now = moment()
                var diff = now.diff(this.currentMonth,'month')
-               console.log(diff)
-               console.log(this.updateMonth)
                this.updateMonth(this.currentMonth)
                 this.$refs.next.setAttribute('class','iconfont right icon-right-arrow')
             },

@@ -1,7 +1,10 @@
 <template>
  <!--运营成本-->
     <div class="fiexedAssets">
-        <Table id="fiexedAssets" min-width="1180" height="400" border :columns="columns2" :data="data4"></Table>
+        <div class="nodata" v-show="isNoData">
+            <i class="iconfont icon-zanwushuju"></i>
+        </div>
+        <Table v-show="!isNoData" id="fiexedAssets" min-width="1180" height="400" border :columns="columns2" :data="data4"></Table>
     </div>
 </template>
 <script>
@@ -10,6 +13,7 @@ import { mapGetters } from 'vuex'
 export default {
     data() {
         return {
+            isNoData:true,
             countObj:{},
             columns2: [
                 {
@@ -40,7 +44,7 @@ export default {
                     render: (h, params) => {
                         return h('div', {
                             style: {
-                                height: '30px'
+                                height: '30px',
                             }
                         }, [
                                 h('span', {
@@ -153,8 +157,8 @@ export default {
                                     width: '100%',
                                     lineHeight: '30px',
                                     borderBottom: '1px solid #e9eaec ',
-                                    background: '#b2b2cc',
-                                    color: '#fff'
+                                    background: '#7eb5e0',
+                                   
                                 }
                             }, '硬件摊销（按照3年折旧）'),
                             h('div', {
@@ -351,8 +355,8 @@ export default {
                                     width: '100%',
                                     lineHeight: '30px',
                                     borderBottom: '1px solid #e9eaec ',
-                                    background: 'rgb(31, 192, 230)',
-                                    color: '#fff'
+                                    background: '#ace1e7',
+                                    
                                 }
                             }, '硬件损耗(按照0.5%/月)'),
                             h('div', {
@@ -523,8 +527,8 @@ export default {
                                     width: '100%',
                                     lineHeight: '30px',
                                     borderBottom: '1px solid #e9eaec ',
-                                    background: 'rgb(245, 106, 175)',
-                                    color: '#fff'
+                                    background: '#f2b5af',
+                                   
                                 }
                             }, '运维费用'),
                             h('div', {
@@ -680,6 +684,12 @@ export default {
                 }).then((response) => {
                     var data = response.data.data||[]
                     var arr = [];
+                    if(data.length>0){
+                        that.isNoData = false
+                    }else{
+                        that.isNoData = true
+                         return
+                    }
                     for (var i = 0; i < data.length; i++) {
                         if (i < data.length - 1) {
                             arr.push(
@@ -786,8 +796,8 @@ export default {
                         </tr>
                     `
                     }
-                   if(that.data4.length>0){
-                         $('.ivu-table-body').eq(1).find('table').find('tfoot').remove()
+                    if(that.data4.length>0){
+                        $('.ivu-table-body').eq(1).find('table').find('tfoot').remove()
                         $('.ivu-table-body').eq(1).find('table').append("<tfoot><tr>" + html + "</tr></tfoot>")
                         $('.ivu-tabs-tabpane').eq(1).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
                         $('.ivu-tabs-tabpane').eq(1).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').append('<tfoot><td class="middle"><div class="ivu-table-cell"><div>合计</div></div></td></tfoot>')
@@ -884,5 +894,7 @@ div.ivu-table-wrapper {
     margin: 0 auto;
 }
 div.fiexedAssets{padding:0 16px 16px 16px;}
+div.nodata{text-align:center;}
+div.nodata i{font-size:400px}
 </style>
 

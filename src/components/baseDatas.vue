@@ -1,8 +1,10 @@
 <template>
     <!--基础数据-->
     <div class="fiexedAssets">
-  
-        <Table id="fiexedAssets" min-width="1180" height="400" border :columns="columns2" :data="data4"></Table>
+         <div class="nodata" v-show="isNoData">
+            <i class="iconfont icon-zanwushuju"></i>
+        </div>
+        <Table v-show="!isNoData" id="fiexedAssets" min-width="1180" height="400" border :columns="columns2" :data="data4"></Table>
     </div>
 </template>
 <script>
@@ -12,6 +14,7 @@ import $ from 'jquery'
 export default {
     data() {
         return {
+            isNoData:true,
             countObj: {},
             columns2: [
                 {
@@ -44,7 +47,7 @@ export default {
                     render: (h, params) => {
                         return h('div', {
                             style: {
-                                height: '30px'
+                                height: '30px',
                             }
                         }, [
                                 h('span', {
@@ -75,7 +78,8 @@ export default {
                                 style: {
                                     width: '100%',
                                     lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
+                                    borderBottom: '1px solid #e9eaec ',
+                                     backgroundColor:'#7eb5e0'
                                 }
                             }, '车辆'),
                             h('div', {
@@ -137,7 +141,8 @@ export default {
                                 style: {
                                     width: '100%',
                                     lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
+                                    borderBottom: '1px solid #e9eaec ',
+                                    backgroundColor:'#7eb5e0'
                                 }
                             }, '电池'),
                             h('div', {
@@ -199,7 +204,8 @@ export default {
                                 style: {
                                     width: '100%',
                                     lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
+                                    borderBottom: '1px solid #e9eaec ',
+                                    backgroundColor:'#7eb5e0'
                                 }
                             }, '充电站'),
                             h('div', {
@@ -261,7 +267,8 @@ export default {
                                 style: {
                                     width: '100%',
                                     lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
+                                    borderBottom: '1px solid #e9eaec ',
+                                    backgroundColor:'#7eb5e0'
                                 }
                             }, '机动车'),
                             h('div', {
@@ -323,7 +330,8 @@ export default {
                                 style: {
                                     width: '100%',
                                     lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
+                                    borderBottom: '1px solid #e9eaec ',
+                                    backgroundColor:'#7eb5e0'
                                 }
                             }, '运维工具车'),
                             h('div', {
@@ -360,7 +368,8 @@ export default {
                                 style: {
                                     width: '100%',
                                     lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
+                                    borderBottom: '1px solid #e9eaec ',
+                                    backgroundColor:'#7eb5e0'
                                 }
                             }, '物流成本'),
                             h('div', {
@@ -390,7 +399,8 @@ export default {
                                 style: {
                                     width: '100%',
                                     lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
+                                    borderBottom: '1px solid #e9eaec ',
+                                    backgroundColor:'#7eb5e0'
                                 }
                             }, '办公成本'),
                             h('div', {
@@ -420,7 +430,8 @@ export default {
                                 style: {
                                     width: '100%',
                                     lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
+                                    borderBottom: '1px solid #e9eaec ',
+                                    backgroundColor:'#7eb5e0'
                                 }
                             }, '其他金额'),
                             h('div', {
@@ -785,7 +796,12 @@ export default {
 
                         }
                     }
-                  
+                    if(data.length>0){
+                        that.isNoData = false
+                    }else{
+                        that.isNoData = true
+                        return
+                    }
                     that.data4 = arr
                     var html = ''
                     for (var i = 0; i < 1; i++) {
@@ -886,7 +902,7 @@ export default {
                     `
                     }
                     if(that.data4.length>0){
-                         $('.ivu-table-body').eq(0).find('table').find('tfoot').remove()
+                        $('.ivu-table-body').eq(0).find('table').find('tfoot').remove()
                         $('.ivu-table-body').eq(0).find('table').append("<tfoot><tr>" + html + "</tr></tfoot>")
                         $('.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
                         $('.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').append('<tfoot><td class="middle"><div class="ivu-table-cell"><div>合计</div></div></td></tfoot>')
@@ -926,5 +942,7 @@ div.ivu-table-wrapper {
 div.fiexedAssets {
     padding: 0 16px 16px 16px;
 }
+div.nodata{text-align:center;}
+div.nodata i{font-size:400px}
 </style>
 
