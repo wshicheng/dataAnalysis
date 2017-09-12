@@ -25,7 +25,14 @@ div#fiexedAssets td .ivu-table-cell {
 div#fiexedAssets .ivu-table td {
   height: 30px;
 }
-
+div#fiexedAssets6 .ivu-table-cell{display:block;padding:0;line-height: 30px;text-align: center}
+div#fiexedAssets6 .ivu-table td {
+  height: 30px;
+}
+div#fiexedAssets7 .ivu-table-cell{display:block;padding:0;line-height: 30px;text-align: center}
+div#fiexedAssets7 .ivu-table td {
+  height: 30px;
+}
  ::selection {
   background: #fff;
 }

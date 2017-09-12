@@ -29,6 +29,12 @@
                 <TabPane :label="label5">
                     <pretend></pretend>
                 </TabPane>
+                <TabPane label="demo">
+                    <demo></demo>
+                </TabPane>
+                 <TabPane label="deMo">
+                    <myDemo></myDemo>
+                </TabPane>
             </Tabs>
         </Row>
     </Row>
@@ -38,6 +44,8 @@ import moment from 'moment'
 import baseDatas from '../../../components/baseDatas.vue'
 import operatingCost  from '../../../components/operatCosts.vue'
 import operatingAnalysis from '../../../components/operatAnalysis.vue'
+import demo from '../../../components/operatAnalysis3.vue'
+import myDemo from '../../../components/operaAnalysis4.vue'
 import singleBike from '../../../components/singleBikeIncoming.vue'
 import pretend from '../../../components/pretend.vue'
 import {mapActions,mapGetters} from 'vuex'
@@ -47,7 +55,9 @@ import {mapActions,mapGetters} from 'vuex'
             'operating-cost':operatingCost,
             'operating-analysis':operatingAnalysis,
             'single-bike':singleBike,
-            'pretend':pretend
+            'pretend':pretend,
+            demo,
+            myDemo
         },
         data(){
             return {
@@ -129,6 +139,7 @@ import {mapActions,mapGetters} from 'vuex'
                this.currentMonth = moment(time).format('YYYY-MM')
                var now = moment()
                var diff = now.diff(this.currentMonth,'month')
+               console.log('minus:' +　this.currentMonth)
                this.updateMonth(this.currentMonth)
                 this.$refs.next.setAttribute('class','iconfont right icon-right-arrow')
             },
@@ -140,12 +151,14 @@ import {mapActions,mapGetters} from 'vuex'
                 if((diff-1)<=0){
                     this.$refs.next.setAttribute('class','iconfont right icon-right-arrow disabled')
                     this.currentMonth = moment().format('YYYY-MM')
+                     this.updateMonth(this.currentMonth)
                     return 
                 }else{
                     this.currentMonth = moment(nextMonth).format('YYYY-MM')
                     this.$refs.next.setAttribute('class','iconfont right icon-right-arrow')
+                     this.updateMonth(this.currentMonth)
                 }
-                this.updateMonth(this.currentMonth)
+               
             }
         },
         mounted(){
