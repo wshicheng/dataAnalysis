@@ -5,7 +5,7 @@
             <i class="iconfont icon-zanwushuju"></i>
         </div>
        
-         <Table id="fiexedAssets" :columns="columns2" min-width='1200' :data="data4" size="small" border ref="table"></Table>
+         <Table id="fiexedAssets" :columns="columns2"  :data="data4" size="small" border ref="table"></Table>
   </div>
 </template>
 <script>
@@ -24,12 +24,18 @@ import { mapGetters } from 'vuex'
                         "fixed": "left",
                         "width": 200,
                         render: (h, params) => {
-                            return h('div', {
-                                style: {
-                                    textAlign: 'center'
-                                }
-                            }, params.row.cityName)
-                        }
+                      return h('div',params.row.cityName)
+                    },
+                    renderHeader: (h) => {
+                      return h('div', [
+                        h('div', {
+                          style: {
+                            width: '100%',
+                          }
+                        }, '城市'),
+
+                      ])
+                    }
                     },
                     {
                         "title": "月收入",
@@ -455,10 +461,10 @@ import { mapGetters } from 'vuex'
         },
         mounted(){
            
-            this.changePage()
+           // this.changePage()
            setTimeout(function(){
                       $('div.ivu-tabs-tabpane').eq(2).find('.ivu-table-header').find('table').width('100%')
-                     $('div.ivu-tabs-tabpane').eq(2).find('.ivu-table-body').find('table').width('100%')
+                      $('div.ivu-tabs-tabpane').eq(2).find('.ivu-table-body').find('table').width('100%')
                 },200)
             
         },

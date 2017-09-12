@@ -327,7 +327,7 @@
                                    }
    
                                }
-                               that.data4 = arr
+                               that.data7 = arr
                                var html = ''
                                for (var i = 0; i < 1; i++) {
                                    html += `
