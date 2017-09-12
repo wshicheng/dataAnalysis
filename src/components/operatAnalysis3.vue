@@ -380,8 +380,7 @@ export default {
                         if (i === data.length - 1) {
                             that.countObj = data[data.length - 1]
                         }
-                        that.$nextTick(()=>{
-                               var html = `
+                         var html = `
                                 <tr class="ivu-table-row">
                                     <td class="ivu-table-cell">
                                         <div class="ivu-table-cell ">
@@ -416,30 +415,29 @@ export default {
                                         </div>
                                     </td>
                                 </tr>
-                                `
-                                console.log(html)
-                            $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-header').find('table').width('100%')
-                            $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-body').find('table').width('100%')
-                            $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-body').find('table').find('tfoot').remove()
-                            $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-body').find('table').append('<tfoot>' + html + '</tfoot>')
-                            $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                            $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-fixed-body').find('table').append('<tfoot>' + html + '</tfoot>')
-                        })
-                      
+                            `
+                        $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-header').find('table').width('100%')
+                        $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-body').find('table').width('100%')
+                        $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-body').find('table').find('tfoot').remove()
+                        $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-body').find('table').append('<tfoot>' + html + '</tfoot>')
+                         $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                        $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-fixed-body').find('table').append('<tfoot>' + html + '</tfoot>')
                     }
                     console.log(arr)
                     that.data7 = arr
                 }).catch((error) => {
                     console.log(error)
                 })
-            }, 2000)
+            }, 200)
         }
     },
     computed: {
         ...mapGetters(['dataMonth'])
     },
     mounted() {
-       
+        setTimeout(() => {
+           
+        }, 200)
 
     },
     watch: {
