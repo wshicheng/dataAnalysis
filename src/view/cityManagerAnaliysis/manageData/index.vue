@@ -17,17 +17,14 @@
             </div>
         </div>
 
-        <div id="cityManage_table">
+        <div id="cityManage_table">             
+            <Spin fix size="large" v-if='spinShow' class="spin"></Spin> 
             <Button type="warning" @click="exportModal = true">导入数据</Button>
             <Button class="cancel" @click="delTableByGroup">删除</Button>
             <span>*每月10号后，不可编辑和删除上月数据</span>
-
-            <div style="position:relative;">
-                          
-                <Spin fix  size="large" v-if='data1 === []'></Spin>
-                <Table v-else :row-class-name="rowClassName" class="cityManage_table" border size='small' :columns="columns4" :data="data1" @on-select="selectGroup" @on-select-all="selectAll" @on-selection-change="selectChange">                
-                </Table>
-            </div>
+                        
+            <Table :row-class-name="rowClassName" :no-data-text='noDataText' class="cityManage_table" border size='small' :columns="columns4" :data="data1" @on-select="selectGroup" @on-select-all="selectAll" @on-selection-change="selectChange">                
+            </Table>
             <Page :total="totalListNum" show-sizer show-elevator :styles='page' :current='current' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
 
             <!-- 模态框区域 -->
@@ -220,11 +217,18 @@
 
 #cityManage_table {
     width: 100%;
+    position: relative;
     overflow: hidden;
     background: #fff;
     box-sizing: border-box;
     padding: 20px 10px 20px 10px; // margin-top: 274px;
     margin-top: 20px;
+    .spin {
+        position: absolute;
+        display: inline-block;
+        // background-color: rgba(253, 248, 248,0.0); 
+        background-color: rgba(177, 175, 175, 0.3); 
+    }
     button:nth-of-type(1) {
         margin-right: 10px;
     }
@@ -236,7 +240,6 @@
     }
     .cityManage_table {
         margin-top: 20px;
-        position: relative;
     }
 }
 
@@ -334,27 +337,6 @@ div.ivu-modal {
     color: orange;
 }
 
-.demo-spin-icon-load {
-    animation: ani-demo-spin 1s linear infinite;
-}
-
-@keyframes ani-demo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    50% {
-        transform: rotate(180deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.demo-spin-col{
-    height: 100px;
-    position: relative;
-    border: 1px solid #eee;
-}
 
 </style>
 
@@ -539,21 +521,7 @@ export default {
                     }
                 }
             ],
-            data1: [
-                // {
-                //     month: '2017年7月2日',
-                //     area: '南京市',
-                //     type: '固定资产/电池',
-                //     num: '100',
-                //     price: '2222',
-                // }, {
-                //     month: '2017年7月2日',
-                //     area: '北京市',
-                //     type: '固定资产/电池',
-                //     num: '222',
-                //     price: '333',
-                // }
-            ],
+            data1: [],
             modal1: false,
             file: null,
             loadingStatus: false,
@@ -577,7 +545,9 @@ export default {
             selectTime: '',
             exportMonth: '',
             exportedData: '',
-            numberShow: true
+            numberShow: true,
+            spinShow: true,
+            noDataText: ''
         }
     },
     mounted() {
@@ -595,6 +565,10 @@ export default {
             return '';
         },
         loadData(type) {
+            // loading显示，同时让无数据的文本为空
+            this.spinShow = true
+            this.noDataText = ''
+
             this.current = 1
             this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
@@ -607,8 +581,13 @@ export default {
             })
                 .then((res) => {
                     this.checkLogin(res)
+                    // loading显示，同时让无数据的文本为空
+                    this.spinShow = false
+                    this.noDataText = '暂无数据'
+
                     var data = res.data.data
                     var dataDeled = this.tableDataDel(data)
+
                     this.data1 = dataDeled
                     if (res.data.totalPage > 1) {
                         this.pageShow = true
@@ -620,6 +599,10 @@ export default {
                 })
         },
         dateChange() {
+            // loading显示，同时让无数据的文本为空
+            this.spinShow = true
+            this.noDataText = ''
+
             this.current = 1
             this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
@@ -632,6 +615,11 @@ export default {
             })
                 .then((res) => {
                     this.checkLogin(res)
+
+                    // loading显示，同时让无数据的文本为空
+                    this.spinShow = false
+                    this.noDataText = '暂无数据'
+
                     var data = res.data.data
                     var dataDesled = this.tableDataDel(data)
                     this.data1 = dataDeled
@@ -645,6 +633,10 @@ export default {
                 })
         },
         handleCurrentPage(currentPage) {
+            // loading显示，同时让无数据的文本为空
+            this.spinShow = true
+            this.noDataText = ''
+
             this.current = 1
             this.current = currentPage
             var _this = this
@@ -660,6 +652,11 @@ export default {
             })
                 .then((res) => {
                     this.checkLogin(res)
+
+                    // loading显示，同时让无数据的文本为空
+                    this.spinShow = false
+                    this.noDataText = '暂无数据'
+
                     var data = res.data.data
                     var dataDeled = this.tableDataDel(data)
 
@@ -674,6 +671,10 @@ export default {
                 });
         },
         handlePageSize(pageSize) {
+            // loading显示，同时让无数据的文本为空
+            this.spinShow = true
+            this.noDataText = ''
+
             this.current = 1
             var _this = this;
             this.pageSize = pageSize
@@ -689,6 +690,11 @@ export default {
             })
                 .then((res) => {
                     this.checkLogin(res)
+
+                    // loading显示，同时让无数据的文本为空
+                    this.spinShow = false
+                    this.noDataText = '暂无数据'
+
                     var data = res.data.data
                     var dataDeled = this.tableDataDel(data)
                     this.data1 = dataDeled
@@ -909,8 +915,9 @@ export default {
                     _this.checkLogin(res)
                     // 上传响应回来后打开进度条
                     var timer = setInterval(function() {
-                        _this.uploadPercent++
-                        if (_this.uploadPercent === 100 && res.data.resultCode === 1) {
+                        _this.uploadPercent += 20
+                        if (_this.uploadPercent === 100 || res.data.resultCode === 1) {
+                            _this.uploadPercent = 100
                             clearInterval(timer)
                             _this.$Message.success('上传成功');
                             // 清除上传excel文件流
@@ -952,6 +959,11 @@ export default {
             // 清空多选删除的数组容器。
             this.checkList = []
             this.current = 1
+
+            // loading显示，同时让无数据的文本为空
+            this.spinShow = true
+            this.noDataText = ''
+
             this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
                     accessToken: this.$store.state.token,
@@ -963,6 +975,11 @@ export default {
             })
             .then((res) => {
                 this.checkLogin(res)
+                
+                // loading显示，同时让无数据的文本为空
+                this.spinShow = false
+                this.noDataText = '暂无数据'
+
                 var data = res.data.data
                 var dataDeled = this.tableDataDel(data)
                 this.data1 = dataDeled
