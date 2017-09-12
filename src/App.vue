@@ -64,7 +64,7 @@ button.ivu-btn.ivu-btn-ghost {
     max-height: 300px; } 
     button.cancel{background:transparent}
 button.cancel:hover{border-color:orange;color:orange;}
-
+.ivu-tabs .ivu-tabs-tabpane{height:400px;}
     
 </style>
 

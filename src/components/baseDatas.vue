@@ -1,10 +1,10 @@
 <template>
     <!--基础数据-->
     <div class="fiexedAssets">
-         <Spin fix size="large" v-if="spinShow"  class="spin">
-                 <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-                <div>Loading....</div>
-            </Spin> 
+      <Spin fix>
+                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                <div>Loading</div>
+            </Spin>
          <div class="nodata" v-show="!isNoData2">
             <i class="iconfont icon-zanwushuju"></i>
         </div>
@@ -952,12 +952,9 @@ div.ivu-table-wrapper {
 
 div.fiexedAssets {
     padding: 0 16px 16px 16px;
-     .spin {
-        position: absolute;
-        display: inline-block;
-        // background-color: rgba(253, 248, 248,0.0); 
-        background-color: rgba(255, 255, 255, 0.8); 
-    }
+    height:400px;
+    box-sizing: border-box;
+    position:relative;
     .demo-spin-icon-load{
         animation: ani-demo-spin 1s linear infinite;
     }

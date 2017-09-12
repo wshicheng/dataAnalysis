@@ -5,7 +5,7 @@
             <i class="iconfont icon-zanwushuju"></i>
         </div>
        
-         <Table id="fiexedAssets" :columns="columns2"  :data="data4" size="small" border ref="table"></Table>
+         <Table id="fiexedAssets"  v-show="!isNoData" :columns="columns2"  :data="data4" size="small" border ref="table"></Table>
   </div>
 </template>
 <script>
