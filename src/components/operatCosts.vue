@@ -895,6 +895,6 @@ div.ivu-table-wrapper {
 }
 div.fiexedAssets{padding:0 16px 16px 16px;}
 div.nodata{text-align:center;}
-div.nodata i{font-size:400px}
+div.nodata i{font-size:400px;color:#dedcdc;}
 </style>
 

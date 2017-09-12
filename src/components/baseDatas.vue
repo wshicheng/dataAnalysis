@@ -1,7 +1,7 @@
 <template>
     <!--基础数据-->
     <div class="fiexedAssets">
-         <div class="nodata" v-show="isNoData">
+         <div class="nodata" v-show="!isNoData2">
             <i class="iconfont icon-zanwushuju"></i>
         </div>
         <Table v-show="!isNoData" id="fiexedAssets" min-width="1180" height="400" border :columns="columns2" :data="data4"></Table>
@@ -15,6 +15,7 @@ export default {
     data() {
         return {
             isNoData:true,
+            isNoData2:true,
             countObj: {},
             columns2: [
                 {
@@ -798,8 +799,10 @@ export default {
                     }
                     if(data.length>0){
                         that.isNoData = false
+                        that.isNoData2 = true
                     }else{
                         that.isNoData = true
+                        that.isNoData2 = false
                         return
                     }
                     that.data4 = arr
@@ -943,6 +946,6 @@ div.fiexedAssets {
     padding: 0 16px 16px 16px;
 }
 div.nodata{text-align:center;}
-div.nodata i{font-size:400px}
+div.nodata i{font-size:400px;color:#dedcdc;}
 </style>
 
