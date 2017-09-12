@@ -13,7 +13,7 @@
             <div class="cityManageData_type">
                 <span>类别:</span>
                 <button class="active" @click='handleClick'>固定资产</button>
-                <button @click='handleClick'>运维费用</button>
+                <button  class="active" @click='handleClick'>运维费用</button>
             </div>
         </div>
 
@@ -550,13 +550,14 @@ export default {
             exportedData: '',
             numberShow: true,
             spinShow: true,
-            noDataText: ''
+            noDataText: '',
+            typeList: ['固定资产','运维费用']
         }
     },
     mounted() {
         this.$store.dispatch('menuActiveName', '/index/managerData')
         document.title = '数据运营平台 - 我管理的数据'
-        this.loadData('固定资产')
+        this.loadData()
     },
     methods: {
         rowClassName (row, index) {
@@ -567,7 +568,7 @@ export default {
             }
             return '';
         },
-        loadData(type) {
+        loadData() {
             // loading显示，同时让无数据的文本为空
             this.spinShow = true
             this.noDataText = ''
@@ -577,7 +578,7 @@ export default {
                 params: {
                     accessToken: this.$store.state.token,
                     time: this.selectTime === '' ? '' : moment(this.selectTime).format('YYYY-MM'),
-                    type: type,
+                    type: this.typeList.toString(),
                     pageSize: this.pageSize,
                     cityCode: this.$store.state.cityList.toString()
                 }
@@ -598,6 +599,9 @@ export default {
                     this.totalListNum = res.data.totalItems
                 })
                 .catch(function(err) {
+                // loading显示，同时让无数据的文本为空
+                    this.spinShow = false
+                    this.noDataText = '暂无数据'
                     console.log('err', err)
                 })
         },
@@ -613,7 +617,7 @@ export default {
                     accessToken: this.$store.state.token,
                     pageSize: this.pageSize,
                     time: this.selectTime === '' ? '' : moment(this.selectTime).format('YYYY-MM'),
-                    type: $('.cityManageData_type button.active')[0].innerHTML
+                    type: this.typeList.toString()
                 }
             })
                 .then((res) => {
@@ -632,6 +636,9 @@ export default {
                     this.totalListNum = res.data.totalItems
                 })
                 .catch((err) => {
+                 // loading显示，同时让无数据的文本为空
+                    this.spinShow = false
+                    this.noDataText = '暂无数据'
                     console.log('err', err)
                 })
         },
@@ -650,7 +657,7 @@ export default {
                     cityCode: this.$store.state.cityList.toString(),
                     accessToken: this.$store.state.token,
                     time: this.selectTime === '' ? '' : moment(this.selectTime).format('YYYY-MM'),
-                    type: $('.cityManageData_type button.active')[0].innerHTML
+                    type: this.typeList.toString()
                 }
             })
                 .then((res) => {
@@ -670,6 +677,9 @@ export default {
                     this.totalListNum = res.data.totalItems
                 })
                 .catch(function(err) {
+                 // loading显示，同时让无数据的文本为空
+                    this.spinShow = false
+                    this.noDataText = '暂无数据'
                     console.log('err', err)
                 });
         },
@@ -688,7 +698,7 @@ export default {
                     pageSize: this.pageSize,
                     accessToken: this.$store.state.token,
                     time: this.selectTime === '' ? '' : moment(this.selectTime).format('YYYY-MM'),
-                    type: $('.cityManageData_type button.active')[0].innerHTML
+                    type: this.typeList.toString()
                 }
             })
                 .then((res) => {
@@ -707,6 +717,9 @@ export default {
                     this.totalListNum = res.data.totalItems
                 })
                 .catch(function(err) {
+                 // loading显示，同时让无数据的文本为空
+                    this.spinShow = false
+                    this.noDataText = '暂无数据'
                     console.log('err', err)
                 });
         },
@@ -801,7 +814,7 @@ export default {
                     this.$Message.success('删除成功!');
                     this.current = 1
                     this.data1.splice(this.delIndex, 1)
-                    this.loadData('固定资产')
+                    this.loadData()
                     this.delModal = false;
                 } else {
                     this.$Message.error('删除失败!');
@@ -834,7 +847,7 @@ export default {
                         if (res.data.resultCode === 1) {
                             this.$Message.success('修改成功!');
                             this.editModal = false
-                            this.loadData('固定资产')
+                            this.loadData()
                         } else {
                             this.$Message.error('修改失败!');
                         }
@@ -852,18 +865,31 @@ export default {
             this.editModal = false
         },
         handleClick(e) {
-            this.current = 1
-            var elems = siblings(e.target)
-            for (var i = 0; i < elems.length; i++) {
-                elems[i].setAttribute('class', '')
-            }
-            e.target.setAttribute('class', 'active')
-            if (e.target.innerHTML === '固定资产') {
-                this.loadData('固定资产')
+            // this.current = 1
+            // var elems = siblings(e.target)
+            // for (var i = 0; i < elems.length; i++) {
+            //     elems[i].setAttribute('class', '')
+            // }
+            // e.target.setAttribute('class', 'active')
+            // if (e.target.innerHTML === '固定资产') {
+            //     this.loadData('固定资产')
+            // } else {
+            //     // this.editValidate.number = ''
+            //     this.loadData('运维费用')
+            // }
+            if (e.target.getAttribute('class') === 'active') {
+                e.target.setAttribute('class', '')
+                var id = this.typeList.indexOf(e.target.innerHTML)
+                this.typeList.splice(id, 1)
             } else {
-                // this.editValidate.number = ''
-                this.loadData('运维费用')
+                e.target.setAttribute('class', 'active')
+                this.typeList.push(e.target.innerHTML)
+                this.typeList.unique()
             }
+
+            this.loadData()
+            
+
         },
         importExcel(obj) {
             if (!obj.files) {
@@ -934,7 +960,7 @@ export default {
                                 _this.isUploadPercent = false
                                 // 关闭遮罩层
                                 // _this.cover = false
-                                _this.loadData('固定资产')
+                                _this.loadData()
                                 _this.exportModal = false
                                 _this.uploadPercent = 0
                             }, 1000)
@@ -1038,7 +1064,7 @@ export default {
                         // 批量删除成功后，清空checkList数组
                         this.checkList = []
                         this.current = 1
-                        this.loadData($('.cityManageData_type button.active')[0].innerHTML)
+                        this.loadData()
                         this.delModal = false;
                     } else {
                         this.$Message.error('删除失败!');
