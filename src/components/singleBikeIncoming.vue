@@ -4,7 +4,8 @@
           <div class="nodata" v-show="isNoData">
             <i class="iconfont icon-zanwushuju"></i>
         </div>
-          <Table v-show="!isNoData" id="fiexedAssets" min-width="1180" height="420" border :columns="columns2" :data="data4"></Table>
+         <Table id="fiexedAssets6" :columns="columns8" :data="data7" size="small" ref="table"></Table>
+       
      </div>
    </template>
    <script>
@@ -14,442 +15,238 @@
            data () {
                return {
                    isNoData:true,
-                   columns2: [
-                       {
-                           title: '城市',
-                           key: 'name',
-                           width: 100,
-                           fixed: 'left',
-                           className: 'middle',
-                           render: (h, params) => {
-                               return h('div', params.row.cityName)
-                           },
-                           renderHeader: (h, params) => {
-                               return h('div', [
-                                   h('div', {
-                                       style: {
-                                           width: '100%',
-                                       }
-                                   }, '城市'),
-   
-                               ])
-                           }
-                       },
-                       {
-                           title: '单车产出',
-                           key: 'age',
-                           width: 420,
-                           align: 'center',
-                           render: (h, params) => {
-                               return h('div', {
-                                   style: {
-                                       height: '30px'
-                                   }
-                               }, [
-                                       h('span', {
-                                           style: {
-                                               float: 'left',
-                                               width: '50%',
-                                               height: '30px',
-                                               lineHeight: '30px',
-                                               borderRight: '1px solid rgb(233, 234, 236)',
-                                               boxSizing: 'border-box',
-                                           }
-                                       }, params.row.singleProduce.outPutBilling),
-                                       h('span', {
-                                           style: {
-                                               float: 'left',
-                                               width: '50%',
-                                               height: '30px',
-                                               lineHeight: '30px',
-                                               borderRight: 'none',
-                                               boxSizing: 'border-box',
-                                           }
-                                       }, params.row.singleProduce.outPutReality)
-   
-                                   ])
-                           },
-                           renderHeader: (h, params) => {
-                               return h('div', [
-                                   h('div', {
-                                       style: {
-                                           width: '100%',
-                                           lineHeight: '30px',
-   
-                                       }
-                                   }, '单车产出'),
-                                   h('div', {
-                                       style: {
-                                           width: '100%',
-                                           lineHeight: '30px',
-                                           borderBottom: '1px solid #e9eaec '
-                                       }
-                                   }, [
-                                           h('span', {
-                                               style: {
-                                                   float: 'left',
-                                                   width: '50%',
-                                                   borderRight: '1px solid rgb(233, 234, 236)',
-                                                   boxSizing: 'border-box',
-                                               }
-                                           }, '计费'),
-                                           h('span', {
-                                               style: {
-                                                   float: 'left',
-                                                   width: '50%',
-                                                   borderRight: 'none',
-                                                   boxSizing: 'border-box',
-                                               }
-                                           }, '实收')
-                                       ])
-                               ])
-                           }
-                       },
-                       {
-                           title: '单车成本',
-                           key: 'age',
-                           width: 420,
-                           align: 'center',
-                           render: (h, params) => {
-                               return h('div', {
-                                   style: {
-                                       height: '30px'
-                                   }
-                               }, [
-   
-                                       h('span', {
-                                           style: {
-                                               float: 'left',
-                                               width: '100%',
-                                               height: '30px',
-                                               lineHeight: '30px',
-                                               boxSizing: 'border-box',
-                                           }
-                                       }, params.row.singleCost.oBikeCost)
-   
-                                   ])
-                           },
-                           renderHeader: (h, params) => {
-                               return h('div', [
-                                   h('div', {
-                                       style: {
-                                           width: '100%',
-                                           lineHeight: '60px',
-                                       }
-                                   }, '单车成本'),
-                                   h('div', {
-                                       style: {
-                                           width: '100%',
-                                           lineHeight: '30px',
-                                       }
-                                   }, [
-   
-   
-                                       ])
-                               ])
-                           }
-                       },
-                       {
-                           title: '单车盈收',
-                           key: 'age',
-                           width: 420,
-                           align: 'center',
-                           render: (h, params) => {
-                               return h('div', {
-                                   style: {
-                                       height: '30px'
-                                   }
-                               }, [
-                                       h('span', {
-                                           style: {
-                                               float: 'left',
-                                               width: '50%',
-                                               height: '30px',
-                                               lineHeight: '30px',
-                                               borderRight: '1px solid rgb(233, 234, 236)',
-                                               boxSizing: 'border-box',
-                                           }
-                                       }, params.row.singleProfit.inPutBilling),
-                                       h('span', {
-                                           style: {
-                                               float: 'left',
-                                               width: '50%',
-                                               height: '30px',
-                                               lineHeight: '30px',
-                                               borderRight: 'none',
-                                               boxSizing: 'border-box',
-                                           }
-                                       }, params.row.singleProfit.inPutReality)
-   
-                                   ])
-                           },
-                           renderHeader: (h, params) => {
-                               return h('div', [
-                                   h('div', {
-                                       style: {
-                                           width: '100%',
-                                           lineHeight: '30px',
-                                           borderBottom: 'none',
-                                       }
-                                   }, '单车盈收'),
-                                   h('div', {
-                                       style: {
-                                           width: '100%',
-                                           lineHeight: '30px',
-                                           borderBottom: '1px solid #e9eaec '
-                                       }
-                                   }, [
-                                           h('span', {
-                                               style: {
-                                                   float: 'left',
-                                                   width: '50%',
-                                                   borderRight: 'none',
-                                                   boxSizing: 'border-box',
-                                               }
-                                           }, '计费'),
-                                           h('span', {
-                                               style: {
-                                                   float: 'left',
-                                                   width: '50%',
-                                                   borderRight: 'none',
-                                                   boxSizing: 'border-box',
-                                               }
-                                           }, '实收')
-                                       ])
-                               ])
-                           }
-                       },
-                       {
-                           title: '单车盈收率）',
-                           key: 'age',
-                           width: 420,
-                           align: 'center',
-                           render: (h, params) => {
-                               return h('div', {
-                                   style: {
-                                       height: '30px'
-                                   }
-                               }, [
-                                       h('span', {
-                                           style: {
-                                               float: 'left',
-                                               width: '50%',
-                                               height: '30px',
-                                               lineHeight: '30px',
-                                               borderRight: '1px solid rgb(233, 234, 236)',
-                                               boxSizing: 'border-box',
-                                           }
-                                       }, params.row.singleProfitRate.inPutBillingLv),
-                                       h('span', {
-                                           style: {
-                                               float: 'left',
-                                               width: '50%',
-                                               height: '30px',
-                                               lineHeight: '30px',
-                                               borderRight: 'none',
-                                               boxSizing: 'border-box',
-                                           }
-                                       }, params.row.singleProfitRate.inPutRealityLv),
-                                   ])
-                           },
-                           renderHeader: (h, params) => {
-                               return h('div', [
-                                   h('div', {
-                                       style: {
-                                           width: '100%',
-                                           lineHeight: '30px',
-                                           borderBottom: 'none ',
-                                       }
-                                   }, '单车盈收率'),
-                                   h('div', {
-                                       style: {
-                                           width: '100%',
-                                           lineHeight: '30px',
-                                           borderBottom: '1px solid #e9eaec '
-                                       }
-                                   }, [
-                                           h('span', {
-                                               style: {
-                                                   float: 'left',
-                                                   width: '50%',
-                                                   borderRight: '1px solid rgb(233, 234, 236)',
-                                                   boxSizing: 'border-box',
-                                               }
-                                           }, '计费'),
-                                           h('span', {
-                                               style: {
-                                                   float: 'left',
-                                                   width: '50%',
-                                                   borderRight: 'none',
-                                                   boxSizing: 'border-box',
-                                               }
-                                           }, '实收')
-                                       ])
-                               ])
-                           }
-                       },
-                       
-                       // {
-                       //     title: '盈亏状态（实收）',
-                       //     key: 'age',
-                       //     width: 420,
-                       //     align: 'center',
-                       //     render: (h, params) => {
-                       //         return h('div', {
-                       //             style: {
-                       //                 height: '30px'
-                       //             }
-                       //         }, [
-                       //                 h('span', {
-                       //                     style: {
-                       //                         float: 'left',
-                       //                         width: '50%',
-                       //                         height: '30px',
-                       //                         lineHeight: '30px',
-                       //                         borderRight: '1px solid rgb(233, 234, 236)',
-                       //                         boxSizing: 'border-box',
-                       //                     }
-                       //                 }, params.row.beefly.num),
-                       //                 h('span', {
-                       //                     style: {
-                       //                         float: 'left',
-                       //                         width: '50%',
-                       //                         height: '30px',
-                       //                         lineHeight: '30px',
-                       //                         borderRight: 'none',
-                       //                         boxSizing: 'border-box',
-                       //                     }
-                       //                 }, params.row.beefly.money),
-                       //             ])
-                       //     },
-                       //     renderHeader: (h, params) => {
-                       //         return h('div', [
-                       //             h('div', {
-                       //                 style: {
-                       //                     width: '100%',
-                       //                     lineHeight: '30px',
-                       //                     borderBottom: 'none ',
-                       //                 }
-                       //             }, '盈亏状态（实收）'),
-                       //             h('div', {
-                       //                 style: {
-                       //                     width: '100%',
-                       //                     lineHeight: '30px',
-                       //                     borderBottom: '1px solid #e9eaec '
-                       //                 }
-                       //             }, [
-                       //                     h('span', {
-                       //                         style: {
-                       //                             float: 'left',
-                       //                             width: '50%',
-                       //                             borderRight: '1px solid rgb(233, 234, 236)',
-                       //                             boxSizing: 'border-box',
-                       //                         }
-                       //                     }, '实收盈亏'),
-                       //                     h('span', {
-                       //                         style: {
-                       //                             float: 'left',
-                       //                             width: '50%',
-                       //                             borderRight: 'none',
-                       //                             boxSizing: 'border-box',
-                       //                         }
-                       //                     }, '实收盈亏率')
-                       //                 ])
-                       //         ])
-                       //     }
-                       // },
-                       // {
-                       //     title: '单车产出',
-                       //     key: 'age',
-                       //     width: 420,
-                       //     align:'center',
-                       //     render:(h,params)=>{
-                       //         return  h('div',{
-                       //            style:{
-                       //                 height:'30px'
-                       //            }
-                       //         },[
-                       //                 h('span',{
-                       //                     style:{
-                       //                         float:'left',
-                       //                        width:'50%',
-                       //                         height:'30px',
-                       //                         lineHeight:'30px',
-                       //                         borderRight:'1px solid rgb(233, 234, 236)',
-                       //                         boxSizing:'border-box',
-                       //                     }
-                       //                 },params.row.beefly.num),
-                       //                 h('span',{
-                       //                     style:{
-                       //                         float:'left',
-                       //                        width:'50%',
-                       //                         height:'30px',
-                       //                         lineHeight:'30px',
-                       //                         borderRight:'none',
-                       //                         boxSizing:'border-box',
-                       //                     }
-                       //                 },params.row.beefly.money),
-                       //             ])
-                       //     },
-                       //     renderHeader:(h,params)=>{
-                       //         return h('div',[
-                       //             h('div',{
-                       //                  style:{
-                       //                     width:'100%',
-                       //                     lineHeight:'30px',
-                       //                     borderBottom:'none ',
-                       //                 }
-                       //             },'单车产出'),
-                       //             h('div',{
-                       //                style:{
-                       //                     width:'100%',
-                       //                     lineHeight:'30px',
-                       //                     borderBottom:'1px solid #e9eaec '
-                       //                 } 
-                       //             },[
-                       //                 h('span',{
-                       //                     style:{
-                       //                         float:'left',
-                       //                        width:'50%',
-                       //                         borderRight:'1px solid rgb(233, 234, 236)',
-                       //                         boxSizing:'border-box',
-                       //                     }
-                       //                 },'计费'),
-                       //                 h('span',{
-                       //                     style:{
-                       //                         float:'left',
-                       //                         width:'50%',
-                       //                         borderRight:'none',
-                       //                         boxSizing:'border-box',
-                       //                     }
-                       //                 },'实收')
-                       //             ])
-                       //         ])
-                       //     }
-                       // },
-                    //     {
-                    //        title: '合计',
-                    //        key: 'total',
-                    //        width: 100,
-                    //        fixed: 'right',
-                    //        className:'middle',
-                    //         render:(h,params)=>{
-                    //            return h('div','')
-                    //        },
-                    //        renderHeader:(h,params)=>{
-                    //            return h('div',[
-                    //                h('div',{
-                    //                    style:{
-                    //                        width:'100%',
-                                          
-                    //                    }
-                    //                },'合计')
-                                  
-                    //            ])
-                    //        }
-                    //    }
-                   ],
-                   data4:this.mockTableData(),
+                   columns8:[
+                  {
+                    "title": "城市",
+                    "key": "name",
+                    "fixed": "left",
+                    "width": 200,
+                    render: (h, params) => {
+                      return h('div',params.row.cityName)
+                    },
+                    renderHeader: (h) => {
+                      return h('div', [
+                        h('div', {
+                          style: {
+                            width: '100%',
+                          }
+                        }, '城市'),
+
+                      ])
+                    }
+                  },
+                  {
+                    "title": "单车产出",
+                    "width": 350,
+                    renderHeader: (h) => {
+                      return h('div', [
+                        h('div', {
+                          style: {
+                            textAlign: 'center',
+                            lineHeight: '30px',
+                            borderBottom: '1px solid #e9eaec',
+                            borderRight: '1px solid #e9eaec'
+                          }
+                        }, '单车产出'),
+                        h('div', [
+                          h('span', {
+                            style: {
+                              display: 'inline-block',
+                              lineHeight: '30px',
+                              width: '50%',
+                              textAlign: 'center',
+                              borderBox: 'box-sizing',
+                              borderRight: '1px solid #e9eaec'
+                            }
+                          }, '计费'),
+                          h('span', {
+                            style: {
+                              display: 'inline-block',
+                              lineHeight: '30px',
+                              width: '50%',
+                              textAlign: 'center',
+                              borderBox: 'box-sizing',
+                              borderRight: '1px solid #e9eaec'
+                            }
+                          }, '实收')
+                        ])
+                      ])
+                    },
+                    render: (h, params) => {
+                      return h('div', [
+                        h('span', {
+                          style: {
+                            display: 'inline-block',
+                            lineHeight: '30px',
+                            width: '50%',
+                            textAlign: 'center',
+                            borderBox: 'box-sizing',
+                            borderRight: '1px solid #e9eaec'
+                          }
+                        }, params.row.singleProduce.outPutBilling),
+                        h('span', {
+                          style: {
+                            display: 'inline-block',
+                            lineHeight: '30px',
+                            width: '50%',
+                            textAlign: 'center',
+                            borderBox: 'box-sizing',
+                            borderRight: '1px solid #e9eaec'
+                          }
+                        }, params.row.singleProduce.outPutReality)
+                      ])
+                    }
+                  },
+                  {
+                    "title": "单车成本",
+                    "width": 350,
+                    renderHeader: (h) => {
+                      return h('div', [
+                        h('div', {
+                          style: {
+                            textAlign: 'center',
+                            lineHeight: '60px',
+                            borderBottom: 'none',
+                            borderRight: '1px solid #e9eaec'
+                          }
+                        }, '单车成本'),
+
+                      ])
+                    },
+                    render: (h, params) => {
+                      return h('div',{
+                          style:{
+                               borderRight: '1px solid #e9eaec'
+                          }
+                      },params.row.singleCost.oBikeCost)
+                    }
+                  },
+                  {
+                    "title": "单车盈收",
+                    "width": 350,
+                    renderHeader: (h) => {
+                      return h('div', [
+                        h('div', {
+                          style: {
+                            textAlign: 'center',
+                            lineHeight: '30px',
+                            borderBottom: '1px solid #e9eaec',
+                            borderRight: '1px solid #e9eaec'
+                          }
+                        }, '单车盈收'),
+                        h('div', [
+                          h('span', {
+                            style: {
+                              display: 'inline-block',
+                              lineHeight: '30px',
+                              width: '50%',
+                              textAlign: 'center',
+                              borderBox: 'box-sizing',
+                              borderRight: '1px solid #e9eaec'
+                            }
+                          }, '计费'),
+                          h('span', {
+                            style: {
+                              display: 'inline-block',
+                              lineHeight: '30px',
+                              width: '50%',
+                              textAlign: 'center',
+                              borderBox: 'box-sizing',
+                              borderRight: '1px solid #e9eaec'
+                            }
+                          }, '实收')
+                        ])
+                      ])
+                    },
+                    render: (h, params) => {
+                      return h('div', [
+                        h('span', {
+                          style: {
+                            display: 'inline-block',
+                            lineHeight: '30px',
+                            width: '50%',
+                            textAlign: 'center',
+                            borderBox: 'box-sizing',
+                            borderRight: '1px solid #e9eaec'
+                          }
+                        }, params.row.singleProfit.inPutBilling),
+                        h('span', {
+                          style: {
+                            display: 'inline-block',
+                            lineHeight: '30px',
+                            width: '50%',
+                            textAlign: 'center',
+                            borderBox: 'box-sizing',
+                            borderRight: '1px solid #e9eaec'
+                          }
+                        }, params.row.singleProfit.inPutReality)
+                      ])
+                    }
+                  },
+                  {
+                    "title": "单车盈收率",
+                    "width": 350,
+                    renderHeader: (h) => {
+                      return h('div', [
+                        h('div', {
+                          style: {
+                            textAlign: 'center',
+                            lineHeight: '30px',
+                            borderBottom: '1px solid #e9eaec',
+                            borderRight: '1px solid #e9eaec'
+                          }
+                        }, '单车盈收率'),
+                        h('div', [
+                          h('span', {
+                            style: {
+                              display: 'inline-block',
+                              lineHeight: '30px',
+                              width: '50%',
+                              textAlign: 'center',
+                              borderBox: 'box-sizing',
+                              borderRight: '1px solid #e9eaec'
+                            }
+                          }, '计费'),
+                          h('span', {
+                            style: {
+                              display: 'inline-block',
+                              lineHeight: '30px',
+                              width: '50%',
+                              textAlign: 'center',
+                              borderBox: 'box-sizing',
+                              borderRight: '1px solid #e9eaec'
+                            }
+                          }, '实收')
+                        ])
+                      ])
+                    },
+                    render: (h, params) => {
+                      return h('div', [
+                        h('span', {
+                          style: {
+                            display: 'inline-block',
+                            lineHeight: '30px',
+                            width: '50%',
+                            textAlign: 'center',
+                            borderBox: 'box-sizing',
+                            borderRight: '1px solid #e9eaec'
+                          }
+                        }, params.row.singleProfitRate.inPutBillingLv),
+                        h('span', {
+                          style: {
+                            display: 'inline-block',
+                            lineHeight: '30px',
+                            width: '50%',
+                            textAlign: 'center',
+                            borderBox: 'box-sizing',
+                            borderRight: '1px solid #e9eaec'
+                          }
+                        }, params.row.singleProfitRate.inPutRealityLv)
+                      ])
+                    }
+                  }
+                ],
+                   data7:this.mockTableData(),
                    countObj:{}
                }
            },
@@ -530,7 +327,7 @@
                                    }
    
                                }
-                               that.data4 = arr
+                               that.data7 = arr
                                var html = ''
                                for (var i = 0; i < 1; i++) {
                                    html += `
@@ -592,71 +389,10 @@
                }
            },
            mounted(){
-   //             var html = ''
-   //             for(var i=0;i<1;i++){
-   //                 html += `
-   //                     <tr class="ivu-table-row">
-   //     <td class="middle ivu-table-hidden">
-   //         <div class="ivu-table-cell ivu-table-hidden">
-   //             <!---->
-   //             <!---->
-   //             <!---->
-   //             <!---->
-   //             <div>北京市</div>
-   //         </div>
-   //     </td>
-   //     <td class="ivu-table-column-center">
-   //         <div class="ivu-table-cell">
-   //             <!---->
-   //             <!---->
-   //             <!---->
-   //             <!---->
-   //             <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">0.00</span>
-   //                 <span
-   //                     style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">0.00</span>
-   //             </div>
-   //         </div>
-   //     </td>
-   //     <td class="ivu-table-column-center">
-   //         <div class="ivu-table-cell">
-   //             <!---->
-   //             <!---->
-   //             <!---->
-   //             <!---->
-   //             <div style="height: 30px;"><span style="float: left; width: 100%; height: 30px; line-height: 30px; box-sizing: border-box;">0.00</span></div>
-   //         </div>
-   //     </td>
-   //     <td class="ivu-table-column-center">
-   //         <div class="ivu-table-cell">
-   //             <!---->
-   //             <!---->
-   //             <!---->
-   //             <!---->
-   //             <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">0.00</span>
-   //                 <span
-   //                     style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">0.00</span>
-   //             </div>
-   //         </div>
-   //     </td>
-   //     <td class="ivu-table-column-center">
-   //         <div class="ivu-table-cell">
-   //             <!---->
-   //             <!---->
-   //             <!---->
-   //             <!---->
-   //             <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">0</span>
-   //                 <span
-   //                     style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">0</span>
-   //             </div>
-   //         </div>
-   //     </td>
-   // </tr>
-   //                 `
-   //             }
-   //             $('.ivu-table-body').eq(3).find('table').append("<tfoot><tr>" + html + "</tr></tfoot>")
-   //             $('.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').append('<tfoot><td class="middle"><div class="ivu-table-cell"><div>合计</div></div></td></tfoot>')
-   //             $('.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append( '<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>6</div></div></td></tr></tfoot>')
-              
+                setTimeout(function(){
+                      $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-header').find('table').width('100%')
+                     $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-body').find('table').width('100%')
+                },200)
            },
            watch: {
                'dataMonth': {

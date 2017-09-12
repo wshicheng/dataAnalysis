@@ -425,21 +425,64 @@ export default {
                                     $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-fixed-body').find('table').append('<tfoot>' + html + '</tfoot>')
                         
                         }
- 
-                      
+                         var html = `
+                                <tr class="ivu-table-row">
+                                    <td class="ivu-table-cell">
+                                        <div class="ivu-table-cell ">
+                                            <span>合计</span>
+                                        </div>
+                                    </td>
+                                    <td class="">
+                                        <div class="ivu-table-cell">
+                                            <div>
+                                                <span style="display: inline-block; line-height: 30px; width: 33.3%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${countObj.mBillingIncome}</span><span style="display: inline-block; line-height: 30px; width: 33.3%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${countObj.mRealityIncome}</span><span style="display: inline-block; line-height: 30px; width: 33.3%; text-align: center; border-right: none;">${countObj.realIncomeLv}</span></div>
+                                        </div>
+                                    </td>
+                                    <td class="">
+                                        <div class="ivu-table-cell">
+                                            <div>
+                                                <span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${countObj.billProfitAndLoss }</span><span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: none;">${countObj.billProfitAndLossLv }</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="">
+                                        <div class="ivu-table-cell">
+                                            <div>
+                                                <span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${countObj.realProfitAndLoss}</span><span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: none;">${countObj.realProfitAndLossLv}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="">
+                                        <div class="ivu-table-cell">
+                                            <div>
+                                                <span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${countObj.oBilling}</span><span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: none;">${countObj.oReality}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `
+                        $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-header').find('table').width('100%')
+                        $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-body').find('table').width('100%')
+                        $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-body').find('table').find('tfoot').remove()
+                        $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-body').find('table').append('<tfoot>' + html + '</tfoot>')
+                         $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                        $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-fixed-body').find('table').append('<tfoot>' + html + '</tfoot>')
                     }
                     console.log(arr)
                     this.data7 = arr
                 }).catch((error) => {
                     console.log(error)
                 })
-            // }, 2000)
+            // }, 200)
         }
     },
     computed: {
         ...mapGetters(['dataMonth'])
     },
     mounted() {
+        setTimeout(() => {
+           
+        }, 200)
 
     },
     beforeMount () {
