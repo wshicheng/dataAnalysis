@@ -18,7 +18,10 @@
         </div>
 
         <div id="cityManage_table">             
-            <Spin fix size="large" v-if='spinShow' class="spin"></Spin> 
+            <Spin fix size="large" v-if="spinShow"  class="spin">
+                 <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                <div>Loading....</div>
+            </Spin> 
             <Button type="warning" @click="exportModal = true">导入数据</Button>
             <Button class="cancel" @click="delTableByGroup">删除</Button>
             <span>*每月10号后，不可编辑和删除上月数据</span>
@@ -227,8 +230,7 @@
         position: absolute;
         display: inline-block;
         // background-color: rgba(253, 248, 248,0.0); 
-        // background-color: rgba(177, 175, 175, 0.3); 
-        background-color: rgba(225, 225, 225, 0.3); 
+        background-color: rgba(255, 255, 255, 0.8); 
     }
     button:nth-of-type(1) {
         margin-right: 10px;
