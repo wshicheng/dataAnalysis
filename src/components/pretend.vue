@@ -126,7 +126,7 @@ import citySelect from './citySelect.vue'
                     $(item).css({
                         width:$percent,
                     })
-                   if($percent.fixed(2)!=='100%'){
+                   if($percent=='100%'){
                        $(item).parent().prev().css({
                            color:'#000'
                        })
@@ -155,37 +155,31 @@ import citySelect from './citySelect.vue'
                                       that.allCount = true
                                       that.items = data[0]
                                       data.splice(0,1)
-                                     that.allCityTables = data
+                                      that.allCityTables = data.map(item => {
+                                        return item.map(list => {
+                                            if(list.actualYield.trim().length==0){
+                                                return {}
+                                            }else{
+                                                return list
+                                            }
+                                        })
+                                        
+                                     })
+                                     // that.allCityTables = data
                                  }else{
                                      that.allCount = false
-                                     that.allCityTables = data
+                                      that.allCityTables = data.map(item => {
+                                        return item.map(list => {
+                                            if(list.actualYield.trim().length==0){
+                                                return {}
+                                            }else{
+                                                return list
+                                            }
+                                        })
+                                        
+                                     })
 
                                  }
-
-                           }).catch((error) => {
-                               console.log(error)
-                           })
-                       }, 200)
-               },
-             mountedWay() {
-                   // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
-                   var that =  this
-                   setTimeout(function() {
-                       that.axios('/beefly/monthDataDetail/api/v1/monthDataDetail', {
-                           params: {
-                               dataMonth: that.dataMonth,
-                               accessToken: that.$store.state.token,
-                               type: 5,
-                               cityCode:that.$store.state.cityList.length===0?'':that.$store.state.cityList.join(',')
-                           }
-                           }).then((response) => {
-                               var data = response.data.data||[]
-                                //合计
-                                this.totalMoneyTbale = true
-                                that.items = data[0]
-                                data.shift()
-                                var newData = that.mockTableDatas3(data)
-                                that.allCityTables = newData
 
                            }).catch((error) => {
                                console.log(error)
