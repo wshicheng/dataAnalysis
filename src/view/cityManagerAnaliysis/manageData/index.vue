@@ -55,7 +55,7 @@
                                 <Select class="small_select" v-show="smallList_one_show" v-model="editValidate.smallKind" :placeholder="editSmallType">
                                     <Option v-for="item in smallList_one" :value="item.name" :key="item.index">{{ item.name }}</Option>
                                 </Select>
-                                <Select class="small_select" :placeholder="little" v-show="smallList_two_show" v-model="editValidate.smallKind">
+                                <Select class="small_select" v-show="smallList_two_show" v-model="editValidate.smallKind"  :placeholder="editSmallType2">
                                     <Option v-for="item in smallList_two" :value="item.name" :key="item.index">{{ item.name }}</Option>
                                 </Select>
                             </FormItem>
@@ -370,7 +370,6 @@ export default {
     data() {
         return {
             listChose: [],
-            little: '请选择小类',
             smallList_one: [
                 {
                     name: '车辆',
@@ -412,10 +411,10 @@ export default {
                     name: '开城费用',
                     index: 2
                 }, {
-                    name: '房租(生产)',
+                    name: '房租',
                     index: 3
                 }, {
-                    name: '水电(生产)',
+                    name: '水电',
                     index: 4
                 }
             ],
@@ -447,7 +446,8 @@ export default {
             editMonth: '',
             editArea: '',
             editBigType: '',
-            editSmallType: '',
+            editSmallType: '请选择小类',
+            editSmallType2: '',
             editValidateRule: {
                 month: [
                     { required: true, type: 'date', message: '请选择时间', trigger: 'change' }
@@ -739,22 +739,11 @@ export default {
             this.editBigType = type[0]
             this.editValidate.bigKind = type[0]
             this.editSmallType = type[1]
+            this.editSmallType2 = '请选择小类'
             this.editValidate.smallKind = type[1]
             if (row.status === 1) {
                 this.$Message.warning('每月10号后，不可编辑和删除上月数据')
-            } else if (type[1] != ('车辆' || '电池' || '机动车' || '运维工具车')) {
-                this.numberShow = false
-                this.editModal = true
-                this.editMonth = row.dataMonth
-                this.editValidate.dataMonth = row.dataMonth
-                this.editArea = row.city
-                // console.log('editArea',this.editArea)
-                this.editValidate.city = row.city
-                this.editValidate.unitPrice = row.unitPrice
-                this.editValidate.number = row.number
-                this.editValidate.id = row.id
-                console.log(this.editValidate)
-            } else {
+            } else if (type[1] === '车辆' || type[1] === '电池' || type[1] === '机动车' || type[1] === '运维工具车') {
                 this.numberShow = true
                 this.editModal = true
                 this.editMonth = row.dataMonth
@@ -765,7 +754,19 @@ export default {
                 this.editValidate.unitPrice = row.unitPrice
                 this.editValidate.number = row.number
                 this.editValidate.id = row.id
-                console.log(this.editValidate)
+                // console.log(this.editValidate)
+            } else {
+                this.numberShow = false
+                this.editModal = true
+                this.editMonth = row.dataMonth
+                this.editValidate.dataMonth = row.dataMonth
+                this.editArea = row.city
+                // console.log('editArea',this.editArea)
+                this.editValidate.city = row.city
+                this.editValidate.unitPrice = row.unitPrice
+                this.editValidate.number = row.number
+                this.editValidate.id = row.id
+                // console.log(this.editValidate)
             }
         },
         remove(index, row) {
@@ -786,7 +787,7 @@ export default {
             })
             .then((res) => {
                 this.checkLogin(res)
-                console.log(res.data)
+                // console.log(res.data)
                 if (res.data.resultCode === 1) {
                     this.$Message.success('删除成功!');
                     this.current = 1
@@ -820,7 +821,7 @@ export default {
                     })
                     .then((res) => {
                         this.checkLogin(res)
-                        console.log(res.data)
+                        // console.log(res.data)
                         if (res.data.resultCode === 1) {
                             this.$Message.success('修改成功!');
                             this.editModal = false
@@ -868,7 +869,7 @@ export default {
             }
             this.file2Xce(file).then(tabJson => {
                 if (tabJson && tabJson.length > 0) {
-                    console.log(tabJson)
+                    // console.log(tabJson)
                     this.exportedData = tabJson
                 }
             });
@@ -951,8 +952,6 @@ export default {
             // 清空多选删除的数组容器。
             this.checkList = []
             this.current = 1
-            console.log(this.selectTime)
-            console.log(moment(this.selectTime).format('YYYY-MM'))
             this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
                     accessToken: this.$store.state.token,
@@ -991,7 +990,6 @@ export default {
             })
         },
         selectChange(selection) {
-            console.log(selection)
             selection.map( (item) => {
                 // this.checkList.push(item.id)
                 if (item.status === 1) {
@@ -1015,7 +1013,6 @@ export default {
                 })
                 .then((res) => {
                     this.checkLogin(res)
-                    console.log(res.data)
                     if (res.data.resultCode === 1) {
                         this.$Message.success('删除成功!');
                         // 批量删除成功后，清空checkList数组
@@ -1096,7 +1093,6 @@ export default {
             }, 100);
         },
         bigListWatch () {
-            console.log(this.editValidate.bigKind)
             if (this.editValidate.bigKind === '固定资产') {
                 this.smallList_one_show = true
                 this.smallList_two_show = false
