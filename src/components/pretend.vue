@@ -1,5 +1,9 @@
 <template>
-  <Row class="pretend">
+  <Row class="pretend fiexedAssets">
+       <Spin v-show="spinShow" fix>
+                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                <div style="color:rgb(204, 204, 204);">Loading</div>
+            </Spin>
       <Row class="citySelect">
           <!-- <ul>
               <li class="active">全部地区</li>
@@ -88,6 +92,7 @@ import citySelect from './citySelect.vue'
         },
         data(){
             return {
+                spinShow:true,
                 isNoData:false,
                 isNoData2:true,
                 allCount:false,
@@ -116,20 +121,21 @@ import citySelect from './citySelect.vue'
                     $(item).css({
                         width:$percent,
                     })
-                   if($percent.fixed(2)!=='100%'){
-                       $(item).parent().prev().css({
-                           color:'#000'
-                       })
-                   }else{
-                       $(item).parent().prev().css({
-                           color:'#fff'
-                       })
-                   }
+                //    if($percent.fixed(2)!=='100%'){
+                //        $(item).parent().prev().css({
+                //            color:'#000'
+                //        })
+                //    }else{
+                //        $(item).parent().prev().css({
+                //            color:'#fff'
+                //        })
+                //    }
                })
             },
              changePage() {
                    // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
                    var that =  this
+                   this.spinShow = true
                    setTimeout(function() {
                        that.axios('/beefly/monthDataDetail/api/v1/monthDataDetail', {
                            params: {
@@ -139,12 +145,12 @@ import citySelect from './citySelect.vue'
                                cityCode:that.$store.state.cityList.length===0?'':that.$store.state.cityList.join(',')
                            }
                            }).then((response) => {
+                               that.spinShow = false
                                var data = response.data.data
                                var message  = data.message
                                if(message==='用户登录超时'){
                                    that.$store.push({path:'/login'})
                                }
-                                 that.items = data[0]
                                  if(that.$store.state.cityList.length<1){
                                       that.allCount = true
                                       that.items = data[0]
@@ -162,25 +168,11 @@ import citySelect from './citySelect.vue'
                                       data.splice(0,1)
                                      var arr = data
                                       that.allCityTables = arr
-                                      return
-                                     data.map(item=>{
-                                        if(item.actualYield.length===0){
-                                            that.allCityTables =[ [{
-                                                actualYield:'',
-                                                city:$('span.active').text(),
-                                                dataMonth:'',
-                                                id:null,
-                                                profitAndLossLv:'',
-                                                profitLossStatus:''
-                                            }]]
-                                        }else{
-                                            that.allCityTables = arr
-                                        }
-                                     })
                                  }
 
                            }).catch((error) => {
                                console.log(error)
+                               that.spinShow = false
                            })
                        }, 200)
                }
@@ -239,16 +231,17 @@ import citySelect from './citySelect.vue'
                                 bottom:0;
                                 top:50%;
                                 margin-top:-15px;
-                                color:#fff;
+                                color:#000;
                                 z-index:3;
                             }
                             .progress-inner{
                                 width:100%;
                                 background:#f3f3f3;
+                                color:#000;
                                 .progress-bg{
                                     height: 30px;
                                     width:100%;
-                                    background:#19be6b;
+                                    background:#f3f3f3;
                                     position: relative;
                                 }
                                 .progress-bg.active{
@@ -265,6 +258,21 @@ import citySelect from './citySelect.vue'
             }
         }
     }
+    div.fiexedAssets {
+    padding: 0 16px 16px 16px;
+    height:400px;
+    box-sizing: border-box;
+    position:relative;
+    .demo-spin-icon-load{
+        color:rgb(204, 204, 204);
+        animation: ani-demo-spin 1s linear infinite;
+    }
+    @keyframes ani-demo-spin {
+        from { transform: rotate(0deg);}
+        50%  { transform: rotate(180deg);}
+        to   { transform: rotate(360deg);}
+    }
+}
     div.nodata{text-align:center;border:1px solid #e9eaec;height:182px;line-height: 182px;}
 div.nodata i{font-size:100px}
 </style>

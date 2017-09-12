@@ -1,10 +1,14 @@
 <template>
     <!--单车日营收-->
      <div class="fiexedAssets">
-          <div class="nodata" v-show="isNoData">
+        <Spin v-show="spinShow" fix>
+                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                <div style="color:rgb(204, 204, 204);">Loading</div>
+            </Spin>
+          <div class="nodata" v-show="isNoData2">
             <i class="iconfont icon-zanwushuju"></i>
         </div>
-         <Table id="fiexedAssets6" :columns="columns8" :data="data7" size="small" ref="table"></Table>
+         <Table v-show="isNoData" id="fiexedAssets6" :columns="columns8" :data="data7" size="small" ref="table"></Table>
        
      </div>
    </template>
@@ -14,13 +18,15 @@
        export default {
            data () {
                return {
+                 spinShow:true,
                    isNoData:true,
+                   isNoData2:true,
                    columns8:[
                   {
                     "title": "城市",
                     "key": "name",
                     "fixed": "left",
-                    "width": 200,
+                    "width": 300,
                     render: (h, params) => {
                       return h('div',params.row.cityName)
                     },
@@ -37,7 +43,7 @@
                   },
                   {
                     "title": "单车产出",
-                    "width": 350,
+                    "width": 450,
                     renderHeader: (h) => {
                       return h('div', [
                         h('div', {
@@ -99,7 +105,7 @@
                   },
                   {
                     "title": "单车成本",
-                    "width": 350,
+                    "width": 450,
                     renderHeader: (h) => {
                       return h('div', [
                         h('div', {
@@ -123,7 +129,7 @@
                   },
                   {
                     "title": "单车盈收",
-                    "width": 350,
+                    "width": 450,
                     renderHeader: (h) => {
                       return h('div', [
                         h('div', {
@@ -185,7 +191,7 @@
                   },
                   {
                     "title": "单车盈收率",
-                    "width": 350,
+                    "width": 450,
                     renderHeader: (h) => {
                       return h('div', [
                         h('div', {
@@ -281,6 +287,7 @@
                    return data
                },
                changePage() {
+                 this.spinShow = true
                    // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
                    var that =  this
                    setTimeout(function() {
@@ -291,13 +298,16 @@
                                type: 4
                            }
                            }).then((response) => {
+                                that.spinShow = false
                                var data = response.data.data||[]
                                var arr = [];
                                 if(data.length>0){
-                                    that.isNoData = false
-                                }else{
+                                    that.isNoData2 = false
                                     that.isNoData = true
-                                     return
+                                }else{
+                                    that.isNoData2 = true
+                                    that.isNoData = false
+                                     
                                 }
                                for (var i = 0; i < data.length; i++) {
                                    if (i < data.length - 1) {
@@ -370,7 +380,7 @@
                                    `
                                }
                               
-                           if(that.data4.length>0){
+                           if(that.data7.length>0){
                                    $('.ivu-table-body').eq(3).find('table').find('tfoot').remove()
                                    $('.ivu-table-body').eq(3).find('table').append("<tfoot><tr>" + html + "</tr></tfoot>")
                                    $('.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
@@ -384,6 +394,7 @@
                                }
                            }).catch((error) => {
                                console.log(error)
+                                 that.spinShow = false
                            })
                        }, 200)
                }
@@ -406,8 +417,22 @@
    </script>
    <style lang="scss" scoped type="text/css">
    div.ivu-table-wrapper{margin:0 auto;}
-   div.fiexedAssets{padding:0 16px 16px 16px;}
-   div.nodata{text-align:center;}
+   div.fiexedAssets {
+    padding: 0 16px 16px 16px;
+    height:400px;
+    box-sizing: border-box;
+    position:relative;
+    .demo-spin-icon-load{
+        color:rgb(204, 204, 204);
+        animation: ani-demo-spin 1s linear infinite;
+    }
+    @keyframes ani-demo-spin {
+        from { transform: rotate(0deg);}
+        50%  { transform: rotate(180deg);}
+        to   { transform: rotate(360deg);}
+    }
+}
+div.nodata{text-align:center;}
 div.nodata i{font-size:400px;color:#dedcdc;}
    </style>
    

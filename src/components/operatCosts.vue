@@ -1,10 +1,14 @@
 <template>
  <!--运营成本-->
     <div class="fiexedAssets">
-        <div class="nodata" v-show="isNoData">
+         <Spin v-show="spinShow" fix>
+                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                <div style="color:rgb(204, 204, 204);">Loading</div>
+            </Spin>
+        <div class="nodata" v-show="isNoData2">
             <i class="iconfont icon-zanwushuju"></i>
         </div>
-        <Table v-show="!isNoData" id="fiexedAssets" min-width="1180" height="400" border :columns="columns2" :data="data4"></Table>
+        <Table v-show="isNoData" id="fiexedAssets2" min-width="1180" border :columns="columns2" :data="data4"></Table>
     </div>
 </template>
 <script>
@@ -13,7 +17,9 @@ import { mapGetters } from 'vuex'
 export default {
     data() {
         return {
-            isNoData:true,
+            spinShow:false,
+            isNoData:false,
+            isNoData2:true,
             countObj:{},
             columns2: [
                 {
@@ -673,6 +679,9 @@ export default {
         },
         changePage() {
             // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
+            this.isNoData = false
+            this.isNoData2 = false
+            this.spinShow = true
             var that =  this
              setTimeout(function() {
             that.axios('/beefly/monthDataDetail/api/v1/monthDataDetail', {
@@ -682,12 +691,15 @@ export default {
                     type: 2
                 }
                 }).then((response) => {
+                    that.spinShow = false
                     var data = response.data.data||[]
                     var arr = [];
                     if(data.length>0){
-                        that.isNoData = false
-                    }else{
+                        that.isNoData2 = false
                         that.isNoData = true
+                    }else{
+                        that.isNoData2 = true
+                        that.isNoData = false
                          return
                     }
                     for (var i = 0; i < data.length; i++) {
@@ -810,74 +822,14 @@ export default {
                     }
                 }).catch((error) => {
                     console.log(error)
+                      that.spinShow = false
                 })
             }, 200)
         }
     },
     mounted(){
-        this.changePage()
-        // var html = ''
-        // for(var i=0;i<1;i++){
-        //     html += `
-        //         <tr class="ivu-table-row">
-        //             <td class="middle ivu-table-hidden">
-        //                 <div class="ivu-table-cell ivu-table-hidden">
-        //                     <div>城市90</div>
-        //                 </div>
-        //             </td>
-        //             <td class="ivu-table-column-center">
-        //                 <div class="ivu-table-cell">
-        //                     <div style="height: 30px;"><span style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">2</span>
-        //                         <span
-        //                             style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span><span style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span>
-        //                             <span
-        //                                 style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span><span style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span>
-        //                                 <span
-        //                                     style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span><span style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span>
-        //                                     <span
-        //                                         style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span><span style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span>
-        //                                         <span
-        //                                             style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">1</span>
-        //                     </div>
-        //                 </div>
-        //             </td>
-        //             <td class="ivu-table-column-center">
-        //                 <div class="ivu-table-cell">
-        //                     <div style="height: 30px;"><span style="float: left; width: 12.5%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">2</span>
-        //                         <span
-        //                             style="float: left; width: 12.5%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span><span style="float: left; width: 12.5%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span>
-        //                             <span
-        //                                 style="float: left; width: 12.5%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span><span style="float: left; width: 12.5%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span>
-        //                                 <span
-        //                                     style="float: left; width: 12.5%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span><span style="float: left; width: 12.5%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span>
-        //                                     <span
-        //                                         style="float: left; width: 12.5%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">1</span>
-        //                     </div>
-        //                 </div>
-        //             </td>
-        //             <td class="ivu-table-column-center">
-        //                 <div class="ivu-table-cell">
-        //                     <div style="height: 30px;"><span style="float: left; width: 14.28%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">2</span>
-        //                         <span
-        //                             style="float: left; width: 14.28%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">2</span><span style="float: left; width: 14.28%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">2</span>
-        //                             <span
-        //                                 style="float: left; width: 14.28%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">2</span><span style="float: left; width: 14.28%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">2</span>
-        //                                 <span
-        //                                     style="float: left; width: 14.28%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">2</span><span style="float: left; width: 14.28%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">2</span></div>
-        //                 </div>
-        //             </td>
-        //             <td class="middle ivu-table-hidden">
-        //                 <div class="ivu-table-cell ivu-table-hidden">
-        //                     <div>8</div>
-        //                 </div>
-        //             </td>
-        //         </tr>
-        //     `
-        // }
-        // $('.ivu-table-body').eq(1).find('table').append("<tfoot><tr>" + html + "</tr></tfoot>")
-        // $('.ivu-tabs-tabpane').eq(1).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').append('<tfoot><td class="middle"><div class="ivu-table-cell"><div>合计</div></div></td></tfoot>')
-        // $('.ivu-tabs-tabpane').eq(1).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append( '<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>6</div></div></td></tr></tfoot>')
-        
+       // this.changePage()
+      
     },
     watch:{
         'dataMonth':{
@@ -893,7 +845,21 @@ export default {
 div.ivu-table-wrapper {
     margin: 0 auto;
 }
-div.fiexedAssets{padding:0 16px 16px 16px;}
+div.fiexedAssets {
+    padding: 0 16px 16px 16px;
+    height:400px;
+    box-sizing: border-box;
+    position:relative;
+    .demo-spin-icon-load{
+        color:rgb(204, 204, 204);
+        animation: ani-demo-spin 1s linear infinite;
+    }
+    @keyframes ani-demo-spin {
+        from { transform: rotate(0deg);}
+        50%  { transform: rotate(180deg);}
+        to   { transform: rotate(360deg);}
+    }
+}
 div.nodata{text-align:center;}
 div.nodata i{font-size:400px;color:#dedcdc;}
 </style>

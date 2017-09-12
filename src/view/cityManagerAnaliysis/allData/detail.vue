@@ -29,6 +29,8 @@
                 <TabPane :label="label5">
                     <pretend></pretend>
                 </TabPane>
+                
+                
             </Tabs>
         </Row>
     </Row>
@@ -38,6 +40,7 @@ import moment from 'moment'
 import baseDatas from '../../../components/baseDatas.vue'
 import operatingCost  from '../../../components/operatCosts.vue'
 import operatingAnalysis from '../../../components/operatAnalysis.vue'
+
 import singleBike from '../../../components/singleBikeIncoming.vue'
 import pretend from '../../../components/pretend.vue'
 import {mapActions,mapGetters} from 'vuex'
@@ -47,7 +50,7 @@ import {mapActions,mapGetters} from 'vuex'
             'operating-cost':operatingCost,
             'operating-analysis':operatingAnalysis,
             'single-bike':singleBike,
-            'pretend':pretend
+            'pretend':pretend,
         },
         data(){
             return {
