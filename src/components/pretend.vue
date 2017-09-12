@@ -52,7 +52,7 @@
                             </tr>
                           </thead>
                           <tbody>
-                              <tr :key="list.id" v-for="list of item">
+                              <tr v-show="item[0].actualYield.length!==0"  :key="list.id" v-for="list of item">
                                   <td>{{list.actualYield}}</td>
                                   <td>{{list.profitLossStatus}}</td>
                                   <td>
@@ -67,23 +67,11 @@
                                       </div> 
                                   </td>
                               </tr>
-                              <!-- <tr>
-                                  <td>{{list.actualYield}}</td>
-                                  <td>{{list.profitLossStatus}}</td>
-                                  <td>
-                                      <div class="progress">
-                                        <div class="progress-outer">
-                                            <span class="progress-text">{{list.profitAndLossLv}}</span>  
-                                            <div class="progress-inner">
-                                                <div  :class="{'progress-bg':common}" :percent="list.profitAndLossLv">
-                                                </div>
-                                            </div>
-                                        </div> 
-                                      </div> 
-                                  </td>
-                              </tr>                                 -->
                           </tbody>
                       </table>
+                       <div v-show="item[0].actualYield.length===0" class="nodata" >
+                           暂无数据
+                        </div>
                   </div>
               </li>
           </ul>
@@ -100,6 +88,8 @@ import citySelect from './citySelect.vue'
         },
         data(){
             return {
+                isNoData:false,
+                isNoData2:true,
                 allCount:false,
                 cityLists:this.cityList,
                 allCityTables:[],
@@ -126,7 +116,7 @@ import citySelect from './citySelect.vue'
                     $(item).css({
                         width:$percent,
                     })
-                   if($percent=='100%'){
+                   if($percent.fixed(2)!=='100%'){
                        $(item).parent().prev().css({
                            color:'#000'
                        })
@@ -151,34 +141,38 @@ import citySelect from './citySelect.vue'
                            }).then((response) => {
                                var data = response.data.data
                                  that.items = data[0]
-                                 if(data.length>1){
+                                 if(that.$store.state.cityList.length<1){
                                       that.allCount = true
                                       that.items = data[0]
                                       data.splice(0,1)
-                                      that.allCityTables = data.map(item => {
-                                        return item.map(list => {
-                                            if(list.actualYield.trim().length==0){
-                                                return {}
-                                            }else{
-                                                return list
-                                            }
-                                        })
-                                        
-                                     })
-                                     // that.allCityTables = data
-                                 }else{
+                                      that.allCityTables = data
+                                 }
+                                 if(that.$store.state.cityList.length==1){
                                      that.allCount = false
-                                      that.allCityTables = data.map(item => {
-                                        return item.map(list => {
-                                            if(list.actualYield.trim().length==0){
-                                                return {}
-                                            }else{
-                                                return list
-                                            }
-                                        })
-                                        
+                                     var arr = data
+                                     that.allCityTables = arr
+                                 }
+                                  if(that.$store.state.cityList.length>1){
+                                     that.allCount = true
+                                      that.items = data[0]
+                                      data.splice(0,1)
+                                     var arr = data
+                                      that.allCityTables = arr
+                                      return
+                                     data.map(item=>{
+                                        if(item.actualYield.length===0){
+                                            that.allCityTables =[ [{
+                                                actualYield:'',
+                                                city:$('span.active').text(),
+                                                dataMonth:'',
+                                                id:null,
+                                                profitAndLossLv:'',
+                                                profitLossStatus:''
+                                            }]]
+                                        }else{
+                                            that.allCityTables = arr
+                                        }
                                      })
-
                                  }
 
                            }).catch((error) => {
@@ -267,4 +261,6 @@ import citySelect from './citySelect.vue'
             }
         }
     }
+    div.nodata{text-align:center;border:1px solid #e9eaec;height:182px;line-height: 182px;}
+div.nodata i{font-size:100px}
 </style>

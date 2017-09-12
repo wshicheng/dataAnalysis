@@ -672,7 +672,7 @@
    div.ivu-table-wrapper{margin:0 auto;}
    div.fiexedAssets{padding:0 16px 16px 16px;}
    div.nodata{text-align:center;}
-div.nodata i{font-size:400px}
+div.nodata i{font-size:400px;color:#dedcdc;}
    </style>
    
    
