@@ -227,7 +227,8 @@
         position: absolute;
         display: inline-block;
         // background-color: rgba(253, 248, 248,0.0); 
-        background-color: rgba(177, 175, 175, 0.3); 
+        // background-color: rgba(177, 175, 175, 0.3); 
+        background-color: rgba(225, 225, 225, 0.3); 
     }
     button:nth-of-type(1) {
         margin-right: 10px;
