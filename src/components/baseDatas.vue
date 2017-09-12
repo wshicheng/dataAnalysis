@@ -1,10 +1,14 @@
 <template>
     <!--基础数据-->
     <div class="fiexedAssets">
+         <Spin fix size="large" v-if="spinShow"  class="spin">
+                 <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                <div>Loading....</div>
+            </Spin> 
          <div class="nodata" v-show="!isNoData2">
             <i class="iconfont icon-zanwushuju"></i>
         </div>
-        <Table v-show="!isNoData" id="fiexedAssets" min-width="1180" height="400" border :columns="columns2" :data="data4"></Table>
+        <Table v-show="isNoData" id="fiexedAssets" min-width="1180" height="400" border :columns="columns2" :data="data4"></Table>
     </div>
 </template>
 <script>
@@ -14,7 +18,8 @@ import $ from 'jquery'
 export default {
     data() {
         return {
-            isNoData:true,
+            spinShow:true,
+            isNoData:false,
             isNoData2:true,
             countObj: {},
             columns2: [
@@ -705,6 +710,7 @@ export default {
             return data
         },
         changePage() {
+            
             // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
             var that =  this
              setTimeout(function() {
@@ -715,6 +721,7 @@ export default {
                     type: 1
                 }
                 }).then((response) => {
+                    that.spinShow = false
                     var data = response.data.data||[]
                     var message = response.data.message
                     if(message === '用户登录超时'){
@@ -798,10 +805,11 @@ export default {
                         }
                     }
                     if(data.length>0){
-                        that.isNoData = false
+                        
+                        that.isNoData = true
                         that.isNoData2 = true
                     }else{
-                        that.isNoData = true
+                        that.isNoData = false
                         that.isNoData2 = false
                         return
                     }
@@ -944,6 +952,20 @@ div.ivu-table-wrapper {
 
 div.fiexedAssets {
     padding: 0 16px 16px 16px;
+     .spin {
+        position: absolute;
+        display: inline-block;
+        // background-color: rgba(253, 248, 248,0.0); 
+        background-color: rgba(255, 255, 255, 0.8); 
+    }
+    .demo-spin-icon-load{
+        animation: ani-demo-spin 1s linear infinite;
+    }
+    @keyframes ani-demo-spin {
+        from { transform: rotate(0deg);}
+        50%  { transform: rotate(180deg);}
+        to   { transform: rotate(360deg);}
+    }
 }
 div.nodata{text-align:center;}
 div.nodata i{font-size:400px;color:#dedcdc;}

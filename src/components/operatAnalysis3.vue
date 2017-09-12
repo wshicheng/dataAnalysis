@@ -1,278 +1,460 @@
 <template>
-    <Table :columns="columns8" :data="data7" width="100%" size="small" ref="table"></Table>
+    <div class="container">
+        <div class="nodata" v-show="isNoData">
+            <i class="iconfont icon-zanwushuju"></i>
+        </div>
+        <Table id="fiexedAssets6" :columns="columns8" min-width='1200' :data="data7" size="small" border ref="table"></Table>
+    </div>
 </template>
 <script>
-    export default {
-        data () {
-            return {
-                columns8: [
-                    {
-                        "title": "名称",
-                        "key": "name",
-                        "fixed": "left",
-                        "width": 200
-                    },
-                    {
-                        "title": "展示",
-                        "key": "show",
-                        "width": 150,
-                        renderHeader:(h)=>{
-                            return h('div',[
-                                h('div', {
+import $ from 'jquery'
+import { mapGetters } from 'vuex'
+export default {
+    data() {
+        return {
+            isNoData: false,
+            countObj: {
+                billProfitAndLoss: "",
+                billProfitAndLossLv: "",
+                city: "",
+                dataMonth: "",
+                id: '',
+                mBillingIncome: "",
+                mRealityIncome: "",
+                oBilling: "",
+                oReality: "",
+                realIncomeLv: "",
+                realProfitAndLoss: "",
+                realProfitAndLossLv: "",
+            },
+            columns8: [
+                {
+                    "title": "城市",
+                    "cityName": "name",
+                    "fixed": "left",
+                    "width": 200,
+                    render: (h,params) => {
+                        return h('div', {
+                            style: {
+                                textAlign: 'center'
+                            }
+                        }, params.row.cityName)
+                    }
+                },
+                {
+                    "title": "月收入",
+                    "width": 350,
+                    renderHeader: (h) => {
+                        return h('div', [
+                            h('div', {
+                                style: {
+                                    textAlign: 'center',
+                                    borderBottom: '1px solid #e9eaec'
+                                }
+                            }, '月收入'),
+                            h('div', [
+                                h('span', {
                                     style: {
-                                        textAlign: 'center'
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '33.3%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: '1px solid #e9eaec'
                                     }
-                                }, '月收入'),
-                                 h('div', [
-                                     h('span',{
-                                         style:{
-                                           display:'inline-block',
-                                           width:'33.3%',
-                                           lineHeight:'30px',
-                                           borderRight:'1px solid red'
-                                         }
-                                     },'1122'),
-                                     h('span','1122'),
-                                     h('span','1122')
-                                 ])
+                                }, '计费收入'),
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '33.3%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: '1px solid #e9eaec'
+                                    }
+                                }, '实际收入'),
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '33.3%',
+                                        textAlign: 'center',
+                                        borderRight: 'none'
+                                    }
+                                }, '实收率'),
+
                             ])
-                        }
-                      
+                        ])
                     },
-                    {
-                        "title": "唤醒",
-                        "key": "weak",
-                        "width": 150,
-                        "sortable": true
-                    },
-                    {
-                        "title": "登录",
-                        "key": "signin",
-                        "width": 150,
-                        "sortable": true
-                    },
-                    {
-                        "title": "点击",
-                        "key": "click",
-                        "width": 150,
-                        "sortable": true
-                    },
-                    {
-                        "title": "激活",
-                        "key": "active",
-                        "width": 150,
-                        "sortable": true
-                    },
-                    {
-                        "title": "7日留存",
-                        "key": "day7",
-                        "width": 150,
-                        "sortable": true
-                    },
-                    {
-                        "title": "30日留存",
-                        "key": "day30",
-                        "width": 150,
-                        "sortable": true
-                    },
-                    {
-                        "title": "次日留存",
-                        "key": "tomorrow",
-                        "width": 150,
-                        "sortable": true
-                    },
-                    {
-                        "title": "日活跃",
-                        "key": "day",
-                        "width": 150,
-                        "sortable": true
-                    },
-                    {
-                        "title": "周活跃",
-                        "key": "week",
-                        "width": 150,
-                        "sortable": true
-                    },
-                    {
-                        "title": "月活跃",
-                        "key": "month",
-                        "width": 150,
-                        "sortable": true
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '33.3%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.monthIncoming.mBillingIncome),
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '33.3%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.monthIncoming.mRealityIncome),
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '33.3%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: 'none'
+                                }
+                            }, params.row.monthIncoming.realIncomeLv),
+                        ])
                     }
-                ],
-                data7: [
-                    {
-                        "name": "推广名称1",
-                        "fav": 0,
-                        "show": 7302,
-                        "weak": 5627,
-                        "signin": 1563,
-                        "click": 4254,
-                        "active": 1438,
-                        "day7": 274,
-                        "day30": 285,
-                        "tomorrow": 1727,
-                        "day": 558,
-                        "week": 4440,
-                        "month": 5610
+                },
+                {
+                    "title": "盈亏状态（计费）",
+                    "key": "show",
+                    "width": 350,
+                    renderHeader: (h) => {
+                        return h('div', [
+                            h('div', {
+                                style: {
+                                    textAlign: 'center',
+                                    borderBottom: '1px solid #e9eaec'
+                                }
+                            }, '盈亏状态（计费）'),
+                            h('div', [
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '50%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: '1px solid #e9eaec'
+                                    }
+                                }, '计费盈亏'),
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '50%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: 'none'
+                                    }
+                                }, '计费盈亏率')
+
+                            ])
+                        ])
                     },
-                    {
-                        "name": "推广名称2",
-                        "fav": 0,
-                        "show": 4720,
-                        "weak": 4086,
-                        "signin": 3792,
-                        "click": 8690,
-                        "active": 8470,
-                        "day7": 8172,
-                        "day30": 5197,
-                        "tomorrow": 1684,
-                        "day": 2593,
-                        "week": 2507,
-                        "month": 1537
-                    },
-                    {
-                        "name": "推广名称3",
-                        "fav": 0,
-                        "show": 7181,
-                        "weak": 8007,
-                        "signin": 8477,
-                        "click": 1879,
-                        "active": 16,
-                        "day7": 2249,
-                        "day30": 3450,
-                        "tomorrow": 377,
-                        "day": 1561,
-                        "week": 3219,
-                        "month": 1588
-                    },
-                    {
-                        "name": "推广名称4",
-                        "fav": 0,
-                        "show": 9911,
-                        "weak": 8976,
-                        "signin": 8807,
-                        "click": 8050,
-                        "active": 7668,
-                        "day7": 1547,
-                        "day30": 2357,
-                        "tomorrow": 7278,
-                        "day": 5309,
-                        "week": 1655,
-                        "month": 9043
-                    },
-                    {
-                        "name": "推广名称5",
-                        "fav": 0,
-                        "show": 934,
-                        "weak": 1394,
-                        "signin": 6463,
-                        "click": 5278,
-                        "active": 9256,
-                        "day7": 209,
-                        "day30": 3563,
-                        "tomorrow": 8285,
-                        "day": 1230,
-                        "week": 4840,
-                        "month": 9908
-                    },
-                    {
-                        "name": "推广名称6",
-                        "fav": 0,
-                        "show": 6856,
-                        "weak": 1608,
-                        "signin": 457,
-                        "click": 4949,
-                        "active": 2909,
-                        "day7": 4525,
-                        "day30": 6171,
-                        "tomorrow": 1920,
-                        "day": 1966,
-                        "week": 904,
-                        "month": 6851
-                    },
-                    {
-                        "name": "推广名称7",
-                        "fav": 0,
-                        "show": 5107,
-                        "weak": 6407,
-                        "signin": 4166,
-                        "click": 7970,
-                        "active": 1002,
-                        "day7": 8701,
-                        "day30": 9040,
-                        "tomorrow": 7632,
-                        "day": 4061,
-                        "week": 4359,
-                        "month": 3676
-                    },
-                    {
-                        "name": "推广名称8",
-                        "fav": 0,
-                        "show": 862,
-                        "weak": 6520,
-                        "signin": 6696,
-                        "click": 3209,
-                        "active": 6801,
-                        "day7": 6364,
-                        "day30": 6850,
-                        "tomorrow": 9408,
-                        "day": 2481,
-                        "week": 1479,
-                        "month": 2346
-                    },
-                    {
-                        "name": "推广名称9",
-                        "fav": 0,
-                        "show": 567,
-                        "weak": 5859,
-                        "signin": 128,
-                        "click": 6593,
-                        "active": 1971,
-                        "day7": 7596,
-                        "day30": 3546,
-                        "tomorrow": 6641,
-                        "day": 1611,
-                        "week": 5534,
-                        "month": 3190
-                    },
-                    {
-                        "name": "推广名称10",
-                        "fav": 0,
-                        "show": 3651,
-                        "weak": 1819,
-                        "signin": 4595,
-                        "click": 7499,
-                        "active": 7405,
-                        "day7": 8710,
-                        "day30": 5518,
-                        "tomorrow": 428,
-                        "day": 9768,
-                        "week": 2864,
-                        "month": 5811
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '50%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.profitStatus. billProfitAndLoss),
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '50%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: 'none'
+                                }
+                            }, params.row.profitStatus. billProfitAndLossLv)
+                        ])
                     }
-                ]
-            }
-        },
-        methods: {
-            exportData (type) {
-                if (type === 1) {
-                    this.$refs.table.exportCsv({
-                        filename: '原始数据'
-                    });
-                } else if (type === 2) {
-                    this.$refs.table.exportCsv({
-                        filename: '排序和过滤后的数据',
-                        original: false
-                    });
-                } else if (type === 3) {
-                    this.$refs.table.exportCsv({
-                        filename: '自定义数据',
-                        columns: this.columns8.filter((col, index) => index < 4),
-                        data: this.data7.filter((data, index) => index < 4)
-                    });
+                },
+                {
+                    "title": "盈亏状态（实收）",
+                    "key": "show",
+                    "width": 350,
+                    renderHeader: (h) => {
+                        return h('div', [
+                            h('div', {
+                                style: {
+                                    textAlign: 'center',
+                                    borderBottom: '1px solid #e9eaec'
+                                }
+                            }, '盈亏状态（实收）'),
+                            h('div', [
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '50%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: '1px solid #e9eaec'
+                                    }
+                                }, '实收盈亏'),
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '50%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: 'none'
+                                    }
+                                }, '实收盈亏率')
+
+                            ])
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '50%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.actualProfit.realProfitAndLoss),
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '50%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: 'none'
+                                }
+                            }, params.row.actualProfit.realProfitAndLossLv)
+                        ])
+                    }
+                },
+                {
+                    "title": "单车产出",
+                    "key": "show",
+                    "width": 350,
+                    renderHeader: (h) => {
+                        return h('div', [
+                            h('div', {
+                                style: {
+                                    textAlign: 'center',
+                                    borderBottom: '1px solid #e9eaec'
+                                }
+                            }, '单车产出'),
+                            h('div', [
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '50%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: '1px solid #e9eaec'
+                                    }
+                                }, '计费'),
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '50%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: 'none'
+                                    }
+                                }, '实收')
+
+                            ])
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '50%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.singleCar.oBilling),
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '50%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: 'none'
+                                }
+                            }, params.row.singleCar.oReality)
+                        ])
+                    }
                 }
-            }        
+            ],
+            data7: [
+                {
+                    cityName: '',
+                    monthIncoming: {
+                        mBillingIncome: '',//月收入-计费
+                        mRealityIncome: '',//月收入-实收
+                        realIncomeLv: ''//月收入-实收率
+                    },
+                    profitStatus: {
+                        billProfitAndLoss: '',//盈亏状态(计费)-计费盈亏
+                        billProfitAndLossLv: '',//盈亏状态(计费)-计费盈亏率
+                    },
+                    actualProfit: {
+                        realProfitAndLoss: '',//盈亏状态(实收)-实收盈亏
+                        realProfitAndLossLv: '',//盈亏状态(实收)-实收盈亏率
+                    },
+                    singleCar: {
+                        oBilling: '',//单车产出-计费
+                        oReality: '',//单车产出-实收
+                    }
+                }
+            ]
+        }
+    },
+    methods: {
+        changePage() {
+            // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
+            var that = this
+            setTimeout(function() {
+                that.axios('/beefly/monthDataDetail/api/v1/monthDataDetail', {
+                    params: {
+                        dataMonth: that.dataMonth,
+                        accessToken: that.$store.state.token,
+                        type: 3
+                    }
+                }).then((response) => {
+                    var data = response.data.data
+                    var arr = [];
+                    if (data.length > 0) {
+                        that.isNoData = false
+                    } else {
+                        that.isNoData = true
+                        return
+                    }
+                    for (var i = 0; i < data.length; i++) {
+                        if (i < data.length - 1) {
+                            arr.push(
+                                {
+                                    cityName: data[i].city,
+                                    monthIncoming: {
+                                        mBillingIncome: data[i].mBillingIncome,//月收入-计费
+                                        mRealityIncome: data[i].mRealityIncome,//月收入-实收
+                                        realIncomeLv: data[i].realIncomeLv//月收入-实收率
+                                    },
+                                    profitStatus: {
+                                        billProfitAndLoss: data[i].billProfitAndLoss,//盈亏状态(计费)-计费盈亏
+                                        billProfitAndLossLv: data[i].billProfitAndLossLv,//盈亏状态(计费)-计费盈亏率
+                                    },
+                                    actualProfit: {
+                                        realProfitAndLoss: data[i].realProfitAndLoss,//盈亏状态(实收)-实收盈亏
+                                        realProfitAndLossLv: data[i].realProfitAndLossLv,//盈亏状态(实收)-实收盈亏率
+                                    },
+                                    singleCar: {
+                                        oBilling: data[i].oBilling,//单车产出-计费
+                                        oReality: data[i].oReality,//单车产出-实收
+                                    }
+                                }
+                            )
+                        }
+                        if (i === data.length - 1) {
+                            that.countObj = data[data.length - 1]
+                        }
+                        that.$nextTick(()=>{
+                               var html = `
+                                <tr class="ivu-table-row">
+                                    <td class="ivu-table-cell">
+                                        <div class="ivu-table-cell ">
+                                            <span>合计</span>
+                                        </div>
+                                    </td>
+                                    <td class="">
+                                        <div class="ivu-table-cell">
+                                            <div>
+                                                <span style="display: inline-block; line-height: 30px; width: 33.3%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${countObj.mBillingIncome}</span><span style="display: inline-block; line-height: 30px; width: 33.3%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${countObj.mRealityIncome}</span><span style="display: inline-block; line-height: 30px; width: 33.3%; text-align: center; border-right: none;">${countObj.realIncomeLv}</span></div>
+                                        </div>
+                                    </td>
+                                    <td class="">
+                                        <div class="ivu-table-cell">
+                                            <div>
+                                                <span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${countObj.billProfitAndLoss }</span><span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: none;">${countObj.billProfitAndLossLv }</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="">
+                                        <div class="ivu-table-cell">
+                                            <div>
+                                                <span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${countObj.realProfitAndLoss}</span><span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: none;">${countObj.realProfitAndLossLv}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="">
+                                        <div class="ivu-table-cell">
+                                            <div>
+                                                <span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${countObj.oBilling}</span><span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: none;">${countObj.oReality}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                `
+                                console.log(html)
+                            $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-header').find('table').width('100%')
+                            $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-body').find('table').width('100%')
+                            $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-body').find('table').find('tfoot').remove()
+                            $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-body').find('table').append('<tfoot>' + html + '</tfoot>')
+                            $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                            $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-fixed-body').find('table').append('<tfoot>' + html + '</tfoot>')
+                        })
+                      
+                    }
+                    console.log(arr)
+                    that.data7 = arr
+                }).catch((error) => {
+                    console.log(error)
+                })
+            }, 2000)
+        }
+    },
+    computed: {
+        ...mapGetters(['dataMonth'])
+    },
+    mounted() {
+       
+
+    },
+    watch: {
+        'dataMonth': {
+            handler: function(val) {
+                this.changePage()
+            },
+            deep: true
         }
     }
+}
 </script>
+<style lang="scss" scoped>
+div.container {
+    padding: 0 16px 0 16px;
+}
+</style>
+

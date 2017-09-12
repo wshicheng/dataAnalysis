@@ -140,6 +140,10 @@ import citySelect from './citySelect.vue'
                            }
                            }).then((response) => {
                                var data = response.data.data
+                               var message  = data.message
+                               if(message==='用户登录超时'){
+                                   that.$store.push({path:'/login'})
+                               }
                                  that.items = data[0]
                                  if(that.$store.state.cityList.length<1){
                                       that.allCount = true
