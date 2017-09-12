@@ -19,8 +19,8 @@
 
         <div id="cityManage_table">             
             <Spin fix size="large" v-if="spinShow"  class="spin">
-                 <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-                <div>Loading....</div>
+                 <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
             </Spin> 
             <Button type="warning" @click="exportModal = true">导入数据</Button>
             <Button class="cancel" @click="delTableByGroup">删除</Button>
@@ -625,7 +625,7 @@ export default {
 
                     var data = res.data.data
                     var dataDesled = this.tableDataDel(data)
-                    this.data1 = dataDeled
+                    this.data1 = dataDesled
                     if (res.data.totalPage > 1) {
                         this.pageShow = true
                     }
