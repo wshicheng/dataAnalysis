@@ -335,21 +335,22 @@ export default {
     methods: {
         changePage() {
             // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
-            var that = this
-            setTimeout(function() {
-                that.axios('/beefly/monthDataDetail/api/v1/monthDataDetail', {
+            // var that = this
+            // setTimeout(function() {
+                this.axios('/beefly/monthDataDetail/api/v1/monthDataDetail', {
                     params: {
-                        dataMonth: that.dataMonth,
-                        accessToken: that.$store.state.token,
+                        dataMonth: this.dataMonth,
+                        accessToken: this.$store.state.token,
                         type: 3
                     }
                 }).then((response) => {
+                    console.log('watch', response.data.data)
                     var data = response.data.data
                     var arr = [];
                     if (data.length > 0) {
-                        that.isNoData = false
+                        this.isNoData = false
                     } else {
-                        that.isNoData = true
+                        this.isNoData = true
                         return
                     }
                     for (var i = 0; i < data.length; i++) {
@@ -378,69 +379,71 @@ export default {
                             )
                         }
                         if (i === data.length - 1) {
-                            that.countObj = data[data.length - 1]
+                            this.countObj = data.pop()
+                            var obj = this.countObj
+                                    var html = `
+                                        <tr class="ivu-table-row">
+                                            <td class="ivu-table-cell">
+                                                <div class="ivu-table-cell ">
+                                                    <span>合计</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div>
+                                                        <span style="display: inline-block; line-height: 30px; width: 33.3%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${obj.mBillingIncome}</span><span style="display: inline-block; line-height: 30px; width: 33.3%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${obj.mRealityIncome}</span><span style="display: inline-block; line-height: 30px; width: 33.3%; text-align: center; border-right: none;">${obj.realIncomeLv}</span></div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div>
+                                                        <span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${obj.billProfitAndLoss }</span><span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: none;">${obj.billProfitAndLossLv }</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div>
+                                                        <span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${obj.realProfitAndLoss}</span><span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: none;">${obj.realProfitAndLossLv}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div>
+                                                        <span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${obj.oBilling}</span><span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: none;">${obj.oReality}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        `
+                                    $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-header').find('table').width('100%')
+                                    $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-body').find('table').width('100%')
+                                    $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-body').find('table').find('tfoot').remove()
+                                    $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-body').find('table').append('<tfoot>' + html + '</tfoot>')
+                                    $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                                    $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-fixed-body').find('table').append('<tfoot>' + html + '</tfoot>')
+                        
                         }
-                        that.$nextTick(()=>{
-                               var html = `
-                                <tr class="ivu-table-row">
-                                    <td class="ivu-table-cell">
-                                        <div class="ivu-table-cell ">
-                                            <span>合计</span>
-                                        </div>
-                                    </td>
-                                    <td class="">
-                                        <div class="ivu-table-cell">
-                                            <div>
-                                                <span style="display: inline-block; line-height: 30px; width: 33.3%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${countObj.mBillingIncome}</span><span style="display: inline-block; line-height: 30px; width: 33.3%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${countObj.mRealityIncome}</span><span style="display: inline-block; line-height: 30px; width: 33.3%; text-align: center; border-right: none;">${countObj.realIncomeLv}</span></div>
-                                        </div>
-                                    </td>
-                                    <td class="">
-                                        <div class="ivu-table-cell">
-                                            <div>
-                                                <span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${countObj.billProfitAndLoss }</span><span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: none;">${countObj.billProfitAndLossLv }</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="">
-                                        <div class="ivu-table-cell">
-                                            <div>
-                                                <span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${countObj.realProfitAndLoss}</span><span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: none;">${countObj.realProfitAndLossLv}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="">
-                                        <div class="ivu-table-cell">
-                                            <div>
-                                                <span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${countObj.oBilling}</span><span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: none;">${countObj.oReality}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                `
-                                console.log(html)
-                            $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-header').find('table').width('100%')
-                            $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-body').find('table').width('100%')
-                            $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-body').find('table').find('tfoot').remove()
-                            $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-body').find('table').append('<tfoot>' + html + '</tfoot>')
-                            $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                            $('div.ivu-tabs-tabpane').eq(5).find('.ivu-table-fixed-body').find('table').append('<tfoot>' + html + '</tfoot>')
-                        })
+ 
                       
                     }
                     console.log(arr)
-                    that.data7 = arr
+                    this.data7 = arr
                 }).catch((error) => {
                     console.log(error)
                 })
-            }, 2000)
+            // }, 2000)
         }
     },
     computed: {
         ...mapGetters(['dataMonth'])
     },
     mounted() {
-       
 
+    },
+    beforeMount () {
+         this.changePage()
     },
     watch: {
         'dataMonth': {
