@@ -1,610 +1,685 @@
 <template>
-    <!--基础数据-->
-    <div class="fiexedAssets">
-         <Spin fix size="large" v-if="spinShow"  class="spin">
-                 <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-                <div>Loading....</div>
-            </Spin> 
-         <div class="nodata" v-show="!isNoData2">
+    <!--基础数据demo-->
+    <div class="container fiexedAssets">
+         <Spin v-show="spinShow" fix>
+                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                <div style="color:rgb(204, 204, 204);">Loading</div>
+            </Spin>
+        <div class="nodata" v-show="isNoData2">
             <i class="iconfont icon-zanwushuju"></i>
         </div>
-        <Table v-show="isNoData" id="fiexedAssets" min-width="1180" height="400" border :columns="columns2" :data="data4"></Table>
+        <Table v-show="isNoData" id="fiexedAssets5" :columns="columns8" min-width='1200' :data="data7" size="small" border ref="table"></Table>
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
 import $ from 'jquery'
-
+import { mapGetters } from 'vuex'
 export default {
     data() {
         return {
             spinShow:true,
+            isNoData2: false,
             isNoData:false,
-            isNoData2:true,
-            countObj: {},
-            columns2: [
+            countObj: {
+               
+            },
+            columns8: [
                 {
-                    title: '城市',
-                    key: 'cityName',
-                    width: 100,
-                    fixed: 'left',
-                    className: 'middle',
-                    render: (h, params) => {
-                        return h('div', params.row.cityName)
-                    },
-                    renderHeader: (h, params) => {
-                        return h('div', [
-                            h('div', {
-                                style: {
-                                    width: '100%',
-
-
-                                }
-                            }, '城市'),
-
-                        ])
+                    "title": "城市",
+                    "cityName": "name",
+                    "fixed": "left",
+                    "width": 200,
+                    render: (h,params) => {
+                        return h('div', {
+                            style: {
+                                textAlign: 'center'
+                            }
+                        }, params.row.cityName)
                     }
                 },
                 {
-                    title: '车辆',
-                    key: 'beefly',
-                    width: 300,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', {
-                            style: {
-                                height: '30px',
-                            }
-                        }, [
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: '50%',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.beefly.num),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: '50%',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.beefly.money)
-                            ])
-                    },
-                    renderHeader: (h, params) => {
+                    "title": "车辆",
+                    "width": 350,
+                    renderHeader: (h) => {
                         return h('div', [
                             h('div', {
                                 style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec ',
-                                     backgroundColor:'#7eb5e0'
+                                    textAlign: 'center',
+                                    background:'#7eb5e0',
+                                    borderBottom: '1px solid #e9eaec'
                                 }
                             }, '车辆'),
-                            h('div', {
+                            h('div', [
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '50%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: '1px solid #e9eaec'
+                                    }
+                                }, '数量'),
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '50%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: '1px solid #e9eaec'
+                                    }
+                                }, '金额')
+
+                            ])
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
                                 style: {
-                                    width: '100%',
+                                    display: 'inline-block',
                                     lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
+                                    width: '50%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
                                 }
-                            }, [
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: '50%',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '数量'),
-                                    h('span', '金额')
-                                ])
+                            }, params.row.beefly.num),
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '50%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.beefly.money)
                         ])
                     }
                 },
                 {
-                    title: '电池',
-                    key: 'Battery',
-                    width: 300,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', {
-                            style: {
-                                height: '30px'
-                            }
-                        }, [
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: '50%',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.Battery.num),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: '50%',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.Battery.money)
-                            ])
-                    },
-                    renderHeader: (h, params) => {
+                    "title": "电池",
+                    "width": 350,
+                    renderHeader: (h) => {
                         return h('div', [
                             h('div', {
                                 style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec ',
-                                    backgroundColor:'#7eb5e0'
+                                    textAlign: 'center',
+                                    background:'#7eb5e0',
+                                    borderBottom: '1px solid #e9eaec'
                                 }
                             }, '电池'),
-                            h('div', {
+                            h('div', [
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '50%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: '1px solid #e9eaec'
+                                    }
+                                }, '数量'),
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '50%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: '1px solid #e9eaec'
+                                    }
+                                }, '金额')
+
+                            ])
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
                                 style: {
-                                    width: '100%',
+                                    display: 'inline-block',
                                     lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
+                                    width: '50%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
                                 }
-                            }, [
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: '50%',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '数量'),
-                                    h('span', '金额')
-                                ])
+                            }, params.row.Battery.num),
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '50%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.Battery.money)
                         ])
                     }
                 },
                 {
-                    title: '充电站',
-                    key: 'ChargingStation',
-                    width: 300,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', {
-                            style: {
-                                height: '30px'
-                            }
-                        }, [
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: '50%',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.ChargingStation.build),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: '50%',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.ChargingStation.cabinet)
-                            ])
-                    },
-                    renderHeader: (h, params) => {
+                    "title": "充电站",
+                    "width": 350,
+                    renderHeader: (h) => {
                         return h('div', [
                             h('div', {
                                 style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec ',
-                                    backgroundColor:'#7eb5e0'
+                                    textAlign: 'center',
+                                    background:'#7eb5e0',
+                                    borderBottom: '1px solid #e9eaec'
                                 }
                             }, '充电站'),
-                            h('div', {
+                            h('div', [
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '50%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: '1px solid #e9eaec'
+                                    }
+                                }, '数量'),
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '50%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: '1px solid #e9eaec'
+                                    }
+                                }, '金额')
+
+                            ])
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
                                 style: {
-                                    width: '100%',
+                                    display: 'inline-block',
                                     lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
+                                    width: '50%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
                                 }
-                            }, [
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: '50%',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '建设'),
-                                    h('span', '电柜')
-                                ])
+                            }, params.row.ChargingStation.build),
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '50%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.ChargingStation.cabinet)
                         ])
                     }
                 },
                 {
-                    title: '机动车',
-                    key: 'Tricycle',
-                    width: 300,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', {
-                            style: {
-                                height: '30px'
-                            }
-                        }, [
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: '50%',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.Tricycle.num),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: '50%',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.Tricycle.money)
-                            ])
-                    },
-                    renderHeader: (h, params) => {
+                    "title": "机动车",
+                    "width": 350,
+                    renderHeader: (h) => {
                         return h('div', [
                             h('div', {
                                 style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec ',
-                                    backgroundColor:'#7eb5e0'
+                                    textAlign: 'center',
+                                    background:'#7eb5e0',
+                                    borderBottom: '1px solid #e9eaec'
                                 }
                             }, '机动车'),
-                            h('div', {
+                            h('div', [
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '50%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: '1px solid #e9eaec'
+                                    }
+                                }, '数量'),
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '50%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: '1px solid #e9eaec'
+                                    }
+                                }, '金额')
+
+                            ])
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
                                 style: {
-                                    width: '100%',
+                                    display: 'inline-block',
                                     lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
+                                    width: '50%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
                                 }
-                            }, [
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: '50%',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '数量'),
-                                    h('span', '金额')
-                                ])
+                            }, params.row.Tricycle.num),
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '50%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.Tricycle.money)
                         ])
                     }
                 },
                 {
-                    title: '运维工具车',
-                    key: 'Toolcar',
-                    width: 300,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', {
-                            style: {
-                                height: '30px'
-                            }
-                        }, [
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: '50%',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.Toolcar.num),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: '50%',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.Toolcar.money)
-                            ])
-                    },
-                    renderHeader: (h, params) => {
+                    "title": "运维工具车",
+                    "width": 350,
+                    renderHeader: (h) => {
                         return h('div', [
                             h('div', {
                                 style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec ',
-                                    backgroundColor:'#7eb5e0'
+                                    textAlign: 'center',
+                                    background:'#7eb5e0',
+                                    borderBottom: '1px solid #e9eaec'
                                 }
                             }, '运维工具车'),
-                            h('div', {
+                            h('div', [
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '50%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: '1px solid #e9eaec'
+                                    }
+                                }, '数量'),
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '50%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: '1px solid #e9eaec'
+                                    }
+                                }, '金额')
+
+                            ])
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
                                 style: {
-                                    width: '100%',
+                                    display: 'inline-block',
                                     lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
+                                    width: '50%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
                                 }
-                            }, [
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: '50%',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '数量'),
-                                    h('span', '金额')
-                                ])
+                            },  params.row.Toolcar.num),
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '50%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.Toolcar.money)
                         ])
                     }
                 },
                 {
-                    title: '物流成本',
-                    key: 'transCost',
-                    width: 300,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', params.row.transCost.money)
-                    },
-                    renderHeader: (h, params) => {
+                    "title": "物流成本",
+                    "width": 350,
+                    renderHeader: (h) => {
                         return h('div', [
                             h('div', {
                                 style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec ',
-                                    backgroundColor:'#7eb5e0'
+                                    textAlign: 'center',
+                                    background:'#7eb5e0',
+                                    borderBottom: '1px solid #e9eaec'
                                 }
                             }, '物流成本'),
-                            h('div', {
-                                style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
-                                }
-                            }, [
-                                    h('span', '金额')
+                            h('div', [
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '100%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: 'none'
+                                    }
+                                }, '金额')
 
-                                ])
+                            ])
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '100%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.transCost.money)
                         ])
                     }
                 },
                 {
-                    title: '办公成本',
-                    key: 'officeCost',
-                    width: 300,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', params.row.officeCost.money)
-                    },
-                    renderHeader: (h, params) => {
+                    "title": "办公成本",
+                    "width": 350,
+                    renderHeader: (h) => {
                         return h('div', [
                             h('div', {
                                 style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec ',
-                                    backgroundColor:'#7eb5e0'
+                                    textAlign: 'center',
+                                    background:'#7eb5e0',
+                                    borderBottom: '1px solid #e9eaec'
                                 }
                             }, '办公成本'),
-                            h('div', {
-                                style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
-                                }
-                            }, [
-                                    h('span', '金额')
+                            h('div', [
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '100%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: 'none'
+                                    }
+                                }, '金额')
 
-                                ])
+                            ])
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '100%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.officeCost.money)
                         ])
                     }
                 },
                 {
-                    title: '其他金额',
-                    key: 'otherCost',
-                    width: 300,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', params.row.otherCost.money)
-                    },
-                    renderHeader: (h, params) => {
+                    "title": "其他",
+                    "width": 350,
+                    renderHeader: (h) => {
                         return h('div', [
                             h('div', {
                                 style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec ',
-                                    backgroundColor:'#7eb5e0'
+                                    textAlign: 'center',
+                                    background:'#7eb5e0',
+                                    borderBottom: '1px solid #e9eaec'
                                 }
-                            }, '其他金额'),
-                            h('div', {
-                                style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
-                                }
-                            }, [
-                                    h('span', '金额')
+                            }, '其他'),
+                            h('div', [
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '100%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: 'none'
+                                    }
+                                }, '金额')
 
-                                ])
+                            ])
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '100%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.otherCost.money)
                         ])
                     }
                 },
                 {
-                    title: '人员成本',
-                    key: 'personnelCost',
-                    width: 300,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', params.row.personnelCost.money)
-                    },
-                    renderHeader: (h, params) => {
+                    "title": "人员成本",
+                    "width": 350,
+                    renderHeader: (h) => {
                         return h('div', [
                             h('div', {
                                 style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec ',
-                                    background: 'pink'
+                                    textAlign: 'center',
+                                    background:'#f2b5af',
+                                    borderBottom: '1px solid #e9eaec'
                                 }
                             }, '人员成本'),
-                            h('div', {
-                                style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
-                                }
-                            }, [
-                                    h('span', '金额')
+                            h('div', [
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '100%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: 'none'
+                                    }
+                                }, '金额')
 
-                                ])
+                            ])
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '100%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.personnelCost.money)
                         ])
                     }
                 },
                 {
-                    title: '房租(生产)',
-                    key: 'rentCost',
-                    width: 300,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', params.row.rentCost.money)
-                    },
-                    renderHeader: (h, params) => {
+                    "title": "房租生产",
+                    "width": 350,
+                    renderHeader: (h) => {
                         return h('div', [
                             h('div', {
                                 style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec ',
-                                    background: 'pink'
+                                    textAlign: 'center',
+                                     background:'#f2b5af',
+                                    borderBottom: '1px solid #e9eaec'
                                 }
-                            }, '房租(生产)'),
-                            h('div', {
-                                style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
-                                }
-                            }, [
-                                    h('span', '金额')
+                            }, '房租生产'),
+                            h('div', [
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '100%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: 'none'
+                                    }
+                                }, '金额')
 
-                                ])
+                            ])
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '100%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.rentCost.money)
                         ])
                     }
                 },
                 {
-                    title: '水电(生产)',
-                    key: 'city',
-                    width: 300,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', params.row.hydropoer.money)
-                    },
-                    renderHeader: (h, params) => {
+                    "title": "水电生产",
+                    "width": 350,
+                    renderHeader: (h) => {
                         return h('div', [
                             h('div', {
                                 style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec ',
-                                    background: 'pink'
+                                    textAlign: 'center',
+                                     background:'#f2b5af',
+                                    borderBottom: '1px solid #e9eaec'
                                 }
-                            }, '水电(生产)'),
-                            h('div', {
-                                style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
-                                }
-                            }, [
-                                    h('span', '金额')
+                            }, '水电生产'),
+                            h('div', [
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '100%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: 'none'
+                                    }
+                                }, '金额')
 
-                                ])
+                            ])
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '100%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.hydropoer.money)
                         ])
                     }
                 },
                 {
-                    title: '经营费用',
-                    key: 'manageCost',
-                    width: 300,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', params.row.manageCost.money)
-                    },
-                    renderHeader: (h, params) => {
+                    "title": "经营费用",
+                    "width": 350,
+                    renderHeader: (h) => {
                         return h('div', [
                             h('div', {
                                 style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec ',
-                                    background: 'pink'
+                                    textAlign: 'center',
+                                    background:'#f2b5af',
+                                    borderBottom: '1px solid #e9eaec'
                                 }
                             }, '经营费用'),
-                            h('div', {
-                                style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
-                                }
-                            }, [
-                                    h('span', '金额')
+                            h('div', [
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '100%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: 'none'
+                                    }
+                                }, '金额')
 
-                                ])
+                            ])
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '100%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.manageCost.money)
                         ])
                     }
                 },
                 {
-                    title: '开城费用',
-                    key: 'openCost',
-                    width: 300,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', params.row.openCost.money)
-                    },
-                    renderHeader: (h, params) => {
+                    "title": "开城费用",
+                    "width": 350,
+                    renderHeader: (h) => {
                         return h('div', [
                             h('div', {
                                 style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec ',
-                                    background: 'pink'
+                                    textAlign: 'center',
+                                    background:'#f2b5af',
+                                    borderBottom: '1px solid #e9eaec'
                                 }
                             }, '开城费用'),
-                            h('div', {
-                                style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec ',
-                                }
-                            }, [
-                                    h('span', '金额')
+                            h('div', [
+                                h('span', {
+                                    style: {
+                                        display: 'inline-block',
+                                        lineHeight: '30px',
+                                        width: '100%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: 'none'
+                                    }
+                                }, '金额')
 
-                                ])
+                            ])
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    width: '100%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.openCost.money)
                         ])
                     }
                 },
@@ -613,11 +688,10 @@ export default {
                     key: 'total',
                     width: 100,
                     fixed: 'right',
-                    className: 'middle',
                     render: (h, params) => {
-                        return h('div', params.row.total.money)
+                        return h('div',  params.row.total.money)
                     },
-                    renderHeader: (h, params) => {
+                    renderHeader: (h,) => {
                         return h('div', [
                             h('div', {
                                 style: {
@@ -629,109 +703,102 @@ export default {
                         ])
                     }
                 }
+               
+              
             ],
-            data4: [],
-          
+            data7: [
+                {
+                    // 城市
+                    cityName: '',
+                    //车辆数量
+                    beefly: {
+                        num: '',
+                        money: '',
+                    },
+                    //电池
+                    Battery: {
+                        num: '',
+                        money: '',
+                    },
+                    // 充电站
+                    ChargingStation: {
+                        build: '',
+                        cabinet: ''
+                    },
+                    //机动车
+                    Tricycle: {
+                        num: '',
+                        money: ''
+                    },
+                    //运维工具车
+                    Toolcar: {
+                        num: '',
+                        money: ''
+                    },
+                    // 物流成本
+                    transCost: {
+                        money: ''
+                    },
+                    //办公成本
+                    officeCost: {
+                        money: ''
+                    },
+                    // 其他金额
+                    otherCost: {
+                        money: ''
+                    },
+                    // 人员成本
+                    personnelCost: {
+                        money: ''
+                    },
+                    // 房租
+                    rentCost: {
+                        money: ''
+                    },
+                    //水电
+                    hydropoer: {
+                        money: ''
+                    },
+                    // 经营费用
+                    manageCost: {
+                        money: ''
+                    },
+                    openCost: {
+                        money: ''
+                    },
+                    total: {
+                        money: ''
+                    }
+                }
+            ]
         }
     },
-    computed: {
-        ...mapGetters(['dataMonth'])
-    },
     methods: {
-        mockTableData() {
-            let data = [];
-            for (let i = 0; i < 10; i++) {
-                data.push(
-                    {
-                        // 城市
-                        cityName: '城市' + Math.floor(Math.random() * 100 + 1),
-                        //车辆数量
-                        beefly: {
-                            num: Math.floor(Math.random() * 3 + 1),
-                            money: Math.floor(Math.random() * 4 + 1),
-                        },
-                        //电池
-                        Battery: {
-                            num: Math.floor(Math.random() * 7 + 1),
-                            money: Math.floor(Math.random() * 8 + 1),
-                        },
-                        // 充电站
-                        ChargingStation: {
-                            build: Math.floor(Math.random() * 9 + 1),
-                            cabinet: Math.floor(Math.random() * 10 + 1)
-                        },
-                        //机动车
-                        Tricycle: {
-                            num: Math.floor(Math.random() * 5 + 1),
-                            money: Math.floor(Math.random() * 6 + 1),
-                        },
-                        //运维工具车
-                        Toolcar: {
-                            num: Math.floor(Math.random() * 5 + 1),
-                            money: Math.floor(Math.random() * 6 + 1),
-                        },
-                        // 物流成本
-                        transCost: {
-                            money: Math.floor(Math.random() * 11 + 1)
-                        },
-                        //办公成本
-                        officeCost: {
-                            money: Math.floor(Math.random() * 11 + 1)
-                        },
-                        // 其他金额
-                        otherCost: {
-                            money: Math.floor(Math.random() * 11 + 1)
-                        },
-                        // 人员成本
-                        personnelCost: {
-                            money: Math.floor(Math.random() * 11 + 1)
-                        },
-                        // 房租
-                        rentCost: {
-                            money: Math.floor(Math.random() * 11 + 1)
-                        },
-                        //水电
-                        hydropoer: {
-                            money: Math.floor(Math.random() * 11 + 1)
-                        },
-                        // 经营费用
-                        manageCost: {
-                            money: Math.floor(Math.random() * 11 + 1)
-                        },
-                        openCost: {
-                            money: Math.floor(Math.random() * 11 + 1)
-                        },
-                        total: {
-                            money: Math.floor(Math.random() * 14 + 1)
-                        }
-                    }
-                )
-            }
-            return data
-        },
         changePage() {
-            
+            this.spinShow = true
             // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
-            var that =  this
-             setTimeout(function() {
-            that.axios('/beefly/monthDataDetail/api/v1/monthDataDetail', {
-                params: {
-                    dataMonth: that.dataMonth,
-                    accessToken: that.$store.state.token,
-                    type: 1
-                }
-                }).then((response) => {
-                    that.spinShow = false
-                    var data = response.data.data||[]
-                    var message = response.data.message
-                    if(message === '用户登录超时'){
-                        that.$router.push({path:'/login'})
+            // var that = this
+            // setTimeout(function() {
+                this.axios('/beefly/monthDataDetail/api/v1/monthDataDetail', {
+                    params: {
+                        dataMonth: this.dataMonth,
+                        accessToken: this.$store.state.token,
+                        type: 1
                     }
+                }).then((response) => {
+                    this.spinShow = false
+                    var data = response.data.data
                     var arr = [];
                     if (data.length > 0) {
-                        for (var i = 0; i < data.length; i++) {
-                            if (i < data.length - 1) {
-                                arr.push(
+                        this.isNoData = true
+                        this.isNoData2 = false
+                    } else {
+                         this.isNoData = false
+                        this.isNoData2 = true
+                    }
+                    for (var i = 0; i < data.length; i++) {
+                        if (i < data.length - 1) {
+                            arr.push(
                                     {
                                         // 城市
                                         cityName: data[i].city,
@@ -797,168 +864,154 @@ export default {
 
                                     }
                                 )
-                            }
-                            if (i === data.length - 1) {
-                                this.countObj = data[data.length - 1]
-                            }
-
                         }
-                    }
-                    if(data.length>0){
-                        
-                        that.isNoData = true
-                        that.isNoData2 = true
-                    }else{
-                        that.isNoData = false
-                        that.isNoData2 = false
-                        return
-                    }
-                    that.data4 = arr
-                    var html = ''
-                    for (var i = 0; i < 1; i++) {
-                        html += `
-                    <tr class="ivu-table-row">
-                        <td class="middle ivu-table-hidden">
-                            <div class="ivu-table-cell ivu-table-hidden">
-                                <div>城市15</div>
+                        if (i === data.length - 1) {
+                            this.countObj = data.pop()
+                            var obj = this.countObj
+                                    var html = `
+                                        <tr class="ivu-table-row">
+                        <td class="middle">
+                            <div class="ivu-table-cell">
+                                <div>合计</div>
                             </div>
                         </td>
                         <td class="ivu-table-column-center">
                             <div class="ivu-table-cell">
                                 <div style="height: 30px;">
-                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.bikeNum}</span>
+                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.bikeNum}</span>
                                     <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.bikeMoney}</span>
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.bikeMoney}</span>
                                 </div>
                             </div>
                         </td>
                         <td class="ivu-table-column-center">
                             <div class="ivu-table-cell">
                                 <div style="height: 30px;">
-                                    <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.battNum}</span>
+                                    <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.battNum}</span>
                                     <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.battMoney}</span>
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.battMoney}</span>
                                 </div>
                             </div>
                         </td>
                         <td class="ivu-table-column-center">
                             <div class="ivu-table-cell">
                                 <div style="height: 30px;">
-                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.chargeBuild}</span>
+                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.chargeBuild}</span>
                                     <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.chargeCabinet}</span>
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.chargeCabinet}</span>
                                 </div>
                             </div>
                         </td>
                         <td class="ivu-table-column-center">
                             <div class="ivu-table-cell">
                                 <div style="height: 30px;">
-                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.truckNum}</span>
+                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.truckNum}</span>
                                     <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.truckMoney}</span>
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.truckMoney}</span>
                                 </div>
                             </div>
                         </td>
                         <td class="ivu-table-column-center">
                             <div class="ivu-table-cell">
                                 <div style="height: 30px;">
-                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.carNum}</span>
+                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.carNum}</span>
                                     <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.carMoney }</span>
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.carMoney }</span>
                                 </div>
                             </div>
                         </td>
                         <td class="ivu-table-column-center">
                             <div class="ivu-table-cell">
-                                <div>${countObj.transMoney}</div>
+                                <div>${obj.transMoney}</div>
                             </div>
                         </td>
                         <td class="ivu-table-column-center">
                             <div class="ivu-table-cell">
-                                <div>${countObj.officeMoney }</div>
+                                <div>${obj.officeMoney }</div>
                             </div>
                         </td>
                         <td class="ivu-table-column-center">
                             <div class="ivu-table-cell">
-                                <div>${countObj.otherMoney}</div>
+                                <div>${obj.otherMoney}</div>
                             </div>
                         </td>
                         <td class="ivu-table-column-center">
                             <div class="ivu-table-cell">
-                                <div>${countObj.personnelMoney}</div>
+                                <div>${obj.personnelMoney}</div>
                             </div>
                         </td>
                         <td class="ivu-table-column-center">
                             <div class="ivu-table-cell">
-                                <div>${countObj.rentMoney}</div>
+                                <div>${obj.rentMoney}</div>
                             </div>
                         </td>
                         <td class="ivu-table-column-center">
                             <div class="ivu-table-cell">
-                                <div>${countObj.hydropower}</div>
+                                <div>${obj.hydropower}</div>
                             </div>
                         </td>
                         <td class="ivu-table-column-center">
                             <div class="ivu-table-cell">
-                                <div>${countObj.manageMoney}</div>
+                                <div>${obj.manageMoney}</div>
                             </div>
                         </td>
                         <td class="ivu-table-column-center">
                             <div class="ivu-table-cell">
-                                <div>${countObj.openMoney}</div>
+                                <div>${obj.openMoney}</div>
                             </div>
                         </td>
                     
                     </tr>
-                    `
+                                        `
+                            $('div.ivu-tabs-tabpane').eq(0).find('.ivu-table-header').find('table').width('100%')
+                            $('div.ivu-tabs-tabpane').eq(0).find('.ivu-table-body').find('table').width('100%')
+                            $('div.ivu-tabs-tabpane').eq(0).find('.ivu-table-body').find('table').find('tfoot').remove()
+                            $('div.ivu-tabs-tabpane').eq(0).find('.ivu-table-body').find('table').append('<tfoot>' + html + '</tfoot>')
+                            $('div.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                            $('div.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed-body').find('table').append('<tfoot>' + html + '</tfoot>')
+                            $('div.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                            $('div.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append('<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>'+obj.total+'</div></div></td></tr></tfoot>')
+                        }
                     }
-                    if(that.data4.length>0){
-                        $('.ivu-table-body').eq(0).find('table').find('tfoot').remove()
-                        $('.ivu-table-body').eq(0).find('table').append("<tfoot><tr>" + html + "</tr></tfoot>")
-                        $('.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                        $('.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').append('<tfoot><td class="middle"><div class="ivu-table-cell"><div>合计</div></div></td></tfoot>')
-                        $('.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                        $('.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append('<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>'+this.countObj.total+'</div></div></td></tr></tfoot>')
-                    }else{
-                        $('.ivu-table-body').eq(0).find('table').find('tfoot').remove()
-                        $('.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                        $('.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                    }
-                   
+                    this.data7 = arr
                 }).catch((error) => {
                     console.log(error)
+                      that.spinShow = false
                 })
-            }, 200)
+            // }, 200)
         }
     },
-    mounted() {
-        var that = this
-       this.changePage()
+    computed: {
+        ...mapGetters(['dataMonth'])
     },
-    watch:{
-        'dataMonth':{
-            handler:function(val){
+    mounted() {
+        
+
+    },
+    beforeMount(){
+       // this.changePage()
+    },
+    watch: {
+        'dataMonth': {
+            handler: function(val) {
                 this.changePage()
             },
-            deep:true
+            deep: true
         }
     }
 }
 </script>
-<style lang="scss" scoped type="text/css">
-div.ivu-table-wrapper {
-    margin: 0 auto;
+<style lang="scss" scoped>
+div.container {
+    padding: 0 16px 0 16px;
 }
-
 div.fiexedAssets {
     padding: 0 16px 16px 16px;
-     .spin {
-        position: absolute;
-        display: inline-block;
-        // background-color: rgba(253, 248, 248,0.0); 
-        background-color: rgba(255, 255, 255, 0.8); 
-    }
+    height:400px;
+    box-sizing: border-box;
+    position:relative;
     .demo-spin-icon-load{
+        color:rgb(204, 204, 204);
         animation: ani-demo-spin 1s linear infinite;
     }
     @keyframes ani-demo-spin {
