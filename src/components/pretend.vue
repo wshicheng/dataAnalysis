@@ -29,7 +29,7 @@
                                         <div class="progress-outer">
                                             <span class="progress-text">{{item.profitAndLossLv}}</span>  
                                             <div class="progress-inner">
-                                                <div :class="{'progress-bg':common,'sign':sign }" :percent="item.profitAndLossLv">
+                                                <div :class="{'progress-bg':diff(item.profitAndLossLv),'sign':sign }" :percent="item.profitAndLossLv">
                                                 </div>
                                             </div>
                                         </div> 
@@ -60,7 +60,7 @@
                                         <div class="progress-outer">
                                             <span class="progress-text">{{list.profitAndLossLv}}</span>  
                                             <div class="progress-inner">
-                                                <div  :class="{'progress-bg':common}" :percent="list.profitAndLossLv">
+                                                <div  :class="{'progress-bg':diff(list.profitAndLossLv),'sign':sign}" :percent="list.profitAndLossLv">
                                                 </div>
                                             </div>
                                         </div> 
@@ -110,6 +110,11 @@ import citySelect from './citySelect.vue'
               },500)
         },
         methods:{
+            diff(percent){
+                    var res = percent.replace(',','')
+                    var res2 = res.replace('%','')
+                    return  res2>0
+            },
             changeWidth(){ 
                var that = this;
                 var $proress = $('.sign');
@@ -119,10 +124,7 @@ import citySelect from './citySelect.vue'
                     $(item).css({
                         width:$percent,
                     })
-                    console.log($percent>'0.00%')
-                    if($percent>'0.00%'){
-                        that.common = true
-                    }  
+    
                    if($percent.fixed(2)!=='100%'){
                        $(item).parent().prev().css({
                            color:'#000'
@@ -130,9 +132,7 @@ import citySelect from './citySelect.vue'
                    }else{
                        $(item).parent().prev().css({
                            color:'#fff'
-                       })
-                      
-                       
+                       }) 
                    }
                })
             },
