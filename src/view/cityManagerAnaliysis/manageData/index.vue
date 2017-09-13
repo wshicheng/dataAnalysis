@@ -572,7 +572,7 @@ export default {
             // loading显示，同时让无数据的文本为空
             this.spinShow = true
             this.noDataText = ''
-
+            var that = this
             this.current = 1
             this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
@@ -600,8 +600,8 @@ export default {
                 })
                 .catch(function(err) {
                 // loading显示，同时让无数据的文本为空
-                    this.spinShow = false
-                    this.noDataText = '暂无数据'
+                    that.spinShow = false
+                    that.noDataText = '暂无数据'
                     console.log('err', err)
                 })
         },

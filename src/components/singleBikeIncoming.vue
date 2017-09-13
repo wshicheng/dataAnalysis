@@ -302,6 +302,10 @@
                            }).then((response) => {
                                 that.spinShow = false
                                var data = response.data.data||[]
+                               var message = response.data.message
+                                if(message === '用户登录超时'){
+                                    this.$router.push({path:'/login'})
+                                }
                                var arr = [];
                                 if(data.length>0){
                                     that.isNoData2 = false
