@@ -85,7 +85,7 @@
                 </div>
                 <div class="managerData_upload_uploadFile">
                     <span>选择文件:</span>
-                    <Input id='fileupload' class="upload" type="file" @change="importExcel($event.target)" placeholder="" ></Input>
+                    <input id='fileupload' class="upload" type="file" @change="importExcel($event.target)" placeholder="" >
                 </div>
                 <div class="managerData_upload_download">
                     <span>*请选择xls、xlsx格式文件</span>
