@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <div id="cityManage_table">             
+        <div id="cityManage_table">
             <Spin fix size="large" v-if="spinShow"  class="spin">
                  <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                  <div style="color: #ccc; text-indent: 5px;">  loading...</div>
@@ -85,7 +85,7 @@
                 </div>
                 <div class="managerData_upload_uploadFile">
                     <span>选择文件:</span>
-                    <input id='fileupload' class="upload" type="file" @change="importExcel($event.target)" placeholder="" />
+                    <input id='fileupload' class="upload" type="file" @change="importExcel($event.target)" placeholder="" >
                 </div>
                 <div class="managerData_upload_download">
                     <span>*请选择xls、xlsx格式文件</span>
@@ -396,10 +396,10 @@ export default {
                     name: '开城费用',
                     index: 2
                 }, {
-                    name: '房租',
+                    name: '房租(生产)',
                     index: 3
                 }, {
-                    name: '水电',
+                    name: '水电(生产)',
                     index: 4
                 }
             ],
@@ -892,9 +892,11 @@ export default {
 
         },
         importExcel(obj) {
+            console.log(obj)
             if (!obj.files) {
                 return;
             }
+            console.log(obj.files)
             let file = obj.files[0],
                 types = file.name.split('.')[1],
                 fileType = ["xlsx", "xlc", "xlm", "xls", "xlt", "xlw", "csv"].some(item => item === types);
@@ -906,6 +908,7 @@ export default {
                 if (tabJson && tabJson.length > 0) {
                     // console.log(tabJson)
                     this.exportedData = tabJson
+                    console.log
                 }
             });
         },
@@ -950,8 +953,10 @@ export default {
                             clearInterval(timer)
                             _this.$Message.success('上传成功');
                             // 清除上传excel文件流
-                            var obj = document.getElementById('fileupload');
-                            obj.outerHTML=obj.outerHTML;
+                            // var obj = document.getElementById('fileupload');
+                            $("#fileupload").html("");
+                            console.log($("#fileupload")[0].outerHTML)
+                            // obj.outerHTML=obj.outerHTML;
                             // 清空上传存储的数组
                             _this.exportedData = []
                             _this.exportMonth = '' 
@@ -1097,8 +1102,8 @@ export default {
                 "城市": '北京市',
                 "大类": '固定资产',
                 '小类': '车辆',
-                '数量':  29,
-                '单价':  200
+                '数量(生产)':  29,
+                '单价(生产)':  200
             }]
             var tmpDown; //导出的二进制对象
             var tmpdata = json[0];
