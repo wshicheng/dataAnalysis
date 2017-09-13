@@ -37,7 +37,7 @@ export default {
                 {
                     "title": "城市",
                     "cityName": "name",
-                    "fixed": "left",
+                   
                     "width": 200,
                     render: (h,params) => {
                         return h('div', {
@@ -426,8 +426,8 @@ export default {
                                             </td>
                                         </tr>
                                         `
-                                    $('div.ivu-tabs-tabpane').eq(2).find('.ivu-table-header').find('table').width('100%')
-                                    $('div.ivu-tabs-tabpane').eq(2).find('.ivu-table-body').find('table').width('100%')
+                                    // $('div.ivu-tabs-tabpane').eq(2).find('.ivu-table-header').find('table').width('100%')
+                                    // $('div.ivu-tabs-tabpane').eq(2).find('.ivu-table-body').find('table').width('100%')
                                     $('div.ivu-tabs-tabpane').eq(2).find('.ivu-table-body').find('table').find('tfoot').remove()
                                     $('div.ivu-tabs-tabpane').eq(2).find('.ivu-table-body').find('table').append('<tfoot>' + html + '</tfoot>')
                                     $('div.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed-body').find('table').find('tfoot').remove()

@@ -1,15 +1,11 @@
 <template>
-  <Row class="pretend fiexedAssets">
+  <div class="pretend fiexedAssets">
        <Spin v-show="spinShow" fix>
                 <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
                 <div style="color:rgb(204, 204, 204);">Loading</div>
             </Spin>
       <Row class="citySelect">
-          <!-- <ul>
-              <li class="active">全部地区</li>
-              <li v-bind:key="cityItem.id" v-for="cityItem of cityLists">{{cityItem.city}}</li>
-          </ul> -->
-        <city-select></city-select>
+        <city-select prop="cityShow"></city-select>
       </Row>
       <Row class="cityBindTable">
           <ul>
@@ -80,7 +76,7 @@
               </li>
           </ul>
       </Row>
-  </Row>
+  </div>
 </template>
 <script>
 import $ from 'jquery'
@@ -99,7 +95,7 @@ import citySelect from './citySelect.vue'
                 cityLists:this.cityList,
                 allCityTables:[],
                 items:[],
-                common:true,
+                common:false,
                 isWin:true,
                 totalMoneyTbale: false
             }
@@ -121,21 +117,26 @@ import citySelect from './citySelect.vue'
                     $(item).css({
                         width:$percent,
                     })
-                //    if($percent.fixed(2)!=='100%'){
-                //        $(item).parent().prev().css({
-                //            color:'#000'
-                //        })
-                //    }else{
-                //        $(item).parent().prev().css({
-                //            color:'#fff'
-                //        })
-                //    }
+                   if($percent.fixed(2)!=='100%'){
+                       $(item).parent().prev().css({
+                           color:'#000'
+                       })
+                       this.common = false;
+                   }else{
+                       $(item).parent().prev().css({
+                           color:'#fff'
+                       })
+                        this.common = true;
+                   }
                })
             },
              changePage() {
                    // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
                    var that =  this
                    this.spinShow = true
+                    this.allCount = false
+                    this.allCityTables = []
+                    this.items = []
                    setTimeout(function() {
                        that.axios('/beefly/monthDataDetail/api/v1/monthDataDetail', {
                            params: {
@@ -190,6 +191,12 @@ import citySelect from './citySelect.vue'
                 },
                 deep: true
             }
+        },
+        mounted(){
+           setTimeout(()=>{
+                $('span.city').remove()
+             
+           },200)
         }
     }
 </script>
@@ -206,15 +213,15 @@ import citySelect from './citySelect.vue'
     .cityBindTable{
         min-width:1200px;
         margin:16px auto 0;
-        padding: 0 16px 0 16px;
+       
         ul{
-            width:100%;margin:0 auto;overflow: hidden;
+            width:100%;margin:0 auto;
             background:#fbfbfb;
             li{ float:left;
-                margin:0 16px 16px 0px;
-                width:calc((100% - 16px - 32px)/3);
+                margin:0 16px 16px 16px;
+               width:calc((100% - 85px - 32px)/3);
                 box-sizing: border-box;
-                h3{margin-bottom:16px;}
+                h3{margin-bottom:10px;margin-top:10px;font-weight:bold;}
                 div{
                     table{border-collapse: collapse;width:100%;
                         tr{
@@ -241,7 +248,7 @@ import citySelect from './citySelect.vue'
                                 .progress-bg{
                                     height: 30px;
                                     width:100%;
-                                    background:#f3f3f3;
+                                    background:#8db4e2;
                                     position: relative;
                                 }
                                 .progress-bg.active{
@@ -258,6 +265,7 @@ import citySelect from './citySelect.vue'
             }
         }
     }
+    div.total{height:213px;}
     div.fiexedAssets {
     padding: 0 16px 16px 16px;
     height:400px;

@@ -17,6 +17,7 @@ import { mapGetters } from 'vuex'
 export default {
     data() {
         return {
+            dynamicWidth:'',
             spinShow:true,
             isNoData2: false,
             isNoData:false,
@@ -32,7 +33,9 @@ export default {
                     render: (h,params) => {
                         return h('div', {
                             style: {
-                                textAlign: 'center'
+                                textAlign: 'center',
+                                height:'30px',
+                                lineHeight:'30PX'
                             }
                         }, params.row.cityName)
                     }
@@ -52,7 +55,7 @@ export default {
                             h('div', [
                                 h('span', {
                                     style: {
-                                        display: 'inline-block',
+                                       display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
                                         width: '50%',
                                         textAlign: 'center',
@@ -62,12 +65,12 @@ export default {
                                 }, '数量'),
                                 h('span', {
                                     style: {
-                                        display: 'inline-block',
+                                       display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
                                         width: '50%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: '1px solid #e9eaec'
+                                        borderRight: 'none'
                                     }
                                 }, '金额')
 
@@ -78,7 +81,7 @@ export default {
                         return h('div', [
                             h('span', {
                                 style: {
-                                    display: 'inline-block',
+                                   display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
                                     width: '50%',
                                     textAlign: 'center',
@@ -88,12 +91,12 @@ export default {
                             }, params.row.beefly.num),
                             h('span', {
                                 style: {
-                                    display: 'inline-block',
+                                   display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
                                     width: '50%',
                                     textAlign: 'center',
                                     borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
+                                    borderRight: 'none'
                                 }
                             }, params.row.beefly.money)
                         ])
@@ -114,7 +117,7 @@ export default {
                             h('div', [
                                 h('span', {
                                     style: {
-                                        display: 'inline-block',
+                                       display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
                                         width: '50%',
                                         textAlign: 'center',
@@ -124,12 +127,12 @@ export default {
                                 }, '数量'),
                                 h('span', {
                                     style: {
-                                        display: 'inline-block',
+                                       display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
                                         width: '50%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: '1px solid #e9eaec'
+                                        borderRight: 'none'
                                     }
                                 }, '金额')
 
@@ -140,9 +143,11 @@ export default {
                         return h('div', [
                             h('span', {
                                 style: {
-                                    display: 'inline-block',
+                                   display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
                                     width: '50%',
+                                    float:'left',
+                                    height:'30px',
                                     textAlign: 'center',
                                     borderBox: 'box-sizing',
                                     borderRight: '1px solid #e9eaec'
@@ -150,12 +155,14 @@ export default {
                             }, params.row.Battery.num),
                             h('span', {
                                 style: {
-                                    display: 'inline-block',
+                                   display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
                                     width: '50%',
+                                     float:'left',
+                                    height:'30px',
                                     textAlign: 'center',
                                     borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
+                                    borderRight: 'none'
                                 }
                             }, params.row.Battery.money)
                         ])
@@ -176,24 +183,24 @@ export default {
                             h('div', [
                                 h('span', {
                                     style: {
-                                        display: 'inline-block',
+                                       display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
                                         width: '50%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
                                         borderRight: '1px solid #e9eaec'
                                     }
-                                }, '数量'),
+                                }, '建设'),
                                 h('span', {
                                     style: {
-                                        display: 'inline-block',
+                                       display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
                                         width: '50%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: '1px solid #e9eaec'
+                                        borderRight: 'none'
                                     }
-                                }, '金额')
+                                }, '电柜')
 
                             ])
                         ])
@@ -202,7 +209,7 @@ export default {
                         return h('div', [
                             h('span', {
                                 style: {
-                                    display: 'inline-block',
+                                   display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
                                     width: '50%',
                                     textAlign: 'center',
@@ -212,12 +219,12 @@ export default {
                             }, params.row.ChargingStation.build),
                             h('span', {
                                 style: {
-                                    display: 'inline-block',
+                                   display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
                                     width: '50%',
                                     textAlign: 'center',
                                     borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
+                                    borderRight: 'none'
                                 }
                             }, params.row.ChargingStation.cabinet)
                         ])
@@ -238,7 +245,7 @@ export default {
                             h('div', [
                                 h('span', {
                                     style: {
-                                        display: 'inline-block',
+                                       display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
                                         width: '50%',
                                         textAlign: 'center',
@@ -248,12 +255,12 @@ export default {
                                 }, '数量'),
                                 h('span', {
                                     style: {
-                                        display: 'inline-block',
+                                       display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
                                         width: '50%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: '1px solid #e9eaec'
+                                        borderRight: 'none'
                                     }
                                 }, '金额')
 
@@ -264,7 +271,7 @@ export default {
                         return h('div', [
                             h('span', {
                                 style: {
-                                    display: 'inline-block',
+                                   display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
                                     width: '50%',
                                     textAlign: 'center',
@@ -274,12 +281,12 @@ export default {
                             }, params.row.Tricycle.num),
                             h('span', {
                                 style: {
-                                    display: 'inline-block',
+                                   display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
                                     width: '50%',
                                     textAlign: 'center',
                                     borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
+                                    borderRight: 'none'
                                 }
                             }, params.row.Tricycle.money)
                         ])
@@ -300,22 +307,22 @@ export default {
                             h('div', [
                                 h('span', {
                                     style: {
-                                        display: 'inline-block',
+                                       display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
                                         width: '50%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: '1px solid #e9eaec'
+                                        borderRight: 'none'
                                     }
                                 }, '数量'),
                                 h('span', {
                                     style: {
-                                        display: 'inline-block',
+                                       display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
                                         width: '50%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: '1px solid #e9eaec'
+                                        borderRight: 'none'
                                     }
                                 }, '金额')
 
@@ -326,7 +333,7 @@ export default {
                         return h('div', [
                             h('span', {
                                 style: {
-                                    display: 'inline-block',
+                                   display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
                                     width: '50%',
                                     textAlign: 'center',
@@ -336,7 +343,7 @@ export default {
                             },  params.row.Toolcar.num),
                             h('span', {
                                 style: {
-                                    display: 'inline-block',
+                                   display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
                                     width: '50%',
                                     textAlign: 'center',
@@ -362,7 +369,7 @@ export default {
                             h('div', [
                                 h('span', {
                                     style: {
-                                        display: 'inline-block',
+                                       display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
                                         width: '100%',
                                         textAlign: 'center',
@@ -378,12 +385,12 @@ export default {
                         return h('div', [
                             h('span', {
                                 style: {
-                                    display: 'inline-block',
+                                   display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
                                     width: '100%',
                                     textAlign: 'center',
                                     borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
+                                    borderRight: 'none'
                                 }
                             }, params.row.transCost.money)
                         ])
@@ -404,7 +411,7 @@ export default {
                             h('div', [
                                 h('span', {
                                     style: {
-                                        display: 'inline-block',
+                                       display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
                                         width: '100%',
                                         textAlign: 'center',
@@ -420,12 +427,12 @@ export default {
                         return h('div', [
                             h('span', {
                                 style: {
-                                    display: 'inline-block',
+                                   display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
                                     width: '100%',
                                     textAlign: 'center',
                                     borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
+                                    borderRight: 'none'
                                 }
                             }, params.row.officeCost.money)
                         ])
@@ -446,7 +453,7 @@ export default {
                             h('div', [
                                 h('span', {
                                     style: {
-                                        display: 'inline-block',
+                                       display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
                                         width: '100%',
                                         textAlign: 'center',
@@ -462,12 +469,12 @@ export default {
                         return h('div', [
                             h('span', {
                                 style: {
-                                    display: 'inline-block',
+                                   display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
                                     width: '100%',
                                     textAlign: 'center',
                                     borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
+                                    borderRight: 'none'
                                 }
                             }, params.row.otherCost.money)
                         ])
@@ -488,7 +495,7 @@ export default {
                             h('div', [
                                 h('span', {
                                     style: {
-                                        display: 'inline-block',
+                                       display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
                                         width: '100%',
                                         textAlign: 'center',
@@ -504,12 +511,12 @@ export default {
                         return h('div', [
                             h('span', {
                                 style: {
-                                    display: 'inline-block',
+                                   display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
                                     width: '100%',
                                     textAlign: 'center',
                                     borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
+                                    borderRight: 'none'
                                 }
                             }, params.row.personnelCost.money)
                         ])
@@ -530,7 +537,7 @@ export default {
                             h('div', [
                                 h('span', {
                                     style: {
-                                        display: 'inline-block',
+                                       display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
                                         width: '100%',
                                         textAlign: 'center',
@@ -546,12 +553,12 @@ export default {
                         return h('div', [
                             h('span', {
                                 style: {
-                                    display: 'inline-block',
+                                   display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
                                     width: '100%',
                                     textAlign: 'center',
                                     borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
+                                    borderRight: 'none'
                                 }
                             }, params.row.rentCost.money)
                         ])
@@ -572,7 +579,7 @@ export default {
                             h('div', [
                                 h('span', {
                                     style: {
-                                        display: 'inline-block',
+                                       display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
                                         width: '100%',
                                         textAlign: 'center',
@@ -588,12 +595,12 @@ export default {
                         return h('div', [
                             h('span', {
                                 style: {
-                                    display: 'inline-block',
+                                   display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
                                     width: '100%',
                                     textAlign: 'center',
                                     borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
+                                    borderRight: 'none'
                                 }
                             }, params.row.hydropoer.money)
                         ])
@@ -614,7 +621,7 @@ export default {
                             h('div', [
                                 h('span', {
                                     style: {
-                                        display: 'inline-block',
+                                       display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
                                         width: '100%',
                                         textAlign: 'center',
@@ -630,12 +637,12 @@ export default {
                         return h('div', [
                             h('span', {
                                 style: {
-                                    display: 'inline-block',
+                                   display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
                                     width: '100%',
                                     textAlign: 'center',
                                     borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
+                                    borderRight: 'none'
                                 }
                             }, params.row.manageCost.money)
                         ])
@@ -656,7 +663,7 @@ export default {
                             h('div', [
                                 h('span', {
                                     style: {
-                                        display: 'inline-block',
+                                       display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
                                         width: '100%',
                                         textAlign: 'center',
@@ -672,7 +679,7 @@ export default {
                         return h('div', [
                             h('span', {
                                 style: {
-                                    display: 'inline-block',
+                                   display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
                                     width: '100%',
                                     textAlign: 'center',
@@ -788,6 +795,10 @@ export default {
                 }).then((response) => {
                     this.spinShow = false
                     var data = response.data.data
+                    var message = response.data.message
+                    if(message === '用户登录超时'){
+                        this.$router.push({path:'/login'})
+                    }
                     var arr = [];
                     if (data.length > 0) {
                         this.isNoData = true
@@ -880,7 +891,7 @@ export default {
                                 <div style="height: 30px;">
                                 <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.bikeNum}</span>
                                     <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.bikeMoney}</span>
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">${obj.bikeMoney}</span>
                                 </div>
                             </div>
                         </td>
@@ -889,7 +900,7 @@ export default {
                                 <div style="height: 30px;">
                                     <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.battNum}</span>
                                     <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.battMoney}</span>
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">${obj.battMoney}</span>
                                 </div>
                             </div>
                         </td>
@@ -898,7 +909,7 @@ export default {
                                 <div style="height: 30px;">
                                 <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.chargeBuild}</span>
                                     <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.chargeCabinet}</span>
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">${obj.chargeCabinet}</span>
                                 </div>
                             </div>
                         </td>
@@ -907,7 +918,7 @@ export default {
                                 <div style="height: 30px;">
                                 <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.truckNum}</span>
                                     <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.truckMoney}</span>
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">${obj.truckMoney}</span>
                                 </div>
                             </div>
                         </td>
@@ -916,7 +927,7 @@ export default {
                                 <div style="height: 30px;">
                                 <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.carNum}</span>
                                     <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.carMoney }</span>
+                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">${obj.carMoney }</span>
                                 </div>
                             </div>
                         </td>
@@ -985,7 +996,12 @@ export default {
         ...mapGetters(['dataMonth'])
     },
     mounted() {
-        
+        console.log( '屏幕分辨率的宽：' +  window.screen.width)
+        console.log('屏幕可用工作区宽度：' +  window.screen.availWidth)
+        console.log('网页可见区域宽： ' + document.body.clientWidth)
+        console.log('网页正文全文宽：'  + document.body.scrollWidth)
+        this.dynamicWidth = window.screen.availWidth/13
+        console.log()
 
     },
     beforeMount(){

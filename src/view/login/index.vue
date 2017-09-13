@@ -32,6 +32,7 @@ import {mapActions,mapState,mapGetters} from 'vuex'
     export default {
         data () {
             return {
+                bg:require('../../assets/img/bg-login.png'),
                 errorText:'',
                 errorTextShow:false,
                 formInline: {
@@ -54,7 +55,6 @@ import {mapActions,mapState,mapGetters} from 'vuex'
        },
         mounted () {
             document.title = '数据运营平台 - 登录'
-           // console.log(this.$store)
            var _this = this;
            document.body.onkeydown=function(e){
                if(e.keyCode===13){
@@ -113,7 +113,6 @@ import {mapActions,mapState,mapGetters} from 'vuex'
                                 if(resultCode === 1){
                                     this.setToken(res.data.data.token)
                                     this.addMenu(res.data.data.token)
-                                    console.log(this.$store)
                                     if (!this.isLoadRoutes) {  
                                         this.$router.addRoutes(this.menuitems)
                                         this.loadRoutes()  
