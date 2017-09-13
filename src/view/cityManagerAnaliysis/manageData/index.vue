@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <div id="cityManage_table">             
+        <div id="cityManage_table">
             <Spin fix size="large" v-if="spinShow"  class="spin">
                  <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                  <div style="color: #ccc; text-indent: 5px;">  loading...</div>
@@ -396,10 +396,10 @@ export default {
                     name: '开城费用',
                     index: 2
                 }, {
-                    name: '房租',
+                    name: '房租(生产)',
                     index: 3
                 }, {
-                    name: '水电',
+                    name: '水电(生产)',
                     index: 4
                 }
             ],
@@ -1097,8 +1097,8 @@ export default {
                 "城市": '北京市',
                 "大类": '固定资产',
                 '小类': '车辆',
-                '数量':  29,
-                '单价':  200
+                '数量(生产)':  29,
+                '单价(生产)':  200
             }]
             var tmpDown; //导出的二进制对象
             var tmpdata = json[0];
