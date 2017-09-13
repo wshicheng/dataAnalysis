@@ -1,6 +1,6 @@
 <template>
     <div class="citySelect_area" style="margin-bottom: 5px;">
-        <span>城市:</span>
+        <span class="city">城市:</span>
         <div class="citySelect_area_span" >
             <span class="active" @click="areaClick">全部地区</span>
             <span @click="areaClick" v-bind:key="item.name" v-for="item in cityList" :myId='item.code'>{{item.name}}</span>

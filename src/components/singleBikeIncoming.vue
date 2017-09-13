@@ -111,7 +111,7 @@
                         h('div', {
                           style: {
                             textAlign: 'center',
-                            lineHeight: '60px',
+                            lineHeight: '30px',
                             borderBottom: 'none',
                             borderRight: '1px solid #e9eaec'
                           }
@@ -351,20 +351,20 @@
                                                <div class="ivu-table-cell">
                                                    <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.outPutBilling}</span>
                                                        <span
-                                                           style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">${countObj.outPutReality}</span>
+                                                           style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.outPutReality}</span>
                                                    </div>
                                                </div>
                                            </td>
                                            <td class="ivu-table-column-center">
                                                <div class="ivu-table-cell">
-                                                   <div style="height: 30px;"><span style="float: left; width: 100%; height: 30px; line-height: 30px; box-sizing: border-box;">${countObj.oBikeCost}</span></div>
+                                                   <div style="height: 30px;"><span style="float: left; width: 100%; height: 30px; line-height: 30px; box-sizing: border-box; border-right: 1px solid rgb(233, 234, 236);">${countObj.oBikeCost}</span></div>
                                                </div>
                                            </td>
                                            <td class="ivu-table-column-center">
                                                <div class="ivu-table-cell">
                                                    <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.inPutBilling}</span>
                                                        <span
-                                                           style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">${countObj.inPutReality}</span>
+                                                           style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.inPutReality}</span>
                                                    </div>
                                                </div>
                                            </td>
@@ -372,7 +372,7 @@
                                                <div class="ivu-table-cell">
                                                    <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.inPutBillingLv}</span>
                                                        <span
-                                                           style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">${countObj.inPutRealityLv}</span>
+                                                           style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.inPutRealityLv}</span>
                                                    </div>
                                                </div>
                                            </td>
@@ -401,8 +401,8 @@
            },
            mounted(){
                 setTimeout(function(){
-                      $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-header').find('table').width('100%')
-                     $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-body').find('table').width('100%')
+                    //   $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-header').find('table').width('100%')
+                    //  $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-body').find('table').width('100%')
                 },200)
            },
            watch: {

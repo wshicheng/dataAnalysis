@@ -754,8 +754,8 @@ export default {
                     for (var i = 0; i < 1; i++) {
                         html += `
                         <tr class="ivu-table-row">
-                            <td class="middle ivu-table-hidden">
-                                <div class="ivu-table-cell ivu-table-hidden">
+                            <td class="middle ">
+                                <div class="ivu-table-cell ">
                                     <div>城市90</div>
                                 </div>
                             </td>
@@ -800,8 +800,8 @@ export default {
                                                     style="float: left; width: 14.28%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.operateTotal}</span><span style="float: left; width: 14.28%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">${countObj.operateProporte}</span></div>
                                 </div>
                             </td>
-                            <td class="middle ivu-table-hidden">
-                                <div class="ivu-table-cell ivu-table-hidden">
+                            <td class="middle ">
+                                <div class="ivu-table-cell ">
                                     <div>${countObj.total}</div>
                                 </div>
                             </td>
@@ -829,7 +829,7 @@ export default {
     },
     mounted(){
        // this.changePage()
-      
+     
     },
     watch:{
         'dataMonth':{
