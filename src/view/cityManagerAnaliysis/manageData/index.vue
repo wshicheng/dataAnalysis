@@ -85,7 +85,7 @@
                 </div>
                 <div class="managerData_upload_uploadFile">
                     <span>选择文件:</span>
-                    <input id='fileupload' class="upload" type="file" @change="importExcel($event.target)" placeholder="" />
+                    <Input id='fileupload' class="upload" type="file" @change="importExcel($event.target)" placeholder="" ></Input>
                 </div>
                 <div class="managerData_upload_download">
                     <span>*请选择xls、xlsx格式文件</span>
@@ -892,9 +892,11 @@ export default {
 
         },
         importExcel(obj) {
+            console.log(obj)
             if (!obj.files) {
                 return;
             }
+            console.log(obj.files)
             let file = obj.files[0],
                 types = file.name.split('.')[1],
                 fileType = ["xlsx", "xlc", "xlm", "xls", "xlt", "xlw", "csv"].some(item => item === types);
@@ -906,6 +908,7 @@ export default {
                 if (tabJson && tabJson.length > 0) {
                     // console.log(tabJson)
                     this.exportedData = tabJson
+                    console.log
                 }
             });
         },
@@ -950,8 +953,10 @@ export default {
                             clearInterval(timer)
                             _this.$Message.success('上传成功');
                             // 清除上传excel文件流
-                            var obj = document.getElementById('fileupload');
-                            obj.outerHTML=obj.outerHTML;
+                            // var obj = document.getElementById('fileupload');
+                            $("#fileupload").html("");
+                            console.log($("#fileupload")[0].outerHTML)
+                            // obj.outerHTML=obj.outerHTML;
                             // 清空上传存储的数组
                             _this.exportedData = []
                             _this.exportMonth = '' 
