@@ -49,6 +49,8 @@ export default {
                                 style: {
                                     textAlign: 'center',
                                     background:'#7eb5e0',
+                                    lineHeight:'30px',
+                                    height:'30px',
                                     borderBottom: '1px solid #e9eaec'
                                 }
                             }, '车辆'),
@@ -111,6 +113,8 @@ export default {
                                 style: {
                                     textAlign: 'center',
                                     background:'#7eb5e0',
+                                     lineHeight:'30px',
+                                    height:'30px',
                                     borderBottom: '1px solid #e9eaec'
                                 }
                             }, '电池'),
@@ -177,6 +181,8 @@ export default {
                                 style: {
                                     textAlign: 'center',
                                     background:'#7eb5e0',
+                                     lineHeight:'30px',
+                                    height:'30px',
                                     borderBottom: '1px solid #e9eaec'
                                 }
                             }, '充电站'),
@@ -239,6 +245,8 @@ export default {
                                 style: {
                                     textAlign: 'center',
                                     background:'#7eb5e0',
+                                     lineHeight:'30px',
+                                    height:'30px',
                                     borderBottom: '1px solid #e9eaec'
                                 }
                             }, '机动车'),
@@ -301,6 +309,8 @@ export default {
                                 style: {
                                     textAlign: 'center',
                                     background:'#7eb5e0',
+                                     lineHeight:'30px',
+                                    height:'30px',
                                     borderBottom: '1px solid #e9eaec'
                                 }
                             }, '运维工具车'),
@@ -363,6 +373,8 @@ export default {
                                 style: {
                                     textAlign: 'center',
                                     background:'#7eb5e0',
+                                     lineHeight:'30px',
+                                    height:'30px',
                                     borderBottom: '1px solid #e9eaec'
                                 }
                             }, '物流成本'),
@@ -405,6 +417,8 @@ export default {
                                 style: {
                                     textAlign: 'center',
                                     background:'#7eb5e0',
+                                     lineHeight:'30px',
+                                    height:'30px',
                                     borderBottom: '1px solid #e9eaec'
                                 }
                             }, '办公成本'),
@@ -447,6 +461,8 @@ export default {
                                 style: {
                                     textAlign: 'center',
                                     background:'#7eb5e0',
+                                     lineHeight:'30px',
+                                    height:'30px',
                                     borderBottom: '1px solid #e9eaec'
                                 }
                             }, '其他'),
@@ -489,6 +505,8 @@ export default {
                                 style: {
                                     textAlign: 'center',
                                     background:'#f2b5af',
+                                     lineHeight:'30px',
+                                    height:'30px',
                                     borderBottom: '1px solid #e9eaec'
                                 }
                             }, '人员成本'),
@@ -531,6 +549,8 @@ export default {
                                 style: {
                                     textAlign: 'center',
                                      background:'#f2b5af',
+                                      lineHeight:'30px',
+                                    height:'30px',
                                     borderBottom: '1px solid #e9eaec'
                                 }
                             }, '房租生产'),
@@ -573,6 +593,8 @@ export default {
                                 style: {
                                     textAlign: 'center',
                                      background:'#f2b5af',
+                                      lineHeight:'30px',
+                                    height:'30px',
                                     borderBottom: '1px solid #e9eaec'
                                 }
                             }, '水电生产'),
@@ -615,6 +637,8 @@ export default {
                                 style: {
                                     textAlign: 'center',
                                     background:'#f2b5af',
+                                     lineHeight:'30px',
+                                    height:'30px',
                                     borderBottom: '1px solid #e9eaec'
                                 }
                             }, '经营费用'),
@@ -657,6 +681,8 @@ export default {
                                 style: {
                                     textAlign: 'center',
                                     background:'#f2b5af',
+                                     lineHeight:'30px',
+                                    height:'30px',
                                     borderBottom: '1px solid #e9eaec'
                                 }
                             }, '开城费用'),
@@ -996,12 +1022,7 @@ export default {
         ...mapGetters(['dataMonth'])
     },
     mounted() {
-        console.log( '屏幕分辨率的宽：' +  window.screen.width)
-        console.log('屏幕可用工作区宽度：' +  window.screen.availWidth)
-        console.log('网页可见区域宽： ' + document.body.clientWidth)
-        console.log('网页正文全文宽：'  + document.body.scrollWidth)
-        this.dynamicWidth = window.screen.availWidth/13
-        console.log()
+       
 
     },
     beforeMount(){

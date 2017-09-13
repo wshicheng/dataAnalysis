@@ -111,7 +111,7 @@
                         h('div', {
                           style: {
                             textAlign: 'center',
-                            lineHeight: '30px',
+                            lineHeight: '60px',
                             borderBottom: 'none',
                             borderRight: '1px solid #e9eaec'
                           }
@@ -122,7 +122,9 @@
                     render: (h, params) => {
                       return h('div',{
                           style:{
-                               borderRight: '1px solid #e9eaec'
+                               borderRight: '1px solid #e9eaec',
+                               height:'30px',
+                               lineHeight:'30px'
                           }
                       },params.row.singleCost.oBikeCost)
                     }

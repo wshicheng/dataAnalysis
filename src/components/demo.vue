@@ -55,8 +55,6 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                    height:'30px',
-                                    lineHeight:'30px',
                                     borderBottom: '1px solid #e9eaec'
                                 }
                             }, '月收入'),
@@ -138,8 +136,6 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                     height:'30px',
-                                    lineHeight:'30px',
                                     borderBottom: '1px solid #e9eaec'
                                 }
                             }, '盈亏状态（计费）'),
@@ -202,8 +198,6 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                     height:'30px',
-                                    lineHeight:'30px',
                                     borderBottom: '1px solid #e9eaec'
                                 }
                             }, '盈亏状态（实收）'),
@@ -266,8 +260,6 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                     height:'30px',
-                                    lineHeight:'30px',
                                     borderBottom: '1px solid #e9eaec'
                                 }
                             }, '单车产出'),

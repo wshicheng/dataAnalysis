@@ -29,7 +29,7 @@
                                         <div class="progress-outer">
                                             <span class="progress-text">{{item.profitAndLossLv}}</span>  
                                             <div class="progress-inner">
-                                                <div :class="{'progress-bg':common }" :percent="item.profitAndLossLv">
+                                                <div :class="{'progress-bg':common,'sign':sign }" :percent="item.profitAndLossLv">
                                                 </div>
                                             </div>
                                         </div> 
@@ -96,6 +96,7 @@ import citySelect from './citySelect.vue'
                 allCityTables:[],
                 items:[],
                 common:false,
+                sign:true,
                 isWin:true,
                 totalMoneyTbale: false
             }
@@ -109,24 +110,29 @@ import citySelect from './citySelect.vue'
               },500)
         },
         methods:{
-            changeWidth(){
-                var $proress = $('.progress-bg');
+            changeWidth(){ 
+               var that = this;
+                var $proress = $('.sign');
                var res =  Array.prototype.slice.call($proress)
                res.forEach(function(item,index){
                    var $percent = $(item).attr('percent')
                     $(item).css({
                         width:$percent,
                     })
+                    console.log($percent>'0.00%')
+                    if($percent>'0.00%'){
+                        that.common = true
+                    }  
                    if($percent.fixed(2)!=='100%'){
                        $(item).parent().prev().css({
                            color:'#000'
                        })
-                       this.common = false;
                    }else{
                        $(item).parent().prev().css({
                            color:'#fff'
                        })
-                        this.common = true;
+                      
+                       
                    }
                })
             },

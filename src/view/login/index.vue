@@ -3,7 +3,7 @@
     <div id="login_head">
       <h1>蜜蜂出行数据运营平台</h1>
     </div>
-    <div id="login_form">
+    <div id="login_form" :style="{backgroundImage: 'url(' +bg + ')'}">
       <Form class="form" ref="formInline" :model="formInline" >
           <h1>登录</h1>
           <FormItem prop="user">
@@ -32,7 +32,7 @@ import {mapActions,mapState,mapGetters} from 'vuex'
     export default {
         data () {
             return {
-                bg:require('../../assets/img/bg-login.png'),
+                bg:require('../../assets/img/1.jpg'),
                 errorText:'',
                 errorTextShow:false,
                 formInline: {
@@ -154,7 +154,7 @@ import {mapActions,mapState,mapGetters} from 'vuex'
 
   width: 100%;
     height: calc(100% - 160px);
-     background: url('../../assets/img/1.jpg') no-repeat;
+     background-repeat:  no-repeat;
     background-size: cover;
     position: fixed;
     bottom: 90px;

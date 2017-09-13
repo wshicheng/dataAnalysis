@@ -5,17 +5,17 @@
  const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
  // Create multiple instances
- const extractCSS = new ExtractTextPlugin('[name].[hash].css');
- const extractLESS = new ExtractTextPlugin('[name]-[hash].css');
- const extractSASS = new ExtractTextPlugin('[name]-[hash].css');
+ const extractCSS = new ExtractTextPlugin('__bundle_build__/[name].[hash].css');
+ const extractLESS = new ExtractTextPlugin('__bundle_build__/[name]-[hash].css');
+ const extractSASS = new ExtractTextPlugin('__bundle_build__/[name]-[hash].css');
  module.exports = {
      entry: {
          app: './src/app.js'
      },
-     output: {
-         filename: '[name].bundle.js',
-         path: path.resolve(__dirname, 'dist'),
-         publicPath: '/'
+     output:{
+        filename: '__bundle_build__/[name].[hash].js', 
+        path: path.resolve(__dirname, 'build'), 
+        publicPath: '/' 
      },
      module: {
          rules: [{
@@ -60,15 +60,29 @@
              },
              {
                  test: /\.(png|svg|jpg|gif)$/,
-                 use: [
-                     'file-loader'
-                 ]
+                 use: {
+                    loader: 'file-loader',
+                    options: {
+                      name: '__images_build__/[name]?[hash:8].[ext]'
+                    }
+                  }
+                // loader: "file?name=__images_build__/[name].[ext]"
+                //  use: [
+                //      'file-loader'
+                //  ]
              },
              {
                  test: /\.(woff|woff2|eot|ttf|otf)$/,
-                 use: [
-                     'file-loader'
-                 ]
+                 use: {
+                    loader: 'file-loader',
+                    options: {
+                      name: '__images_build__/[name]?[hash:8].[ext]'
+                    }
+                  }
+                // loader: "file?name=[name].[ext]"
+                //  use: [
+                //      'file-loader'
+                //  ]
              },
              {
                  test: /\.(csv|tsv)$/,
@@ -85,7 +99,7 @@
          ]
      },
      plugins: [
-         new CleanWebpackPlugin(['dist']),
+         new CleanWebpackPlugin(['build']),
          new HtmlWebpackPlugin({
              title: 'Production',
              template: './src/template/index.html'
