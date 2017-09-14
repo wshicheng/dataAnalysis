@@ -94,7 +94,7 @@
                 </div>
                 <Progress class="my_page" :percent="uploadPercent" v-show="isUploadPercent" status="active"></Progress>
                 <div slot="footer">
-                    <Button class="cancel" @click="exportModal = false" style="margin-left: 8px">取消</Button>
+                    <Button class="cancel" @click="closeExport" style="margin-left: 8px">取消</Button>
                     <Button type="warning" class="confirm" @click="confirmExport">确认</Button>
                 </div>
             </Modal>
@@ -892,11 +892,9 @@ export default {
 
         },
         importExcel(obj) {
-            console.log(obj)
             if (!obj.files) {
                 return;
             }
-            console.log(obj.files)
             let file = obj.files[0],
                 types = file.name.split('.')[1],
                 fileType = ["xlsx", "xlc", "xlm", "xls", "xlt", "xlw", "csv"].some(item => item === types);
@@ -924,6 +922,16 @@ export default {
                 };
                 reader.readAsBinaryString(file);
             });
+        },
+        closeExport () {
+            this.exportModal = false
+            // 清除上传excel文件流
+            var obj = document.getElementById('fileupload');
+            // obj.outerHTML=obj.outerHTML;
+            obj.value = ''
+
+            this.exportedData = []
+            this.exportMonth = ''
         },
         confirmExport() {
             if (this.exportedData.length === 0) {
@@ -956,14 +964,7 @@ export default {
                                 _this.$Message.success('上传成功');
                                 // 清除上传excel文件流
                                 var obj = document.getElementById('fileupload');
-                                // obj.outerHTML=obj.outerHTML;
                                 obj.value = ''
-                                // $('#fileupload')[0].on('change', function () {
-                                //     importExcel
-                                // })
-                                // $("#fileupload").html("");
-                                // $("#fileupload").replaceWith("<input id='fileupload' class='upload' type='file' @change='importExcel($event.target)' placeholder='' >");  
-                                // $("#fileupload").on("change", this.importExcel);  
                                 // 清空上传存储的数组
                                 _this.exportedData = []
                                 _this.exportMonth = '' 
@@ -988,6 +989,13 @@ export default {
                         _this.$Message.warning(res.data.message);
                         _this.$Message.warning(res.data.message);
                         _this.isUploadPercent = false
+                        // 清除上传excel文件流
+                        var obj = document.getElementById('fileupload');
+                        // obj.outerHTML=obj.outerHTML;
+                        obj.value = ''
+
+                        _this.exportedData = []
+                        _this.exportMonth = ''
                         clearInterval(timer)
                         _this.uploadPercent = 0
                     }
