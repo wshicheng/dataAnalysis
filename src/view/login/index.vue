@@ -51,7 +51,7 @@ import {mapActions,mapState,mapGetters} from 'vuex'
             }
         },
        computed:{
-           ...mapGetters(['isLoadRoutes','menuitems'])
+           ...mapGetters(['isLoadRoutes','menuitems','userInfo'])
        },
         mounted () {
             document.title = '数据运营平台 - 登录'
@@ -75,7 +75,7 @@ import {mapActions,mapState,mapGetters} from 'vuex'
                     this.errorTextShow = true
                 }
             },
-            ...mapActions(['setToken','addMenu','loadRoutes']),
+            ...mapActions(['setToken','addMenu','loadRoutes','getUser']),
             handleSubmit(name) {
                 var that = this
                 if(this.formInline.user.trim().length===0&&this.formInline.password.trim().length>0){
@@ -113,10 +113,13 @@ import {mapActions,mapState,mapGetters} from 'vuex'
                                 if(resultCode === 1){
                                     this.setToken(res.data.data.token)
                                     this.addMenu(res.data.data.token)
-                                    if (!this.isLoadRoutes) {  
+                                    if (this.isLoadRoutes) {  
+                                        console.log('是否加载过路由：' + this.isLoadRoutes)
                                         this.$router.addRoutes(this.menuitems)
                                         this.loadRoutes()  
                                     }
+                                    this.getUser(res.data.data)
+                                    window.sessionStorage.setItem('userInfo',JSON.stringify(this.userInfo))
                                     this.$router.push({path:'/index/cityManagerAnalysis'})
                                 }else{
                                     this.errorTextShow = true

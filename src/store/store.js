@@ -3,11 +3,13 @@ import Vue from 'vue'
 import * as types from './types'
 import allDataDetailMoudle from './modules/allDataDetail'
 import MenuModule from './modules/menuModule.js'
+import userModule from './modules/userModule.js'
 Vue.use(Vuex);
 export default new Vuex.Store({
     modules:{
         allDataDetailMoudle:allDataDetailMoudle,
-        menus:MenuModule
+        menus:MenuModule,
+        user:userModule
     },
     state: {
         user: {},

@@ -4,22 +4,26 @@
             <div class="layout-logo">蜜蜂出行数据运营平台</div>
             <div class="layout-logoInfo">
                 <i class="iconfont icon-zhanghao1"></i>
-                <span class="accountUserName">管理员</span>
+                <span class="accountUserName">{{userInfo.name}}</span>
                 <i class="iconfont icon-zhuxiao_logout exit" @click="handleLoginOut"></i>
             </div>
         </Menu>
     </div>
 </template>
 <script>
-import {mapActions} from 'vuex'
+import {mapActions,mapGetters} from 'vuex'
     export default {
         methods:{
             handleLoginOut(){
                 this.$router.push('/login')
                 this.removeToken()
-                window.localStorage.removeItem('token')
+                window.sessionStorage.removeItem('token')
+                window.sessionStorage.removeItem('userInfo')
             },
             ...mapActions(['removeToken'])
+        },
+        computed:{
+            ...mapGetters(['userInfo'])
         }
     }
 </script>
