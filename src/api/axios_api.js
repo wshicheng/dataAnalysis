@@ -3,7 +3,7 @@ import store from '../store/store'
 import * as types from '../store/types'
 import router from '../router/router-config'
 
-// let baseURL = 'http://192.168.3.78:5080'
+let baseURL = 'http://192.168.0.109:5080'
 // let baseURL = 'http://192.168.3.49:5080'
 //let baseURL = 'http://192.168.0.121:5080'
 //  let baseURL = 'http://192.168.3.139:5080'
@@ -11,7 +11,7 @@ import router from '../router/router-config'
 // let baseURL = 'http://192.168.0.121:5080'
 // let baseURL = 'http://192.168.0.102:5080'
 // let baseURL = 'http://192.168.3.181:5080'
-let baseURL = 'http://47.93.48.250:5080'
+// let baseURL = 'http://47.93.48.250:5080'
 // let baseURL = 'http://192.168.0.102:5080'
 
 
@@ -25,7 +25,7 @@ let baseURL = 'http://47.93.48.250:5080'
 axios.defaults.baseURL = baseURL;
 //axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
 
 // axios 配置

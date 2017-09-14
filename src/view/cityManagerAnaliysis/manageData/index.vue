@@ -348,6 +348,7 @@ import $ from 'jquery'
 import citySelect from '../../../components/citySelect.vue'
 import { siblings } from '../../../util/util.js'
 import moment from 'moment'
+import qs from 'qs'
 export default {
     components: {
         "city-select": citySelect
@@ -943,14 +944,13 @@ export default {
                 // this.cover = true
                 var _this = this
                 this.isUploadPercent = true
-                this.axios.get('/beefly/baseData/api/v1/importData', {
-                    params: {
-                        data: JSON.stringify(this.exportedData),
-                        userId: 123424,
-                        dataMonth: moment(this.exportMonth).format('YYYY-MM'),
-                        accessToken: this.$store.state.token
-                    }
-                })
+
+                this.axios.post('/beefly/baseData/api/v1/importData', qs.stringify({
+                    data: JSON.stringify(this.exportedData),
+                    userId: 123424,
+                    dataMonth: moment(this.exportMonth).format('YYYY-MM'),
+                    accessToken: this.$store.state.token
+                }))
                 .then(function(res) {
                     _this.checkLogin(res)
                     // 上传响应回来后打开进度条
