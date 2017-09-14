@@ -113,8 +113,7 @@ import {mapActions,mapState,mapGetters} from 'vuex'
                                 if(resultCode === 1){
                                     this.setToken(res.data.data.token)
                                     this.addMenu(res.data.data.token)
-                                    if (this.isLoadRoutes) {  
-                                        console.log('是否加载过路由：' + this.isLoadRoutes)
+                                    if (!this.isLoadRoutes) {  
                                         this.$router.addRoutes(this.menuitems)
                                         this.loadRoutes()  
                                     }
