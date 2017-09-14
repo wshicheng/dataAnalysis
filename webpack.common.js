@@ -16,8 +16,8 @@
      },
      output:{
         filename: '[name].[hash].js', 
-        path: BUILD_PATH
-       
+        path: BUILD_PATH,
+        publicPath:'/',
      },
      module: {
          rules: [{
