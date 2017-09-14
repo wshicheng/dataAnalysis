@@ -1,21 +1,23 @@
  const path = require('path');
+ const ROOT_PATH = path.resolve(__dirname);
+ const BUILD_PATH = path.resolve(ROOT_PATH, 'build');
  const CleanWebpackPlugin = require('clean-webpack-plugin');
  const HtmlWebpackPlugin = require('html-webpack-plugin');
  const webpack = require('webpack')
  const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
  // Create multiple instances
- const extractCSS = new ExtractTextPlugin('__bundle_build__/[name].[hash].css');
- const extractLESS = new ExtractTextPlugin('__bundle_build__/[name]-[hash].css');
- const extractSASS = new ExtractTextPlugin('__bundle_build__/[name]-[hash].css');
+ const extractCSS = new ExtractTextPlugin('[name].[hash].css');
+ const extractLESS = new ExtractTextPlugin('[name].[hash].css');
+ const extractSASS = new ExtractTextPlugin('[name].[hash].css');
  module.exports = {
      entry: {
          app: './src/app.js'
      },
      output:{
-        filename: '__bundle_build__/[name].[hash].js', 
-        path: path.resolve(__dirname, 'build'), 
-        publicPath: '/' 
+        filename: '[name].[hash].js', 
+        path: BUILD_PATH
+       
      },
      module: {
          rules: [{
@@ -61,28 +63,21 @@
              {
                  test: /\.(png|svg|jpg|gif)$/,
                  use: {
-                    loader: 'file-loader',
+                    loader: 'url-loader',
                     options: {
-                      name: '__images_build__/[name]?[hash:8].[ext]'
+                      name: '[name].[hash:8].[ext]',
+                      publicPath:'/'
                     }
                   }
-                // loader: "file?name=__images_build__/[name].[ext]"
-                //  use: [
-                //      'file-loader'
-                //  ]
              },
              {
                  test: /\.(woff|woff2|eot|ttf|otf)$/,
                  use: {
                     loader: 'file-loader',
                     options: {
-                      name: '__images_build__/[name]?[hash:8].[ext]'
+                      name: '[name].[hash:8].[ext]'
                     }
                   }
-                // loader: "file?name=[name].[ext]"
-                //  use: [
-                //      'file-loader'
-                //  ]
              },
              {
                  test: /\.(csv|tsv)$/,
@@ -115,5 +110,10 @@
          extractCSS,
          extractLESS,
          extractSASS
-     ]
+     ],
+     resolve: {
+        alias: {
+          'vue$': 'vue/dist/vue.common.js'
+        }
+      }
  };

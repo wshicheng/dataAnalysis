@@ -99,7 +99,7 @@ export default {
     }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss" type="text/css" scoped>
 ul.ivu-menu.ivu-menu-dark.ivu-menu-vertical {
     min-width: 168px;
 }

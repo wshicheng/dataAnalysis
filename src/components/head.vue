@@ -1,7 +1,12 @@
 <template>
     <div class="header">
         <Menu mode="horizontal" theme="dark" active-name="1">
-            <div class="layout-logo">蜜蜂出行数据运营平台</div>
+            <div class="layout-logo">蜜蜂出行数据运营平台
+
+            </div>
+            <div class="cityList">
+                <span class="cityList">{{city}}</span>
+            </div>
             <div class="layout-logoInfo">
                 <i class="iconfont icon-zhanghao1"></i>
                 <span class="accountUserName">{{userInfo.name}}</span>
@@ -11,21 +16,35 @@
     </div>
 </template>
 <script>
-import {mapActions,mapGetters} from 'vuex'
-    export default {
-        methods:{
-            handleLoginOut(){
-                this.$router.push('/login')
-                this.removeToken()
-                window.sessionStorage.removeItem('token')
-                window.sessionStorage.removeItem('userInfo')
-            },
-            ...mapActions(['removeToken'])
+import { mapActions, mapGetters } from 'vuex'
+export default {
+    data() {
+        return {
+            cityList: [
+                { "code": "110100", "id": 1, "name": "北京市" },
+                { "code": "120100", "id": 12, "name": "天津市" },
+                { "code": "130200", "id": 40, "name": "唐山市" },
+                { "code": "340225", "id": 2, "name": "无为县" }
+            ]
+
+        }
+    },
+    methods: {
+        handleLoginOut() {
+            this.$router.push('/login')
+            this.removeToken()
+            window.sessionStorage.removeItem('token')
+            window.sessionStorage.removeItem('userInfo')
         },
-        computed:{
-            ...mapGetters(['userInfo'])
+        ...mapActions(['removeToken'])
+    },
+    computed: {
+        ...mapGetters(['userInfo']),
+        city: function() {
+            return this.userInfo.cityList.map((item) => { return item.name }).join('、')
         }
     }
+}
 </script>
 <style lang="scss" scoped type="text/css">
 .layout-logo {
@@ -36,7 +55,7 @@ import {mapActions,mapGetters} from 'vuex'
     top: 15px;
     left: 20px;
     color: #fff;
-    font-size:20px;
+    font-size: 20px;
     line-height: 30px;
 }
 
@@ -84,4 +103,32 @@ i.icon-zhuxiao_logout {
     color: #444;
 }
 
+div.cityList {
+    display: inline-block;
+
+    position: relative;
+    left: 50px;
+    height: 30px;
+    line-height: 30px;
+    top: 12px;
+    color: #fff;
+}
+
+span.cityList {
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 208px;
+    display: inline-block;
+    text-overflow: ellipsis;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+span.cityList:hover {
+    cursor:pointer;
+    text-overflow: inherit;
+    overflow: visible;
+}
 </style>
