@@ -946,37 +946,52 @@ export default {
                 .then(function(res) {
                     _this.checkLogin(res)
                     // 上传响应回来后打开进度条
-                    var timer = setInterval(function() {
-                        _this.uploadPercent += 20
-                        if (_this.uploadPercent === 100 || res.data.resultCode === 1) {
-                            _this.uploadPercent = 100
-                            clearInterval(timer)
-                            _this.$Message.success('上传成功');
-                            // 清除上传excel文件流
-                            // var obj = document.getElementById('fileupload');
-                            $("#fileupload").html("");
-                            console.log($("#fileupload")[0].outerHTML)
-                            // obj.outerHTML=obj.outerHTML;
-                            // 清空上传存储的数组
-                            _this.exportedData = []
-                            _this.exportMonth = '' 
-                            
-                            setTimeout(function() {
-                                _this.isUploadPercent = false
-                                // 关闭遮罩层
-                                // _this.cover = false
-                                _this.loadData()
-                                _this.exportModal = false
-                                _this.uploadPercent = 0
-                            }, 1000)
-                            
-                        } else if (_this.uploadPercent === 100) {
-                            _this.$Message.warning(res.data.message);
-                            _this.isUploadPercent = false
-                            clearInterval(timer)
-                            _this.uploadPercent = 0
-                        }
-                    }, 100)
+                    if (res.data.resultCode === 1) {
+                        var timer = setInterval(function() {
+                            _this.uploadPercent += 20
+                            console.log(res.data.resultCode)
+                            if (_this.uploadPercent === 100) {
+                                _this.uploadPercent = 100
+                                clearInterval(timer)
+                                _this.$Message.success('上传成功');
+                                // 清除上传excel文件流
+                                var obj = document.getElementById('fileupload');
+                                // obj.outerHTML=obj.outerHTML;
+                                obj.value = ''
+                                // $('#fileupload')[0].on('change', function () {
+                                //     importExcel
+                                // })
+                                // $("#fileupload").html("");
+                                // $("#fileupload").replaceWith("<input id='fileupload' class='upload' type='file' @change='importExcel($event.target)' placeholder='' >");  
+                                // $("#fileupload").on("change", this.importExcel);  
+                                // 清空上传存储的数组
+                                _this.exportedData = []
+                                _this.exportMonth = '' 
+                                
+                                setTimeout(function() {
+                                    _this.isUploadPercent = false
+                                    // 关闭遮罩层
+                                    // _this.cover = false
+                                    _this.loadData()
+                                    _this.exportModal = false
+                                    _this.uploadPercent = 0
+                                }, 1000)
+                                
+                            } else if (_this.uploadPercent === 100) {
+                                // _this.$Message.warning(res.data.message);
+                                // _this.isUploadPercent = false
+                                // clearInterval(timer)
+                                // _this.uploadPercent = 0
+                            }
+                        }, 100)
+                    } else {
+                        _this.$Message.warning(res.data.message);
+                        _this.$Message.warning(res.data.message);
+                        _this.isUploadPercent = false
+                        clearInterval(timer)
+                        _this.uploadPercent = 0
+                    }
+
                 })
                 .catch(function(err) {
                     _this.isUploadPercent = false
