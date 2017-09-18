@@ -349,6 +349,7 @@ export default {
     methods: {
         changePage() {
             this.spinShow = true
+            this.isNoData = false
             // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
             // var that = this
             // setTimeout(function() {
@@ -457,7 +458,10 @@ export default {
     computed: {
         ...mapGetters(['dataMonth'])
     },
-   
+    mounted(){
+         var height = $(window).height()
+         $('div.fiexedAssets').eq(2).height(height/2)
+    },
     beforeMount(){
         //this.changePage()
     },
@@ -477,7 +481,6 @@ div.container {
 }
 div.fiexedAssets {
     padding: 0 16px 16px 16px;
-    height:400px;
     box-sizing: border-box;
     position:relative;
     .demo-spin-icon-load{

@@ -809,6 +809,7 @@ export default {
     methods: {
         changePage() {
             this.spinShow = true
+             this.isNoData = false
             // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
             // var that = this
             // setTimeout(function() {
@@ -819,7 +820,7 @@ export default {
                         type: 1
                     }
                 }).then((response) => {
-                    this.spinShow = false
+                   this.spinShow = false
                     var data = response.data.data
                     var message = response.data.message
                     if(message === '用户登录超时'){
@@ -1022,7 +1023,8 @@ export default {
         ...mapGetters(['dataMonth'])
     },
     mounted() {
-       
+         var height = $(window).height()
+         $('div.fiexedAssets').eq(0).height(height/2)
 
     },
     beforeMount(){
@@ -1044,7 +1046,6 @@ div.container {
 }
 div.fiexedAssets {
     padding: 0 16px 16px 16px;
-    height:400px;
     box-sizing: border-box;
     position:relative;
     .demo-spin-icon-load{
