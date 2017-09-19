@@ -1,7 +1,7 @@
 <template>
     <div id="dateAndArea_body">
             <Breadcrumb class="Breadcrumb">
-                <BreadcrumbItem>整体数据</BreadcrumbItem>
+                <BreadcrumbItem>分日期分地区</BreadcrumbItem>
             </Breadcrumb>
         <div id="dateAndArea_head">
             <div class="dateAndArea_head_time">
@@ -47,7 +47,7 @@
             box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
             font-size: 14px;
             background: #fff;
-            padding: 10px;
+            padding: 12px 10px 0 10px;
             overflow: hidden;
             position: relative;
             div.dateAndArea_head_time {

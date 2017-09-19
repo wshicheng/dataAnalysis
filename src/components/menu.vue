@@ -1,7 +1,7 @@
 <template>
     <div class="menu">
-        <Menu v-on:on-select="handleRoute" :active-name='menuActiveName' id="ul" :theme="theme2" :open-names="['9','/index/cityManagerAnalysis']" :accordion='accord' width="auto">
-            <!-- <Menu-item name="/">首页</Menu-item>
+        <Menu v-on:on-select="handleRoute" :active-name='menuActiveName' id="ul" :theme="theme2" :open-names="[]" :accordion='accord' width="auto">
+        <!-- <Menu-item name="/">首页</Menu-item> -->
             <Submenu name="orderData">
                 <template slot="title">
                     <Icon type="ios-paper"></Icon>
@@ -9,13 +9,13 @@
                 </template>
                 <Menu-item name="/index/orderAllData">整体数据</Menu-item>
                 <Menu-item name="/index/dateAndArea">分日期分地区</Menu-item>
-                <Menu-item name="1-3">订单状态构成</Menu-item>
-                <Menu-item name="1-4">24小时趋势</Menu-item>
+                <Menu-item name="/index/orderStatus">订单状态构成</Menu-item>
+                <!-- <Menu-item name="1-4">24小时趋势</Menu-item>
                 <Menu-item name="1-5">订单时长分布</Menu-item>
                 <Menu-item name="1-6">订单里程分布</Menu-item>
-                <Menu-item name="1-7">使用频次分布</Menu-item>
+                <Menu-item name="1-7">使用频次分布</Menu-item> -->
             </Submenu>
-            <Submenu name="2">
+            <!-- <Submenu name="2">
                 <template slot="title">
                     <Icon type="ios-people"></Icon>
                     用户数据
@@ -50,8 +50,8 @@
                     <Menu-item name="3-2">活跃分析</Menu-item>
                     <Menu-item name="3-3">时段分析</Menu-item>
                 </Menu-group>
-            </Submenu>
-            <Submenu name="5">
+            </Submenu> -->
+            <!-- <Submenu name="5">
                 <template slot="title">
                     <Icon type="stats-bars"></Icon>
                     优惠券
@@ -61,10 +61,19 @@
                 <Menu-item name="5-3">获取途径</Menu-item>
                 <Menu-item name="5-4">使用情况</Menu-item>
                 <Menu-item name="5-5">充值金额分布</Menu-item>
-            </Submenu>
-            <Menu-item name="6">个人中心</Menu-item>
-            <Menu-item name="/index/accountManager">账号管理</Menu-item>
-            <Menu-item name="8">角色管理</Menu-item> -->
+            </Submenu> -->
+            <Menu-item name="/index/memberCenter">
+                <i class="iconfont icon-center contPostion"></i>
+                个人中心
+            </Menu-item>
+            <Menu-item name="/index/accountManager">
+                <i class="iconfont icon-jiaoseguanli2 contPostion"></i>
+                账号管理
+            </Menu-item>
+            <Menu-item name="8">
+                <i class="iconfont icon-jiaoseguanli contPostion"></i>
+                角色管理
+            </Menu-item>
             <Submenu name="9">
                 <template slot="title">
                     <Icon type="stats-bars"></Icon>
@@ -102,6 +111,12 @@ export default {
 <style lang="scss" type="text/css" scoped>
 ul.ivu-menu.ivu-menu-dark.ivu-menu-vertical {
     min-width: 168px;
+}
+
+.contPostion {
+    margin-left: -23px;
+    font-weight: 600;
+    margin-right: 4px;
 }
 
 .ivu-menu-dark {

@@ -5,7 +5,8 @@
 
             </div>
             <div class="cityList">
-                <span class="cityList">{{city}}</span>
+                <!-- <span class="cityList">{{city}}</span> -->
+                <span class="cityList">全部地区</span>
             </div>
             <div class="layout-logoInfo">
                 <i class="iconfont icon-zhanghao1"></i>

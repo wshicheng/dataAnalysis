@@ -6,7 +6,7 @@
                 <time class="currentMonth">
                     {{currentMonth}}       
                 </time>
-                <i ref="next" @click="handleAplusMonth" class="iconfont right icon-right-arrow "></i>
+                <i ref="next" @click="handleAplusMonth" class="iconfont right icon-right-arrow"></i>
             </div>
             <div class="title">
                 <h3>城市经营分析</h3>

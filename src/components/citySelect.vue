@@ -18,7 +18,7 @@
     border: 1px solid #dddee1;
     border-radius: 4px;
     text-align: center;
-    margin: 0 5px 10px 5px;
+    margin: 0 8px 10px 5px;
 }
 .citySelect_area span:nth-of-type(1) {
     border: none;
