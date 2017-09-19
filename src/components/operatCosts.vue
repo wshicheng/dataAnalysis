@@ -833,7 +833,8 @@ export default {
     },
     mounted(){
        // this.changePage()
-     
+        var height = $(window).height()
+         $('div.fiexedAssets').eq(1).height(height/2)
     },
     watch:{
         'dataMonth':{
@@ -851,7 +852,6 @@ div.ivu-table-wrapper {
 }
 div.fiexedAssets {
     padding: 0 16px 16px 16px;
-    height:400px;
     box-sizing: border-box;
     position:relative;
     .demo-spin-icon-load{

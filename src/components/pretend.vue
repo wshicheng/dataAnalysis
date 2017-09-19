@@ -1,14 +1,14 @@
 <template>
   <div class="pretend fiexedAssets">
-       <Spin v-show="spinShow" fix>
-                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-                <div style="color:rgb(204, 204, 204);">Loading</div>
-            </Spin>
       <Row class="citySelect">
         <city-select prop="cityShow"></city-select>
       </Row>
-      <Row class="cityBindTable">
-          <ul>
+      <Row class="cityBindTable" style="position:relative;">
+           <Spin v-show="spinShow" fix>
+                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                <div style="color:rgb(204, 204, 204);">Loading</div>
+            </Spin>
+          <ul v-show="allCount2">
               <li class="total" v-show="allCount">
                   <h3>合计</h3>
                   <div class="total">
@@ -88,6 +88,7 @@ import citySelect from './citySelect.vue'
         },
         data(){
             return {
+                allCount2:false,
                 spinShow:true,
                 isNoData:false,
                 isNoData2:true,
@@ -141,6 +142,7 @@ import citySelect from './citySelect.vue'
                    var that =  this
                    this.spinShow = true
                     this.allCount = false
+                    this.allCount2 = false
                     this.allCityTables = []
                     this.items = []
                    setTimeout(function() {
@@ -160,17 +162,20 @@ import citySelect from './citySelect.vue'
                                }
                                  if(that.$store.state.cityList.length<1){
                                       that.allCount = true
+                                      that.allCount2 = true
                                       that.items = data[0]
                                       data.splice(0,1)
                                       that.allCityTables = data
                                  }
                                  if(that.$store.state.cityList.length==1){
                                      that.allCount = false
+                                        that.allCount2 = true
                                      var arr = data
                                      that.allCityTables = arr
                                  }
                                   if(that.$store.state.cityList.length>1){
                                      that.allCount = true
+                                    that.allCount2 = true
                                       that.items = data[0]
                                       data.splice(0,1)
                                      var arr = data
@@ -199,6 +204,8 @@ import citySelect from './citySelect.vue'
             }
         },
         mounted(){
+             var height = $(window).height()
+              $('div.fiexedAssets').eq(4).height(height/2)
            setTimeout(()=>{
                 $('span.city').remove()
              
@@ -219,7 +226,17 @@ import citySelect from './citySelect.vue'
     .cityBindTable{
         min-width:1200px;
         margin:16px auto 0;
-       
+        position: relative;
+        height:100%;
+         .demo-spin-icon-load{
+        color:rgb(204, 204, 204);
+        animation: ani-demo-spin 1s linear infinite;
+    }
+    @keyframes ani-demo-spin {
+        from { transform: rotate(0deg);}
+        50%  { transform: rotate(180deg);}
+        to   { transform: rotate(360deg);}
+    }
         ul{
             width:100%;margin:0 auto;
             background:#fbfbfb;
@@ -274,19 +291,11 @@ import citySelect from './citySelect.vue'
     div.total{height:213px;}
     div.fiexedAssets {
     padding: 0 16px 16px 16px;
-    height:400px;
     box-sizing: border-box;
     position:relative;
-    .demo-spin-icon-load{
-        color:rgb(204, 204, 204);
-        animation: ani-demo-spin 1s linear infinite;
-    }
-    @keyframes ani-demo-spin {
-        from { transform: rotate(0deg);}
-        50%  { transform: rotate(180deg);}
-        to   { transform: rotate(360deg);}
-    }
+   
 }
     div.nodata{text-align:center;border:1px solid #e9eaec;height:182px;line-height: 182px;}
 div.nodata i{font-size:100px}
+
 </style>
