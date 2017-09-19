@@ -165,10 +165,21 @@ div.ivu-select-selection:hover {
     to   { transform: rotate(360deg);}
 }
 
+
 /**
-    菜单hover背景色调整
+    菜单hover背景色调整，
+    下面是菜单active状态的字体颜色
 */
 .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item-active, .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item-active:hover{background-color:rgba(73, 80, 96, 0.48)!important;}
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu), .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title-active:not(.ivu-menu-submenu) {
+    color: rgba(255, 255, 255, 0.7);
+    border-right: 2px solid #2d8cf0;
+}
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu), .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title-active:not(.ivu-menu-submenu), .ivu-menu-dark.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu):hover, .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title-active:not(.ivu-menu-submenu):hover{
+    background-color:rgba(73, 80, 96, 0.48);
+}
+
+
 /**
 // Prefix
 @css-prefix             : ivu-;

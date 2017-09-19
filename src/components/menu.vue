@@ -70,7 +70,7 @@
                 <i class="iconfont icon-jiaoseguanli2 contPostion"></i>
                 账号管理
             </Menu-item>
-            <Menu-item name="8">
+            <Menu-item name="/index/roleManager">
                 <i class="iconfont icon-jiaoseguanli contPostion"></i>
                 角色管理
             </Menu-item>

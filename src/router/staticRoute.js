@@ -2,6 +2,8 @@ import index from '../view/index/index.vue'
 import bikeAllData from '../view/bikeData/bikeAllData/index.vue'
 import accountManager from '../view/accountManager/index.vue'
 import memberCenter from '../view/memberCenter/index.vue'
+import roleManager from '../view/roleManager/index.vue'
+
 import Home from '../view/home/index.vue'
 import Login from '../view/login/index.vue'
 // 订单管理模块
@@ -48,6 +50,21 @@ let staticRoutes = [
                 name:'订单状态构成'
             },
             {
+                path:'/index/memberCenter',
+                component: memberCenter,
+                name:'个人中心'
+            },
+            {
+                path:'/index/accountManager',
+                component: accountManager,
+                name:'账号管理'
+            },
+            {
+                path:'/index/roleManager',
+                component: roleManager,
+                name: '角色管理'
+            },
+            {
                 path: '/index/managerData',
                 component: managerData,
                 name:'管理数据'
@@ -57,16 +74,6 @@ let staticRoutes = [
                 component: cityManagerAnalysis,
                 name:'城市经营分析'
             },
-            {
-                path:'/index/accountManager',
-                component: accountManager,
-                name:'账号管理'
-            },
-            {
-                path:'/index/memberCenter',
-                component: memberCenter,
-                name:'个人中心'
-            }
         ]
     },
     {
