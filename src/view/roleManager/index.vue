@@ -7,6 +7,7 @@
            <Col span="10">
              <span class="lable">角色名称：</span>
                 <Input v-model="userName" @on-change="handleQuery" placeholder="姓名\用户名" style="width: 300px"></Input>
+                <Button type="warning">搜索</Button>
            </Col>
             
         </Row>
@@ -46,33 +47,18 @@
              <!-- 模态框区域 增加数据 -->
             <Modal v-model="addModal" width="800px" :styles="{top: '20%'}" class="editModal_form">
                 <p slot="header" class="editModal_head">
-                    <span>添加账号</span>
+                    <span>添加角色</span>
                 </p>
                 <div class="editModal_content">
                     <Form ref="addValidate" :model="addValidate" :rules="addValidateRule" :label-width="80">
-                        <FormItem label="用户名" prop="userName">
-                             <Input v-model="addValidate.userName" @on-change="handleQuery" placeholder="不超过100个字符" style="width: 300px"></Input>
+                        <FormItem label="角色名称" prop="roleName">
+                             <Input v-model="addValidate.roleName" @on-change="handleQuery" placeholder="不超过50个字符" style="width: 300px"></Input>
                         </FormItem>
-                        <FormItem label="密码" prop="password">
-                             <Input type="password" v-model="addValidate.password" @on-change="handleQuery" placeholder="6-20位字符，可包括字母和数字、区分大小写" style="width: 300px"></Input>
+                        <FormItem label="备注" prop="remark">
+                             <Input type="password" v-model="addValidate.remark" @on-change="handleQuery" placeholder="6-20位字符，可包括字母和数字、区分大小写" style="width: 300px"></Input>
                         </FormItem>
-                         <FormItem label="所属角色" prop="role">
-                             <Input type="password" v-model="addValidate.role" @on-change="handleQuery" placeholder="请填写角色" style="width: 300px"></Input>
-                        </FormItem>
-                        <FormItem label="可查看地区" prop="area">
-                            <Input v-model="addValidate.area" @on-change="handleQuery" placeholder="地区" style="width: 300px"></Input>
-                        </FormItem>
-                         <FormItem label="姓名" prop="name">
-                            <Input v-model="addValidate.name" @on-change="handleQuery" placeholder="姓名" style="width: 300px"></Input>
-                        </FormItem>
-                        <FormItem label="手机号" prop="phoneNum">
-                            <Input v-model="addValidate.phoneNum" @on-change="handleQuery" placeholder="手机号\邮箱" style="width: 300px"></Input>
-                        </FormItem>
-                         <FormItem label="邮箱" prop="email">
-                            <Input v-model="addValidate.role"  placeholder="角色" style="width: 300px"></Input>
-                        </FormItem>
-                        <FormItem label="备注" prop="description">
-                            <Input v-model="addValidate.description"  placeholder="备注" style="width: 300px"></Input>
+                        <FormItem label="菜单权限" prop="roleList">
+                          <Tree class="roleList" :data="baseData" show-checkbox></Tree>
                         </FormItem>
                     </Form>
                 </div>
@@ -103,6 +89,35 @@ export default {
              addModal: false,
              delModal:false,
              index:'',
+              baseData: [{
+                  expand: true,
+                  title: '数据运营平台',
+                  children: [{
+                      title: '订单数据',
+                      expand: false,
+                      children: [{
+                          title: '整体数据',
+                          // disableCheckbox: true
+                      }, {
+                          title: '分日期分地区',
+                      }, {
+                          title: '订单状态构成',
+                      }]
+                  }, {
+                      title: '个人中心'
+                  }, {
+                      title: '账号管理'
+                  }, {
+                      title: '角色管理'
+                  }, {
+                      title: '城市经营分析',
+                      children: [{
+                        title: '整体数据'
+                      }, {
+                        title: '我管理的数据'
+                      }]
+                  }]
+              }],
              editValidate: {
                 userName: '',
                 phoneNum: '',
@@ -351,6 +366,12 @@ div.opeartor{margin-bottom:16px;}
             }
             .number { 
                 width:280px;
+            }
+            .roleList {    
+              border: 1px solid #dddee1;
+              width: 300px;
+              border-radius: 4px;
+              padding-left: 10px;
             }
         }
     }
