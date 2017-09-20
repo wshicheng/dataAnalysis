@@ -4,14 +4,15 @@
             <BreadcrumbItem>账号管理</BreadcrumbItem>
         </Breadcrumb>
         <Row class="datePick_zone">
-           <Col span="10">
+           <Col span="7">
              <span class="lable">关键字：</span>
-                <Input v-model="userName" @on-change="handleQuery" placeholder="姓名\用户名" style="width: 300px"></Input>
+                <Input  v-model="userName" @on-change="handleQuery" placeholder="姓名\用户名" style="width: 160px"></Input>
            </Col>
-             <Col span="10">
+            <Col span="7">
               <span class="lable">关键字：</span>
-                <Input v-model="phone" @on-change="handleQuery" placeholder="手机号\邮箱" style="width: 300px"></Input>
+                <Input v-model="phone" @on-change="handleQuery" placeholder="手机号\邮箱" style="width: 160px"></Input>
            </Col>
+           <Button class="search" @click="query">查询</Button>
             
         </Row>
         <Row class="tableGrid">
@@ -29,13 +30,13 @@
                 <div class="editModal_content">
                     <Form ref="editValidate" :model="editValidate" :rules="editValidateRule" :label-width="80">
                         <FormItem label="用户名" prop="userName">
-                             <Input v-model="editValidate.userName" @on-change="handleQuery" placeholder="姓名\用户名" style="width: 300px"></Input>
+                             <Input v-model="editValidate.userName" placeholder="姓名\用户名" style="width: 300px"></Input>
                         </FormItem>
                         <FormItem label="手机号" prop="phoneNum">
-                            <Input v-model="editValidate.phoneNum" @on-change="handleQuery" placeholder="手机号\邮箱" style="width: 300px"></Input>
+                            <Input v-model="editValidate.phoneNum"  placeholder="手机号\邮箱" style="width: 300px"></Input>
                         </FormItem>
                          <FormItem label="姓名" prop="name">
-                            <Input v-model="editValidate.name" @on-change="handleQuery" placeholder="姓名" style="width: 300px"></Input>
+                            <Input v-model="editValidate.name" placeholder="姓名" style="width: 300px"></Input>
                         </FormItem>
                          <FormItem label="角色" prop="role">
                             <Input v-model="editValidate.role"  placeholder="角色" style="width: 300px"></Input>
@@ -55,22 +56,22 @@
                 <div class="editModal_content">
                     <Form ref="addValidate" :model="addValidate" :rules="addValidateRule" :label-width="80">
                         <FormItem label="用户名" prop="userName">
-                             <Input v-model="addValidate.userName" @on-change="handleQuery" placeholder="不超过100个字符" style="width: 300px"></Input>
+                             <Input v-model="addValidate.userName"  placeholder="不超过100个字符" style="width: 300px"></Input>
                         </FormItem>
                         <FormItem label="密码" prop="password">
-                             <Input type="password" v-model="addValidate.password" @on-change="handleQuery" placeholder="6-20位字符，可包括字母和数字、区分大小写" style="width: 300px"></Input>
+                             <Input type="password" v-model="addValidate.password"  placeholder="6-20位字符，可包括字母和数字、区分大小写" style="width: 300px"></Input>
                         </FormItem>
                          <FormItem label="所属角色" prop="role">
-                             <Input type="password" v-model="addValidate.role" @on-change="handleQuery" placeholder="请填写角色" style="width: 300px"></Input>
+                             <Input type="password" v-model="addValidate.role" placeholder="请填写角色" style="width: 300px"></Input>
                         </FormItem>
                         <FormItem label="可查看地区" prop="area">
-                            <Input v-model="addValidate.area" @on-change="handleQuery" placeholder="地区" style="width: 300px"></Input>
+                            <Input v-model="addValidate.area"  placeholder="地区" style="width: 300px"></Input>
                         </FormItem>
                          <FormItem label="姓名" prop="name">
-                            <Input v-model="addValidate.name" @on-change="handleQuery" placeholder="姓名" style="width: 300px"></Input>
+                            <Input v-model="addValidate.name"  placeholder="姓名" style="width: 300px"></Input>
                         </FormItem>
                         <FormItem label="手机号" prop="phoneNum">
-                            <Input v-model="addValidate.phoneNum" @on-change="handleQuery" placeholder="手机号\邮箱" style="width: 300px"></Input>
+                            <Input v-model="addValidate.phoneNum"  placeholder="手机号\邮箱" style="width: 300px"></Input>
                         </FormItem>
                          <FormItem label="邮箱" prop="email">
                             <Input v-model="addValidate.role"  placeholder="角色" style="width: 300px"></Input>
@@ -100,6 +101,7 @@
 </template>
 <script>
 import $ from 'jquery'
+
 export default {
     data() {
         return {
@@ -195,7 +197,75 @@ export default {
                 },
                 {
                     title: '状态',
-                    key: 'status'
+                    key: 'status',
+                    render:(h,params)=>{
+                        return h('div',{
+                            style:{
+                                position:'relative',
+                                width:'60px',
+                                borderRadius:'24px',
+                                height:'24px',
+                                color:'#fff',
+                                background:'rgb(44, 228, 119)',
+                                cursor:'pointer'
+                            },
+                            attrs:{
+                                class:'active'
+                            },
+                            on:{
+                                click:(e)=>{
+                                    console.log(e.currentTarget.children)
+                                    if(e.currentTarget.getAttribute('class')){
+                                        e.currentTarget.setAttribute('class','')
+                                        e.currentTarget.style.backgroundColor="rgb(217, 221, 228)"
+                                        e.currentTarget.children[1].style.display = 'block'
+                                        e.currentTarget.children[0].style.display = 'none'
+                                        e.currentTarget.children[2].style.right = '36px'
+                                    }else{
+                                       e.currentTarget.setAttribute('class','active')
+                                       e.currentTarget.style.backgroundColor="rgb(44, 228, 119)"
+                                       e.currentTarget.children[2].style.right = '1px'
+                                       e.currentTarget.children[1].style.display = 'none'
+                                       e.currentTarget.children[0].style.display = 'block'
+                                    }
+                                    
+                                }
+                            }
+                        },[
+                            h('span',{
+                                style:{
+                                    width:'50%',
+                                    height:'24px',
+                                    float:'left',
+                                    lineHeight:'24px',
+                                    textAlign:'center',
+                                    visible:'hidden'
+                                }
+                            },'开'),
+                             h('span',{
+                                style:{
+                                    width:'50%',
+                                    height:'24px',
+                                    float:'right',
+                                    lineHeight:'24px',
+                                    textAlign:'center'
+                                }
+                            },'关'),
+                            h('span',{
+                                style:{
+                                    width:'22px',
+                                    height:'22px',
+                                    display:'block',
+                                    position:'absolute',
+                                    transition:'all linear .2s',
+                                    right:'1px',
+                                    top:'1px',
+                                    background:'#fff',
+                                    borderRadius:'24px'
+                                }
+                            })
+                        ])
+                    }
                 },
                 {
                     title:'操作',
@@ -283,12 +353,26 @@ export default {
         },
         handleCurrentPage(currentPage) {
             this.currentPage = currentPage
+            // 页面编号发请求
         },
         handlePageSize(pageSize) {
             this.pageSize = pageSize
+            // 页面size 变化 发请求
         },
         handleQuery(e){
-            console.log(this.value)
+              var name = this.userName;
+              var phone = this.phone
+              // 发起查询请求 
+              if(name.length===0&&phone.length===0){
+                     console.log('查询条件为空，执行初始化查询')
+              }
+           
+        },
+        query(){
+            var name = this.userName;
+            var phone = this.phone
+            // 发起查询请求
+            console.log('发起查询请求')
         },
         mockTableDatas(){
             var arr = [];
@@ -333,6 +417,12 @@ div.tableGrid {
     -moz-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
     -webkit-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
     box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
+    button.search{
+        outline: none;
+        border: 1px solid rgb(121, 121, 121);
+        background: #797979;
+        color: #fff;
+    }
 }
 
 ul.ivu-page {
