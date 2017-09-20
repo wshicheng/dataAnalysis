@@ -44,7 +44,7 @@
                 </div>
                 <div slot="footer">
                     <Button class="cancel" @click="handleReset" style="margin-left: 8px">重置</Button>
-                    <Button type="warning" class="confirm" @click="handleSubmit">提交</Button>
+                    <Button type="warning" class="confirm">提交</Button>
                 </div>
             </Modal>
              <!-- 模态框区域 增加数据 -->
@@ -57,8 +57,8 @@
                         <FormItem label="角色名称" prop="roleName">
                              <Input v-model="addValidate.roleName" @on-change="handleQuery" placeholder="不超过50个字符" style="width: 300px"></Input>
                         </FormItem>
-                        <FormItem label="备注" prop="remark">
-                             <Input type="password" v-model="addValidate.remark" @on-change="handleQuery" placeholder="6-20位字符，可包括字母和数字、区分大小写" style="width: 300px"></Input>
+                        <FormItem label="备注" prop="description">
+                            <Input v-model="addValidate.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="不超过200个字符"  style="width: 300px"></Input>
                         </FormItem>
                         <FormItem label="菜单权限" prop="roleList">
                           <Tree class="roleList" :data="baseData" ref="authTree" show-checkbox></Tree>
@@ -66,8 +66,8 @@
                     </Form>
                 </div>
                 <div slot="footer">
-                    <Button class="cancel" style="margin-left: 8px">取消</Button>
-                    <Button type="warning" class="confirm" @click="confirmAddRole">确认</Button>
+                    <Button class="cancel" style="margin-left: 8px" @click="closeAddModel">取消</Button>
+                    <Button type="warning" class="confirm" @click="handleSubmit('addValidate')">确认</Button>
                 </div>
             </Modal>
             <!-- 删除模态框 -->
@@ -91,45 +91,57 @@ export default {
              editModal: false,
              addModal: false,
              delModal:false,
+             delId: '',
              index:'',
              spinShow: false,
              baseData: [{
                   expand: true,
                   title: '数据运营平台',
+                  checked: false,
                   name: 0,
                   children: [{
                       title: '订单数据',
                       name: 20,
                       expand: false,
+                      checked: false,
                       children: [{
                           title: '整体数据',
                           name: 21,
+                          checked: false,
                           // disableCheckbox: true
                       }, {
                           title: '分日期分地区',
                           name: 22,
+                          checked: false,
                       }, {
                           title: '订单状态构成',
                           name: 23,
+                          checked: false,
                       }]
                   }, {
                       title: '个人中心',
-                      name: 70
+                      name: 70,
+                      checked: false,
                   }, {
                       title: '账号管理',
-                      name: 80
+                      name: 80,
+                      checked: false,
                   }, {
                       title: '角色管理',
-                      name: 90
+                      name: 90,
+                      checked: false,
                   }, {
                       title: '城市经营分析',
+                      checked: false,
                       name: 100,
                       children: [{
                         title: '整体数据',
+                        checked: false,
                         name: 101,
                       }, {
                         title: '我管理的数据',
                         name: 102,
+                        checked: false,
                       }]
                   }]
               }],
@@ -155,36 +167,15 @@ export default {
                 ]
             },
             addValidate: {
-                userName: '',
-                password:'',
-                role:'',
-                area:'',
-                name: '',
-                phoneNum: '',
-                email:'',
+                roleName: '',
                 description:''
             },
-             addValidateRule: {
-                userName: [
+            addValidateRule: {
+                roleName: [
                     { required: true, type: 'string', message: '请输入用户名', trigger: 'change' }
                 ],
-                password: [
-                    { required: true, type: 'string', message: '请输入密码', trigger: 'change' }
-                ],
-                 role: [
-                    { required: true, type: 'string', message: '请输入角色', trigger: 'change' }
-                ],
-                 password: [
-                    { required: true, type: 'string', message: '请输入密码', trigger: 'change' }
-                ],
-                phoneNum: [
-                    { required: true, message: '请填写手机号', trigger: 'change' }
-                ],
-                name: [
-                    { required: true, message: '请填写姓名', trigger: 'blur'}
-                ],
-                role: [
-                    { required: true, message: '请选择角色', trigger: 'blur'}
+                description: [
+                    { type: 'string', max: 200, message: '备注最长不能超过200个字符哦~', trigger: 'blur'}
                 ]
             },
             initRowData:{},
@@ -235,7 +226,7 @@ export default {
                                 },
                                 nativeOn: {
                                     click: () => {
-                                        this.handleDelete(params.index)
+                                        this.handleDelete(params)
                                     }
                                 }
                             })
@@ -289,20 +280,41 @@ export default {
             this.$refs.editValidate.resetFields();
             this.editModal = false
         },
-        handleSubmit(){
-            /*提交表单 修改数据*/
-            this.data.splice(this.index,1,this.editValidate)
-            this.editModal = false
-        },
-        handleDelete(index){
+        // handleSubmit(){
+        //     /*提交表单 修改数据*/
+        //     this.data.splice(this.index,1,this.editValidate)
+        //     this.editModal = false
+        // },
+        handleDelete(params){
           /*删除Row 数据 根据index 序列号*/
-          this.index = index;
+          this.index = params.index;
+          this.delId = params.row.id
           this.delModal = true
           //this.data.splice(index,1)  
         },
         closeDelModal(){
-            this.data.splice(this.index,1) 
-             this.delModal = false
+            this.axios.get('/beefly/role/api/v1/delete', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    id: this.delId
+                }
+            })
+            .then((res) => {
+                if (res.data.resultCode === 1) {
+                    this.$Message.success('删除成功!');
+                    this.currentPage = 1
+                    this.data.splice(this.index,1)
+                    this.loadData()
+                    this.delModal = false;
+                } else {
+                    this.delModal = false;
+                    let message = res.data.message
+                    this.$Message.error(message);
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
         },
         handleAdd(){
             /*增加数据*/
@@ -354,16 +366,56 @@ export default {
         handleQuery(e){
             // console.log(this.value)
         },
-        confirmAddRole () {
-            // 抓取编辑状态的节点
-            var auth = this.$refs.authTree.getCheckedNodes()
-            var arr = []
-            auth.map( (item) => {
-                arr.push(item.name)
-                return arr
+        handleSubmit (name) {
+            this.$refs[name].validate((valid) => {
+                if (valid) {
+                    // 抓取编辑状态的节点
+                    var auth = this.$refs.authTree.getCheckedNodes()
+                    var arr = []
+                    auth.map( (item) => {
+                        arr.push(item.name)
+                        return arr
+                    })
+                    this.axios.get('/beefly/role/api/v1/add', {
+                        params: {
+                            accessToken: this.$store.state.token,
+                            authList: arr.toString(),
+                            roleName: this.addValidate.roleName,
+                            description: this.addValidate.description
+                        }
+                    })
+                    .then((res) => {
+                        if (res.data.resultCode === 1) {
+                            this.$Message.error('添加成功!');
+                            // 关闭弹窗，关闭添加表单
+                            this.addModal = false
+                            this.loadData()
+                            this.$refs[name].resetFields();
+                            
+                        } else {
+                            var message = res.data.message
+                            this.$Message.error(message);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+                } else {
+                    // this.$Message.error('表单验证失败!');
+                }
             })
 
-            console.log(arr)
+        },
+        closeAddModel () {
+           this.addModal = false
+           this.$refs.addValidate.resetFields();
+        //    将权限树的选中状态取消。
+           for (var i = 0; i < this.baseData.length; i++) {
+               this.baseData[i].checked = false
+               this.baseData[i].children.map((item) => {
+                   item.checked = false
+               })
+           }
         },
         searchByName () {
             if (this.keyword === '') {    
@@ -435,9 +487,9 @@ div.tableGrid {
     -moz-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
     -webkit-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
     box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
-    // button {
-    //     float: right;
-    // }
+    button {
+        font-weight: bolder;
+    }
 }
 
 ul.ivu-page {
