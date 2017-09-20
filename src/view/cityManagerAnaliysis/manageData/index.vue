@@ -21,7 +21,7 @@
             <Spin fix size="large" v-if="spinShow"  class="spin">
                  <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                  <div style="color: #ccc; text-indent: 5px;">  loading...</div>
-            </Spin> 
+            </Spin>
             <Button type="warning" @click="exportModal = true">导入数据</Button>
             <Button class="cancel" @click="delTableByGroup">删除</Button>
             <span>*每月10号后，不可编辑和删除上月数据</span>

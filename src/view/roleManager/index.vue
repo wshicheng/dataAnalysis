@@ -6,21 +6,24 @@
         <Row class="datePick_zone">
            <Col span="10">
              <span class="lable">角色名称：</span>
-                <Input v-model="userName" @on-change="handleQuery" placeholder="姓名\用户名" style="width: 300px"></Input>
-                <Button type="warning">搜索</Button>
+                <Input v-model="keyword" @on-change="handleQuery" placeholder="姓名\用户名" style="width: 300px"></Input>
+                <Button type="warning" @click="searchByName">搜索</Button>
            </Col>
-            
         </Row>
         <Row class="tableGrid">
             <Col class="opeartor">
                 <Button type="warning" @click="handleAdd">添加角色</Button>
             </Col>
             <Table :columns="columns" :data="data"></Table>
-            <Page :total="totalListNum" class="tableGrid_page" placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
+            <Spin fix size="large" v-if="spinShow"  class="spin">
+                 <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+            </Spin> 
+            <Page :total="totalListNum" class="tableGrid_page" placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </Row>
            <!-- 模态框区域 编辑数据 -->
             <Modal v-model="editModal" width="800px" :styles="{top: '20%'}" class="editModal_form">
-                <p slot="header" class="editModal_head">
+                <p slot="header" style="color: #404040;">
                     <span>编辑账号</span>
                 </p>
                 <div class="editModal_content">
@@ -28,13 +31,13 @@
                         <FormItem label="角色名称" prop="roleName">
                              <Input v-model="editValidate.roleName" @on-change="handleQuery" placeholder="姓名\用户名" style="width: 300px"></Input>
                         </FormItem>
-                        <FormItem label="备注" prop="role_remark">
-                            <Input v-model="editValidate.role_remark" @on-change="handleQuery" placeholder="手机号\邮箱" style="width: 300px"></Input>
+                        <FormItem label="备注" prop="description">
+                            <Input v-model="editValidate.description" @on-change="handleQuery" placeholder="手机号\邮箱" style="width: 300px"></Input>
                         </FormItem>
                          <FormItem label="包含用户" prop="content_user">
                             <Input v-model="editValidate.content_user" @on-change="handleQuery" placeholder="姓名" style="width: 300px"></Input>
                         </FormItem>
-                         <FormItem label="角色" prop="role">
+                        <FormItem label="角色" prop="role">
                             <Input v-model="editValidate.role"  placeholder="角色" style="width: 300px"></Input>
                         </FormItem>
                     </Form>
@@ -46,7 +49,7 @@
             </Modal>
              <!-- 模态框区域 增加数据 -->
             <Modal v-model="addModal" width="800px" :styles="{top: '20%'}" class="editModal_form">
-                <p slot="header" class="editModal_head">
+                <p slot="header" style="color: #404040;">
                     <span>添加角色</span>
                 </p>
                 <div class="editModal_content">
@@ -58,18 +61,18 @@
                              <Input type="password" v-model="addValidate.remark" @on-change="handleQuery" placeholder="6-20位字符，可包括字母和数字、区分大小写" style="width: 300px"></Input>
                         </FormItem>
                         <FormItem label="菜单权限" prop="roleList">
-                          <Tree class="roleList" :data="baseData" show-checkbox></Tree>
+                          <Tree class="roleList" :data="baseData" ref="authTree" show-checkbox></Tree>
                         </FormItem>
                     </Form>
                 </div>
                 <div slot="footer">
-                    <Button class="cancel" style="margin-left: 8px">重置</Button>
-                    <Button type="warning" class="confirm">提交</Button>
+                    <Button class="cancel" style="margin-left: 8px">取消</Button>
+                    <Button type="warning" class="confirm" @click="confirmAddRole">确认</Button>
                 </div>
             </Modal>
             <!-- 删除模态框 -->
             <Modal v-model="delModal" :styles="{width: '500px', top: '20%'}" class="editModal_form">
-                <p slot="header" class="editModal_head">
+                <p slot="header" style="color: #404040;">
                     <span>Warning</span>
                 </p>
                 <p style="color: #444; font-weight: bold; font-size: 16px; text-align:left;text-indent:55px; height: 50px; line-height: 50px;">确认删除吗？</p>
@@ -89,32 +92,44 @@ export default {
              addModal: false,
              delModal:false,
              index:'',
-              baseData: [{
+             spinShow: false,
+             baseData: [{
                   expand: true,
                   title: '数据运营平台',
+                  name: 0,
                   children: [{
                       title: '订单数据',
+                      name: 20,
                       expand: false,
                       children: [{
                           title: '整体数据',
+                          name: 21,
                           // disableCheckbox: true
                       }, {
                           title: '分日期分地区',
+                          name: 22,
                       }, {
                           title: '订单状态构成',
+                          name: 23,
                       }]
                   }, {
-                      title: '个人中心'
+                      title: '个人中心',
+                      name: 70
                   }, {
-                      title: '账号管理'
+                      title: '账号管理',
+                      name: 80
                   }, {
-                      title: '角色管理'
+                      title: '角色管理',
+                      name: 90
                   }, {
                       title: '城市经营分析',
+                      name: 100,
                       children: [{
-                        title: '整体数据'
+                        title: '整体数据',
+                        name: 101,
                       }, {
-                        title: '我管理的数据'
+                        title: '我管理的数据',
+                        name: 102,
                       }]
                   }]
               }],
@@ -173,7 +188,7 @@ export default {
                 ]
             },
             initRowData:{},
-            userName:'',
+            keyword:'',
             phone:'',
             columns: [
                 {
@@ -182,11 +197,11 @@ export default {
                 },
                 {
                     title: '备注',
-                    key: 'role_remark'
+                    key: 'description'
                 },
                 {
                     title: '包含用户',
-                    key: 'content_user'
+                    key: 'userList'
                 },
                 {
                     title:'操作',
@@ -229,14 +244,36 @@ export default {
                 }
 
             ],
-            data: this.mockTableDatas(),
+            data: [],
             totalListNum: 100,
             pageSizeOpts: [10, 20, 30, 40],
-            pageSize: 20,
+            pageSize: 10,
             currentPage: 1,
+            pageShow: false
         }
     },
+    mounted () {
+        this.loadData()
+    },
     methods: {
+        loadData () {
+            this.axios.get('/beefly/role/api/v1/page', {
+                params: {
+                    accessToken: this.$store.state.token
+                }
+            })
+            .then((res) => {
+                this.data = res.data.data
+
+                if (res.data.totalPage > 1) {
+                    this.pageShow = true
+                }
+                this.totalListNum = res.data.totalItems
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        },
         show (params) {
             /*显示弹窗*/
             this.editModal = true
@@ -274,19 +311,89 @@ export default {
         },
         handleCurrentPage(currentPage) {
             this.currentPage = currentPage
+            this.axios.get('/beefly/role/api/v1/page', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    pageNo: currentPage,
+                    pageSize: this.pageSize
+                }
+            })
+            .then((res) => {
+                this.data = res.data.data
+
+                if (res.data.totalPage > 1) {
+                    this.pageShow = true
+                }
+                this.totalListNum = res.data.totalItems
+            })
+            .catch((err) => {
+                console.log(err)
+            })
         },
         handlePageSize(pageSize) {
             this.pageSize = pageSize
+            this.axios.get('/beefly/role/api/v1/page', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    pageNo: this.currentPage,
+                    pageSize: pageSize
+                }
+            })
+            .then((res) => {
+                this.data = res.data.data
+
+                if (res.data.totalPage > 1) {
+                    this.pageShow = true
+                }
+                this.totalListNum = res.data.totalItems
+            })
+            .catch((err) => {
+                console.log(err)
+            })
         },
         handleQuery(e){
-            console.log(this.value)
+            // console.log(this.value)
+        },
+        confirmAddRole () {
+            // 抓取编辑状态的节点
+            var auth = this.$refs.authTree.getCheckedNodes()
+            var arr = []
+            auth.map( (item) => {
+                arr.push(item.name)
+                return arr
+            })
+
+            console.log(arr)
+        },
+        searchByName () {
+            if (this.keyword === '') {    
+                this.$Message.warning('请输入要查询的角色名称！');
+            } else {
+                this.axios.get('/beefly/role/api/v1/page', {
+                    params: {
+                        accessToken: this.$store.state.token,
+                        keyword: this.keyword
+                    }
+                })
+                .then((res) => {
+                    this.data = res.data.data
+                    console.log("查询",res.data.data)
+                    if (res.data.totalPage > 1) {
+                        this.pageShow = true
+                    }
+                    this.totalListNum = res.data.totalItems
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+            }
         },
         mockTableDatas(){
             var arr = [];
             for(var i=0;i<10;i++){
                 arr.push({
                     roleName: 'jack' + i,
-                    role_remark: '18812341234',
+                    description: '18812341234',
                     content_user: 'zhouyu'
                 })
             }
@@ -312,6 +419,12 @@ div.tableGrid {
         margin-top: 20px;
         margin-right: -10px;
     }
+    .spin {
+        position: absolute;
+        display: inline-block;
+        // background-color: rgba(253, 248, 248,0.0); 
+        background-color: rgba(255, 255, 255, 0.8); 
+    }
 }
 .datePick_zone {
     background: #fff;
@@ -322,6 +435,9 @@ div.tableGrid {
     -moz-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
     -webkit-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
     box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
+    // button {
+    //     float: right;
+    // }
 }
 
 ul.ivu-page {
