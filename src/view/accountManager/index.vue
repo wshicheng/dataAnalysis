@@ -24,7 +24,7 @@
         </Row>
            <!-- 模态框区域 编辑数据 -->
             <Modal v-model="editModal" width="800px" :styles="{top: '20%'}" class="editModal_form">
-                <p slot="header" class="editModal_head">
+                <p slot="header" style="color: #404040;">
                     <span>编辑账号</span>
                 </p>
                 <div class="editModal_content">
@@ -50,7 +50,7 @@
             </Modal>
              <!-- 模态框区域 增加数据 -->
             <Modal v-model="addModal" width="800px" :styles="{top: '20%'}" class="editModal_form">
-                <p slot="header" class="editModal_head">
+                <p slot="header" class="editModal_head" style="color: #404040;">
                     <span>添加账号</span>
                 </p>
                 <div class="editModal_content">
@@ -214,7 +214,6 @@ export default {
                             },
                             on:{
                                 click:(e)=>{
-                                    console.log(e.currentTarget.children)
                                     if(e.currentTarget.getAttribute('class')){
                                         e.currentTarget.setAttribute('class','')
                                         e.currentTarget.style.backgroundColor="rgb(217, 221, 228)"
@@ -419,8 +418,10 @@ div.tableGrid {
     box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
     button.search{
         outline: none;
-        border: 1px solid rgb(121, 121, 121);
-        background: #797979;
+        // border: 1px solid rgb(121, 121, 121);
+        border:1px solid #ff9900;
+        // background: #797979;
+        background:#ff9900;
         color: #fff;
     }
 }
