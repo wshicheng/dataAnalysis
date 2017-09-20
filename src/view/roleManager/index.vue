@@ -413,7 +413,14 @@ export default {
            for (var i = 0; i < this.baseData.length; i++) {
                this.baseData[i].checked = false
                this.baseData[i].children.map((item) => {
-                   item.checked = false
+                   if (item.children != null) {
+                        item.checked = false
+                       item.children.map(item => {
+                           item.checked = false
+                       }) 
+                   } else {    
+                        item.checked = false
+                   }
                })
            }
         },
