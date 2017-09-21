@@ -20,7 +20,8 @@ export default new Vuex.Store({
         menuActiveName: ''
     },
     getters:{
-        cityList: state => {return state.cityList}
+        cityList: state => {return state.cityList},
+        accessToken: state => {return state.token}
     },
     mutations: {
         [types.LOGIN](state, data){
