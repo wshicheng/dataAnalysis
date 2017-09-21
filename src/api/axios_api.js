@@ -11,7 +11,7 @@ import router from '../router/router-config'
 // let baseURL = 'http://192.168.0.121:5080'
 // let baseURL = 'http://192.168.0.102:5080'
 // let baseURL = 'http://192.168.3.181:5080'
-let baseURL = 'http://192.168.3.78:5080'
+let baseURL = 'http://47.93.48.250:5080'
 // let baseURL = 'http://192.168.0.102:5080'
 
 
