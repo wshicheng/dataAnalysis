@@ -38,19 +38,21 @@
                     <FormItem label="用户名" prop="username">
                         <Input v-model="editValidate.userName" style="width:300px;" placeholder="不超过100个字符"></Input>
                     </FormItem>
-                    <FormItem label="密码" prop="password">
+                    <!-- <FormItem label="密码" prop="password">
                         <Input v-model="editValidate.passWord" type="password" style="width:300px;" placeholder="6-20位字符，可包括字母和数字，区分大小写"></Input>
-                    </FormItem>
+                    </FormItem> -->
                     <FormItem label="所属角色" prop="roleName">
-                        <Select style="width:300px;" @on-change="handleSelect" v-model="editValidate.roleName" :value="editValidate.roleName" placeholder="请选择所属角色">
+                        <!-- <Select style="width:300px;" @on-change="handleSelect" v-model="editValidate.roleName" :value="editValidate.roleName" placeholder="请选择所属角色">
                             <Option value="角色1">角色1</Option>
                             <Option value="角色11">角色11</Option>
                             <Option value="角色1123">角色1123</Option>
+                        </Select> -->
+                         <Select style="width:300px;" @on-change="handleRole" v-model="editValidate.roleName" placeholder="请选择所属角色">
+                            <Option :value="role.roleName" :key="role.id" v-for="role of allRole">{{role.roleName}}</Option>
                         </Select>
-
                     </FormItem>
-                    <FormItem label="可查看地区" prop="cityList">
-                        <div>
+                    <FormItem label="可查看地区" prop="area">
+                        <!-- <div>
                             <Checkbox :indeterminate="indeterminate" :value="checkAll" @click.prevent.native="handleCheckAll">全选</Checkbox>
                         </div>
                         <CheckboxGroup v-model="editValidate.cityList" @on-change="checkAllGroupChange">
@@ -58,6 +60,14 @@
                             <Checkbox label="地区2"></Checkbox>
                             <Checkbox label="地区3"></Checkbox>
                             <Checkbox label="地区4"></Checkbox>
+                        </CheckboxGroup> -->
+                         <div>
+                            <Checkbox :indeterminate="indeterminate" :value="checkAll" @click.prevent.native="handleCheckAll">
+                                全选
+                            </Checkbox>
+                        </div>
+                        <CheckboxGroup v-model="editValidate.cityList" @on-change="checkAllGroupChange">
+                            <Checkbox :label="list.name" :key="list + '_1_' + Math.random()" v-for="list of allCity"></Checkbox>
                         </CheckboxGroup>
                     </FormItem>
                     <FormItem label="姓名" prop="name">
@@ -110,7 +120,7 @@
                             </Checkbox>
                         </div>
                         <CheckboxGroup v-model="formValidate.cityList" @on-change="checkAllGroupChange">
-                            <Checkbox :label="list.name" :key="list.id" v-for="list of allCity"></Checkbox>
+                            <Checkbox :label="list.name" :key="list + '-' + Math.random()" v-for="list of allCity"></Checkbox>
                         </CheckboxGroup>
                     </FormItem>
                     <FormItem label="姓名" prop="name">
@@ -156,6 +166,7 @@ import { mapGetters } from 'vuex'
 export default {
     data() {
         return {
+            initStatu:'',
             allCity: [],
             allCityCode: [],
             allRole: [],
@@ -242,6 +253,7 @@ export default {
                     { type: 'string', min: 20, message: '介绍不能少于20字', trigger: 'blur' }
                 ]
             },
+            recodeCityList:[],
             initRowData: {},
             userName: '',
             phone: '',
@@ -411,14 +423,17 @@ export default {
 
             if (this.checkAll) {
                 this.formValidate.cityList = this.allCity.map((item) => { return item.name });
+                this.editValidate.cityList = this.allCity.map((item) => { return item.name });
                 this.allCityCode = this.allCity.map((item)=>{return item.code})
             } else {
                 this.formValidate.cityList = [];
+                this.editValidate.cityList = [];
                 this.allCityCode = []
             }
+            
         },
         checkAllGroupChange(data) {
-            console.log(data)
+          
             if (data.length === this.allCity.length) {
                 this.indeterminate = false;
                 this.checkAll = true;
@@ -431,7 +446,6 @@ export default {
             }
             this.allCityCode = []
             data.map((item)=>{
-               
                 for(var i=0;i<this.allCity.length;i++){
                     if(this.allCity[i].name===item){
                        this.allCityCode.push(this.allCity[i].code)
@@ -442,18 +456,15 @@ export default {
         },
         show(params) {
             /*显示弹窗*/
+            var that = this
             this.editModal = true
-            console.log(params)
             this.editValidate = params.row
-            console.log(this.editValidate)
             this.index = params.index
-            $('span.ivu-select-selected-value').text(params.row.role)
-        },
-        handleSelect(value) {
-            $('span.ivu-select-selected-value').text(value)
+            this.recodeCityList = params.row.cityList.map((item)=>{return item.name})
+            this.editValidate.cityList = this.recodeCityList
+            //$('span.ivu-select-selected-value').text(params.row.role)
         },
         handleSubmit(name) {
-            console.log('aaa')
             if (name === 'formValidate') {
                 // 增加数据
                 this.$refs[name].validate((valid) => {
@@ -467,15 +478,7 @@ export default {
                 //修改数据
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        this.$Message.success('修改成功!');
-                        console.log(this.editValidate)
-                        this.data.splice(this.index, 1, {
-                            userName: this.editValidate.username,
-                            phoneNum: this.editValidate.tel,
-                            name: this.editValidate.name,
-                            role: this.editValidate.role,
-                            status: 0
-                        })
+                      this.modifyAccount()
                     } else {
                         this.$Message.error('表单验证失败!');
                     }
@@ -509,7 +512,6 @@ export default {
         },
         handleCurrentPage(currentPage) {
             this.currentPage = currentPage
-            console.log(currentPage)
             // 页码变化发请求
             this.query()
         },
@@ -523,7 +525,6 @@ export default {
             var phone = this.phone
             // 发起查询请求 
             if (name.length === 0 && phone.length === 0) {
-                console.log('查询条件为空，执行初始化查询')
                 this.query()
             }
         },
@@ -541,7 +542,6 @@ export default {
             this.axios.get('/beefly/user/api/v1/delete', {
                 params: { id: index, accessToken: this.accessToken }
             }).then((res) => {
-                console.log(res.data.resultCode)
                 if (res.data.resultCode === 1) {
                     this.data.splice(this.index, 1)
                     this.delModal = false
@@ -550,12 +550,36 @@ export default {
                 }
             })
         },
+        modifyAccount(){
+            this.initStatu = this.editValidate.status
+            delete this.editValidate.cityList;
+            delete this.editValidate._index;
+            delete this.editValidate._rowKey;
+            delete this.editValidate.token;
+            delete this.editValidate.adminUserIconUrl;
+            delete this.editValidate.createTime;
+            delete this.editValidate.passWord;
+            delete this.editValidate.roleName;
+            delete this.editValidate.status;
+            delete this.editValidate.updateDate;
+           this.axios.get('/beefly/user/api/v1/update', {
+                params: Object.assign({},this.editValidate,{accessToken:this.accessToken},{roleId:this.roleId},{cityStr:this.allCityCode.join(',')})
+            }).then((res) => {
+                if (res.data.resultCode === 1) {
+                      this.$Message.success('修改成功!');
+                      this.editModal = false
+                      this.data.splice(this.index, 1,Object.assign({},this.editValidate,{status:this.initStatu}))
+                    this.query()
+                } else if (res.data.resultCode === 0) {
+                    this.$router.push('/login')
+                }
+            }) 
+        },
         addAccount(){
             delete this.formValidate.cityList;
            this.axios.get('/beefly/user/api/v1/add', {
                 params: Object.assign({},this.formValidate,{accessToken:this.accessToken},{roleId:this.roleId},{cityStr:this.allCityCode.join(',')})
             }).then((res) => {
-                console.log(res.data.resultCode)
                 if (res.data.resultCode === 1) {
                      this.$Message.success('增加账号成功!');
                    this.data.unshift(this.formValidate)
@@ -612,8 +636,6 @@ export default {
             this.axios.get('/beefly/user/api/v1/allCity', {
                 params: { accessToken: this.accessToken }
             }).then((res) => {
-                console.log(res.data.data)
-
                 this.allCity = res.data.data
                 // this.formValidate.cityList = res.data.data.map((item)=>{return item.name})
                 var message = res.data.message
@@ -628,7 +650,6 @@ export default {
             this.axios.get('/beefly/role/api/v1/allRole', {
                 params: { accessToken: this.accessToken }
             }).then((res) => {
-                console.log(res.data.data)
                 this.allRole = res.data.data
                 var message = res.data.message
                 if (message === '用户登录超时') {
@@ -638,9 +659,11 @@ export default {
 
         },
         handleRole(value) {
-            console.log(value)
             var res = this.allRole.filter((item) => { return item.roleName === value })
-            this.roleId = res[0].id
+            if(res.length>0){
+                 this.roleId = res[0].id
+            }
+           
         },
         throttle(fn, context, delay, text) {
             // 节流函数
@@ -667,6 +690,21 @@ export default {
         this.query()
         this.queryCity()
         this.queryRole()
+    },
+    watch:{
+        'editValidate.cityList':{
+            handler:function(val,OldVal){
+                this.allCityCode = []
+               val.map((item)=>{
+                   for(var i=0;i<this.allCity.length;i++){
+                       if(this.allCity[i].name===item){
+                           this.allCityCode.push(this.allCity[i].code)
+                       }
+                   }
+               })
+            },
+            deep:true
+        }
     }
 }
 </script>
