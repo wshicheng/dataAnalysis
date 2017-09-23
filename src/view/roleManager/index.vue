@@ -6,7 +6,7 @@
         <Row class="datePick_zone">
            <Col span="10">
              <span class="lable">角色名称：</span>
-                <Input v-model="keyword" @on-change="handleQuery" placeholder="姓名\用户名" style="width: 300px"></Input>
+                <Input v-model="keyword" @on-change="inputChange" placeholder="姓名\用户名" style="width: 300px"></Input>
                 <Button type="warning" @click="searchByName">搜索</Button>
            </Col>
         </Row>
@@ -24,27 +24,24 @@
            <!-- 模态框区域 编辑数据 -->
             <Modal v-model="editModal" width="800px" :styles="{top: '20%'}" class="editModal_form">
                 <p slot="header" style="color: #404040;">
-                    <span>编辑账号</span>
+                    <span>编辑角色</span>
                 </p>
                 <div class="editModal_content">
                     <Form ref="editValidate" :model="editValidate" :rules="editValidateRule" :label-width="80">
                         <FormItem label="角色名称" prop="roleName">
-                             <Input v-model="editValidate.roleName" @on-change="handleQuery" placeholder="姓名\用户名" style="width: 300px"></Input>
+                             <Input v-model="editValidate.roleName" placeholder="姓名\用户名" style="width: 300px"></Input>
                         </FormItem>
                         <FormItem label="备注" prop="description">
-                            <Input v-model="editValidate.description" @on-change="handleQuery" placeholder="手机号\邮箱" style="width: 300px"></Input>
+                            <Input v-model="editValidate.description" placeholder="手机号\邮箱" style="width: 300px"></Input>
                         </FormItem>
-                         <FormItem label="包含用户" prop="content_user">
-                            <Input v-model="editValidate.content_user" @on-change="handleQuery" placeholder="姓名" style="width: 300px"></Input>
-                        </FormItem>
-                        <FormItem label="角色" prop="role">
-                            <Input v-model="editValidate.role"  placeholder="角色" style="width: 300px"></Input>
+                        <FormItem label="菜单权限" prop="roleList">
+                          <Tree class="roleList" :data="baseData" ref="editAuthTree" show-checkbox></Tree>
                         </FormItem>
                     </Form>
                 </div>
                 <div slot="footer">
-                    <Button class="cancel" @click="handleReset" style="margin-left: 8px">重置</Button>
-                    <Button type="warning" class="confirm">提交</Button>
+                    <Button class="cancel" @click="handleReset" style="margin-left: 8px">取消</Button>
+                    <Button type="warning" class="confirm" @click="editConfirm">确定</Button>
                 </div>
             </Modal>
              <!-- 模态框区域 增加数据 -->
@@ -93,6 +90,7 @@ export default {
              delModal:false,
              delId: '',
              index:'',
+             editId: '',
              spinShow: false,
              baseData: [{
                   expand: true,
@@ -145,25 +143,16 @@ export default {
                       }]
                   }]
               }],
-             editValidate: {
-                userName: '',
-                phoneNum: '',
-                name: '',
-                role: '',
-                status: ''
+            editValidate: {
+                roleName: '',
+                description:''
             },
-             editValidateRule: {
-                userName: [
+            editValidateRule: {
+                roleName: [
                     { required: true, type: 'string', message: '请输入用户名', trigger: 'change' }
                 ],
-                phoneNum: [
-                    { required: true, message: '请填写手机号', trigger: 'change' }
-                ],
-                name: [
-                    { required: true, message: '请填写姓名', trigger: 'blur'}
-                ],
-                role: [
-                    { required: true, message: '请选择角色', trigger: 'blur'}
+                description: [
+                    { type: 'string', max: 200, message: '备注最长不能超过200个字符哦~', trigger: 'blur'}
                 ]
             },
             addValidate: {
@@ -248,6 +237,7 @@ export default {
     },
     methods: {
         loadData () {
+            this.spinShow = true
             this.axios.get('/beefly/role/api/v1/page', {
                 params: {
                     accessToken: this.$store.state.token
@@ -255,30 +245,100 @@ export default {
             })
             .then((res) => {
                 this.data = res.data.data
-
+                // 关闭Loading
+                this.spinShow = false
                 if (res.data.totalPage > 1) {
                     this.pageShow = true
                 }
                 this.totalListNum = res.data.totalItems
             })
             .catch((err) => {
+                // 关闭Loading
+                this.spinShow = false
                 console.log(err)
             })
         },
         show (params) {
             /*显示弹窗*/
             this.editModal = true
-            console.log(params)
-            this.initRowData = Object.assign({},params.row)
             this.editValidate = params.row
-            this.index = params.index
+            this.editId = params.row.id
+            var menuStr = params.row.menuStr
+            console.log('menuStr',menuStr )
+            // console.log('checkList',this.baseData )
+            var that = this
+            setTimeout(function () {
+                that.baseData.map ( item => {
+                    for (var i = 0; i < item.children.length; i++) {
+                        if (menuStr.indexOf(item.children[i].name) != -1) {
+                            item.children[i].checked = true
+                        }
+                        if (item.children[i].children != 'undefined') {
+                            if (item.children[i].children instanceof Array === true) {
+                                item.children[i].children.map(list => {
+                                    if (menuStr.indexOf(list.name) != -1) {
+                                        list.checked = true
+                                    }
+                                })
+                            }
+
+                        }
+                    }
+                })
+            }, 200)
+            
         },
         handleReset(){
             /*重置编辑表单*/
-            console.log(this.initRowData)
-            this.data = this.initRowData
-            this.$refs.editValidate.resetFields();
+            this.clearTree()
+            // this.$refs.editValidate.resetFields();
             this.editModal = false
+        },
+        inputChange () {
+            if (this.keyword === '') {
+                this.loadData()
+            }
+        },
+        editConfirm () {
+            this.$refs.editValidate.validate((valid) => {
+                if (valid) {
+                    // 抓取编辑状态的节点
+                    var auth = this.$refs.editAuthTree.getCheckedNodes()
+                    var arr = []
+                    auth.map( (item) => {
+                        arr.push(item.name)
+                        return arr
+                    })
+                    this.axios.get('/beefly/role/api/v1/update', {
+                        params: {
+                            accessToken: this.$store.state.token,
+                            menuStr: arr.toString(),
+                            roleName: this.editValidate.roleName,
+                            description: this.editValidate.description,
+                            id: this.editId
+                        }
+                    })
+                    .then((res) => {
+                        if (res.data.resultCode === 1) {
+                            this.$Message.success('修改成功!');
+                            // 关闭弹窗，关闭添加表单
+                            this.editModal = false
+                            this.clearTree()
+                            this.loadData()
+                            this.$refs.editValidate.resetFields();
+                            
+                        } else {
+                            var message = res.data.message
+                            this.$Message.error(message);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+                } else {
+                    // this.$Message.error('表单验证失败!');
+                }
+            })
         },
         // handleSubmit(){
         //     /*提交表单 修改数据*/
@@ -322,6 +382,7 @@ export default {
             //this.data.unshift(this.editValidate)
         },
         handleCurrentPage(currentPage) {
+            this.spinShow = true
             this.currentPage = currentPage
             this.axios.get('/beefly/role/api/v1/page', {
                 params: {
@@ -332,6 +393,8 @@ export default {
             })
             .then((res) => {
                 this.data = res.data.data
+                // 关闭Loading
+                this.spinShow = false
 
                 if (res.data.totalPage > 1) {
                     this.pageShow = true
@@ -339,10 +402,13 @@ export default {
                 this.totalListNum = res.data.totalItems
             })
             .catch((err) => {
+                // 关闭Loading
+                this.spinShow = false
                 console.log(err)
             })
         },
         handlePageSize(pageSize) {
+            this.spinShow = true
             this.pageSize = pageSize
             this.axios.get('/beefly/role/api/v1/page', {
                 params: {
@@ -353,6 +419,8 @@ export default {
             })
             .then((res) => {
                 this.data = res.data.data
+                // 关闭Loading
+                this.spinShow = false
 
                 if (res.data.totalPage > 1) {
                     this.pageShow = true
@@ -360,6 +428,8 @@ export default {
                 this.totalListNum = res.data.totalItems
             })
             .catch((err) => {
+                // 关闭Loading
+                this.spinShow = false
                 console.log(err)
             })
         },
@@ -379,16 +449,17 @@ export default {
                     this.axios.get('/beefly/role/api/v1/add', {
                         params: {
                             accessToken: this.$store.state.token,
-                            authList: arr.toString(),
+                            menuStr: arr.toString(),
                             roleName: this.addValidate.roleName,
                             description: this.addValidate.description
                         }
                     })
                     .then((res) => {
                         if (res.data.resultCode === 1) {
-                            this.$Message.error('添加成功!');
+                            this.$Message.success('添加成功!');
                             // 关闭弹窗，关闭添加表单
                             this.addModal = false
+                            this.clearTree()
                             this.loadData()
                             this.$refs[name].resetFields();
                             
@@ -409,7 +480,10 @@ export default {
         closeAddModel () {
            this.addModal = false
            this.$refs.addValidate.resetFields();
-        //    将权限树的选中状态取消。
+           this.clearTree()
+        },
+        clearTree () {
+            //   将权限树的选中状态取消。
            for (var i = 0; i < this.baseData.length; i++) {
                this.baseData[i].checked = false
                this.baseData[i].children.map((item) => {
@@ -436,7 +510,6 @@ export default {
                 })
                 .then((res) => {
                     this.data = res.data.data
-                    console.log("查询",res.data.data)
                     if (res.data.totalPage > 1) {
                         this.pageShow = true
                     }
@@ -496,6 +569,8 @@ div.tableGrid {
     box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
     button {
         font-weight: bolder;
+        display: inline-block;
+        margin-left: 30px;
     }
 }
 
