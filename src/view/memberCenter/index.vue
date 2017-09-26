@@ -32,17 +32,17 @@
                         <i v-if="telBinded" class="iconfont right">&#xe616;</i>
                         <i v-else class="iconfont err">&#xe600;</i>
                     </span>
-                    <span>手机验证</span>
-                    <span>{{this.phone === ''?'未绑定':'已绑定'}}</span>
-                    <span>{{this.phone === '' || null?'您的手机号码' + this.phone === null?'':this.phone + '尚未绑定，请尽快绑定手机号':'手机号码' + this.phone + '已验证'}}</span>
+                    <span style="font-size: 16px;">手机验证</span>
+                    <span>{{this.phoneNo === ''?'未绑定':'已绑定'}}</span>
+                    <span>{{this.phoneNo === '' || null?'您的手机号码' + this.phoneNo === null?'':this.phoneNo + '尚未绑定，请尽快绑定手机号':'手机号码' + this.phoneNo + '已验证'}}</span>
 
                     <span>
                         <!-- <button disabled='isBinded' @click='$router.push({path:"/index/memberCenter/bindTel"})'>绑定手机号</button> -->
-                        <button :class="{disabled:isBinded}" :disabled="isBinded" @click='$router.push({path:"/index/memberCenter/bindTel"})'>绑定手机号</button>
+                        <button :class="{disabled:isBinded}" :disabled="isBinded" @click='openBindModel'>绑定手机号</button>
                     </span>
 
-                    <span>
-                        <button @click='$router.push({path:"/index/memberCenter/updateTel"})'>修改手机号</button>
+                    <span v-show="editShow">
+                        <button @click='openEditModal'>修改手机号</button>
                     </span>
                 </li>
                 <!-- <li>
@@ -64,18 +64,72 @@
                     <span>
                         <i class="iconfont right">&#xe616;</i>
                     </span>
-                    <span>登录密码</span>
-                    <span>建议使用6-20个字符，包含字母、数字、下划线</span>
+                    <span style="font-size: 16px;">登录密码</span>
+                    <span style="color: #ccc;">建议使用6-20个字符，包含字母、数字、下划线</span>
                     <button @click='$router.push({path:"/index/memberCenter/amendPassword"})'>修改密码</button>
                 </li>
             </ul>
         </div>
 
-        <router-view id="member_router"></router-view>
+        <!-- 绑定模态框 -->
+        <Modal v-model="bindModal" width="431" :styles="{top: '20%'}" class="bindModal_form">
+            <p slot="header" class="bindModal_head">
+                <span>绑定手机号码</span>
+            </p>
+            <div class="bindModal_body">
+                <Form ref="bindPhone" :model="bindPhone" :rules="bindPhoneRule" :label-width="80">
+                    <FormItem label="手机号" prop="phoneNo" class="phone">
+                        <Input v-model="bindPhone.phoneNo" placeholder="请输入手机号"></Input>
+                        <Button class="sendCode" 
+                        @click="getVerCode(bindPhone.phoneNo)"
+                        :plain="isPlain"
+                        :disabled="isDisabled">发送验证码</Button>
+                    </FormItem>
+                    <FormItem label="验证码" prop="phoneCode" class="pc">
+                        <Input v-model="bindPhone.phoneCode" placeholder="请输入手机收到的验证码"></Input>
+                    </FormItem>
+                    <FormItem label="账户密码" prop="passWord" class="pwd">
+                        <Input v-model="bindPhone.passWord" placeholder="为保障账号安全，您需要填写当前登录账号与密码"></Input>
+                    </FormItem>
+                </Form>
+            </div>
+            <div slot="footer">
+                <Button class="cancel" @click="handleReset('bindPhone')" style="margin-left: 8px">取消</Button>
+                <Button type="warning" class="confirm" @click="handleSubmit('bindPhone')">立即绑定</Button>
+            </div>
+        </Modal>
+
+        <!-- 编辑模态框 -->
+        <Modal v-model="editModal" width="431" :styles="{top: '20%'}" class="editModal_form">
+            <p slot="header" class="editModal_head">
+                <span>绑定手机号码</span>
+            </p>
+            <div class="bindModal_body">
+                <Form ref="editPhone" :model="editPhone" :rules="editPhoneRule" :label-width="80">
+                    <FormItem label="手机号" prop="phoneNo" class="phone">
+                        <Input v-model="editPhone.phoneNo" placeholder="请输入手机号"></Input>
+                        <Button class="sendCode" 
+                        @click="getVerCode(editPhone.phoneNo)"
+                        :plain="isPlain"
+                        :disabled="isDisabled">发送验证码</Button>
+                    </FormItem>
+                    <FormItem label="验证码" prop="phoneCode" class="pc">
+                        <Input v-model="editPhone.phoneCode" placeholder="请输入手机收到的验证码"></Input>
+                    </FormItem>
+                    <FormItem label="账户密码" prop="passWord" class="pwd">
+                        <Input v-model="editPhone.passWord" placeholder="为保障账号安全，您需要填写当前登录账号与密码"></Input>
+                    </FormItem>
+                </Form>
+            </div>
+            <div slot="footer">
+                <Button class="cancel" @click="handleReset2('editPhone')" style="margin-left: 8px">取消</Button>
+                <Button type="warning" class="confirm" @click="handleSubmit2('editPhone')">立即绑定</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 
-<style scoped>
+<style lang='scss' scoped type="text/css">
     #member_router {
         width: 100%;
         height: 100%;
@@ -280,25 +334,210 @@
     .homepage_select ul li .err {
         color: red;
     }
+
+    p.bindModal_head {
+        text-align: left;
+        color: #404040;
+    }
+
+    .bindModal_body {
+        overflow: hidden;
+        .phone {
+            width: 300px;
+        }
+        button.sendCode {
+            width: 92px;
+            text-align: center;
+            position: absolute;
+            right: -95px;
+            top: 1px;
+        }
+        .pc,.pwd {
+            width: 396px;
+        }
+    }
 </style>
 
 <script>
+import {checkMobile, IsEmpty} from '../../util/util.js'
+import $ from 'jquery'
 export default {
 	name: 'HomePage',
 	data: function (){
+        var validateTel = (rule, value, callback) => {
+            if (!value) {
+                return callback(new Error('手机号码不能为空'))
+            }else {
+                setTimeout(() => {
+                var res = checkMobile(value)
+                if (res === true) {
+                    return callback()
+                } else {
+                    callback(new Error('手机格式格式不正确！！！'))
+                }
+                }, 1000)
+            }
+        }
+        var validateVerCode = (rule,value,callback) => {
+            if(!value) {
+                return callback(new Error('验证码不能为空'))
+            } else {
+                callback()
+            }
+        }
 		return {
 			updateEmail: '',
 			name: '姓名',
 			userName: '用户名',
-			phone: '',
+			phoneNo: '',
 			email: '',
 			telBinded: false,
 			emailBinded: false,
 			isBinded: false,
-			imageUrl: ''
-			
+            imageUrl: '',
+            editShow: false,
+			bindPhone: {
+                phoneNo: '',
+                phoneCode: '',
+                passWord: ''
+            },
+            bindPhoneRule: {
+                phoneNo: [
+                    {
+                        required: true, trigger: 'blur', validator: validateTel
+                    }
+                ],
+                phoneCode: [
+                    {
+                        required: true, message: '请输入验证码', validator: validateVerCode 
+                    }
+                ],
+                passWord: [
+                    { required: true, message: '请输入密码', trigger: 'blur' },
+                    { min: 6, message: '请输入正确密码', trigger: 'blur' }
+                ]
+            },
+            bindModal: false,  
+            isPlain:true,
+            isDisabled:false,
+            initText: ''
 		}
     },
+    mounted () {
+        this.loadData ()
+    },
+    methods: {
+        getVerCode (val) {
+            console.log(val)
+            var that = this
+            var $btn = $('button.sendCode')
+            var text = $btn.text()
+            this.initText = text
+            var initTime = 60
+            if(checkMobile(val)){
+                this.isDisabled = true
+                this.isPlain = false
+                var timer = setInterval(function(){
+                    initTime--
+                    if(initTime<=0){
+                        that.isDisabled = false
+                        that.isPlain = true
+                        $btn.text(that.initText)
+                        clearInterval(timer)
+                        return
+                    }else {
+                        $btn.text(initTime + 's')
+                    }
+                },1000)
+                setTimeout(function(){
+                    that.$Message.warning('已向您的手机发送验证码，请查收！！！')
+                },1000)
+
+                this.axios.get('/beefly/user/api/v1/sendPhoneCode', {
+                    params: {
+                        accessToken: this.$store.state.token,
+                        phoneNo: this.bindPhone.phoneNo
+                    }
+                })
+                .then( (res) => {
+                    this.checkLogin(res)
+                    console.log(res)
+                })
+                .catch( (err) => {
+                    if(err) {
+                        console.log(err)
+                    } else {
+                        that.ruleForm.verificationCode = JSON.parse(res.text).data
+                    }
+                })
+            }
+        },
+        loadData () {
+            this.axios.get('/beefly/user/api/v1/mycenter', {
+                params: {
+                    accessToken: this.$store.state.token
+                }
+            })
+            .then( (res) => {
+                this.checkLogin(res)
+                console.log(res)
+
+                // 填写用户信息
+                this.name = res.data.data.name
+                this.userName = res.data.data.userName
+                this.phoneNo = res.data.data.phoneNo
+
+                if (res.data.data.phoneNoBand === 0) {
+                    this.editShow = false
+                    this.telBinded = false
+                } else {
+                    this.editShow = true
+                    this.telBinded = true
+                }
+            })
+            .catch( (err) => {
+                console.log(err)
+            })
+        },
+        handleSubmit (name) {
+            this.$refs[name].validate((valid) => {
+                if (valid) {
+                    this.axios.get('/beefly/user/api/v1/phoneBinding', {
+                        params: {
+                            accessToken: this.$store.state.token,
+                            phoneNo: this.bindPhone.phoneNo,
+                            phoneCode: this.bindPhone.phoneCode,
+                            passWord: this.bindPhone.passWord
+                        }
+                    })
+                    .then( (res) => {
+                        this.checkLogin(res)
+                        if (res.data.resultCode === 1) {
+                            this.$Message.success('手机号码绑定成功!');
+                            this.loadData()
+                            this.$refs.bindPhone.resetFields()
+                        } else {
+                            this.$Message.error(res.data.message);
+                        }
+                    })
+                } else {
+                    // this.$Message.error('表单验证失败!');
+                }
+            })
+        },
+        handleReset (name) {
+            this.bindModal = false
+            this.$refs[name].resetFields();
+        },
+        openBindModel () {
+            this.bindModal = true
+        },
+        checkLogin (res) {
+           if (res.data.message === '用户登录超时') {
+                this.$router.push('/login')
+           }
+        }
+    }
 }
 </script>
 

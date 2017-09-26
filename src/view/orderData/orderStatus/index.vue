@@ -6,11 +6,11 @@
       <div id="orderStatus_head">
         <div class="orderStatus_head_time">
             <span>时间:</span>
-            <button class="active" @click="handleClick">今日</button>
-            <button @click="handleClick">昨日</button>
-            <button @click="handleClick">近七日</button>
-            <button @click="handleClick">近30天</button>
-            <button @click="handleClick">指定时间段</button>
+            <button class="active" @click="handleClick"  :myId='1'>今日</button>
+            <button @click="handleClick" :myId='2'>昨日</button>
+            <button @click="handleClick" :myId='3'>近七日</button>
+            <button @click="handleClick" :myId='4'>近30天</button>
+            <button @click="handleClick" :myId='5'>指定时间段</button>
         </div>
         <div class="timeSelectShow" v-show="timeSelectShow">
             <DatePicker type="daterange" v-model="timeLine" placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
@@ -20,11 +20,22 @@
       </div>
 
       <div class="orderStatus_table">
-        <Table border size='small' :columns="columns_orderStatusData" :data="orderStatusData"></Table>
-        <Page :total="100" show-sizer show-elevator :styles='page' placement="bottom"></Page>
+        <Spin fix size="large" v-if="spinShow"  class="spin">
+            <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+            <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+        </Spin>
+        <Table :no-data-text='noDataText'  border size='small' :columns="columns_orderStatusData" :data="orderStatusData"></Table>
+        <!-- <Page :total="100" show-sizer show-elevator :styles='page' placement="bottom"></Page> -->
       </div>
 
       <div class="orderStatus_chart">
+            <Spin fix size="large" v-if="spinShow"  class="spin">
+                <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+                <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+            </Spin>
+            <div class="nodata" v-show="noData" style="text-align:center;">
+                <i class="iconfont icon-zanwushuju" style="font-size:400px;color:#dedcdc;"></i>
+            </div>
           <div id="container" style="min-width:400px; height: 400px;"></div>
       </div>
   </div>
@@ -106,21 +117,36 @@
             }
         }
         .orderStatus_table {
+            position: relative;
             padding: 10px;
             margin-top: 20px;
             background: #fff;
             overflow: hidden;
+            .spin {
+                position: absolute;
+                display: inline-block;
+                // background-color: rgba(253, 248, 248,0.0); 
+                background-color: rgba(255, 255, 255, 0.8); 
+            }
         }
         .orderStatus_chart {
+            position: relative;
             margin-top: 20px;
             padding: 10px;
             background: #fff;
+            .spin {
+                position: absolute;
+                display: inline-block;
+                // background-color: rgba(253, 248, 248,0.0); 
+                background-color: rgba(255, 255, 255, 0.8); 
+            }
         }
     }
 </style>
 <script>
 import citySelect from '../../../components/citySelect.vue'
 import { siblings } from '../../../util/util.js'
+import moment from 'moment'
 import $ from 'jquery'
 var Highcharts = require('highcharts');
 // 在 Highcharts 加载之后加载功能模块
@@ -133,6 +159,7 @@ export default {
         return {
             timeSelectShow: false,
             timeLine: '',
+            spinShow: false,
             page: {
                 'float': 'right',
                 'margin-top': '20px'
@@ -140,46 +167,77 @@ export default {
             columns_orderStatusData: [
                 {
                     title: '订单状态',
-                    key: 'orderStatus'
+                    key: 'orderFlow'
                 },
                 {
                     title: '订单数',
-                    key: 'orderNum'
+                    key: 'num'
                 },
                 {
                     title: '数量占比',
-                    key: 'numPercent'
+                    key: 'proportion'
                 }
             ],
-            orderStatusData: [
-                {
-                    orderStatus: '人工开锁',
-                    orderNum: '432423',
-                    numPercent: '2%'
-                }, {
-                    orderStatus: '人工开锁',
-                    orderNum: '432423',
-                    numPercent: '2%'
-                }, {
-                    orderStatus: '人工开锁',
-                    orderNum: '432423',
-                    numPercent: '2%'
-                }, {
-                    orderStatus: '人工开锁',
-                    orderNum: '432423',
-                    numPercent: '2%'
-                }, {
-                    orderStatus: '人工开锁',
-                    orderNum: '432423',
-                    numPercent: '2%'
-                }
-            ]
+            orderStatusData: [],
+            noDataText: '',
+            chartArr: '',
+            noData: false
         }
     },
     mounted () {
-        this.initChart()
+        this.loadData('1')
     },
     methods: {
+        loadData (type) {
+            this.spinShow = true
+            this.noDataText = ''
+
+            this.axios.get('/beefly/orderState/getOrderState', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    type: type,
+                    cityCode: this.$store.state.cityList.toString()
+                }
+            })
+            .then((res) => {
+                this.spinShow = false
+                this.noDataText = '暂无数据'
+                // 判断是否超时
+                this.checkLogin(res)
+                
+                var data = res.data.data
+                if (data.length > 0) {
+                    console.log('data>0')
+                    this.noData = false
+                    var newArr = []
+                    data.map( (item) => {
+                        newArr.push(Object.assign({},item,{proportion: item.proportion + "%"}))
+                        return newArr
+                    })
+                    this.orderStatusData = newArr
+                    // 去掉合计字段集
+                    data.pop()
+                    var arr = new Array()
+                    for (var i in data) {
+                        arr.push([data[i].orderFlow, Number(data[i].proportion)])
+                    }
+                    // 取掉无关字段
+                    arr.pop()
+                    this.chartArr = arr
+
+                    // console.log(this.chartArr)
+                    this.initChart()                    
+                } else {
+                    console.log('data<0')
+                    this.noData = true
+                }
+            })
+            .catch( (err) => {
+                this.spinShow = false
+                this.noDataText = '暂无数据'
+                console.log(err)
+            })
+        },
         handleClick (e) {
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
@@ -191,9 +249,69 @@ export default {
             } else {
                 this.timeSelectShow = false
                 this.timeLine = ''
+                this.loadData(e.target.getAttribute('myId'))
             }
         },
-        searchByTimeLine () {},
+        checkLogin (res) {
+           if (res.data.message === '用户登录超时') {
+                this.$router.push('/login')
+           }
+        },
+        searchByTimeLine () {
+            this.spinShow = true
+            this.noDataText = ''
+
+            console.log(this.timeLine)
+            var beginDate = moment(this.timeLine[0]).format('YYYY-MM-DD')
+            var endDate = moment(this.timeLine[1]).format('YYYY-MM-DD')
+            this.axios.get('/beefly/orderState/getOrderState', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    type: 5,
+                    cityCode: this.$store.state.cityList.toString(),
+                    beginDate,
+                    endDate
+                }
+            })
+            .then((res) => {
+                this.spinShow = false
+                this.noDataText = '暂无数据'
+                // 判断是否超时
+                this.checkLogin(res)
+                
+                var data = res.data.data
+                if (data.length > 0) {
+                    console.log('data>0')
+                    this.noData = false
+                    var newArr = []
+                    data.map( (item) => {
+                        newArr.push(Object.assign({},item,{proportion: item.proportion + "%"}))
+                        return newArr
+                    })
+                    this.orderStatusData = newArr
+                    // 去掉合计字段集
+                    data.pop()
+                    var arr = new Array()
+                    for (var i in data) {
+                        arr.push([data[i].orderFlow, Number(data[i].proportion)])
+                    }
+                    // 取掉无关字段
+                    arr.pop()
+                    this.chartArr = arr
+
+                    // console.log(this.chartArr)
+                    this.initChart()                    
+                } else {
+                    console.log('data<0')
+                    this.noData = true
+                }
+            })
+            .catch( (err) => {
+                this.spinShow = false
+                this.noDataText = '暂无数据'
+                console.log(err)
+            })
+        },
         initChart () {
             var options = {
                 chart: {
@@ -231,23 +349,19 @@ export default {
                 series: [{
                     type: 'pie',
                     name: '不同订单状态的比例',
-                    data: [
-                        ['待出租',   45.0],
-                        ['已预定',       26.8],
-                        // {
-                        //     name: 'Chrome',
-                        //     y: 12.8,
-                        //     sliced: true,
-                        //     selected: true
-                        // },
-                        ['已出租',    8.5],
-                        ['维护中',    6.2]
-                    ]
+                    data: this.chartArr
                 }]
             }
 
             new Highcharts.chart('container', options);
+        },
+        cityChange () {
+            var type = $('.orderStatus_head_time button.active').attr('myId')
+            this.loadData(type)
         }
+    },
+    watch: {
+        '$store.state.cityList': 'cityChange'
     }
 }
 </script>

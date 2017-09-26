@@ -7,7 +7,7 @@
                     <Icon type="ios-paper"></Icon>
                     订单数据
                 </template>
-                <Menu-item name="/index/orderAllData">整体数据</Menu-item>
+                <!-- <Menu-item name="/index/orderAllData">整体数据</Menu-item> -->
                 <Menu-item name="/index/dateAndArea">分日期分地区</Menu-item>
                 <Menu-item name="/index/orderStatus">订单状态构成</Menu-item>
                 <!-- <Menu-item name="1-4">24小时趋势</Menu-item>

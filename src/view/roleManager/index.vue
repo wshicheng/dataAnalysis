@@ -14,7 +14,7 @@
             <Col class="opeartor">
                 <Button type="warning" @click="handleAdd">添加角色</Button>
             </Col>
-            <Table :columns="columns" :data="data"></Table>
+            <Table :columns="columns"  :no-data-text='noDataText'  :data="data"></Table>
             <Spin fix size="large" v-if="spinShow"  class="spin">
                  <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                  <div style="color: #ccc; text-indent: 5px;">  loading...</div>
@@ -91,6 +91,7 @@ export default {
              delId: '',
              index:'',
              editId: '',
+             noDataText: '',
              spinShow: false,
              baseData: [{
                   expand: true,
@@ -238,15 +239,19 @@ export default {
     methods: {
         loadData () {
             this.spinShow = true
+            this.noDataText = ''
             this.axios.get('/beefly/role/api/v1/page', {
                 params: {
                     accessToken: this.$store.state.token
                 }
             })
             .then((res) => {
+                // 判断返回状态
+                this.checkLogin(res)
                 this.data = res.data.data
                 // 关闭Loading
                 this.spinShow = false
+                this.noDataText = '暂无数据'
                 if (res.data.totalPage > 1) {
                     this.pageShow = true
                 }
@@ -255,6 +260,7 @@ export default {
             .catch((err) => {
                 // 关闭Loading
                 this.spinShow = false
+                this.noDataText = '暂无数据'
                 console.log(err)
             })
         },
@@ -319,6 +325,8 @@ export default {
                         }
                     })
                     .then((res) => {
+                        // 判断返回状态
+                        this.checkLogin(res)
                         if (res.data.resultCode === 1) {
                             this.$Message.success('修改成功!');
                             // 关闭弹窗，关闭添加表单
@@ -360,6 +368,8 @@ export default {
                 }
             })
             .then((res) => {
+                // 判断返回状态
+                this.checkLogin(res)
                 if (res.data.resultCode === 1) {
                     this.$Message.success('删除成功!');
                     this.currentPage = 1
@@ -383,6 +393,8 @@ export default {
         },
         handleCurrentPage(currentPage) {
             this.spinShow = true
+            this.noDataText = ''
+
             this.currentPage = currentPage
             this.axios.get('/beefly/role/api/v1/page', {
                 params: {
@@ -392,9 +404,12 @@ export default {
                 }
             })
             .then((res) => {
+                // 判断返回状态
+                this.checkLogin(res)
                 this.data = res.data.data
                 // 关闭Loading
                 this.spinShow = false
+                this.noDataText = '暂无数据'
 
                 if (res.data.totalPage > 1) {
                     this.pageShow = true
@@ -404,11 +419,14 @@ export default {
             .catch((err) => {
                 // 关闭Loading
                 this.spinShow = false
+                this.noDataText = '暂无数据'
                 console.log(err)
             })
         },
         handlePageSize(pageSize) {
             this.spinShow = true
+            this.noDataText = ''
+
             this.pageSize = pageSize
             this.axios.get('/beefly/role/api/v1/page', {
                 params: {
@@ -418,9 +436,12 @@ export default {
                 }
             })
             .then((res) => {
+                // 判断返回状态
+                this.checkLogin(res)
                 this.data = res.data.data
                 // 关闭Loading
                 this.spinShow = false
+                this.noDataText = '暂无数据'
 
                 if (res.data.totalPage > 1) {
                     this.pageShow = true
@@ -430,6 +451,7 @@ export default {
             .catch((err) => {
                 // 关闭Loading
                 this.spinShow = false
+                this.noDataText = '暂无数据'
                 console.log(err)
             })
         },
@@ -455,6 +477,8 @@ export default {
                         }
                     })
                     .then((res) => {
+                        // 判断返回状态
+                        this.checkLogin(res)
                         if (res.data.resultCode === 1) {
                             this.$Message.success('添加成功!');
                             // 关闭弹窗，关闭添加表单
@@ -509,6 +533,7 @@ export default {
                     }
                 })
                 .then((res) => {
+                    this.checkLogin(res)
                     this.data = res.data.data
                     if (res.data.totalPage > 1) {
                         this.pageShow = true
@@ -530,6 +555,11 @@ export default {
                 })
             }
             return arr;
+        },
+        checkLogin (res) {
+            if (res.message === '用户登录超时') {
+                this.$router.push('/login')
+            }
         }
     },
 }

@@ -12,12 +12,13 @@
             </div>
             <div class="timeSelectShow" v-show="timeSelectShow">
                 <DatePicker type="daterange" v-model="timeLine" placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
-                <div class="search"><button @click="searchByTimeLine">搜索</button></div>
+                <div class="search"><button class="DIY_button" @click="searchByTimeLine">搜索</button></div>
             </div>
             <city-select></city-select>
         </div>
 
         <div class="dateAndArea_table">
+            
             <div class="help">
                 <Poptip trigger="hover" style="float: right;"  placement="top-end" title="提示标题" content="提示内容">
                     <span>?</span>
@@ -82,7 +83,7 @@
                 display: inline;
                 position: absolute;
                 left: 335px;
-                top: 9px;
+                top: 11px;
                 div.search {
                     display: inline-block;
                     button {
@@ -310,9 +311,17 @@ export default {
         }
     },
     mounted () {
+        this.loadData()
         this.initChart()
     },
     methods: {
+        loadData () {
+            this.axios.get('/beefly/baseData/api/v1/page', {
+                params: {
+                    accessToken: this.$store.state.token
+                }
+            })
+        },
         handleClick (e) {
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {

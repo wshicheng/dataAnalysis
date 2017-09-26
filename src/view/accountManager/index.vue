@@ -12,7 +12,7 @@
             <span class="lable">联系方式：</span>
             <Input v-model="phone" @on-change="handleQuery" placeholder="手机号\邮箱" style="width: 160px"></Input>
             </Col>
-            <Button class="search" @click="query">查询</Button>
+            <button class="DIY_button" @click="query">查询</button>
 
         </Row>
         <Row class="tableGrid" style="position:relative">
@@ -90,7 +90,7 @@
                 </Form>
             </div>
             <div slot="footer">
-                <Button class="cancel" @click="handleReset('editValidate')" style="margin-left: 8px">重置</Button>
+                <Button class="cancel" @click="closeEditModel" style="margin-left: 8px">取消</Button>
                 <Button type="warning" class="confirm" @click="handleSubmit('editValidate')">提交</Button>
 
             </div>
@@ -102,13 +102,13 @@
             </p>
             <div class="editModal_content">
                 <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
-                    <FormItem label="用户名" prop="username">
+                    <FormItem label="用户名" prop="userName">
                         <Input v-model="formValidate.userName" style="width:300px;" placeholder="不超过100个字符"></Input>
                     </FormItem>
-                    <FormItem label="密码" prop="password">
-                        <Input v-model="formValidate.passWord" style="width:300px;" placeholder="6-20位字符，可包括字母和数字，区分大小写"></Input>
+                    <FormItem label="密码" prop="passWord">
+                        <Input v-model="formValidate.passWord" type="password" style="width:300px;" placeholder="6-20位字符，可包括字母和数字，区分大小写"></Input>
                     </FormItem>
-                    <FormItem label="所属角色" prop="role">
+                    <FormItem label="所属角色" prop="roleName">
                         <Select style="width:300px;" v-model="formValidate.roleName" @on-change="handleRole" placeholder="请选择所属角色">
                             <Option :value="role.roleName" :key="role.id" v-for="role of allRole">{{role.roleName}}</Option>
                         </Select>
@@ -116,7 +116,7 @@
                     <FormItem label="可查看地区" prop="area">
                         <div>
                             <Checkbox :indeterminate="indeterminate" :value="checkAll" @click.prevent.native="handleCheckAll">
-                                全选
+                                全部地区
                             </Checkbox>
                         </div>
                         <CheckboxGroup v-model="formValidate.cityList" @on-change="checkAllGroupChange">
@@ -124,13 +124,13 @@
                         </CheckboxGroup>
                     </FormItem>
                     <FormItem label="姓名" prop="name">
-                        <Input v-model="formValidate.name" style="width:300px;" placeholder="不超过50个字符"></Input>
+                        <Input v-model="formValidate.name" style="width:300px;" placeholder="请输入姓名"></Input>
                     </FormItem>
                     <FormItem label="手机号" prop="phoneNo">
-                        <Input v-model="formValidate.phoneNo" style="width:300px;" placeholder="不超过50个字符"></Input>
+                        <Input v-model="formValidate.phoneNo" style="width:300px;" placeholder="请输入手机号"></Input>
                     </FormItem>
                     <FormItem label="邮箱" prop="email">
-                        <Input v-model="formValidate.email" style="width:300px;" placeholder="不超过50个字符"></Input>
+                        <Input v-model="formValidate.email" style="width:300px;" placeholder="请输入邮箱"></Input>
                     </FormItem>
 
                     <FormItem label="备注" prop="description">
@@ -143,7 +143,7 @@
                 </Form>
             </div>
             <div slot="footer">
-                <Button class="cancel" @click="handleReset('formValidate')" style="margin-left: 8px">重置</Button>
+                <Button class="cancel" @click="closeAddModel" style="margin-left: 8px">取消</Button>
                 <Button type="warning" class="confirm" @click="handleSubmit('formValidate')">提交</Button>
             </div>
         </Modal>
@@ -235,8 +235,7 @@ export default {
                     { required: true, message: '请选择角色', trigger: 'change' }
                 ],
                 cityList: [
-                    { required: false, type: 'array', min: 1, message: '至少选择一个地区', trigger: 'change' },
-
+                    { required: false, type: 'array', min: 1, message: '至少选择一个地区', trigger: 'change' }
                 ],
                 name: [
                     { required: false, message: '姓名不能为空', trigger: 'blur' }
@@ -250,7 +249,7 @@ export default {
                 ],
                 description: [
                     { required: false, message: '请输入个人介绍', trigger: 'blur' },
-                    { type: 'string', min: 20, message: '介绍不能少于20字', trigger: 'blur' }
+                    { type: 'string', max: 200, message: '介绍不能超过200个字符', trigger: 'blur' }
                 ]
             },
             recodeCityList:[],
@@ -455,6 +454,7 @@ export default {
             })
         },
         show(params) {
+            console.log(params.row)
             /*显示弹窗*/
             var that = this
             this.editModal = true
@@ -488,6 +488,14 @@ export default {
         },
         handleReset(name) {
             this.$refs[name].resetFields();
+        },
+        closeEditModel () {
+            // this.$refs.editValidate.resetFields()
+            this.editModal = false
+        },
+        closeAddModel () {
+            this.$refs.formValidate.resetFields()
+            this.addModal = false
         },
         handleDelete(index, id) {
             /*删除Row 数据 根据index 序列号*/
@@ -581,7 +589,7 @@ export default {
                 params: Object.assign({},this.formValidate,{accessToken:this.accessToken},{roleId:this.roleId},{cityStr:this.allCityCode.join(',')})
             }).then((res) => {
                 if (res.data.resultCode === 1) {
-                     this.$Message.success('增加账号成功!');
+                     this.$Message.success('增加添加成功!');
                    this.data.unshift(this.formValidate)
                     this.addModal = false
                 } else if (res.data.resultCode === 0) {
@@ -605,6 +613,7 @@ export default {
         },
         queryData(text) {
             // 调用后台接口 发请求
+            this.spinShow = true
             const { keyword, tel, pageNo, pageSize, accessToken } = text
             this.axios.get('/beefly/user/api/v1/page', {
                 params: { keyword, tel, pageNo, pageSize, accessToken }
@@ -625,7 +634,6 @@ export default {
                 }
             }).catch((error) => {
                 console.log(error)
-                this.pageShow = false
                 this.noDataText = '暂无数据'
                 this.spinShow = false
             })
@@ -663,7 +671,6 @@ export default {
             if(res.length>0){
                  this.roleId = res[0].id
             }
-           
         },
         throttle(fn, context, delay, text) {
             // 节流函数
@@ -741,12 +748,6 @@ div.tableGrid {
     -moz-box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
     -webkit-box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
     box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
-    button.search {
-        outline: none; // border: 1px solid rgb(121, 121, 121);
-        border: 1px solid #ff9900; // background: #797979;
-        background: #ff9900;
-        color: #fff;
-    }
 }
 
 ul.ivu-page {
