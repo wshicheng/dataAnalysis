@@ -204,7 +204,7 @@ export default {
                 },
                 {
                     title: '北京',
-                    key: 'orderTime'
+                    key: 'city'
                 },
                 {
                     title: '合计',
@@ -213,8 +213,9 @@ export default {
             ],
             orderData: [
                 {
-                    area: '无为',
-                    orderNum: '432423'
+                    orderTime: '1111',
+                    city: '111',
+                    total:1
                 }
             ],
             totalListNum: 100,
@@ -242,7 +243,7 @@ export default {
             })
             .then( (res) => {
                 console.log(res.data.data)
-
+                
                 var data = res.data.data
                 
                 //随机取出一个数据制作表头  
@@ -250,18 +251,17 @@ export default {
                 var firstData = data[0]
                 firstData.map( (item) => {
                     console.log('item',item)
-                    for (var i = 0; i < item.length; i++) {
+                    // for (var i = 0; i < item.length; i++) {
                         var obj = {}
 
-                        obj.title = item[i].cityName
+                        obj.title = item.cityName
                         obj.key = $('.dateAndArea_type_select button.active').attr("myType")
 
                         arr.push(obj)
-                    }
+                    // }
                     return arr
                 })
                 
-                console.log(arr)
                 // 将最后一条的合计取出
                 var totalTitle = arr.pop()
                 totalTitle.title = '合计'
@@ -275,6 +275,8 @@ export default {
                 })
                 
                 this.columns_orderData = arr
+                var delData = this.tableDataDel(data)
+                this.orderData = delData
             })
             .catch( (err) => {
                 console.log(err)
@@ -284,7 +286,6 @@ export default {
             var type = $('.dateAndArea_type_select button.active').attr("myType")
             var newArr = []
             arr.map( (item) => {
-                console.log(item)
                 for (var i = 0; i < item.length; i++) {
                     var obj = {}
                     obj[type] = item[i][type]
@@ -293,7 +294,13 @@ export default {
                 }
                 return newArr
             })
+
+            newArr.unshift({
+                'orderTime': arr[0][0].orderTime
+            })
             console.log('newArr',newArr)
+
+            return newArr
         },
         handleClick (e) {
             var elems = siblings(e.target)
