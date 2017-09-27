@@ -90,7 +90,7 @@
                 display: inline;
                 position: absolute;
                 left: 523px;
-                top: 9px;
+                top: 11px;
                 div.search {
                     display: inline-block;
                     button {
@@ -190,13 +190,15 @@ export default {
     methods: {
         loadData (type) {
             this.spinShow = true
-            this.noDataText = ''
+            this.noDataText = '' 
 
             this.axios.get('/beefly/orderState/getOrderState', {
                 params: {
                     accessToken: this.$store.state.token,
                     type: type,
-                    cityCode: this.$store.state.cityList.toString()
+                    cityCode: this.$store.state.cityList.toString(),
+                    beginDate: this.timeLine[0] === '' || null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                    endDate: this.timeLine[0] === '' || null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
                 }
             })
             .then((res) => {
@@ -207,7 +209,6 @@ export default {
                 
                 var data = res.data.data
                 if (data.length > 0) {
-                    console.log('data>0')
                     this.noData = false
                     var newArr = []
                     data.map( (item) => {
@@ -228,7 +229,23 @@ export default {
                     // console.log(this.chartArr)
                     this.initChart()                    
                 } else {
-                    console.log('data<0')
+                    var newArr = []
+                    data.map( (item) => {
+                        newArr.push(Object.assign({},item,{proportion: item.proportion + "%"}))
+                        return newArr
+                    })
+                    this.orderStatusData = newArr
+                    // 去掉合计字段集
+                    data.pop()
+                    var arr = new Array()
+                    for (var i in data) {
+                        arr.push([data[i].orderFlow, Number(data[i].proportion)])
+                    }
+                    // 取掉无关字段
+                    arr.pop()
+                    this.chartArr = arr
+                    $('#container').html('')
+                    this.chartArr = []
                     this.noData = true
                 }
             })
@@ -258,59 +275,77 @@ export default {
            }
         },
         searchByTimeLine () {
-            this.spinShow = true
-            this.noDataText = ''
+            if (this.timeLine[0] === '' || null) {
+                this.$Message.warning('请选择时间段')
+            } else {
+                this.spinShow = true
+                this.noDataText = ''
 
-            console.log(this.timeLine)
-            var beginDate = moment(this.timeLine[0]).format('YYYY-MM-DD')
-            var endDate = moment(this.timeLine[1]).format('YYYY-MM-DD')
-            this.axios.get('/beefly/orderState/getOrderState', {
-                params: {
-                    accessToken: this.$store.state.token,
-                    type: 5,
-                    cityCode: this.$store.state.cityList.toString(),
-                    beginDate,
-                    endDate
-                }
-            })
-            .then((res) => {
-                this.spinShow = false
-                this.noDataText = '暂无数据'
-                // 判断是否超时
-                this.checkLogin(res)
-                
-                var data = res.data.data
-                if (data.length > 0) {
-                    console.log('data>0')
-                    this.noData = false
-                    var newArr = []
-                    data.map( (item) => {
-                        newArr.push(Object.assign({},item,{proportion: item.proportion + "%"}))
-                        return newArr
-                    })
-                    this.orderStatusData = newArr
-                    // 去掉合计字段集
-                    data.pop()
-                    var arr = new Array()
-                    for (var i in data) {
-                        arr.push([data[i].orderFlow, Number(data[i].proportion)])
+                var beginDate = moment(this.timeLine[0]).format('YYYY-MM-DD')
+                var endDate =  moment(this.timeLine[1]).format('YYYY-MM-DD')
+                this.axios.get('/beefly/orderState/getOrderState', {
+                    params: {
+                        accessToken: this.$store.state.token,
+                        type: 5,
+                        cityCode: this.$store.state.cityList.toString(),
+                        beginDate,
+                        endDate
                     }
-                    // 取掉无关字段
-                    arr.pop()
-                    this.chartArr = arr
+                })
+                .then((res) => {
+                    this.spinShow = false
+                    this.noDataText = '暂无数据'
+                    // 判断是否超时
+                    this.checkLogin(res)
+                    
+                    var data = res.data.data
+                    if (data.length > 0) {
+                        this.noData = false
+                        var newArr = []
+                        data.map( (item) => {
+                            newArr.push(Object.assign({},item,{proportion: item.proportion + "%"}))
+                            return newArr
+                        })
+                        this.orderStatusData = newArr
+                        // 去掉合计字段集
+                        data.pop()
+                        var arr = new Array()
+                        for (var i in data) {
+                            arr.push([data[i].orderFlow, Number(data[i].proportion)])
+                        }
+                        // 取掉无关字段
+                        arr.pop()
+                        this.chartArr = arr
 
-                    // console.log(this.chartArr)
-                    this.initChart()                    
-                } else {
-                    console.log('data<0')
-                    this.noData = true
-                }
-            })
-            .catch( (err) => {
-                this.spinShow = false
-                this.noDataText = '暂无数据'
-                console.log(err)
-            })
+                        // console.log(this.chartArr)
+                        this.initChart()                    
+                    } else {
+                        var newArr = []
+                        data.map( (item) => {
+                            newArr.push(Object.assign({},item,{proportion: item.proportion + "%"}))
+                            return newArr
+                        })
+                        this.orderStatusData = newArr
+                        // 去掉合计字段集
+                        data.pop()
+                        var arr = new Array()
+                        for (var i in data) {
+                            arr.push([data[i].orderFlow, Number(data[i].proportion)])
+                        }
+                        // 取掉无关字段
+                        arr.pop()
+                        this.chartArr = arr
+                        $('#container').html('')
+                        this.chartArr = []
+                        this.noData = true
+                    }
+                })
+                .catch( (err) => {
+                    this.spinShow = false
+                    this.noDataText = '暂无数据'
+                    console.log(err)
+                })
+            }
         },
         initChart () {
             var options = {

@@ -10,6 +10,7 @@
             </div>
             <div class="layout-logoInfo">
                 <i class="iconfont icon-zhanghao1"></i>
+                <!-- <i class="icon iconfont icon-touxiang" style="color: #fff; font-size: 50px;"></i> -->
                 <span class="accountUserName">{{userInfo.name}}</span>
                 <i class="iconfont icon-zhuxiao_logout exit" @click="handleLoginOut"></i>
             </div>

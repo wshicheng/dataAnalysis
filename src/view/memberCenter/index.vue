@@ -1,21 +1,25 @@
 <template>
     <div style="margin-right: 20px;">
+        <Breadcrumb class="Breadcrumb">
+            <BreadcrumbItem>个人中心</BreadcrumbItem>
+        </Breadcrumb>
         <div id="homepage_content">
             <div id="home_header">
                 <h1>
-                    <!-- <img src="../../../assets/homepage/2.jpg">
-                    <el-upload
-                        class="my_upload"
-                        :show-file-list="true"
-                        :with-credentials='true'
-                        action=''
+                    <Upload
+                        ref="upload"
+                        :show-upload-list="false"
+                        :format="['jpg','jpeg','png']"
+                        :max-size="2048" 
+                        :on-format-error="handleFormatError"
+                        :on-exceeded-size="handleMaxSize"
+                        :before-upload="handleBeforeUpload"
                         :http-request = 'uploadWay'
-                        :on-success="handleAvatarSuccess"
-                        :before-upload="beforeAvatarUpload">
-                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                        <i v-else  class="icon iconfont icon-touxiang" style="font-size: 180px;line-height: 196px; margin-left: 7px;"></i>
-                        <h3>点击上传营业执照</h3>
-                    </el-upload>  -->
+                        action=""
+                        style="display: inline-block;">
+                        <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+                        <i v-else  class="icon iconfont icon-touxiang" style="font-size: 180px;line-height: 196px; color: #fff; margin-left: 7px;"></i>
+                    </Upload>
                 </h1>
                 <div class="homepage_info">
                     <h2>{{name}}</h2>
@@ -89,7 +93,7 @@
                         <Input v-model="bindPhone.phoneCode" placeholder="请输入手机收到的验证码"></Input>
                     </FormItem>
                     <FormItem label="账户密码" prop="passWord" class="pwd">
-                        <Input v-model="bindPhone.passWord" placeholder="为保障账号安全，您需要填写当前登录账号与密码"></Input>
+                        <Input v-model="bindPhone.passWord" type='password' placeholder="为保障账号安全，您需要填写当前登录账号与密码"></Input>
                     </FormItem>
                 </Form>
             </div>
@@ -117,7 +121,7 @@
                         <Input v-model="editPhone.phoneCode" placeholder="请输入手机收到的验证码"></Input>
                     </FormItem>
                     <FormItem label="账户密码" prop="passWord" class="pwd">
-                        <Input v-model="editPhone.passWord" placeholder="为保障账号安全，您需要填写当前登录账号与密码"></Input>
+                        <Input v-model="editPhone.passWord" type='password' placeholder="为保障账号安全，您需要填写当前登录账号与密码"></Input>
                     </FormItem>
                 </Form>
             </div>
@@ -134,14 +138,14 @@
             </p>
             <div>
                 <Form ref="editPassWord" :model="editPassWord" :rules="editPassWordRule" :label-width="80">
-                    <FormItem label="原始密码" type='password' prop="oldPassWord">
-                        <Input v-model="editPassWord.oldPassWord" placeholder="请输入原始密码"></Input>
+                    <FormItem label="原始密码" prop="oldPassWord">
+                        <Input v-model="editPassWord.oldPassWord" type='password' placeholder="请输入原始密码"></Input>
                     </FormItem>
-                    <FormItem label="新密码" type='password'  prop="newPassWord">
-                        <Input v-model="editPassWord.newPassWord" placeholder="密码为6-20位字符，可包含数字、字母、下划线"></Input>
+                    <FormItem label="新密码"  prop="newPassWord">
+                        <Input v-model="editPassWord.newPassWord" type='password' placeholder="密码为6-20位字符，可包含数字、字母、下划线"></Input>
                     </FormItem>
-                    <FormItem label="确认密码"  type='password' prop="confirmPassWord">
-                        <Input v-model="editPassWord.confirmPassWord" placeholder="确认密码"></Input>
+                    <FormItem label="确认密码" prop="confirmPassWord">
+                        <Input v-model="editPassWord.confirmPassWord" type='password' placeholder="确认密码"></Input>
                     </FormItem>
                 </Form>
             </div>
@@ -154,6 +158,12 @@
 </template>
 
 <style lang='scss' scoped type="text/css">
+    .Breadcrumb {
+        width: 100%;
+        height: 30px;
+        font-size: 16px;
+        line-height: 30px;
+    }
     #member_router {
         width: 100%;
         height: 100%;
@@ -385,6 +395,7 @@
 <script>
 import {checkMobile, IsEmpty} from '../../util/util.js'
 import $ from 'jquery'
+import qs from 'qs'
 export default {
 	name: 'HomePage',
 	data: function (){
@@ -629,6 +640,10 @@ export default {
                     this.editShow = true
                     this.telBinded = true
                 }
+
+                if (res.data.adminUserIconUrl != null) {
+                    this.imageStr = res.data.adminUserIconUrl
+                }
             })
             .catch( (err) => {
                 console.log(err)
@@ -734,6 +749,46 @@ export default {
         cancelEditPassWord (name) {
             this.passWordModal = false
             this.$refs.editPassWord.resetFields();
+        },
+        handleBeforeUpload (file) {
+            console.log(file)
+            console.log(file.file)
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            var data; 
+            var that = this
+            reader.onload = function(e){   
+                data = this.result
+                that.imageUrl = data
+                that.axios.post('/beefly/user/api/v1/saveImage', qs.stringify({
+                        accessToken: that.$store.state.token,
+                        imageStr: 'data'
+                    })
+                )
+                .then( (res) => {
+                    console.log(res)
+                    if (res.data.resultCode === 1) {
+                        this.$Message.success('头像保存成功！')
+                        this.loadData()
+                    } else {
+                        this.$Message.success(res.data.message)
+                    }
+                })
+                .catch( (err) => {
+                    this.$Message.error('网络请求错误')
+                    console.log(err)
+                })
+            }
+            return false
+        },
+        handleFormatError () {
+
+        },
+        handleMaxSize () {
+
+        },
+        uploadWay (file) {
+            console.log('kekekekke')
         }
     }
 }
