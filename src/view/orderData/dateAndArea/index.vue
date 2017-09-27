@@ -6,15 +6,22 @@
         <div id="dateAndArea_head">
             <div class="dateAndArea_head_time">
                 <span>时间:</span>
-                <button class="active"@click="handleClick">近七日</button>
-                <button @click="handleClick">近30天</button>
-                <button @click="handleClick">指定时间段</button>
+                <button class="active"@click="handleClick" :myId='1'>近七日</button>
+                <button @click="handleClick" :myId='2'>近30天</button>
+                <button @click="handleClick" :myId='3'>指定时间段</button>
             </div>
             <div class="timeSelectShow" v-show="timeSelectShow">
                 <DatePicker type="daterange" v-model="timeLine" placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
                 <div class="search"><button class="DIY_button" @click="searchByTimeLine">搜索</button></div>
             </div>
             <city-select></city-select>
+            <div class="dateAndArea_type_select">
+                <span>指标:</span>
+                <button @click="handleTypeClick"  class="active" myType='orderNum'>有效订单数</button>
+                <button @click="handleTypeClick"  myType='orderAmount'>订单金额</button>
+                <button @click="handleTypeClick"  myType='avgAmount'>均单价有效</button>
+                <button @click="handleTypeClick"  myType='payAmount'>实收金额</button>
+            </div>
         </div>
 
         <div class="dateAndArea_table">
@@ -24,8 +31,8 @@
                     <span>?</span>
                 </Poptip>
             </div>
-            <Table border size='small' :columns="columns_orderData" :data="orderData"></Table>
-            <Page :total="100" show-sizer show-elevator :styles='page' placement="bottom"></Page>
+            <Table :loading='loading' border size='small' :columns="columns_orderData" :data="orderData"></Table>
+            <Page :total="totalListNum" show-sizer show-elevator :styles='page' :current='current' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </div>
 
         <div class="dateAndArea_chart">
@@ -108,6 +115,33 @@
                     }
                 }
             }
+            div.dateAndArea_type_select {
+                margin-bottom: 10px;
+                span:nth-of-type(1) {
+                    margin-right: 9px;
+                }
+                button {
+                    width: 80px;
+                    height: 30px;
+                    line-height: 30px;
+                    cursor: pointer;
+                    display: inline-block;
+                    background: #fff;
+                    border: 1px solid #dddee1;
+                    border-radius: 4px;
+                    text-align: center;
+                    color: #565c6b;
+                    outline: none;
+                    margin-right: 10px;
+                }
+                button:nth-last-of-type(1) {
+                    width: 80px;
+                }
+                button.active {
+                    border: 1px solid orange;
+                    color: orange;
+                }
+            }
         }
         .dateAndArea_table {
             padding: 10px;
@@ -145,6 +179,7 @@
 </style>
 <script>
 import citySelect from '../../../components/citySelect.vue'
+import moment from 'moment'
 import { siblings } from '../../../util/util.js'
 import $ from 'jquery'
 var Highcharts = require('highcharts');
@@ -164,163 +199,101 @@ export default {
             },
             columns_orderData: [
                 {
-                    title: '地区',
-                    key: 'area'
+                    title: '日期',
+                    key: 'orderTime'
                 },
                 {
-                    title: '订单数',
-                    key: 'orderNum',
-                    sortable: true
+                    title: '北京',
+                    key: 'orderTime'
                 },
                 {
-                    title: '订单金额(￥)',
-                    key: 'orderMoney',
-                    sortable: true
-                },
-                {
-                    title: '均单价',
-                    key: 'price',
-                    sortable: true
-                },
-                {
-                    title: '实际支付金额',
-                    key: 'actualMoney',
-                    sortable: true
-                },
-                {
-                    title: '实收率',
-                    key: 'earningMoney'
-                },
-                {
-                    title: '优惠卷订单数',
-                    key: 'discountsNum'
-                },
-                {
-                    title: '平均订单时长(min)',
-                    key: 'time',
-                    width: 150
-                },
-                {
-                    title: '平均订单里程(m)',
-                    key: 'mileage'
+                    title: '合计',
+                    key: 'total'
                 }
             ],
             orderData: [
                 {
                     area: '无为',
-                    orderNum: '432423',
-                    orderMoney: '23213123',
-                    price: '2',
-                    actualMoney: '323',
-                    earningMoney: '20%',
-                    discountsNum: '234',
-                    time: '232',
-                    mileage: '20',
-                },{
-                    area: '无为',
-                    orderNum: '432423',
-                    orderMoney: '23213123',
-                    price: '2',
-                    actualMoney: '323',
-                    earningMoney: '20%',
-                    discountsNum: '234',
-                    time: '232',
-                    mileage: '20',
-                },{
-                    area: '无为',
-                    orderNum: '432423',
-                    orderMoney: '23213123',
-                    price: '2',
-                    actualMoney: '323',
-                    earningMoney: '20%',
-                    discountsNum: '234',
-                    time: '232',
-                    mileage: '20',
-                },{
-                    area: '无为',
-                    orderNum: '432423',
-                    orderMoney: '23213123',
-                    price: '2',
-                    actualMoney: '323',
-                    earningMoney: '20%',
-                    discountsNum: '234',
-                    time: '232',
-                    mileage: '20',
-                },{
-                    area: '无为',
-                    orderNum: '432423',
-                    orderMoney: '23213123',
-                    price: '2',
-                    actualMoney: '323',
-                    earningMoney: '20%',
-                    discountsNum: '234',
-                    time: '232',
-                    mileage: '20',
-                },{
-                    area: '无为',
-                    orderNum: '432423',
-                    orderMoney: '23213123',
-                    price: '2',
-                    actualMoney: '323',
-                    earningMoney: '20%',
-                    discountsNum: '234',
-                    time: '232',
-                    mileage: '20',
-                },{
-                    area: '无为',
-                    orderNum: '432423',
-                    orderMoney: '23213123',
-                    price: '2',
-                    actualMoney: '323',
-                    earningMoney: '20%',
-                    discountsNum: '234',
-                    time: '232',
-                    mileage: '20',
-                },{
-                    area: '无为',
-                    orderNum: '432423',
-                    orderMoney: '23213123',
-                    price: '2',
-                    actualMoney: '323',
-                    earningMoney: '20%',
-                    discountsNum: '234',
-                    time: '232',
-                    mileage: '20',
-                },{
-                    area: '无为',
-                    orderNum: '432423',
-                    orderMoney: '23213123',
-                    price: '2',
-                    actualMoney: '323',
-                    earningMoney: '20%',
-                    discountsNum: '234',
-                    time: '232',
-                    mileage: '20',
-                },{
-                    area: '无为',
-                    orderNum: '432423',
-                    orderMoney: '23213123',
-                    price: '2',
-                    actualMoney: '323',
-                    earningMoney: '20%',
-                    discountsNum: '234',
-                    time: '232',
-                    mileage: '20',
+                    orderNum: '432423'
                 }
-            ]
+            ],
+            totalListNum: 100,
+            pageSizeOpts: [10, 20, 30, 40],
+            pageSize: 10,
+            current: 1,
+            loading: false
         }
     },
     mounted () {
-        this.loadData()
+        this.loadData('1')
         this.initChart()
     },
     methods: {
-        loadData () {
-            this.axios.get('/beefly/baseData/api/v1/page', {
+        loadData (type) {
+            this.axios.get('/beefly/dateCityOrders/api/v1/page', {
                 params: {
-                    accessToken: this.$store.state.token
+                    accessToken: this.$store.state.token,
+                    type: type,
+                    beginTime: this.timeLine === ''?'':moment(this.timeLine[0]).format('yyyy-MM-DD'),
+                    endTime: this.timeLine === ''?'':moment(this.timeLine[1]).format('yyyy-MM-DD'),
+                    pageNo: this.current,
+                    pageSize: this.pageSize
                 }
             })
+            .then( (res) => {
+                console.log(res.data.data)
+
+                var data = res.data.data
+                
+                //随机取出一个数据制作表头  
+                var arr = []
+                var firstData = data[0]
+                firstData.map( (item) => {
+                    console.log('item',item)
+                    for (var i = 0; i < item.length; i++) {
+                        var obj = {}
+
+                        obj.title = item[i].cityName
+                        obj.key = $('.dateAndArea_type_select button.active').attr("myType")
+
+                        arr.push(obj)
+                    }
+                    return arr
+                })
+                
+                console.log(arr)
+                // 将最后一条的合计取出
+                var totalTitle = arr.pop()
+                totalTitle.title = '合计'
+                totalTitle.key = $('.dateAndArea_type_select button.active').attr("myType")
+                
+                arr.push(totalTitle)
+                // 讲日期插入动态title
+                arr.unshift({
+                    title: '日期',
+                    key: 'orderTime'
+                })
+                
+                this.columns_orderData = arr
+            })
+            .catch( (err) => {
+                console.log(err)
+            })
+        },
+        tableDataDel (arr) {
+            var type = $('.dateAndArea_type_select button.active').attr("myType")
+            var newArr = []
+            arr.map( (item) => {
+                console.log(item)
+                for (var i = 0; i < item.length; i++) {
+                    var obj = {}
+                    obj[type] = item[i][type]
+
+                    newArr.push(obj)
+                }
+                return newArr
+            })
+            console.log('newArr',newArr)
         },
         handleClick (e) {
             var elems = siblings(e.target)
@@ -333,7 +306,15 @@ export default {
             } else {
                 this.timeSelectShow = false
                 this.timeLine = ''
+                this.loadData(e.target.getAttribute('myId'))
             }
+        },
+        handleTypeClick (e) {
+            var elems = siblings(e.target)
+            for (var i = 0; i < elems.length; i++) {
+                elems[i].setAttribute('class', '')
+            }
+            e.target.setAttribute('class', 'active')
         },
         searchByTimeLine () {},
         initChart () {
@@ -370,7 +351,7 @@ export default {
                     }
                 },
                 series: [{
-                    name: '东京',
+                    name: 'd',
                     data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
                 }, {
                     name: '伦敦',
@@ -403,6 +384,16 @@ export default {
             }
 
             new Highcharts.chart('container', options);
+        },
+        handleCurrentPage(currentPage) {
+            // loading显示，同时让无数据的文本为空
+            this.spinShow = true
+            this.noDataText = ''
+        },
+        handlePageSize(pageSize) {
+            // loading显示，同时让无数据的文本为空
+            this.spinShow = true
+            this.noDataText = ''
         }
     }
 }

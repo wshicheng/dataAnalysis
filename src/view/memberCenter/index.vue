@@ -3,19 +3,19 @@
         <div id="homepage_content">
             <div id="home_header">
                 <h1>
-                    <!-- <img src="../../../assets/homepage/2.jpg"> -->
-                    <!-- <el-upload
-    						class="my_upload"
-    						:show-file-list="true"
-    						:with-credentials='true'
-    						action=''
-    						:http-request = 'uploadWay'
-    						:on-success="handleAvatarSuccess"
-    						:before-upload="beforeAvatarUpload">
-    						<img v-if="imageUrl" :src="imageUrl" class="avatar">
-    					  <i v-else  class="icon iconfont icon-touxiang" style="font-size: 180px;line-height: 196px; margin-left: 7px;"></i>
-    						<h3>点击上传营业执照</h3>
-    					</el-upload>  -->
+                    <!-- <img src="../../../assets/homepage/2.jpg">
+                    <el-upload
+                        class="my_upload"
+                        :show-file-list="true"
+                        :with-credentials='true'
+                        action=''
+                        :http-request = 'uploadWay'
+                        :on-success="handleAvatarSuccess"
+                        :before-upload="beforeAvatarUpload">
+                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                        <i v-else  class="icon iconfont icon-touxiang" style="font-size: 180px;line-height: 196px; margin-left: 7px;"></i>
+                        <h3>点击上传营业执照</h3>
+                    </el-upload>  -->
                 </h1>
                 <div class="homepage_info">
                     <h2>{{name}}</h2>
@@ -66,7 +66,7 @@
                     </span>
                     <span style="font-size: 16px;">登录密码</span>
                     <span style="color: #ccc;">建议使用6-20个字符，包含字母、数字、下划线</span>
-                    <button @click='$router.push({path:"/index/memberCenter/amendPassword"})'>修改密码</button>
+                    <button @click="passWordModal = true">修改密码</button>
                 </li>
             </ul>
         </div>
@@ -99,17 +99,17 @@
             </div>
         </Modal>
 
-        <!-- 编辑模态框 -->
+        <!-- 修改模态框 -->
         <Modal v-model="editModal" width="431" :styles="{top: '20%'}" class="editModal_form">
             <p slot="header" class="editModal_head">
-                <span>绑定手机号码</span>
+                <span>修改手机号码</span>
             </p>
             <div class="bindModal_body">
                 <Form ref="editPhone" :model="editPhone" :rules="editPhoneRule" :label-width="80">
                     <FormItem label="手机号" prop="phoneNo" class="phone">
-                        <Input v-model="editPhone.phoneNo" placeholder="请输入手机号"></Input>
+                        <Input v-model="editPhone.phoneNo" placeholder="请输入新手机号"></Input>
                         <Button class="sendCode" 
-                        @click="getVerCode(editPhone.phoneNo)"
+                        @click="editGetVerCode(editPhone.phoneNo)"
                         :plain="isPlain"
                         :disabled="isDisabled">发送验证码</Button>
                     </FormItem>
@@ -124,6 +124,30 @@
             <div slot="footer">
                 <Button class="cancel" @click="handleReset2('editPhone')" style="margin-left: 8px">取消</Button>
                 <Button type="warning" class="confirm" @click="handleSubmit2('editPhone')">立即绑定</Button>
+            </div>
+        </Modal>
+
+        <!-- 修改密码模态框 -->
+        <Modal v-model="passWordModal" width="431" :styles="{top: '20%'}" class="editModal_form">
+            <p slot="header" class="editModal_head">
+                <span>修改密码</span>
+            </p>
+            <div>
+                <Form ref="editPassWord" :model="editPassWord" :rules="editPassWordRule" :label-width="80">
+                    <FormItem label="原始密码" type='password' prop="oldPassWord">
+                        <Input v-model="editPassWord.oldPassWord" placeholder="请输入原始密码"></Input>
+                    </FormItem>
+                    <FormItem label="新密码" type='password'  prop="newPassWord">
+                        <Input v-model="editPassWord.newPassWord" placeholder="密码为6-20位字符，可包含数字、字母、下划线"></Input>
+                    </FormItem>
+                    <FormItem label="确认密码"  type='password' prop="confirmPassWord">
+                        <Input v-model="editPassWord.confirmPassWord" placeholder="确认密码"></Input>
+                    </FormItem>
+                </Form>
+            </div>
+            <div slot="footer">
+                <Button class="cancel" @click="cancelEditPassWord('editPassWord')" style="margin-left: 8px">取消</Button>
+                <Button type="warning" class="confirm" @click="confirmEditPassWord('editPassWord')">立即修改</Button>
             </div>
         </Modal>
     </div>
@@ -385,6 +409,25 @@ export default {
                 callback()
             }
         }
+        var validatePass = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请输入密码'))
+            } else {
+                if (this.editPassWord.confirmPassWord !== '') {
+                    this.$refs.editPassWord.validateField('confirmPassWord')
+                }
+                callback()
+            }
+        }
+        var validateCheckPass = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请再次输入密码'))
+            } else if (value !== this.editPassWord.newPassWord) {
+                callback(new Error('两次输入密码不一致!'))
+            } else {
+                callback()
+            }
+        }
 		return {
 			updateEmail: '',
 			name: '姓名',
@@ -396,6 +439,7 @@ export default {
 			isBinded: false,
             imageUrl: '',
             editShow: false,
+            // 绑定手机号字段与规则
 			bindPhone: {
                 phoneNo: '',
                 phoneCode: '',
@@ -417,7 +461,52 @@ export default {
                     { min: 6, message: '请输入正确密码', trigger: 'blur' }
                 ]
             },
-            bindModal: false,  
+            // 修改手机号码字段与规则
+			editPhone: {
+                phoneNo: '',
+                phoneCode: '',
+                passWord: ''
+            },
+            editPhoneRule: {
+                phoneNo: [
+                    {
+                        required: true, trigger: 'blur', validator: validateTel
+                    }
+                ],
+                phoneCode: [
+                    {
+                        required: true, message: '请输入验证码', validator: validateVerCode 
+                    }
+                ],
+                passWord: [
+                    { required: true, message: '请输入密码', trigger: 'blur' },
+                    { min: 6, message: '请输入正确密码', trigger: 'blur' }
+                ]
+            },
+            // 修改密码字段与规则
+            editPassWord: {
+                oldPassWord: '',
+                newPassWord: '',
+                confirmPassWord: ''
+            },
+            editPassWordRule: {
+                oldPassWord: [
+                    { required: true, validator: validatePass, trigger: 'blur' },
+                    { min: 6, max: 20, message: '密码长度应该在6-20位之间', trigger: 'change' },
+                    { min: 6, max: 20, message: '密码长度应该在6-20位之间', trigger: 'blur' }
+                ],
+                newPassWord: [
+                    { required: true, validator: validatePass, trigger: 'blur' },
+                    { min: 6, max: 20, message: '密码长度应该在6-20位之间', trigger: 'change' },
+                    { min: 6, max: 20, message: '密码长度应该在6-20位之间', trigger: 'blur' }
+                ],
+                confirmPassWord: [
+                    { required: true, validator: validateCheckPass, trigger: 'blur' }
+                ]
+            },
+            editModal: false,
+            bindModal: false,
+            passWordModal: false,
             isPlain:true,
             isDisabled:false,
             initText: ''
@@ -442,6 +531,7 @@ export default {
                     if(initTime<=0){
                         that.isDisabled = false
                         that.isPlain = true
+                        $btn.text('')
                         $btn.text(that.initText)
                         clearInterval(timer)
                         return
@@ -467,7 +557,52 @@ export default {
                     if(err) {
                         console.log(err)
                     } else {
-                        that.ruleForm.verificationCode = JSON.parse(res.text).data
+                        that.bindPhone.verificationCode = JSON.parse(res.text).data
+                    }
+                })
+            }
+        },
+        editGetVerCode (val) {
+            console.log(val)
+            var that = this
+            var $btn = $('button.sendCode')
+            var text = $btn.text()
+            this.initText = text
+            var initTime = 60
+            if(checkMobile(val)){
+                this.isDisabled = true
+                this.isPlain = false
+                var timer = setInterval(function(){
+                    initTime--
+                    if(initTime<=0){
+                        that.isDisabled = false
+                        that.isPlain = true
+                        $btn.text('')
+                        $btn.text(that.initText)
+                        clearInterval(timer)
+                        return
+                    }else {
+                        $btn.text(initTime + 's')
+                    }
+                },1000)
+                setTimeout(function(){
+                    that.$Message.warning('已向您的手机发送验证码，请查收！！！')
+                },1000)
+
+                this.axios.get('/beefly/user/api/v1/sendPhoneCode', {
+                    params: {
+                        accessToken: this.$store.state.token,
+                        phoneNo: this.editPhone.phoneNo
+                    }
+                })
+                .then( (res) => {
+                    this.checkLogin(res)
+                })
+                .catch( (err) => {
+                    if(err) {
+                        console.log(err)
+                    } else {
+                        that.editPhone.verificationCode = JSON.parse(res.text).data
                     }
                 })
             }
@@ -536,6 +671,69 @@ export default {
            if (res.data.message === '用户登录超时') {
                 this.$router.push('/login')
            }
+        },
+        openEditModal () {
+            this.editModal = true
+        },
+        handleReset2 (name) {
+            this.editModal = false
+            this.$refs[name].resetFields();
+        },
+        handleSubmit2 (name) {
+            this.$refs[name].validate((valid) => {
+                if (valid) {
+                    this.axios.get('/beefly/user/api/v1/phoneBinding', {
+                        params: {
+                            accessToken: this.$store.state.token,
+                            phoneNo: this.editPhone.phoneNo,
+                            phoneCode: this.editPhone.phoneCode,
+                            passWord: this.editPhone.passWord
+                        }
+                    })
+                    .then( (res) => {
+                        this.checkLogin(res)
+                        if (res.data.resultCode === 1) {
+                            this.$Message.success('手机号码绑定成功!');
+                            this.loadData()
+                            this.$refs.editPhone.resetFields()
+                        } else {
+                            this.$Message.error(res.data.message);
+                        }
+                    })
+                } else {
+                    // this.$Message.error('表单验证失败!');
+                }
+            })
+        },
+        confirmEditPassWord (name) {
+            this.$refs[name].validate((valid) => {
+                if (valid) {
+                    this.axios.get('/beefly/user/api/v1/changePassWord', {
+                        params: {
+                            accessToken: this.$store.state.token,
+                            oldPassWord: this.editPassWord.oldPassWord,
+                            newPassWord: this.editPassWord.newPassWord
+                        }
+                    })
+                    .then( (res) => {
+                        this.checkLogin(res)
+                        if (res.data.resultCode === 1) {
+                            this.$Message.success('密码修改成功!');
+                            this.loadData()
+                            this.$refs.editPassWord.resetFields()
+                            this.passWordModal = false
+                        } else {
+                            this.$Message.error(res.data.message);
+                        }
+                    })
+                } else {
+                    // this.$Message.error('表单验证失败!');
+                }
+            })
+        },
+        cancelEditPassWord (name) {
+            this.passWordModal = false
+            this.$refs.editPassWord.resetFields();
         }
     }
 }
