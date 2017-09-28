@@ -1,6 +1,6 @@
 <template>
     <div class="menu">
-        <Menu v-on:on-select="handleRoute" :active-name='menuActiveName' id="ul" :theme="theme2" :open-names="[]" :accordion='accord' width="auto">
+        <Menu v-on:on-select="handleRoute" @on-open-change='openChange' :active-name='menuActiveName' id="ul" :theme="theme2" :open-names="openNames" :accordion='accord' width="auto">
         <!-- <Menu-item name="/">首页</Menu-item> -->
             <Submenu name="orderData">
                 <template slot="title">
@@ -92,8 +92,13 @@ export default {
         return {
             theme2: 'dark',
             menuActiveName: "",
-            accord: true
+            accord: true,
+            openNames: []
         }
+    },
+    beforeMount () {
+         var openId = window.sessionStorage.getItem('openNames').toString()
+         this.openNames.push(openId)
     },
     methods: {
         handleRoute(name) {
@@ -101,6 +106,11 @@ export default {
         },
         changeMenuActiveName () {
             this.menuActiveName = this.$store.state.menuActiveName
+        },
+        openChange (name) {
+            // console.log('name', name)
+            this.openNames = name
+            window.sessionStorage.setItem('openNames', name)
         }
     },
     watch: {

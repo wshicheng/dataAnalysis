@@ -4,15 +4,15 @@
             <BreadcrumbItem>账号管理</BreadcrumbItem>
         </Breadcrumb>
         <Row class="datePick_zone">
-            <Col span="7">
+            <!-- <Col span="7"> -->
             <span class="lable">关键字：</span>
             <Input v-model="userName" @on-change="handleQuery" placeholder="姓名\用户名" style="width: 160px"></Input>
-            </Col>
-            <Col span="7">
-            <span class="lable">联系方式：</span>
+            <!-- </Col> -->
+            <!-- <Col span="7"> -->
+            <span class="lable" style="margin-left: 30px;">联系方式：</span>
             <Input v-model="phone" @on-change="handleQuery" placeholder="手机号\邮箱" style="width: 160px"></Input>
-            </Col>
-            <button class="DIY_button" @click="query">查询</button>
+            <!-- </Col> -->
+            <button class="DIY_button" @click="query" style="margin-left: 30px;position: relative;top: 1px;">查询</button>
 
         </Row>
         <Row class="tableGrid" style="position:relative">
@@ -211,7 +211,7 @@ export default {
                 ],
                 description: [
                     { required: false, message: '请输入个人介绍', trigger: 'blur' },
-                    { type: 'string', min: 20, message: '介绍不能少于20字', trigger: 'blur' }
+                    { type: 'string', max: 200, message: '不能超过200个字符', trigger: 'blur' }
                 ]
             },
             formValidate: {
@@ -332,7 +332,7 @@ export default {
                                         textAlign: 'center',
                                         visible: 'hidden'
                                     }
-                                }, '启用'),
+                                }, '冻结'),
                                 h('span', {
                                     style: {
                                         width: '50%',
@@ -341,7 +341,7 @@ export default {
                                         lineHeight: '24px',
                                         textAlign: 'center'
                                     }
-                                }, '冻结'),
+                                }, '启用'),
                                 h('span', {
                                     style: {
                                         width: '26px',
@@ -694,6 +694,8 @@ export default {
         }
     },
     mounted() {
+        document.title = '数据运营平台 - 账号管理'
+        this.$store.dispatch('menuActiveName', '/index/accountManager')
         this.query()
         this.queryCity()
         this.queryRole()

@@ -6,8 +6,8 @@
         <Row class="datePick_zone">
            <Col span="10">
              <span class="lable">角色名称：</span>
-                <Input v-model="keyword" @on-change="inputChange" placeholder="姓名\用户名" style="width: 300px"></Input>
-                <Button type="warning" @click="searchByName">搜索</Button>
+                <Input v-model="keyword" @on-change="inputChange" placeholder="角色名称" style="width: 300px"></Input>
+                <button class="DIY_button" @click="searchByName" style="float: right; font-weight: 400;">查询</button>
            </Col>
         </Row>
         <Row class="tableGrid">
@@ -234,6 +234,7 @@ export default {
         }
     },
     mounted () {
+        this.$store.dispatch('menuActiveName', '/index/roleManager')
         this.loadData()
     },
     methods: {

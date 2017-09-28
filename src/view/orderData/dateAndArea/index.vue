@@ -25,7 +25,10 @@
         </div>
 
         <div class="dateAndArea_table">
-            
+            <Spin fix size="large" v-if="spinShow"  class="spin">
+                <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+                <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+            </Spin>
             <!-- <div class="help">
                 <Poptip trigger="hover" style="float: right;"  placement="top-end" title="数据字段说明">
                     <span>?</span>
@@ -35,11 +38,34 @@
                     </div>
                 </Poptip>
             </div> -->
-            <Table :loading='loading' border size='small' :columns="columns_orderData" :data="orderData"></Table>
+            <Table :no-data-text='noDataText' :loading='loading' border size='small' :columns="columns_orderData" :data="orderData"></Table>
             <Page :total="totalListNum" show-sizer show-elevator :styles='page' :current='current' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </div>
 
+        <div class="dateAndArea_table_total">
+            <Spin fix size="large" v-if="spinShow2"  class="spin">
+                <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+                <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+            </Spin>
+            <div class="title">
+                <div class="avg">
+                    平均
+                </div>
+                <div class="total">
+                    合计
+                </div>
+            </div>
+            <Table :no-data-text='noDataText' class="totalTable" :show-header='showHeader' border size='small' :columns="columns_total" :data="totalData"></Table>
+        </div>
+
         <div class="dateAndArea_chart">
+            <Spin fix size="large" v-if="spinShow"  class="spin">
+                <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+                <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+            </Spin>
+            <div class="nodata" v-show="noData" style="text-align:center;">
+                <i class="iconfont icon-zanwushuju" style="font-size:400px;color:#dedcdc;"></i>
+            </div>
             <div id="container" style="min-width:400px; height: 400px;"></div>
         </div>
     </div>
@@ -151,7 +177,14 @@
             padding: 10px;
             margin-top: 20px;
             background: #fff;
+            position: relative;
             overflow: hidden;
+            .spin {
+                position: absolute;
+                display: inline-block;
+                // background-color: rgba(253, 248, 248,0.0); 
+                background-color: rgba(255, 255, 255, 0.8); 
+            }
             .help {
                 width: 100%;
                 height: 30px;
@@ -189,10 +222,49 @@
                 }
             }
         }
+        .dateAndArea_table_total {
+            padding: 10px;
+            width: 100%;
+            overflow: hidden;
+            background: #fff;
+            position: relative;
+            div.title {
+                float: left;
+                width: 200px;
+                div.avg {
+                    width: 100%;
+                    height: 41px;
+                    background: #fcf;
+                    text-align: center;
+                    line-height: 41px;
+                    color: #fff;
+                    font-weight: bolder;
+                }
+                div.total {
+                    width: 100%;
+                    height: 41px;
+                    background: #ccf;
+                    text-align: center;
+                    line-height: 41px;
+                    color: #fff;
+                    font-weight: bolder;
+                }
+            }
+            div.totalTable {
+                // float: left;
+            }
+        }
         .dateAndArea_chart {
             margin-top: 20px;
+            position: relative;
             padding: 10px;
             background: #fff;
+            .spin {
+                position: absolute;
+                display: inline-block;
+                // background-color: rgba(253, 248, 248,0.0); 
+                background-color: rgba(255, 255, 255, 0.8); 
+            }
         }
     }
 </style>
@@ -237,26 +309,54 @@ export default {
                     total:1
                 }
             ],
+            columns_total: [
+                {
+                    title: '日期',
+                    key: 'orderTime'
+                },
+                {
+                    title: '北京',
+                    key: 'city'
+                },
+                {
+                    title: '合计',
+                    key: 'total'
+                }
+            ],
+            totalData: [],
             totalListNum: 100,
             pageSizeOpts: [10, 20, 30, 40],
             pageSize: 10,
             current: 1,
-            loading: false
+            loading: false,
+            spinShow: false,
+            spinShow2: false,
+            showHeader: false,
+            chartTime: [],
+            chartData: [],
+            noDataText: '',
+            noData: false
         }
     },
     mounted () {
+        this.$store.dispatch('menuActiveName', '/index/dateAndArea')
+        document.title = '订单数据 - 分日期分地区'
         this.loadData('1')
-        this.initChart()
+        this.loadTotalData('1')
     },
     methods: {
         loadData (type) {
-            this.loading = true
+            this.spinShow = true
+            this.noDataText = ''
+            // 默认加载时去掉无数据图片
+            this.noData = false
+
             this.axios.get('/beefly/dateCityOrders/api/v1/page', {
                 params: {
                     accessToken: this.$store.state.token,
                     type: type,
-                    beginTime: this.timeLine === ''?'':moment(this.timeLine[0]).format('yyyy-MM-DD'),
-                    endTime: this.timeLine === ''?'':moment(this.timeLine[1]).format('yyyy-MM-DD'),
+                    beginTime: this.timeLine === '' || 'null'?'':moment(this.timeLine[0]).format('yyyy-MM-DD'),
+                    endTime: this.timeLine === '' || 'null'?'':moment(this.timeLine[1]).format('yyyy-MM-DD'),
                     pageNo: this.current,
                     pageSize: this.pageSize
                 }
@@ -264,46 +364,111 @@ export default {
             .then( (res) => {
                 console.log(res.data.data)
                 
-                var data = res.data.data
-                
-                //随机取出一个数据制作表头  
-                var arr = []
-                var firstData = data[0]
-                firstData.map( (item) => {
-                    // for (var i = 0; i < item.length; i++) {
+                if (res.data.data === '') {
+                    this.spinShow = true
+                    this.noDataText = '暂无数据'
+
+                    this.noData = true
+                } else {
+                    var data = res.data.data
+
+                    this.noData = false
+                    //随机取出一个数据制作表头
+                    var arr = []
+                    var firstData = data[0]
+                    firstData.map( (item) => {
                         var obj = {}
 
                         obj.title = item.cityName
                         obj.key = $('.dateAndArea_type_select button.active').attr("myType") + item.cityCode
 
                         arr.push(obj)
-                    // }
+                        return arr
+                    })
+                    // 将最后一条的合计取出
+                    var totalTitle = arr.pop()
+                    totalTitle.title = '合计'
+                    totalTitle.key = $('.dateAndArea_type_select button.active').attr("myType")
+                    
+                    arr.push(totalTitle)
+                    // 讲日期插入动态title
+                    arr.unshift({
+                        title: '日期',
+                        key: 'orderTime'
+                    })
+                    
+                    this.columns_orderData = arr
+                    var delData = this.tableDataDel(data)
+                    this.orderData = delData
+
+                    this.totalListNum = res.data.totalItems
+                    // 关闭loading 
+                    this.spinShow = false
+                    this.noDataText = ''
+
+                    this.initChart()
+                }
+                
+            })
+            .catch( (err) => {
+                console.log(err)
+                this.spinShow = false
+                this.noDataText = '暂无数据'
+            })
+        },
+        loadTotalData (type) {
+            this.spinShow2 = true
+            this.noDataText = ''
+            
+            this.axios.get('/beefly/dateCityOrders/api/v1/avgTotal', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    type: type,
+                    beginTime: this.timeLine === '' || 'null'?'':moment(this.timeLine[0]).format('yyyy-MM-DD'),
+                    endTime: this.timeLine === '' || 'null'?'':moment(this.timeLine[1]).format('yyyy-MM-DD')
+                }
+            })
+            .then( (res) => {
+                console.log(res.data.data)
+                
+                var data = res.data.data
+                //随机取出一个数据制作表头  
+                var arr = []
+                var firstData = data[0]
+                firstData.map( (item) => {
+                    var obj = {}
+
+                    obj.title = item.cityName
+                    obj.key = $('.dateAndArea_type_select button.active').attr("myType") + item.cityCode
+
+                    arr.push(obj)
                     return arr
                 })
-                
                 // 将最后一条的合计取出
                 var totalTitle = arr.pop()
                 totalTitle.title = '合计'
                 totalTitle.key = $('.dateAndArea_type_select button.active').attr("myType")
                 
                 arr.push(totalTitle)
-                // 讲日期插入动态title
-                arr.unshift({
-                    title: '日期',
-                    key: 'orderTime'
-                })
+                // 将日期插入动态title
+                // arr.unshift({
+                //     title: '日期',
+                //     key: 'orderTime'
+                // })
                 
-                this.columns_orderData = arr
-                var delData = this.tableDataDel(data)
-                this.orderData = delData
+                this.columns_total = arr
+                var delData = this.tableTotalDataDel(data)
+                this.totalData = delData
 
+                // 关闭loading 
+                this.spinShow2 = false
+                this.noDataText = ''
 
-                this.loading = false
-
-                this.totalListNum = res.data.totalItems
             })
             .catch( (err) => {
                 console.log(err)
+                this.spinShow2 = false
+                this.noDataText = '暂无数据'
             })
         },
         tableDataDel (arr) {
@@ -312,7 +477,28 @@ export default {
             arr.map( (list) => {
                 // 去除合计字段
                 var dataTime = list.pop()
-                console.log(dataTime)
+                var obj = {}
+                for (var i=0; i<list.length; i++) {
+                    var code = type + list[i].cityCode
+                    obj[code] = list[i][type]
+                }
+                newArr.push(obj)
+                obj.orderTime = dataTime.orderTime
+                // 在这里创造chart图表的x轴坐标
+                this.chartTime.push(dataTime.orderTime)
+                obj[type] = dataTime[type]
+                return newArr
+            })
+            // console.log('newArr',newArr)
+
+            return newArr
+        },
+        tableTotalDataDel (arr) {
+            var type = $('.dateAndArea_type_select button.active').attr("myType")
+            var newArr = []
+            arr.map( (list) => {
+                // 去除合计字段
+                var dataTime = list.pop()
                 var obj = {}
                 for (var i=0; i<list.length; i++) {
                     var code = type + list[i].cityCode
@@ -347,7 +533,7 @@ export default {
                 elems[i].setAttribute('class', '')
             }
             e.target.setAttribute('class', 'active')
-            this.loadData($('.dateAndArea_type_select button.active').attr('myId'))
+            this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
         },
         searchByTimeLine () {},
         initChart () {
@@ -368,7 +554,7 @@ export default {
                     enabled:false
                 },
                 xAxis: {
-                    categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+                    categories: this.chartTime
                 },
                 yAxis: {
                     title: {
@@ -383,37 +569,7 @@ export default {
                         enableMouseTracking: false // 关闭鼠标跟踪，对应的提示框、点击事件会失效
                     }
                 },
-                series: [{
-                    name: 'd',
-                    data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-                }, {
-                    name: '伦敦',
-                    data: [3.9, 3.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-                }, {
-                    name: '伦敦',
-                    data: [3.9, 17.2, 2.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-                }, {
-                    name: '伦敦',
-                    data: [3.9, 4.2, 0.7, 8.5, 11.9, 13.2, 16.0, 12.2, 14.2, 68.3,16.6, 4.8]
-                }, {
-                    name: '伦敦',
-                    data: [3.9, 4.2, 1.7, 8.5, 11.9, 12.2, 17.0, 16.6, 14.2, 10.3,12.2, 4.8]
-                }, {
-                    name: '伦敦',
-                    data: [3.9, 4.2,12.2, 17.2, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-                }, {
-                    name: '伦敦',
-                    data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-                }, {
-                    name: '伦敦',
-                    data: [3.9, 4.2,12.2, 17.2, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6,12.2]
-                }, {
-                    name: '伦敦',
-                    data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 12.2, 14.2, 10.3, 6.6, 4.8]
-                }, {
-                    name: '伦敦',
-                    data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 12.2, 17.2, 17.2]
-                }]
+                series: this.chartData
             }
 
             new Highcharts.chart('container', options);

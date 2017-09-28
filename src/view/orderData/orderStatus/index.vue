@@ -231,6 +231,8 @@ export default {
         }
     },
     mounted () {
+        this.$store.dispatch('menuActiveName', '/index/orderStatus')
+        document.title = '订单数据 - 订单状态构成'
         this.loadData('1')
     },
     methods: {

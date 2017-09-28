@@ -121,7 +121,7 @@ import {mapActions,mapState,mapGetters} from 'vuex'
                                     this.getUser(res.data.data)
                                     window.sessionStorage.setItem('userInfo',JSON.stringify(this.userInfo))
                                     window.sessionStorage.setItem('headImg', res.data.data.adminUserIconUrl)
-                                    this.$router.push({path:'/index/cityManagerAnalysis'})
+                                    this.$router.push({path:'/index/dateAndArea'})
                                 }else{
                                     this.errorTextShow = true
                                      this.errorText = message
