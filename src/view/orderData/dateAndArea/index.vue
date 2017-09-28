@@ -250,6 +250,7 @@ export default {
     },
     methods: {
         loadData (type) {
+            this.loading = true
             this.axios.get('/beefly/dateCityOrders/api/v1/page', {
                 params: {
                     accessToken: this.$store.state.token,
@@ -269,12 +270,11 @@ export default {
                 var arr = []
                 var firstData = data[0]
                 firstData.map( (item) => {
-                    console.log('item',item)
                     // for (var i = 0; i < item.length; i++) {
                         var obj = {}
 
                         obj.title = item.cityName
-                        obj.key = $('.dateAndArea_type_select button.active').attr("myType")
+                        obj.key = $('.dateAndArea_type_select button.active').attr("myType") + item.cityCode
 
                         arr.push(obj)
                     // }
@@ -296,6 +296,11 @@ export default {
                 this.columns_orderData = arr
                 var delData = this.tableDataDel(data)
                 this.orderData = delData
+
+
+                this.loading = false
+
+                this.totalListNum = res.data.totalItems
             })
             .catch( (err) => {
                 console.log(err)
@@ -304,20 +309,21 @@ export default {
         tableDataDel (arr) {
             var type = $('.dateAndArea_type_select button.active').attr("myType")
             var newArr = []
-            arr.map( (item) => {
-                for (var i = 0; i < item.length; i++) {
-                    var obj = {}
-                    obj[type] = item[i][type]
-
-                    newArr.push(obj)
+            arr.map( (list) => {
+                // 去除合计字段
+                var dataTime = list.pop()
+                console.log(dataTime)
+                var obj = {}
+                for (var i=0; i<list.length; i++) {
+                    var code = type + list[i].cityCode
+                    obj[code] = list[i][type]
                 }
+                newArr.push(obj)
+                obj.orderTime = dataTime.orderTime
+                obj[type] = dataTime[type]
                 return newArr
             })
-
-            newArr.unshift({
-                'orderTime': arr[0][0].orderTime
-            })
-            console.log('newArr',newArr)
+            // console.log('newArr',newArr)
 
             return newArr
         },
@@ -341,6 +347,7 @@ export default {
                 elems[i].setAttribute('class', '')
             }
             e.target.setAttribute('class', 'active')
+            this.loadData($('.dateAndArea_type_select button.active').attr('myId'))
         },
         searchByTimeLine () {},
         initChart () {
