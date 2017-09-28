@@ -17,7 +17,8 @@ export default new Vuex.Store({
         title: '',
         cityList: [],
         keepCitys: [],
-        menuActiveName: ''
+        menuActiveName: '',
+        imageUrl: ''
     },
     getters:{
         cityList: state => {return state.cityList},
@@ -43,6 +44,9 @@ export default new Vuex.Store({
         },
         menuActiveName_mutation( state, text) {
             state.menuActiveName = text
+        },
+        set_HeadImg ( state , imageUrl) {
+            state.imageUrl = imageUrl
         }
     },
     actions:{
@@ -60,6 +64,9 @@ export default new Vuex.Store({
         },
         menuActiveName ( { commit }, text) {
             commit( 'menuActiveName_mutation', text)
+        },
+        setHeadImg ( { commit }, imageUrl) {
+            commit( 'set_HeadImg', imageUrl)
         }
     }
 })

@@ -24,6 +24,15 @@
             <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
             <div style="color: #ccc; text-indent: 5px;">  loading...</div>
         </Spin>
+        <div class="help">
+            <Poptip trigger="hover" style="float: right;"  placement="top-end" :title="poptipTitle">
+                <span>?</span>
+                <div class="content" slot="content">
+                    <p><b>订单数:</b>各订单状态的订单数（非运维订单）</p>
+                    <p><b>数量占比:</b>各订单状态的订单数（非运维订单）/订单总数</p>
+                </div>
+            </Poptip> 
+        </div>
         <Table :no-data-text='noDataText'  border size='small' :columns="columns_orderStatusData" :data="orderStatusData"></Table>
         <!-- <Page :total="100" show-sizer show-elevator :styles='page' placement="bottom"></Page> -->
       </div>
@@ -128,6 +137,42 @@
                 // background-color: rgba(253, 248, 248,0.0); 
                 background-color: rgba(255, 255, 255, 0.8); 
             }
+            .help {
+                width: 100%;
+                height: 30px;
+                line-height: 30px;
+                overflow: hidden;
+                margin-bottom: 10px;
+                span {
+                    float: right;
+                    display: inline-block;
+                    width: 30px;
+                    height: 30px;
+                    background: orange;
+                    color: #fff;
+                    font-weight: bolder;
+                    border-radius: 50%;
+                    text-align: center;
+                    font-size: 18px;
+                    cursor: pointer;
+                    margin-bottom: 10px;
+                }
+                .content {
+                    p {
+                        width: 100%;
+                        color: #444;
+                        font-size: 12px;
+                        b {
+                            width: 50px;
+                            color: #444;
+                            font-size: 12px;
+                            display: inline-block;
+                            text-align: right;
+                            margin-right: 10px;
+                        }
+                    }
+                }
+            }
         }
         .orderStatus_chart {
             position: relative;
@@ -181,7 +226,8 @@ export default {
             orderStatusData: [],
             noDataText: '',
             chartArr: '',
-            noData: false
+            noData: false,
+            poptipTitle: '数据字段说明'
         }
     },
     mounted () {
@@ -192,13 +238,18 @@ export default {
             this.spinShow = true
             this.noDataText = '' 
 
+            this.noData = false
+
+            console.log(this.timeLine)
+            console.log(this.timeLine[0])
+
             this.axios.get('/beefly/orderState/getOrderState', {
                 params: {
                     accessToken: this.$store.state.token,
                     type: type,
                     cityCode: this.$store.state.cityList.toString(),
-                    beginDate: this.timeLine[0] === '' || null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
-                    endDate: this.timeLine[0] === '' || null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
+                    beginDate: this.timeLine[0] === ''||'null'?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                    endDate: this.timeLine[0] === ''||'null'?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
                 }
             })
             .then((res) => {
@@ -275,7 +326,7 @@ export default {
            }
         },
         searchByTimeLine () {
-            if (this.timeLine[0] === '' || null) {
+            if (this.timeLine[0] === '' || 'null') {
                 this.$Message.warning('请选择时间段')
             } else {
                 this.spinShow = true

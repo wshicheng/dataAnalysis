@@ -26,11 +26,15 @@
 
         <div class="dateAndArea_table">
             
-            <div class="help">
-                <Poptip trigger="hover" style="float: right;"  placement="top-end" title="提示标题" content="提示内容">
+            <!-- <div class="help">
+                <Poptip trigger="hover" style="float: right;"  placement="top-end" title="数据字段说明">
                     <span>?</span>
+                    <div class="content" slot="content">
+                        <p><b>订单数:</b>各订单状态的订单数（非运维订单）</p>
+                        <p><b>数量占比:</b>各订单状态的订单数（非运维订单）/订单总数</p>
+                    </div>
                 </Poptip>
-            </div>
+            </div> -->
             <Table :loading='loading' border size='small' :columns="columns_orderData" :data="orderData"></Table>
             <Page :total="totalListNum" show-sizer show-elevator :styles='page' :current='current' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </div>
@@ -167,6 +171,21 @@
                     font-size: 18px;
                     cursor: pointer;
                     margin-bottom: 10px;
+                }
+                .content {
+                    p {
+                        width: 100%;
+                        color: #444;
+                        font-size: 12px;
+                        b {
+                            width: 50px;
+                            color: #444;
+                            font-size: 12px;
+                            display: inline-block;
+                            text-align: right;
+                            margin-right: 10px;
+                        }
+                    }
                 }
             }
         }

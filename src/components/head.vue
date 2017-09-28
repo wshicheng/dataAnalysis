@@ -9,7 +9,10 @@
                 <span class="cityList">全部地区</span>
             </div>
             <div class="layout-logoInfo">
-                <i class="iconfont icon-zhanghao1"></i>
+                <img class="headImg" v-if="headImg" :src="headImg">
+                <i v-else class="icon iconfont icon-touxiang"></i>
+
+                <!-- <i v-if="getHeadImg = false" class="iconfont icon-zhanghao1"></i> -->
                 <!-- <i class="icon iconfont icon-touxiang" style="color: #fff; font-size: 50px;"></i> -->
                 <span class="accountUserName">{{userInfo.name}}</span>
                 <i class="iconfont icon-zhuxiao_logout exit" @click="handleLoginOut"></i>
@@ -27,9 +30,13 @@ export default {
                 { "code": "120100", "id": 12, "name": "天津市" },
                 { "code": "130200", "id": 40, "name": "唐山市" },
                 { "code": "340225", "id": 2, "name": "无为县" }
-            ]
-
+            ],
+            getHeadImg: false,
+            headImg: ''
         }
+    },
+    mounted () {
+        this.headImg = window.sessionStorage.getItem('headImg')
     },
     methods: {
         handleLoginOut() {
@@ -38,6 +45,13 @@ export default {
             window.sessionStorage.removeItem('token')
             window.sessionStorage.removeItem('userInfo')
         },
+        getImage () {
+            if (this.$store.state.imageUrl === '') {
+                this.headImg = window.sessionStorage.getItem('headImg')
+            } else {
+                this.headImg = this.$store.state.imageUrl
+            }
+        },
         ...mapActions(['removeToken'])
     },
     computed: {
@@ -45,10 +59,23 @@ export default {
         city: function() {
             return this.userInfo.cityList.map((item) => { return item.name }).join('、')
         }
+    },
+    watch: {
+        '$store.state.imageUrl': 'getImage'
     }
 }
 </script>
 <style lang="scss" scoped type="text/css">
+
+img.headImg {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    float: left;
+    margin-right: 10px;
+    margin-top: 15px;
+    display: inline-block;
+}
 .layout-logo {
     height: 30px;
     border-radius: 3px;

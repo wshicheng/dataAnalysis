@@ -19,7 +19,7 @@
                  <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                  <div style="color: #ccc; text-indent: 5px;">  loading...</div>
             </Spin> 
-            <Page :total="totalListNum" class="tableGrid_page" placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
+            <Page :total="totalListNum" show-sizer show-elevator class="tableGrid_page" placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </Row>
            <!-- 模态框区域 编辑数据 -->
             <Modal v-model="editModal" width="800px" :styles="{top: '20%'}" class="editModal_form">
@@ -32,7 +32,7 @@
                              <Input v-model="editValidate.roleName" placeholder="姓名\用户名" style="width: 300px"></Input>
                         </FormItem>
                         <FormItem label="备注" prop="description">
-                            <Input v-model="editValidate.description" placeholder="手机号\邮箱" style="width: 300px"></Input>
+                            <Input id='textArea' v-model="editValidate.description" placeholder="手机号\邮箱" style="width: 300px"></Input>
                         </FormItem>
                         <FormItem label="菜单权限" prop="roleList">
                           <Tree class="roleList" :data="baseData" ref="editAuthTree" show-checkbox></Tree>
@@ -579,7 +579,7 @@ div.tableGrid {
     background: #fff;
     .tableGrid_page {
         margin-top: 20px;
-        margin-right: -10px;
+        // margin-right: -10px;
     }
     .spin {
         position: absolute;

@@ -641,9 +641,11 @@ export default {
                     this.telBinded = true
                 }
 
-                if (res.data.adminUserIconUrl != null) {
-                    this.imageStr = res.data.adminUserIconUrl
+                if (res.data.data.adminUserIconUrl != null) {
+                    this.imageUrl = res.data.data.adminUserIconUrl
                 }
+
+                console.log(this.imageUrl)
             })
             .catch( (err) => {
                 console.log(err)
@@ -666,6 +668,7 @@ export default {
                             this.$Message.success('手机号码绑定成功!');
                             this.loadData()
                             this.$refs.bindPhone.resetFields()
+                            this.bindModal = false
                         } else {
                             this.$Message.error(res.data.message);
                         }
@@ -708,9 +711,10 @@ export default {
                     .then( (res) => {
                         this.checkLogin(res)
                         if (res.data.resultCode === 1) {
-                            this.$Message.success('手机号码绑定成功!');
+                            this.$Message.success('手机号码修改成功!');
                             this.loadData()
                             this.$refs.editPhone.resetFields()
+                            this.editModal = false
                         } else {
                             this.$Message.error(res.data.message);
                         }
@@ -762,20 +766,23 @@ export default {
                 that.imageUrl = data
                 that.axios.post('/beefly/user/api/v1/saveImage', qs.stringify({
                         accessToken: that.$store.state.token,
-                        imageStr: 'data'
+                        imageStr: data
                     })
                 )
                 .then( (res) => {
                     console.log(res)
                     if (res.data.resultCode === 1) {
-                        this.$Message.success('头像保存成功！')
-                        this.loadData()
+                        that.$Message.success('头像保存成功！')
+                        that.imageUrl = res.data.data.adminUserIconUrl
+                        that.$store.dispatch('setHeadImg', that.imageUrl)
+                        window.sessionStorage.setItem('headImg', that.imageUrl)
+                        that.loadData()
                     } else {
-                        this.$Message.success(res.data.message)
+                        that.$Message.success(res.data.message)
                     }
                 })
                 .catch( (err) => {
-                    this.$Message.error('网络请求错误')
+                    that.$Message.error('网络请求错误')
                     console.log(err)
                 })
             }

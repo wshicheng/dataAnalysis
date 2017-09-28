@@ -332,7 +332,7 @@ export default {
                                         textAlign: 'center',
                                         visible: 'hidden'
                                     }
-                                }, '开'),
+                                }, '启用'),
                                 h('span', {
                                     style: {
                                         width: '50%',
@@ -341,15 +341,15 @@ export default {
                                         lineHeight: '24px',
                                         textAlign: 'center'
                                     }
-                                }, '关'),
+                                }, '冻结'),
                                 h('span', {
                                     style: {
-                                        width: '22px',
+                                        width: '26px',
                                         height: '22px',
                                         display: 'block',
                                         position: 'absolute',
                                         transition: 'all linear .2s',
-                                        right: params.row.status === 1 ? '1px' : '36px',
+                                        right: params.row.status === 1 ? '1px' : '33px',
                                         top: '1px',
                                         background: '#fff',
                                         borderRadius: '24px'
@@ -730,7 +730,7 @@ div.tableGrid {
     background: #fff;
     .tableGrid_page {
         margin-top: 20px;
-        margin-right: -10px;
+        // margin-right: -10px;
     }
     .spin {
         position: absolute;
