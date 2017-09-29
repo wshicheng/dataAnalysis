@@ -101,7 +101,7 @@ export default {
         if (window.sessionStorage.getItem('openNames') === 'null') {
             return
         } else {
-            var openId = window.sessionStorage.getItem('openNames').toString()
+            var openId = window.sessionStorage.getItem('openNames')
             this.openNames.push(openId)
         }
     },

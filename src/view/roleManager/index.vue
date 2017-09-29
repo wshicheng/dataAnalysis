@@ -4,10 +4,10 @@
             <BreadcrumbItem>角色管理</BreadcrumbItem>
         </Breadcrumb>
         <Row class="datePick_zone">
-           <Col span="10">
+           <Col span="24">
              <span class="lable">角色名称：</span>
-                <Input v-model="keyword" @on-change="inputChange" placeholder="角色名称" style="width: 300px"></Input>
-                <button class="DIY_button" @click="searchByName" style="float: right; font-weight: 400;">查询</button>
+                <Input v-model="keyword" @on-change="inputChange" placeholder="角色名称" style="width: 300px;vertical-align:bottom;"></Input>
+                <button class="DIY_button" @click="searchByName" style="font-weight: 400;">查询</button>
            </Col>
         </Row>
         <Row class="tableGrid">
