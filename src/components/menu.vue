@@ -97,8 +97,13 @@ export default {
         }
     },
     beforeMount () {
-         var openId = window.sessionStorage.getItem('openNames').toString()
-         this.openNames.push(openId)
+        //  window.sessionStorage.setItem('openNames', '')
+        if (window.sessionStorage.getItem('openNames') === 'null') {
+            return
+        } else {
+            var openId = window.sessionStorage.getItem('openNames').toString()
+            this.openNames.push(openId)
+        }
     },
     methods: {
         handleRoute(name) {

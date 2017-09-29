@@ -9,8 +9,8 @@
                 <span class="cityList">全部地区</span>
             </div>
             <div class="layout-logoInfo">
-                <img class="headImg" v-if="headImg" :src="headImg">
-                <i v-else class="icon iconfont icon-touxiang"></i>
+                <img class="headImg" v-if="headImg" :src="headImg" @click="$router.push('/index/memberCenter')">
+                <i v-else class="icon iconfont icon-touxiang headIcon"></i>
 
                 <!-- <i v-if="getHeadImg = false" class="iconfont icon-zhanghao1"></i> -->
                 <!-- <i class="icon iconfont icon-touxiang" style="color: #fff; font-size: 50px;"></i> -->
@@ -73,8 +73,17 @@ img.headImg {
     border-radius: 50%;
     float: left;
     margin-right: 10px;
+    cursor: pointer;
     margin-top: 15px;
     display: inline-block;
+}
+
+.headIcon {
+    font-size: 38px;
+    position: relative;
+    left: -8px;
+    top: 1px;
+    float: left;
 }
 .layout-logo {
     height: 30px;

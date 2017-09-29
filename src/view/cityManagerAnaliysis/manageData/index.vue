@@ -987,7 +987,6 @@ export default {
                         }, 100)
                     } else {
                         _this.$Message.warning(res.data.message);
-                        _this.$Message.warning(res.data.message);
                         _this.isUploadPercent = false
                         // 清除上传excel文件流
                         var obj = document.getElementById('fileupload');
@@ -1025,7 +1024,7 @@ export default {
                 params: {
                     accessToken: this.$store.state.token,
                     pageSize: this.pageSize,
-                    type: $('.cityManageData_type button.active')[0].innerHTML,
+                    type: this.typeList.toString(),
                     cityCode: this.$store.state.cityList.toString(),
                     time: this.selectTime === '' ? '' : moment(this.selectTime).format('YYYY-MM')
                 }
