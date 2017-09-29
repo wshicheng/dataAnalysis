@@ -8,6 +8,10 @@
             <DatePicker @on-change="queryMonth"  type="month" :options="options" format="yyyy-MM"  placeholder="选择日期" style="width: 216px"></DatePicker>
         </Row>
         <Row class="tableGrid">
+            <Spin fix size="large" v-if="spinShow"  class="spin">
+                 <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+            </Spin>
             <Table :columns="columns" :data="data"></Table>
             <Page :total="totalListNum" v-show="pageShow" class="tableGrid_page" placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </Row>
@@ -56,12 +60,15 @@ export default {
                 disabledDate (date) {
                     return date&&date.valueOf()> Date.now()
                 }
-            }
+            },
+            spinShow: false
         }
     },
     mounted () {
         this.$store.dispatch('menuActiveName', '/index/cityManagerAnalysis')
         document.title = '数据运营平台 - 整体数据'
+
+        this.spinShow = true
         var _this = this
         this.axios.get('/beefly/record/api/v1/page',{params:{accessToken:this.$store.state.token}})
         .then(function (res) {
@@ -73,6 +80,8 @@ export default {
             if (res.data.totalPage > 1) {
                 _this.pageShow = true
             }
+            
+            _this.spinShow = false
             _this.totalListNum = res.data.totalItems
         })
         .catch(function (err) {
@@ -81,6 +90,7 @@ export default {
     },
     methods: {
         queryMonth(value){
+            this.spinShow = true
             var _this = this
             this.axios.get('/beefly/record/api/v1/page', {
                 params: {
@@ -97,12 +107,15 @@ export default {
                     _this.pageShow = true
                 }
                 _this.totalListNum = res.data.totalItems
+                _this.spinShow = false
             })
             .catch(function (err) {
+                _this.spinShow = false
                 console.log('err', err)
             });
         },
         handleCurrentPage(currentPage) {
+            this.spinShow = true
             this.currentPage = currentPage
             var _this = this
             this.axios.get('/beefly/record/api/v1/page', {
@@ -117,13 +130,16 @@ export default {
                 if (res.data.totalPage > 1) {
                     _this.pageShow = true
                 }
+                _this.spinShow = false
                 _this.totalListNum = res.data.totalItems
             })
             .catch(function (err) {
+                _this.spinShow = false
                 console.log('err', err)
             });
         },
         handlePageSize(pageSize) {
+            this.spinShow = true
             var _this = this;
             this.pageSize = pageSize
             this.axios.get('/beefly/record/api/v1/page', {
@@ -138,9 +154,11 @@ export default {
                 if (res.data.totalPage > 1) {
                     _this.pageShow = true
                 }
+                _this.spinShow = false
                 _this.totalListNum = res.data.totalItems
             })
             .catch(function (err) {
+                _this.spinShow = false
                 console.log('err', err)
             });
         },
@@ -174,6 +192,12 @@ div.tableGrid {
     margin-bottom: $tableGridMarginBottom;
     padding: 20px 10px 20px 10px;
     background: #fff;
+    .spin {
+        position: absolute;
+        display: inline-block;
+        // background-color: rgba(253, 248, 248,0.0); 
+        background-color: rgba(255, 255, 255, 0.8); 
+    }
     .tableGrid_page {
         margin-top: 20px;
         margin-right: -10px;

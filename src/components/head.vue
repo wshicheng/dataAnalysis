@@ -44,6 +44,7 @@ export default {
             this.removeToken()
             window.sessionStorage.removeItem('token')
             window.sessionStorage.removeItem('userInfo')
+            window.sessionStorage.removeItem('openNames')
         },
         getImage () {
             if (this.$store.state.imageUrl === '') {
@@ -81,6 +82,7 @@ img.headImg {
 .headIcon {
     font-size: 38px;
     position: relative;
+    color: #fff;
     left: -8px;
     top: 1px;
     float: left;

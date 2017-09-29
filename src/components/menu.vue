@@ -93,7 +93,7 @@ export default {
             theme2: 'dark',
             menuActiveName: "",
             accord: true,
-            openNames: []
+            openNames: ['orderData']
         }
     },
     beforeMount () {

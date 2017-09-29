@@ -47,7 +47,7 @@
                 <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
             </Spin>
-            <div class="title">
+            <div class="title" v-show="totalTitle">
                 <div class="avg">
                     平均
                 </div>
@@ -331,11 +331,14 @@ export default {
             loading: false,
             spinShow: false,
             spinShow2: false,
+            spinShow3: false,
             showHeader: false,
             chartTime: [],
             chartData: [],
             noDataText: '',
-            noData: false
+            noData: false,
+            chartTitleName: '有效订单数',
+            totalTitle: true
         }
     },
     mounted () {
@@ -343,13 +346,13 @@ export default {
         document.title = '订单数据 - 分日期分地区'
         this.loadData('1')
         this.loadTotalData('1')
+        // this.getChartData('1')
     },
     methods: {
         loadData (type) {
             this.spinShow = true
             this.noDataText = ''
             // 默认加载时去掉无数据图片
-            this.noData = false
 
             this.axios.get('/beefly/dateCityOrders/api/v1/page', {
                 params: {
@@ -363,17 +366,17 @@ export default {
                 }
             })
             .then( (res) => {
-                console.log(res.data.data)
+                // console.log(res.data.data)
+                    $('#container').html('')
                 
-                if (res.data.data === '') {
-                    this.spinShow = true
+                if (res.data.data.length === 0) {
                     this.noDataText = '暂无数据'
-
-                    this.noData = true
+                    this.spinShow = false
+                    this.orderData = []
+                    this.totalListNum = 1
                 } else {
+                    this.spinShow = false
                     var data = res.data.data
-
-                    this.noData = false
                     //随机取出一个数据制作表头
                     var arr = []
                     var firstData = data[0]
@@ -403,11 +406,12 @@ export default {
                     this.orderData = delData
 
                     this.totalListNum = res.data.totalItems
+
+                    this.getChartData($('.dateAndArea_head_time button.active').attr('myId'))
                     // 关闭loading 
                     this.spinShow = false
                     this.noDataText = ''
 
-                    this.initChart()
                 }
                 
             })
@@ -431,40 +435,51 @@ export default {
                 }
             })
             .then( (res) => {
-                console.log(res.data.data)
+                // console.log(res.data.data)
                 
                 var data = res.data.data
-                //随机取出一个数据制作表头  
-                var arr = []
-                var firstData = data[0]
-                firstData.map( (item) => {
-                    var obj = {}
+                if (data.length === 0) {
+                    this.totalTitle = false
+                    this.totalData = []
 
-                    obj.title = item.cityName
-                    obj.key = $('.dateAndArea_type_select button.active').attr("myType") + item.cityCode
+                    // 关闭loading 
+                    this.spinShow2 = false
+                    this.noDataText = ''
+                } else {
+                    this.totalTitle = true
+                    //随机取出一个数据制作表头  
+                    var arr = []
+                    var firstData = data[0]
+                    firstData.map( (item) => {
+                        var obj = {}
 
-                    arr.push(obj)
-                    return arr
-                })
-                // 将最后一条的合计取出
-                var totalTitle = arr.pop()
-                totalTitle.title = '合计'
-                totalTitle.key = $('.dateAndArea_type_select button.active').attr("myType")
+                        obj.title = item.cityName
+                        obj.key = $('.dateAndArea_type_select button.active').attr("myType") + item.cityCode
+
+                        arr.push(obj)
+                        return arr
+                    })
+                    // 将最后一条的合计取出
+                    var totalTitle = arr.pop()
+                    totalTitle.title = '合计'
+                    totalTitle.key = $('.dateAndArea_type_select button.active').attr("myType")
+                    
+                    arr.push(totalTitle)
+                    // 将日期插入动态title
+                    // arr.unshift({
+                    //     title: '日期',
+                    //     key: 'orderTime'
+                    // })
+                    
+                    this.columns_total = arr
+                    var delData = this.tableTotalDataDel(data)
+                    this.totalData = delData
+
+                    // 关闭loading 
+                    this.spinShow2 = false
+                    this.noDataText = ''
+                }
                 
-                arr.push(totalTitle)
-                // 将日期插入动态title
-                // arr.unshift({
-                //     title: '日期',
-                //     key: 'orderTime'
-                // })
-                
-                this.columns_total = arr
-                var delData = this.tableTotalDataDel(data)
-                this.totalData = delData
-
-                // 关闭loading 
-                this.spinShow2 = false
-                this.noDataText = ''
 
             })
             .catch( (err) => {
@@ -494,6 +509,54 @@ export default {
             // console.log('newArr',newArr)
 
             return newArr
+        },
+        getChartData (type) {
+            this.spinShow = true
+            // 加载中不显示noData图片
+            this.noData = false
+            this.axios.get('/beefly/dateCityOrders/lineNum', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    type: type,
+                    beginTime: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                    endTime: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD'),
+                    cityCode: this.$store.state.cityList.toString()
+                }
+            })
+            .then( (res) => {
+                var chartData = res.data.data
+                if (chartData.length === 0) {
+                    $('#container').html('')
+                    this.noData = true
+                } else {
+                    this.spinShow = false
+                    var newArr = []
+                    var type = $('.dateAndArea_type_select button.active').attr("myType")
+                    chartData.map( item => {
+                        var arr = new Array()
+                        for (var i = 0; i < item.length; i++) {
+                            // debugger
+                            var obj = {}
+                            arr.push(Number(item[i][type]))
+                            obj.data = arr
+                            obj.name = item[i].cityName
+                        }
+                        newArr.push(obj)
+                        return newArr
+                    })
+
+                    this.chartData = newArr
+                    var that = this
+                    // 延时加载，确保x轴正常显示。
+                    setTimeout(function() {
+                        that.initChart()
+                    }, 500)
+                }
+            })
+            .catch( (err) => {
+                this.spinShow = false
+                console.log(err)
+            })
         },
         tableTotalDataDel (arr) {
             var type = $('.dateAndArea_type_select button.active').attr("myType")
@@ -529,9 +592,11 @@ export default {
                 this.timeLine = ['','']
                 this.loadData(e.target.getAttribute('myId'))
                 this.loadTotalData(e.target.getAttribute('myId'))
+                this.getChartData(e.target.getAttribute('myId'))
             }
         },
         handleTypeClick (e) {
+            this.chartTitleName = e.target.innerHTML
             this.current = 1
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
@@ -540,6 +605,7 @@ export default {
             e.target.setAttribute('class', 'active')
             this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
             this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
+            // this.getChartData($('.dateAndArea_head_time button.active').attr('myId'))
         },
         searchByTimeLine () {
             if (this.timeLine[0] === '' || this.timeLine[0] === null) {
@@ -547,6 +613,7 @@ export default {
             } else {
                 this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
                 this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
+                // this.getChartData($('.dateAndArea_head_time button.active').attr('myId'))
             }
         },
         initChart () {
@@ -555,7 +622,7 @@ export default {
                     type: 'line'
                 },
                 title: {
-                    text: '分日期分地区 订单金额'
+                    text: '分日期分地区 ' + this.chartTitleName
                 },
                 subtitle: {
                     text: '*地区超过10个时，显示排名靠前的10个地区'
@@ -571,7 +638,7 @@ export default {
                 },
                 yAxis: {
                     title: {
-                        text: '气温 (°C)'
+                        text: ''
                     }
                 },
                 plotOptions: {
@@ -604,6 +671,7 @@ export default {
             this.current = 1
             this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
             this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
+            // this.getChartData($('.dateAndArea_head_time button.active').attr('myId'))
         }
     },
     watch: {

@@ -16,8 +16,8 @@
                         :before-upload="handleBeforeUpload"
                         action=""
                         style="display: inline-block;">
-                        <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-                        <i v-else  class="icon iconfont icon-touxiang" style="font-size: 180px;height: 200px;color: rgb(255, 255, 255); margin-left: 7px;position: relative;top: -34px;"></i>
+                        <img v-if="imageUrl" :src="imageUrl" class="avatar" style="cursor: pointer;" />
+                        <i v-else  class="icon iconfont icon-touxiang" style="font-size: 180px;height: 200px;color: rgb(255, 255, 255); margin-left: 7px;position: relative;top: -34px; cursor: pointer;"></i>
                     </Upload>
                 </h1>
                 <div class="homepage_info">
@@ -28,7 +28,7 @@
         </div>
 
         <div class="homepage_select">
-            <h1>账户信息</h1>
+            <h1><span>账户信息</span></h1>
             <ul>
                 <li>
                     <span>
@@ -37,7 +37,8 @@
                     </span>
                     <span style="font-size: 16px;">手机验证</span>
                     <span>{{this.phoneNoBand === 0?'未绑定':'已绑定'}}</span>
-                    <span>{{this.phoneNoBand === 0?'您的手机号码尚未绑定，请尽快绑定手机号':'手机号码' + this.phoneNo + '已验证'}}</span>
+                    <span v-if="this.phoneNoBand === 0">{{this.phoneNo === ''?'您尚未绑定手机号码，请尽快绑定手机号':'手机号码' + this.phoneNo + '未验证, 验证后可以使用手机号码进行登录'}}</span>
+                    <span v-else>{{this.phoneNo === ''?'您尚未绑定手机号码，请尽快绑定手机号':'手机号码' + this.phoneNo + '已验证'}}</span>
 
                     <span v-show="bindShow">
                         <!-- <button disabled='isBinded' @click='$router.push({path:"/index/memberCenter/bindTel"})'>绑定手机号</button> -->
@@ -200,7 +201,7 @@
 
     #home_header h1 img {
         display: block;
-        margin-top: 6px;
+        margin-top: 10px;
         width: 90%;
         height: 180px;
         border-radius: 50%;
@@ -260,6 +261,11 @@
         font-size: 17px;
         width: 100%;
         height: 48px;
+        position: relative;
+        span {
+            position: absolute;
+            left: 0;
+        }
     }
 
     .homepage_select i {
@@ -632,6 +638,7 @@ export default {
                 this.name = res.data.data.name
                 this.userName = res.data.data.userName
                 this.phoneNo = res.data.data.phoneNo
+                this.bindPhone.phoneNo = res.data.data.phoneNo 
 
                 this.phoneNoBand = res.data.data.phoneNoBand 
                 if (res.data.data.phoneNoBand === 0) {
