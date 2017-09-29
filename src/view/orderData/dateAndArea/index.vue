@@ -283,7 +283,7 @@ export default {
     data () {
         return {
             timeSelectShow: false,
-            timeLine: '',
+            timeLine: ['',''],
             page: {
                 'float': 'right',
                 'margin-top': '20px'
@@ -355,10 +355,11 @@ export default {
                 params: {
                     accessToken: this.$store.state.token,
                     type: type,
-                    beginTime: this.timeLine === '' || 'null'?'':moment(this.timeLine[0]).format('yyyy-MM-DD'),
-                    endTime: this.timeLine === '' || 'null'?'':moment(this.timeLine[1]).format('yyyy-MM-DD'),
+                    beginTime: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                    endTime: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD'),
                     pageNo: this.current,
-                    pageSize: this.pageSize
+                    pageSize: this.pageSize,
+                    cityCode: this.$store.state.cityList.toString()
                 }
             })
             .then( (res) => {
@@ -424,8 +425,9 @@ export default {
                 params: {
                     accessToken: this.$store.state.token,
                     type: type,
-                    beginTime: this.timeLine === '' || 'null'?'':moment(this.timeLine[0]).format('yyyy-MM-DD'),
-                    endTime: this.timeLine === '' || 'null'?'':moment(this.timeLine[1]).format('yyyy-MM-DD')
+                    beginTime: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                    endTime: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD'),
+                    cityCode: this.$store.state.cityList.toString()
                 }
             })
             .then( (res) => {
@@ -514,6 +516,7 @@ export default {
             return newArr
         },
         handleClick (e) {
+            this.current = 1
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
                 elems[i].setAttribute('class', '')
@@ -523,19 +526,29 @@ export default {
                 this.timeSelectShow = true
             } else {
                 this.timeSelectShow = false
-                this.timeLine = ''
+                this.timeLine = ['','']
                 this.loadData(e.target.getAttribute('myId'))
+                this.loadTotalData(e.target.getAttribute('myId'))
             }
         },
         handleTypeClick (e) {
+            this.current = 1
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
                 elems[i].setAttribute('class', '')
             }
             e.target.setAttribute('class', 'active')
             this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
+            this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
         },
-        searchByTimeLine () {},
+        searchByTimeLine () {
+            if (this.timeLine[0] === '' || this.timeLine[0] === null) {
+                this.$Message.warning('请选择时间段')
+            } else {
+                this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
+                this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
+            }
+        },
         initChart () {
             var options = {
                 chart: {
@@ -574,16 +587,27 @@ export default {
 
             new Highcharts.chart('container', options);
         },
-        handleCurrentPage(currentPage) {
-            // loading显示，同时让无数据的文本为空
-            this.spinShow = true
-            this.noDataText = ''
+        handleCurrentPage(current) {
+            this.current = current
+
+            this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
+            this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
         },
         handlePageSize(pageSize) {
-            // loading显示，同时让无数据的文本为空
-            this.spinShow = true
-            this.noDataText = ''
+            this.pageSize = pageSize
+
+            this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
+            this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
+            
+        },
+        cityChange () {
+            this.current = 1
+            this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
+            this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
         }
+    },
+    watch: {
+        '$store.state.cityList': 'cityChange'
     }
 }
 </script>

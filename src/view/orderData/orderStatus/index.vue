@@ -242,9 +242,6 @@ export default {
 
             this.noData = false
 
-            console.log(this.timeLine[0])
-            console.log(this.timeLine[0] === '')
-            console.log(this.timeLine[0] === null)
 
             this.axios.get('/beefly/orderState/getOrderState', {
                 params: {

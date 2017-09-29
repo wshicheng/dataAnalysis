@@ -17,7 +17,7 @@
                         action=""
                         style="display: inline-block;">
                         <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-                        <i v-else  class="icon iconfont icon-touxiang" style="font-size: 180px;line-height: 216px;height:200px; color: #fff; margin-left: 7px;"></i>
+                        <i v-else  class="icon iconfont icon-touxiang" style="font-size: 180px;height: 200px;color: rgb(255, 255, 255); margin-left: 7px;position: relative;top: -34px;"></i>
                     </Upload>
                 </h1>
                 <div class="homepage_info">
