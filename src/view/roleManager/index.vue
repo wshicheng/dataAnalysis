@@ -299,7 +299,9 @@ export default {
             /*重置编辑表单*/
             this.clearTree()
             // this.$refs.editValidate.resetFields();
+            this.loadData()
             this.editModal = false
+
         },
         inputChange () {
             if (this.keyword === '') {

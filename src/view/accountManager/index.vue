@@ -29,7 +29,7 @@
             <Page v-show="pageShow" :total="totalListNum" class="tableGrid_page" placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts' show-elevator></Page>
         </Row>
         <!-- 模态框区域 编辑数据 -->
-        <Modal v-model="editModal" width="800px" :styles="{top: '20%'}" class="editModal_form">
+        <Modal v-model="editModal" width="800px" :mask-closable="close" :styles="{top: '20%'}" class="editModal_form">
             <p slot="header" style="color: #404040;">
                 <span>编辑账号</span>
             </p>
@@ -96,7 +96,7 @@
             </div>
         </Modal>
         <!-- 模态框区域 增加数据 -->
-        <Modal v-model="addModal" width="800px" :styles="{top: '20%'}" class="editModal_form">
+        <Modal v-model="addModal" width="800px" :styles="{top: '20%'}" :mask-closable="close" class="editModal_form">
             <p slot="header" class="editModal_head" style="color: #404040;">
                 <span>添加账号</span>
             </p>
@@ -148,7 +148,7 @@
             </div>
         </Modal>
         <!-- 删除模态框 -->
-        <Modal v-model="delModal" :styles="{width: '500px', top: '20%'}" class="editModal_form">
+        <Modal v-model="delModal" :styles="{width: '500px', top: '20%'}" :mask-closable="close" class="editModal_form">
             <p slot="header" class="editModal_head">
                 <span>Warning</span>
             </p>
@@ -166,6 +166,7 @@ import { mapGetters } from 'vuex'
 export default {
     data() {
         return {
+            close:false,
             initStatu:'',
             allCity: [],
             allCityCode: [],
@@ -492,6 +493,7 @@ export default {
         },
         closeEditModel () {
             // this.$refs.editValidate.resetFields()
+            this.query()
             this.editModal = false
         },
         closeAddModel () {
