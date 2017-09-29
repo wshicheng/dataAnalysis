@@ -76,7 +76,7 @@
         </div>
 
         <!-- 绑定模态框 -->
-        <Modal v-model="bindModal" width="431" :styles="{top: '20%'}" class="bindModal_form">
+        <Modal v-model="bindModal" :mask-closable='close' width="431" :styles="{top: '20%'}" class="bindModal_form">
             <p slot="header" class="bindModal_head">
                 <span>绑定手机号码</span>
             </p>
@@ -104,7 +104,7 @@
         </Modal>
 
         <!-- 修改模态框 -->
-        <Modal v-model="editModal" width="431" :styles="{top: '20%'}" class="editModal_form">
+        <Modal v-model="editModal" :mask-closable='close' width="431" :styles="{top: '20%'}" class="editModal_form">
             <p slot="header" class="editModal_head">
                 <span>修改手机号码</span>
             </p>
@@ -132,7 +132,7 @@
         </Modal>
 
         <!-- 修改密码模态框 -->
-        <Modal v-model="passWordModal" width="431" :styles="{top: '20%'}" class="editModal_form">
+        <Modal v-model="passWordModal" :mask-closable='close' width="431" :styles="{top: '20%'}" class="editModal_form">
             <p slot="header" class="editModal_head">
                 <span>修改密码</span>
             </p>
@@ -407,11 +407,26 @@ export default {
         var validateTel = (rule, value, callback) => {
             if (!value) {
                 return callback(new Error('手机号码不能为空'))
-            }else {
+            } else {
                 setTimeout(() => {
                 var res = checkMobile(value)
                 if (res === true) {
-                    return callback()
+                    this.axios.get('/beefly/user/api/v1/sendPhoneCode', {
+                        params: {
+                            accessToken: this.$store.state.token,
+                            phoneNo: this.bindPhone.phoneNo
+                        }
+                    })
+                    .then( (res) => {
+                        if (res.data.resultCode === 1) {
+                            return callback()
+                        } else {
+                            callback(new Error(res.data.message))
+                        }
+                    })
+                    .catch( err => {
+                        console.log(err)
+                    })
                 } else {
                     callback(new Error('手机格式格式不正确！！！'))
                 }
@@ -445,6 +460,7 @@ export default {
             }
         }
 		return {
+            close: false,
 			updateEmail: '',
 			name: '姓名',
 			userName: '用户名',
@@ -536,31 +552,11 @@ export default {
     },
     methods: {
         getVerCode (val) {
-            var that = this
-            var $btn = $('button.sendCode')
-            var text = $btn.text()
-            this.initText = text
-            var initTime = 60
-            if(checkMobile(val)){
-                this.isDisabled = true
-                this.isPlain = false
-                var timer = setInterval(function(){
-                    initTime--
-                    if(initTime<=0){
-                        that.isDisabled = false
-                        that.isPlain = true
-                        $btn.text('')
-                        $btn.text('发送验证码')
-                        clearInterval(timer)
-                        return
-                    }else {
-                        $btn.text(initTime + 's')
-                    }
-                },1000)
-                setTimeout(function(){
-                    that.$Message.warning('已向您的手机发送验证码，请查收！！！')
-                },1000)
-
+                var that = this
+                var $btn = $('button.sendCode')
+                var text = $btn.text()
+                this.initText = text
+                var initTime = 60
                 this.axios.get('/beefly/user/api/v1/sendPhoneCode', {
                     params: {
                         accessToken: this.$store.state.token,
@@ -569,7 +565,30 @@ export default {
                 })
                 .then( (res) => {
                     this.checkLogin(res)
-                    console.log(res)
+                    if (res.data.resultCode === 1) {
+                        if(checkMobile(val)){
+                            this.isDisabled = true
+                            this.isPlain = false
+                            var timer = setInterval(function(){
+                                initTime--
+                                if(initTime<=0){
+                                    that.isDisabled = false
+                                    that.isPlain = true
+                                    $btn.text('')
+                                    $btn.text('发送验证码')
+                                    clearInterval(timer)
+                                    return
+                                }else {
+                                    $btn.text(initTime + 's')
+                                }
+                            },1000)
+                            setTimeout(function(){
+                                that.$Message.warning('已向您的手机发送验证码，请查收！！！')
+                            },1000)
+                        }
+                    } else {
+                        return
+                    }
                 })
                 .catch( (err) => {
                     if(err) {
@@ -578,7 +597,6 @@ export default {
                         that.bindPhone.verificationCode = JSON.parse(res.text).data
                     }
                 })
-            }
         },
         editGetVerCode (val) {
             var that = this
@@ -586,43 +604,47 @@ export default {
             var text = $btn.text()
             this.initText = text
             var initTime = 60
-            if(checkMobile(val)){
-                this.isDisabled = true
-                this.isPlain = false
-                var timer = setInterval(function(){
-                    initTime--
-                    if(initTime<=0){
-                        that.isDisabled = false
-                        that.isPlain = true
-                        $btn.text('')
-                        $btn.text('发送验证码')
-                        clearInterval(timer)
-                        return
-                    }else {
-                        $btn.text(initTime + 's')
-                    }
-                },1000)
-                setTimeout(function(){
-                    that.$Message.warning('已向您的手机发送验证码，请查收！！！')
-                },1000)
 
-                this.axios.get('/beefly/user/api/v1/sendPhoneCode', {
-                    params: {
-                        accessToken: this.$store.state.token,
-                        phoneNo: this.editPhone.phoneNo
+            this.axios.get('/beefly/user/api/v1/sendPhoneCode', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    phoneNo: this.editPhone.phoneNo
+                }
+            })
+            .then( (res) => {
+                this.checkLogin(res)
+                if (res.data.resultCode === 1) {
+                    if(checkMobile(val)){
+                        this.isDisabled = true
+                        this.isPlain = false
+                        var timer = setInterval(function(){
+                            initTime--
+                            if(initTime<=0){
+                                that.isDisabled = false
+                                that.isPlain = true
+                                $btn.text('')
+                                $btn.text('发送验证码')
+                                clearInterval(timer)
+                                return
+                            }else {
+                                $btn.text(initTime + 's')
+                            }
+                        },1000)
+                        setTimeout(function(){
+                            that.$Message.warning('已向您的手机发送验证码，请查收！！！')
+                        },1000)
                     }
-                })
-                .then( (res) => {
-                    this.checkLogin(res)
-                })
-                .catch( (err) => {
-                    if(err) {
-                        console.log(err)
-                    } else {
-                        that.editPhone.verificationCode = JSON.parse(res.text).data
-                    }
-                })
-            }
+                } else {
+                    this.$Message.error(res.data.message)
+                }
+            })
+            .catch( (err) => {
+                if(err) {
+                    console.log(err)
+                } else {
+                    that.editPhone.verificationCode = JSON.parse(res.text).data
+                }
+            })
         },
         loadData () {
             this.axios.get('/beefly/user/api/v1/mycenter', {
