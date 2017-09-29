@@ -264,12 +264,12 @@ export default {
                         return h('a', {
                             style: {
                                 color: '#2d8cf0',
-                                cursor: 'pointer'
+                                cursor: 'initial'
                             },
-                            attrs: {
-                                blank: '_blank',
-                                href: '/#/index/accountManger/userName/' + params.row.userName
-                            }
+                            // attrs: {
+                            //     blank: '_blank',
+                            //     href: '/#/index/accountManger/userName/' + params.row.userName
+                            // }
                         }, params.row.userName)
                     }
                 },
@@ -590,7 +590,8 @@ export default {
                 params: Object.assign({},this.formValidate,{accessToken:this.accessToken},{roleId:this.roleId},{cityStr:this.allCityCode.join(',')})
             }).then((res) => {
                 if (res.data.resultCode === 1) {
-                     this.$Message.success('增加添加成功!');
+                     var message = res.data.message
+                     this.$Message.success(message);
                    this.data.unshift(Object.assign({},this.formValidate,{status:1}))
                     this.addModal = false
                      this.formValidate = {}
