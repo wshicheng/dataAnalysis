@@ -22,7 +22,7 @@
             <Page :total="totalListNum" show-sizer show-elevator class="tableGrid_page" placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </Row>
            <!-- 模态框区域 编辑数据 -->
-            <Modal v-model="editModal" width="800px" :styles="{top: '20%'}" class="editModal_form">
+            <Modal v-model="editModal" :mask-closable='close' width="800px" :styles="{top: '20%'}" class="editModal_form">
                 <p slot="header" style="color: #404040;">
                     <span>编辑角色</span>
                 </p>
@@ -45,7 +45,7 @@
                 </div>
             </Modal>
              <!-- 模态框区域 增加数据 -->
-            <Modal v-model="addModal" width="800px" :styles="{top: '20%'}" class="editModal_form">
+            <Modal v-model="addModal" :mask-closable='close' width="800px" :styles="{top: '20%'}" class="editModal_form">
                 <p slot="header" style="color: #404040;">
                     <span>添加角色</span>
                 </p>
@@ -68,7 +68,7 @@
                 </div>
             </Modal>
             <!-- 删除模态框 -->
-            <Modal v-model="delModal" :styles="{width: '500px', top: '20%'}" class="editModal_form">
+            <Modal v-model="delModal" :mask-closable='close' :styles="{width: '500px', top: '20%'}" class="editModal_form">
                 <p slot="header" style="color: #404040;">
                     <span>Warning</span>
                 </p>
@@ -85,6 +85,7 @@ import $ from 'jquery'
 export default {
     data() {
         return {
+             close: false,
              editModal: false,
              addModal: false,
              delModal:false,
@@ -507,6 +508,7 @@ export default {
         closeAddModel () {
            this.addModal = false
            this.$refs.addValidate.resetFields();
+           this.loadData()
            this.clearTree()
         },
         clearTree () {

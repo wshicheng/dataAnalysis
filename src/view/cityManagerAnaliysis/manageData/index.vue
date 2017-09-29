@@ -31,7 +31,7 @@
             <Page :total="totalListNum" show-sizer show-elevator :styles='page' :current='current' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
 
             <!-- 模态框区域 -->
-            <Modal v-model="editModal" width="800px" :styles="{top: '20%'}" class="editModal_form">
+            <Modal v-model="editModal" :mask-closable='close'  width="800px" :styles="{top: '20%'}" class="editModal_form">
                 <p slot="header" class="editModal_head">
                     <span>编辑我的数据</span>
                 </p>
@@ -75,7 +75,7 @@
             </Modal>
 
             <!-- 导入模态框 -->
-            <Modal v-model="exportModal" width="800px" :styles="{width: '600px', top: '20%'}" class="editModal_form">
+            <Modal v-model="exportModal" :mask-closable='close'  width="800px" :styles="{width: '600px', top: '20%'}" class="editModal_form">
                 <p slot="header" class="editModal_head">
                     <span>导入数据</span>
                 </p>
@@ -100,7 +100,7 @@
             </Modal>
 
             <!-- 删除模态框 -->
-            <Modal v-model="delModal" :styles="{width: '500px', top: '20%'}" class="editModal_form">
+            <Modal v-model="delModal" :mask-closable='close'  :styles="{width: '500px', top: '20%'}" class="editModal_form">
                 <p slot="header" class="editModal_head">
                     <span>Warning</span>
                 </p>
@@ -356,6 +356,7 @@ export default {
     data() {
         return {
             listChose: [],
+            close: false,
             smallList_one: [
                 {
                     name: '车辆',
