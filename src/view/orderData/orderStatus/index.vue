@@ -203,7 +203,7 @@ export default {
     data () {
         return {
             timeSelectShow: false,
-            timeLine: '',
+            timeLine: ['',''],
             spinShow: false,
             page: {
                 'float': 'right',
@@ -241,6 +241,10 @@ export default {
             this.noDataText = '' 
 
             this.noData = false
+
+            console.log(this.timeLine[0])
+            console.log(this.timeLine[0] === '')
+            console.log(this.timeLine[0] === null)
 
             this.axios.get('/beefly/orderState/getOrderState', {
                 params: {
@@ -315,7 +319,7 @@ export default {
                 this.timeSelectShow = true
             } else {
                 this.timeSelectShow = false
-                this.timeLine = ''
+                this.timeLine = ['','']
                 this.loadData(e.target.getAttribute('myId'))
             }
         },

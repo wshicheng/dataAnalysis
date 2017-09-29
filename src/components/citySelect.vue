@@ -115,9 +115,9 @@ export default {
                 _this.allCityHide = false
             } else {
                 _this.allCityHide = true
-                setTimeout( function () {
-                    $('.citySelect_area_span span')[0].setAttribute('active')
-                }, 10)        
+                // setTimeout( function () {
+                //     $('.citySelect_area_span span')[0].setAttribute('active')
+                // }, 10)        
             }
         })
         .catch(function (err) {
