@@ -36,8 +36,8 @@
                         <i v-else class="iconfont err">&#xe600;</i>
                     </span>
                     <span style="font-size: 16px;">手机验证</span>
-                    <span>{{this.phoneNo === ''?'未绑定':'已绑定'}}</span>
-                    <span>{{this.phoneNo === '' || null?'您的手机号码' + this.phoneNo === null?'':this.phoneNo + '尚未绑定，请尽快绑定手机号':'手机号码' + this.phoneNo + '已验证'}}</span>
+                    <span>{{this.phoneNoBand === 0?'未绑定':'已绑定'}}</span>
+                    <span>{{this.phoneNoBand === 0?'您的手机号码尚未绑定，请尽快绑定手机号':'手机号码' + this.phoneNo + '已验证'}}</span>
 
                     <span v-show="bindShow">
                         <!-- <button disabled='isBinded' @click='$router.push({path:"/index/memberCenter/bindTel"})'>绑定手机号</button> -->
@@ -446,7 +446,8 @@ export default {
 			email: '',
 			telBinded: false,
 			emailBinded: false,
-			isBinded: false,
+            isBinded: false,
+            phoneNoBand: '',
             imageUrl: '',
             editShow: false,
             bindShow: false,
@@ -632,11 +633,11 @@ export default {
                 this.userName = res.data.data.userName
                 this.phoneNo = res.data.data.phoneNo
 
+                this.phoneNoBand = res.data.data.phoneNoBand 
                 if (res.data.data.phoneNoBand === 0) {
                     this.editShow = false
                     this.bindShow = true
                     this.telBinded = false
-                    
                 } else {
                     this.editShow = true
                     this.bindShow = false
