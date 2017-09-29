@@ -590,7 +590,7 @@ export default {
             }).then((res) => {
                 if (res.data.resultCode === 1) {
                      this.$Message.success('增加添加成功!');
-                   this.data.unshift(this.formValidate)
+                   this.data.unshift(Object.assign({},this.formValidate,{status:1}))
                     this.addModal = false
                 } else if (res.data.resultCode === 0) {
                     this.$router.push('/login')
@@ -619,6 +619,7 @@ export default {
                 params: { keyword, tel, pageNo, pageSize, accessToken }
             }).then((res) => {
                 this.spinShow = false
+                console.log(res.data.data)
                 if (res.data.data.length > 0) {
                     this.pageShow = true
                 }

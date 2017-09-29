@@ -5,7 +5,7 @@
    devtool: 'inline-source-map',
    devServer: {
      disableHostCheck: true,
-     port:7777,
+     port:3000,
      contentBase: './build',
      inline: true,
      historyApiFallback: true
