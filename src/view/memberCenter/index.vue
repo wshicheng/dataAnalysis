@@ -762,11 +762,12 @@ export default {
             const isLt2M = file.size / 1024 / 1024 < 2
             if (!isJPG) {
                 this.$Message.error('上传头像图片只能是 JPG、JPEG、PNG 格式!')
+                return isJPG
             }
             if (!isLt2M) {
                 this.$Message.error('上传头像图片大小不能超过 2MB!')
+                return isLt2M
             }
-            return isJPG && isLt2M
             var reader = new FileReader();
             reader.readAsDataURL(file);
             var data; 
