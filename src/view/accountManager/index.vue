@@ -590,7 +590,7 @@ export default {
             }).then((res) => {
                 if (res.data.resultCode === 1) {
                      this.$Message.success('增加添加成功!');
-                   this.data.unshift(this.formValidate)
+                   this.data.unshift(Object.assign({},this.formValidate,{status:1}))
                     this.addModal = false
                 } else if (res.data.resultCode === 0) {
                     this.$router.push('/login')
