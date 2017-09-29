@@ -591,14 +591,15 @@ export default {
            this.axios.get('/beefly/user/api/v1/add', {
                 params: Object.assign({},this.formValidate,{accessToken:this.accessToken},{roleId:this.roleId},{cityStr:this.allCityCode.join(',')})
             }).then((res) => {
+                 var message = res.data.message
                 if (res.data.resultCode === 1) {
-                     var message = res.data.message
+                    
                      this.$Message.success(message);
                    this.data.unshift(Object.assign({},this.formValidate,{status:1}))
                     this.addModal = false
                      this.formValidate = {}
-                } else if (res.data.resultCode === 0) {
-                    this.$router.push('/login')
+                } else{
+                    this.$Message.error(message);
                 }
             }) 
         },
