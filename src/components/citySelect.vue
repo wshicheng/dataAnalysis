@@ -2,7 +2,7 @@
     <div class="citySelect_area" style="margin-bottom: 5px;">
         <span class="city">城市:</span>
         <div class="citySelect_area_span" >
-            <span class="active" @click="areaClick">全部地区</span>
+            <span class="active" @click="areaClick" v-show="allCityHide">全部地区</span>
             <span @click="areaClick" v-bind:key="item.name" v-for="item in cityList" :myId='item.code'>{{item.name}}</span>
         </div>
     </div>
@@ -60,7 +60,8 @@ export default {
     data () {
         return {
             cityList: [],
-            citySelect: []
+            citySelect: [],
+            allCityHide: false
         }
     },
     methods: {
@@ -109,7 +110,15 @@ export default {
         .then(function (res) {
             _this.cityList = res.data.data||[]
             _this.$store.dispatch('keepCitys', res.data.data)
-
+            
+            if (res.data.data.length === 1) {
+                _this.allCityHide = false
+            } else {
+                _this.allCityHide = true
+                setTimeout( function () {
+                    $('.citySelect_area_span span')[0].setAttribute('active')
+                }, 10)        
+            }
         })
         .catch(function (err) {
             console.log('err', err)

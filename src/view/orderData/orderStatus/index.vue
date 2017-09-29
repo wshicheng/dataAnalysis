@@ -242,16 +242,13 @@ export default {
 
             this.noData = false
 
-            console.log(this.timeLine)
-            console.log(this.timeLine[0])
-
             this.axios.get('/beefly/orderState/getOrderState', {
                 params: {
                     accessToken: this.$store.state.token,
                     type: type,
                     cityCode: this.$store.state.cityList.toString(),
-                    beginDate: this.timeLine[0] === ''||'null'?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
-                    endDate: this.timeLine[0] === ''||'null'?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
+                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
                 }
             })
             .then((res) => {
@@ -328,7 +325,7 @@ export default {
            }
         },
         searchByTimeLine () {
-            if (this.timeLine[0] === '' || 'null') {
+            if (this.timeLine[0] === '' || this.timeLine[0] === null) {
                 this.$Message.warning('请选择时间段')
             } else {
                 this.spinShow = true

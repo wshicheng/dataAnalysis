@@ -14,7 +14,6 @@
                         :on-format-error="handleFormatError"
                         :on-exceeded-size="handleMaxSize"
                         :before-upload="handleBeforeUpload"
-                        :http-request = 'uploadWay'
                         action=""
                         style="display: inline-block;">
                         <img v-if="imageUrl" :src="imageUrl" class="avatar" />
@@ -40,7 +39,7 @@
                     <span>{{this.phoneNo === ''?'未绑定':'已绑定'}}</span>
                     <span>{{this.phoneNo === '' || null?'您的手机号码' + this.phoneNo === null?'':this.phoneNo + '尚未绑定，请尽快绑定手机号':'手机号码' + this.phoneNo + '已验证'}}</span>
 
-                    <span>
+                    <span v-show="bindShow">
                         <!-- <button disabled='isBinded' @click='$router.push({path:"/index/memberCenter/bindTel"})'>绑定手机号</button> -->
                         <button :class="{disabled:isBinded}" :disabled="isBinded" @click='openBindModel'>绑定手机号</button>
                     </span>
@@ -450,6 +449,7 @@ export default {
 			isBinded: false,
             imageUrl: '',
             editShow: false,
+            bindShow: false,
             // 绑定手机号字段与规则
 			bindPhone: {
                 phoneNo: '',
@@ -529,7 +529,6 @@ export default {
     },
     methods: {
         getVerCode (val) {
-            console.log(val)
             var that = this
             var $btn = $('button.sendCode')
             var text = $btn.text()
@@ -544,7 +543,7 @@ export default {
                         that.isDisabled = false
                         that.isPlain = true
                         $btn.text('')
-                        $btn.text(that.initText)
+                        $btn.text('发送验证码')
                         clearInterval(timer)
                         return
                     }else {
@@ -575,7 +574,6 @@ export default {
             }
         },
         editGetVerCode (val) {
-            console.log(val)
             var that = this
             var $btn = $('button.sendCode')
             var text = $btn.text()
@@ -590,7 +588,7 @@ export default {
                         that.isDisabled = false
                         that.isPlain = true
                         $btn.text('')
-                        $btn.text(that.initText)
+                        $btn.text('发送验证码')
                         clearInterval(timer)
                         return
                     }else {
@@ -636,9 +634,12 @@ export default {
 
                 if (res.data.data.phoneNoBand === 0) {
                     this.editShow = false
+                    this.bindShow = true
                     this.telBinded = false
+                    
                 } else {
                     this.editShow = true
+                    this.bindShow = false
                     this.telBinded = true
                 }
 
@@ -756,8 +757,15 @@ export default {
             this.$refs.editPassWord.resetFields();
         },
         handleBeforeUpload (file) {
-            console.log(file)
-            console.log(file.file)
+            const isJPG = (file.type === 'image/jpeg')||(file.type === 'image/png')
+            const isLt2M = file.size / 1024 / 1024 < 2
+            if (!isJPG) {
+                this.$Message.error('上传头像图片只能是 JPG、JPEG、PNG 格式!')
+            }
+            if (!isLt2M) {
+                this.$Message.error('上传头像图片大小不能超过 2MB!')
+            }
+            return isJPG && isLt2M
             var reader = new FileReader();
             reader.readAsDataURL(file);
             var data; 
@@ -789,14 +797,17 @@ export default {
             }
             return false
         },
-        handleFormatError () {
-
+        handleFormatError (file) {
+            this.$Notice.warning({
+                title: '文件格式不正确',
+                desc: '文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
+            });
         },
-        handleMaxSize () {
-
-        },
-        uploadWay (file) {
-            console.log('kekekekke')
+        handleMaxSize (file) {
+            this.$Notice.warning({
+                title: '超出文件大小限制',
+                desc: '文件 ' + file.name + ' 太大，不能超过 2M。'
+            });
         }
     }
 }
