@@ -332,7 +332,7 @@ export default {
                                         textAlign: 'center',
                                         visible: 'hidden'
                                     }
-                                }, '冻结'),
+                                }, '启用'),
                                 h('span', {
                                     style: {
                                         width: '50%',
@@ -341,7 +341,7 @@ export default {
                                         lineHeight: '24px',
                                         textAlign: 'center'
                                     }
-                                }, '启用'),
+                                }, '冻结'),
                                 h('span', {
                                     style: {
                                         width: '26px',
@@ -470,6 +470,7 @@ export default {
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         this.addAccount()
+                       
                     } else {
                         this.$Message.error('表单验证失败!');
                     }
@@ -592,6 +593,7 @@ export default {
                      this.$Message.success('增加添加成功!');
                    this.data.unshift(Object.assign({},this.formValidate,{status:1}))
                     this.addModal = false
+                     this.formValidate = {}
                 } else if (res.data.resultCode === 0) {
                     this.$router.push('/login')
                 }
