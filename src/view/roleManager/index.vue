@@ -85,6 +85,7 @@ import $ from 'jquery'
 export default {
     data() {
         return {
+            deleteRow:'',
              close: false,
              editModal: false,
              addModal: false,
@@ -358,13 +359,22 @@ export default {
         //     this.editModal = false
         // },
         handleDelete(params){
-          /*删除Row 数据 根据index 序列号*/
-          this.index = params.index;
-          this.delId = params.row.id
-          this.delModal = true
+          this.deleteRow = params
+          console.log(this.deleteRow)
+          if(this.deleteRow.row.userList.length>0){
+              this.$Message.error('该角色下有用户，不可删除！');
+          }else{
+                /*删除Row 数据 根据index 序列号*/
+                this.index = params.index;
+                this.delId = params.row.id
+                this.delModal = true
+          }
+          return;
+        
           //this.data.splice(index,1)  
         },
         closeDelModal(){
+          
             this.axios.get('/beefly/role/api/v1/delete', {
                 params: {
                     accessToken: this.$store.state.token,

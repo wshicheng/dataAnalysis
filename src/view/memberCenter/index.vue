@@ -408,33 +408,34 @@ export default {
             if (!value) {
                 return callback(new Error('手机号码不能为空'))
             } else {
-                setTimeout(() => {
-                var res = checkMobile(value)
-                if (res === true) {
-                    this.axios.get('/beefly/user/api/v1/sendPhoneCode', {
-                        params: {
-                            accessToken: this.$store.state.token,
-                            phoneNo: value
-                        }
-                    })
-                    .then( (res) => {
-                        if (res.data.resultCode === 1) {
-                            this.phoneHaveBind = false
-                            return callback()
-                        } else {
-                            this.phoneHaveBind = true
-                            // 一旦手机号码已经存在，就允许用户修改手机号码
-                            this.editShow = true
-                            callback(new Error(res.data.message))
-                        }
-                    })
-                    .catch( err => {
-                        console.log(err)
-                    })
-                } else {
-                    callback(new Error('手机格式格式不正确！！！'))
-                }
-                }, 1000)
+                callback()
+                // setTimeout(() => {
+                // var res = checkMobile(value)
+                // if (res === true) {
+                //     this.axios.get('/beefly/user/api/v1/sendPhoneCode', {
+                //         params: {
+                //             accessToken: this.$store.state.token,
+                //             phoneNo: value
+                //         }
+                //     })
+                //     .then( (res) => {
+                //         if (res.data.resultCode === 1) {
+                //             this.phoneHaveBind = false
+                //             return callback()
+                //         } else {
+                //             this.phoneHaveBind = true
+                //             // 一旦手机号码已经存在，就允许用户修改手机号码
+                //             this.editShow = true
+                //             callback(new Error(res.data.message))
+                //         }
+                //     })
+                //     .catch( err => {
+                //         console.log(err)
+                //     })
+                // } else {
+                //     callback(new Error('手机格式格式不正确！！！'))
+                // }
+                // }, 1000)
             }
         }
         var validateVerCode = (rule,value,callback) => {
@@ -466,8 +467,8 @@ export default {
 		return {
             close: false,
 			updateEmail: '',
-			name: '姓名',
-			userName: '用户名',
+			name: '',
+			userName: '',
 			phoneNo: '',
 			email: '',
 			telBinded: false,
@@ -743,8 +744,9 @@ export default {
                     })
                     .then( (res) => {
                         this.checkLogin(res)
+                        var message = res.data.message
                         if (res.data.resultCode === 1) {
-                            this.$Message.success('手机号码修改成功!');
+                            this.$Message.success(message);
                             this.loadData()
                             this.$refs.editPhone.resetFields()
                             this.editModal = false

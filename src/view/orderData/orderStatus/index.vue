@@ -8,7 +8,7 @@
             <span>时间:</span>
             <button class="active" @click="handleClick"  :myId='1'>今日</button>
             <button @click="handleClick" :myId='2'>昨日</button>
-            <button @click="handleClick" :myId='3'>近七日</button>
+            <button @click="handleClick" :myId='3'>近7日</button>
             <button @click="handleClick" :myId='4'>近30天</button>
             <button @click="handleClick" :myId='5'>指定时间段</button>
         </div>
@@ -37,12 +37,12 @@
         <!-- <Page :total="100" show-sizer show-elevator :styles='page' placement="bottom"></Page> -->
       </div>
 
-      <div class="orderStatus_chart">
+      <div v-show="noData" class="orderStatus_chart">
             <Spin fix size="large" v-if="spinShow"  class="spin">
                 <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
             </Spin>
-            <div class="nodata" v-show="noData" style="text-align:center;">
+            <div class="nodata" v-show="!noData" style="text-align:center;">
                 <i class="iconfont icon-zanwushuju" style="font-size:400px;color:#dedcdc;"></i>
             </div>
           <div id="container" style="min-width:400px; height: 400px;"></div>
@@ -239,10 +239,7 @@ export default {
         loadData (type) {
             this.spinShow = true
             this.noDataText = '' 
-
             this.noData = false
-
-
             this.axios.get('/beefly/orderState/getOrderState', {
                 params: {
                     accessToken: this.$store.state.token,
@@ -257,10 +254,9 @@ export default {
                 this.noDataText = '暂无数据'
                 // 判断是否超时
                 this.checkLogin(res)
-                
                 var data = res.data.data
                 if (data.length > 0) {
-                    this.noData = false
+                    this.noData = true
                     var newArr = []
                     data.map( (item) => {
                         newArr.push(Object.assign({},item,{proportion: item.proportion + "%"}))
@@ -276,7 +272,6 @@ export default {
                     // 取掉无关字段
                     arr.pop()
                     this.chartArr = arr
-
                     // console.log(this.chartArr)
                     this.initChart()                    
                 } else {
@@ -297,7 +292,7 @@ export default {
                     this.chartArr = arr
                     $('#container').html('')
                     this.chartArr = []
-                    this.noData = true
+                    this.noData = false
                 }
             })
             .catch( (err) => {

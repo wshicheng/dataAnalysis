@@ -12,7 +12,7 @@
             <span class="lable" style="margin-left: 30px;">联系方式：</span>
             <Input v-model="phone" @on-change="handleQuery" placeholder="手机号\邮箱" style="width: 160px"></Input>
             <!-- </Col> -->
-            <button class="DIY_button" @click="query" style="margin-left: 30px;position: relative;top: 1px;">查询</button>
+            <button class="DIY_button" @click="query(1)" style="margin-left: 30px;position: relative;top: 1px;">查询</button>
 
         </Row>
         <Row class="tableGrid" style="position:relative">
@@ -84,14 +84,14 @@
                         <Input v-model="editValidate.description" style="width:300px;" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
                     </FormItem>
                     <!-- <FormItem>
-                                        <Button type="primary" @click="handleSubmit('formValidate')">提交</Button>
+                                        <Button type="primary" @click="handleSubmit('formValidate')">确定</Button>
                                         <Button type="ghost" @click="handleReset('formValidate')" style="margin-left: 8px">重置</Button>
                                     </FormItem> -->
                 </Form>
             </div>
             <div slot="footer">
                 <Button class="cancel" @click="closeEditModel" style="margin-left: 8px">取消</Button>
-                <Button type="warning" class="confirm" @click="handleSubmit('editValidate')">提交</Button>
+                <Button type="warning" class="confirm" @click="handleSubmit('editValidate')">确定</Button>
 
             </div>
         </Modal>
@@ -137,14 +137,14 @@
                         <Input v-model="formValidate.description" style="width:300px;" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
                     </FormItem>
                     <!-- <FormItem>
-                                        <Button type="primary" @click="handleSubmit('formValidate')">提交</Button>
+                                        <Button type="primary" @click="handleSubmit('formValidate')">确定</Button>
                                         <Button type="ghost" @click="handleReset('formValidate')" style="margin-left: 8px">重置</Button>
                                     </FormItem> -->
                 </Form>
             </div>
             <div slot="footer">
                 <Button class="cancel" @click="closeAddModel" style="margin-left: 8px">取消</Button>
-                <Button type="warning" class="confirm" @click="handleSubmit('formValidate')">提交</Button>
+                <Button type="warning" class="confirm" @click="handleSubmit('formValidate')">确定</Button>
             </div>
         </Modal>
         <!-- 删除模态框 -->
@@ -524,29 +524,28 @@ export default {
         handleCurrentPage(currentPage) {
             this.currentPage = currentPage
             // 页码变化发请求
-            this.query()
+            this.query(currentPage)
         },
         handlePageSize(pageSize) {
             this.pageSize = pageSize
             // 页面size 变化 发请求
-            this.query()
+            this.query(this.currentPage)
         },
         handleQuery(e) {
             var name = this.userName;
             var phone = this.phone
             // 发起查询请求 
             if (name.length === 0 && phone.length === 0) {
-                this.query()
+                this.query(1)
             }
         },
-        query() {
+        query(pageNo) {
             // 点击查询按钮 实际执行函数
             var keyword = this.userName
             var tel = this.phone
-            var pageNo = this.currentPage
             var pageSize = this.pageSize
             var accessToken = this.accessToken
-            this.throttle(this.queryData, null, 500, { keyword, tel, pageNo, pageSize, accessToken })
+            this.throttle(this.queryData, null, 500, { keyword, tel, pageNo:pageNo, pageSize, accessToken })
 
         },
         delete(index) {
@@ -580,7 +579,7 @@ export default {
                       this.$Message.success('修改成功!');
                       this.editModal = false
                       this.data.splice(this.index, 1,Object.assign({},this.editValidate,{status:this.initStatu}))
-                    this.query()
+                      this.query(1)
                 } else if (res.data.resultCode === 0) {
                     this.$router.push('/login')
                 }
@@ -703,7 +702,7 @@ export default {
     mounted() {
         document.title = '数据运营平台 - 账号管理'
         this.$store.dispatch('menuActiveName', '/index/accountManager')
-        this.query()
+        this.query(1)
         this.queryCity()
         this.queryRole()
     },

@@ -1,9 +1,10 @@
 <template>
-    <div class="citySelect_area" style="margin-bottom: 5px;">
+    <div  v-show="cityList.length<=1?false:true" class="citySelect_area" style="margin-bottom: 5px;">
         <span class="city">城市:</span>
         <div class="citySelect_area_span" >
             <span class="active" @click="areaClick" v-show="allCityHide">全部地区</span>
             <span @click="areaClick" v-bind:key="item.name" v-for="item in cityList" :myId='item.code'>{{item.name}}</span>
+            <i type="error" v-show="cityAuth" style="font-style:normal;">没有城市访问权限，请联系管理员</i>
         </div>
     </div>
 </template>
@@ -59,6 +60,7 @@ import {siblings} from '../util/util.js'
 export default {
     data () {
         return {
+            cityAuth:false,
             cityList: [],
             citySelect: [],
             allCityHide: false
@@ -110,11 +112,15 @@ export default {
         .then(function (res) {
             _this.cityList = res.data.data||[]
             _this.$store.dispatch('keepCitys', res.data.data)
-            
-            if (res.data.data.length === 1) {
-                _this.allCityHide = false
-            } else {
+            if(res.data.data.length===0){
+                _this.cityAuth = true
+            }else{
+                _this.cityAuth = false
+            }
+            if (res.data.data.length >1) {
                 _this.allCityHide = true
+            } else {
+                _this.allCityHide = false
                 // setTimeout( function () {
                 //     $('.citySelect_area_span span')[0].setAttribute('active')
                 // }, 10)        

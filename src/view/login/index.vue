@@ -114,7 +114,6 @@ import {mapActions,mapState,mapGetters} from 'vuex'
                                     this.setToken(res.data.data.token)
                                     this.addMenu(res.data.data.token)
                                     if (!this.isLoadRoutes) {  
-                                        console.log('this.menuitems', this.menuitems)
                                         this.$router.addRoutes(this.menuitems)
                                         this.loadRoutes()  
                                     }

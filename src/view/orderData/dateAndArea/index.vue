@@ -6,13 +6,13 @@
         <div id="dateAndArea_head">
             <div class="dateAndArea_head_time">
                 <span>时间:</span>
-                <button class="active"@click="handleClick" :myId='1'>近七日</button>
+                <button class="active"@click="handleClick" :myId='1'>近7日</button>
                 <button @click="handleClick" :myId='2'>近30天</button>
                 <button @click="handleClick" :myId='3'>指定时间段</button>
             </div>
             <div class="timeSelectShow" v-show="timeSelectShow">
                 <DatePicker type="daterange" v-model="timeLine" placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
-                <div class="search"><button class="DIY_button" @click="searchByTimeLine">搜索</button></div>
+                <div class="search"><button class="DIY_button" @click="searchByTimeLine">查询</button></div>
             </div>
             <city-select></city-select>
             <div class="dateAndArea_type_select">
@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <div class="dateAndArea_table">
+        <div v-show="show1" class="dateAndArea_table">
             <Spin fix size="large" v-if="spinShow"  class="spin">
                 <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
@@ -42,7 +42,7 @@
             <Page :total="totalListNum" show-sizer show-elevator :styles='page' :current='current' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </div>
 
-        <div class="dateAndArea_table_total">
+        <div v-show="show2" class="dateAndArea_table_total">
             <Spin fix size="large" v-if="spinShow2"  class="spin">
                 <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
@@ -323,6 +323,8 @@ export default {
                     key: 'total'
                 }
             ],
+            show1:false,
+            show2:false,
             totalData: [],
             totalListNum: 100,
             pageSizeOpts: [10, 20, 30, 40],
@@ -374,7 +376,12 @@ export default {
                     this.spinShow = false
                     this.orderData = []
                     this.totalListNum = 1
+                    this.columns_orderData = []
+                    this.show1 = false
+                    this.noData = true;
                 } else {
+                      this.noData = false;
+                    this.show1 = true
                     this.spinShow = false
                     var data = res.data.data
                     //随机取出一个数据制作表头
@@ -404,9 +411,7 @@ export default {
                     this.columns_orderData = arr
                     var delData = this.tableDataDel(data)
                     this.orderData = delData
-
                     this.totalListNum = res.data.totalItems
-
                     this.getChartData($('.dateAndArea_head_time button.active').attr('myId'))
                     // 关闭loading 
                     this.spinShow = false
@@ -441,11 +446,14 @@ export default {
                 if (data.length === 0) {
                     this.totalTitle = false
                     this.totalData = []
-
+                    this.show2 = false
+                   
                     // 关闭loading 
                     this.spinShow2 = false
                     this.noDataText = ''
                 } else {
+                   
+                    this.show2 = true
                     this.totalTitle = true
                     //随机取出一个数据制作表头  
                     var arr = []
@@ -502,7 +510,7 @@ export default {
                 newArr.push(obj)
                 obj.orderTime = dataTime.orderTime
                 // 在这里创造chart图表的x轴坐标
-                this.chartTime.push(dataTime.orderTime)
+                //this.chartTime.push(dataTime.orderTime)
                 obj[type] = dataTime[type]
                 return newArr
             })
@@ -530,27 +538,54 @@ export default {
                     this.noData = true
                 } else {
                     this.spinShow = false
-                    var newArr = []
+                    // var newArr = []
+                    // var type = $('.dateAndArea_type_select button.active').attr("myType")
+                    // chartData.map( item => {
+                    //     var arr = new Array()
+                    //     for (var i = 0; i < item.length; i++) {
+                    //         // debugger
+                    //         var obj = {}
+                    //         arr.push(Number(item[i][type]))
+                    //         obj.data = arr
+                    //         obj.name = item[i].cityName
+                    //     }
+                    //     newArr.push(obj)
+                    //     return newArr
+                    // })
                     var type = $('.dateAndArea_type_select button.active').attr("myType")
-                    chartData.map( item => {
-                        var arr = new Array()
-                        for (var i = 0; i < item.length; i++) {
-                            // debugger
-                            var obj = {}
-                            arr.push(Number(item[i][type]))
-                            obj.data = arr
-                            obj.name = item[i].cityName
-                        }
-                        newArr.push(obj)
-                        return newArr
+                    var res = chartData.map((item)=>{
+                        var arrType = []
+                        var arrTime = []
+                        var obj = {}
+                        item.map((list)=>{
+                           arrType.push(Number(list[type]))
+                           arrTime.push(list.orderTime)
+                           obj.name = list.cityName
+                        })
+                        obj.data = arrType
+                        obj.time = arrTime
+                       return obj
                     })
-
-                    this.chartData = newArr
-                    var that = this
-                    // 延时加载，确保x轴正常显示。
+                   
+                    var _result = res.map((item)=>{
+                        return item.time.length
+                    })
+                   var _index = Math.max.apply(null,_result)
+                   res.map((item)=>{
+                       if(item.time.length === _index){
+                           this.chartTime = item.time
+                       }
+                   })
+                    console.log(res)
+                       this.chartData = res;
+                        // 延时加载，确保x轴正常显示。
+                        var that = this;
                     setTimeout(function() {
                         that.initChart()
                     }, 500)
+                   
+
+                 
                 }
             })
             .catch( (err) => {

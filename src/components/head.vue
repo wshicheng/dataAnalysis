@@ -1,20 +1,27 @@
 <template>
     <div class="header">
+        <div v-show="cityList.length>3?true:false" class="cityShowHiden">
+            <ul>
+                <li v-bind:key="list.code" v-for="list of cityList">{{list.name}}</li>
+            </ul>
+        </div>
         <Menu mode="horizontal" theme="dark" active-name="1">
             <div class="layout-logo">蜜蜂出行数据运营平台
 
             </div>
             <div class="cityList">
-                <!-- <span class="cityList">{{city}}</span> -->
-                <span class="cityList">全部地区</span>
+                <span class="cityList">{{city}}
+                </span>
+                <!-- <span class="cityList">全部地区</span> -->
             </div>
+
             <div class="layout-logoInfo">
                 <img class="headImg" v-if="headImg" :src="headImg" @click="$router.push('/index/memberCenter')">
                 <i v-else class="icon iconfont icon-touxiang headIcon"></i>
 
                 <!-- <i v-if="getHeadImg = false" class="iconfont icon-zhanghao1"></i> -->
                 <!-- <i class="icon iconfont icon-touxiang" style="color: #fff; font-size: 50px;"></i> -->
-                <span class="accountUserName">{{userInfo.name}}</span>
+                <span class="accountUserName">{{userInfo.name.length>0?userInfo.name:userInfo.userName}}</span>
                 <i class="iconfont icon-zhuxiao_logout exit" @click="handleLoginOut"></i>
             </div>
         </Menu>
@@ -22,21 +29,27 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import $ from 'jquery'
+
 export default {
     data() {
+        setTimeout(function() {
+            $('span.cityList').hover(function() {
+                $('div.cityShowHiden').animate({ height: '200px', opacity: 1 }, 200)
+            }, function() {
+                $('div.cityShowHiden').animate({ height: '0', opacity: 0 }, 200)
+            })
+        }, 1000)
         return {
             cityList: [
-                { "code": "110100", "id": 1, "name": "北京市" },
-                { "code": "120100", "id": 12, "name": "天津市" },
-                { "code": "130200", "id": 40, "name": "唐山市" },
-                { "code": "340225", "id": 2, "name": "无为县" }
             ],
             getHeadImg: false,
             headImg: ''
         }
     },
-    mounted () {
+    mounted() {
         this.headImg = window.sessionStorage.getItem('headImg')
+
     },
     methods: {
         handleLoginOut() {
@@ -46,7 +59,7 @@ export default {
             window.sessionStorage.removeItem('userInfo')
             window.sessionStorage.removeItem('openNames')
         },
-        getImage () {
+        getImage() {
             if (this.$store.state.imageUrl === '') {
                 this.headImg = window.sessionStorage.getItem('headImg')
             } else {
@@ -58,6 +71,7 @@ export default {
     computed: {
         ...mapGetters(['userInfo']),
         city: function() {
+            this.cityList = this.userInfo.cityList
             return this.userInfo.cityList.map((item) => { return item.name }).join('、')
         }
     },
@@ -67,16 +81,14 @@ export default {
 }
 </script>
 <style lang="scss" scoped type="text/css">
-
 img.headImg {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    float: left;
     margin-right: 10px;
     cursor: pointer;
-    margin-top: 15px;
-    display: inline-block;
+    margin-top: 10px;
+    float: left;
 }
 
 .headIcon {
@@ -87,6 +99,7 @@ img.headImg {
     top: 1px;
     float: left;
 }
+
 .layout-logo {
     height: 30px;
     border-radius: 3px;
@@ -122,6 +135,8 @@ i.icon-zhanghao1 {
 span.accountUserName {
     color: #fff;
     font-size: 16px;
+    float: left;
+    margin-top: 0;
 }
 
 i.icon-zhuxiao_logout {
@@ -145,30 +160,56 @@ i.icon-zhuxiao_logout {
 
 div.cityList {
     display: inline-block;
-
     position: relative;
     left: 50px;
     height: 30px;
     line-height: 30px;
-    top: 12px;
+    top: 4px;
     color: #fff;
 }
 
 span.cityList {
     font-size: 15px;
     white-space: nowrap;
-    overflow: hidden;
     width: 208px;
     display: inline-block;
     text-overflow: ellipsis;
+
+    overflow: hidden;
     position: absolute;
-    left: 0;
-    top: 0;
+    top: 10px;
 }
 
-span.cityList:hover {
-    cursor:pointer;
-    text-overflow: inherit;
-    overflow: visible;
+div.cityShowHiden ul {
+    padding: 10px;
+}
+
+div.cityShowHiden {
+    width: 400px;
+    height: 0;
+    transition: all linear .2s;
+    position: absolute;
+    left: 241px;
+    top: 59px;
+    border: 1px solid #797979;
+    z-index: 33;
+    overflow-y: auto;
+    opacity: 0;
+    background: rgba(121, 121, 121, .8);
+}
+
+div.cityShowHiden ul li {
+    padding: 0 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    float: left;
+    background: #495060;
+    color: #f8f8f9;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+div.header {
+    position: relative;
 }
 </style>

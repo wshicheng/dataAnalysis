@@ -8,7 +8,7 @@
             <span>时间:</span>
             <button class="active" @click="handleClick">今日</button>
             <button @click="handleClick">昨日</button>
-            <button @click="handleClick">近七日</button>
+            <button @click="handleClick">近7日</button>
             <button @click="handleClick">近30天</button>
             <button @click="handleClick">指定时间段</button>
         </div>
