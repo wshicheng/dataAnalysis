@@ -87,7 +87,7 @@ img.headImg {
     border-radius: 50%;
     margin-right: 10px;
     cursor: pointer;
-    margin-top: 10px;
+    margin-top: 16px;
     float: left;
 }
 
@@ -172,6 +172,7 @@ span.cityList {
     font-size: 15px;
     white-space: nowrap;
     width: 208px;
+    cursor: pointer;
     display: inline-block;
     text-overflow: ellipsis;
 
@@ -182,9 +183,11 @@ span.cityList {
 
 div.cityShowHiden ul {
     padding: 10px;
+    padding-bottom: 0px;
 }
 
 div.cityShowHiden {
+    cursor: pointer;
     width: 400px;
     height: 0;
     transition: all linear .2s;

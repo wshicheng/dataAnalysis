@@ -38,7 +38,7 @@
                     </div>
                 </Poptip>
             </div> -->
-            <Table :no-data-text='noDataText' :loading='loading' border size='small' :columns="columns_orderData" :data="orderData"></Table>
+            <Table :no-data-text='noDataText' :ellipsis='ellipsis' :loading='loading' border size='small' :columns="columns_orderData" :data="orderData"></Table>
             <Page :total="totalListNum" show-sizer show-elevator :styles='page' :current='current' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </div>
 
@@ -47,14 +47,14 @@
                 <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
             </Spin>
-            <div class="title" v-show="totalTitle">
+            <!-- <div class="title" v-show="totalTitle">
                 <div class="avg">
                     平均
                 </div>
                 <div class="total">
                     合计
                 </div>
-            </div>
+            </div> -->
             <Table :no-data-text='noDataText' class="totalTable" :show-header='showHeader' border size='small' :columns="columns_total" :data="totalData"></Table>
         </div>
 
@@ -315,7 +315,7 @@ export default {
                     key: 'orderTime'
                 },
                 {
-                    title: '北京',
+                    title: '',
                     key: 'city'
                 },
                 {
@@ -325,7 +325,12 @@ export default {
             ],
             show1:false,
             show2:false,
-            totalData: [],
+            totalData: [                
+                {
+                    orderTime: '1111',
+                    city: '',
+                    total:1
+                }],
             totalListNum: 100,
             pageSizeOpts: [10, 20, 30, 40],
             pageSize: 10,
@@ -340,7 +345,8 @@ export default {
             noDataText: '',
             noData: false,
             chartTitleName: '有效订单数',
-            totalTitle: true
+            totalTitle: true,
+            ellipsis: true
         }
     },
     mounted () {
@@ -348,7 +354,6 @@ export default {
         document.title = '订单数据 - 分日期分地区'
         this.loadData('1')
         this.loadTotalData('1')
-        // this.getChartData('1')
     },
     methods: {
         loadData (type) {
@@ -370,13 +375,11 @@ export default {
             .then( (res) => {
                 // console.log(res.data.data)
                     $('#container').html('')
-                
                 if (res.data.data.length === 0) {
                     this.noDataText = '暂无数据'
                     this.spinShow = false
                     this.orderData = []
                     this.totalListNum = 1
-                    this.columns_orderData = []
                     this.show1 = false
                     this.noData = true;
                 } else {
@@ -392,6 +395,7 @@ export default {
 
                         obj.title = item.cityName
                         obj.key = $('.dateAndArea_type_select button.active').attr("myType") + item.cityCode
+                        obj.width = firstData.length > 10?100:''
 
                         arr.push(obj)
                         return arr
@@ -400,12 +404,16 @@ export default {
                     var totalTitle = arr.pop()
                     totalTitle.title = '合计'
                     totalTitle.key = $('.dateAndArea_type_select button.active').attr("myType")
+                    totalTitle.fixed = 'right'
+                    totalTitle.width = 120
                     
                     arr.push(totalTitle)
                     // 讲日期插入动态title
                     arr.unshift({
                         title: '日期',
-                        key: 'orderTime'
+                        key: 'orderTime',
+                        fixed: 'left',
+                        width: 100
                     })
                     
                     this.columns_orderData = arr
@@ -463,6 +471,7 @@ export default {
 
                         obj.title = item.cityName
                         obj.key = $('.dateAndArea_type_select button.active').attr("myType") + item.cityCode
+                        obj.width = firstData.length > 10?100:''
 
                         arr.push(obj)
                         return arr
@@ -471,13 +480,17 @@ export default {
                     var totalTitle = arr.pop()
                     totalTitle.title = '合计'
                     totalTitle.key = $('.dateAndArea_type_select button.active').attr("myType")
+                    totalTitle.width = 120
+                    totalTitle.fixed = 'right'
                     
                     arr.push(totalTitle)
-                    // 将日期插入动态title
-                    // arr.unshift({
-                    //     title: '日期',
-                    //     key: 'orderTime'
-                    // })
+                    // 将平均字段插入动态title
+                    arr.unshift({
+                        title: '分类',
+                        key: 'title',
+                        fixed: 'left',
+                        width: 100
+                    })
                     
                     this.columns_total = arr
                     var delData = this.tableTotalDataDel(data)
@@ -609,7 +622,10 @@ export default {
                 obj[type] = dataTime[type]
                 return newArr
             })
-            // console.log('newArr',newArr)
+            
+            newArr[0].title = '平均'
+            newArr[1].title = '合计'
+            console.log('newArr000',newArr)
 
             return newArr
         },
@@ -627,7 +643,6 @@ export default {
                 this.timeLine = ['','']
                 this.loadData(e.target.getAttribute('myId'))
                 this.loadTotalData(e.target.getAttribute('myId'))
-                this.getChartData(e.target.getAttribute('myId'))
             }
         },
         handleTypeClick (e) {
@@ -640,7 +655,6 @@ export default {
             e.target.setAttribute('class', 'active')
             this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
             this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
-            // this.getChartData($('.dateAndArea_head_time button.active').attr('myId'))
         },
         searchByTimeLine () {
             if (this.timeLine[0] === '' || this.timeLine[0] === null) {
@@ -648,7 +662,6 @@ export default {
             } else {
                 this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
                 this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
-                // this.getChartData($('.dateAndArea_head_time button.active').attr('myId'))
             }
         },
         initChart () {
@@ -668,6 +681,9 @@ export default {
                 exporting:{
                     enabled:false
                 },
+                tooltip: {
+                    valueSuffix: ''
+                },
                 xAxis: {
                     categories: this.chartTime
                 },
@@ -679,9 +695,9 @@ export default {
                 plotOptions: {
                     line: {
                         dataLabels: {
-                            enabled: true          // 开启数据标签
+                            enabled: false          // 开启数据标签
                         },
-                        enableMouseTracking: false // 关闭鼠标跟踪，对应的提示框、点击事件会失效
+                        enableMouseTracking: true // 关闭鼠标跟踪，对应的提示框、点击事件会失效
                     }
                 },
                 series: this.chartData
