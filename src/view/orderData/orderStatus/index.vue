@@ -14,7 +14,7 @@
         </div>
         <div class="timeSelectShow" v-show="timeSelectShow">
             <DatePicker type="daterange" v-model="timeLine" placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
-            <div class="search"><button @click="searchByTimeLine">搜索</button></div>
+            <div class="search"><button @click="searchByTimeLine">查询</button></div>
         </div>
         <city-select></city-select>
       </div>

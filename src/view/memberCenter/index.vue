@@ -416,34 +416,32 @@ export default {
             if (!value) {
                 return callback(new Error('手机号码不能为空'))
             } else {
-                // callback()
-                setTimeout(() => {
-                var res = checkMobile(value)
-                if (res === true) {
-                    this.axios.get('/beefly/user/api/v1/sendPhoneCode', {
-                        params: {
-                            accessToken: this.$store.state.token,
-                            phoneNo: value
-                        }
-                    })
-                    .then( (res) => {
-                        if (res.data.resultCode === 1) {
-                            this.phoneHaveBind = false
-                            return callback()
-                        } else {
-                            this.phoneHaveBind = true
-                            // 一旦手机号码已经存在，就允许用户修改手机号码
-                            this.editShow = true
-                            callback(new Error(res.data.message))
-                        }
-                    })
-                    .catch( err => {
-                        console.log(err)
-                    })
-                } else {
-                    callback(new Error('手机格式格式不正确！！！'))
-                }
-                }, 1000)
+                callback()
+                // setTimeout(() => {
+                // var res = checkMobile(value)
+                // if (res === true) {
+                //     this.axios.get('/beefly/user/api/v1/sendPhoneCode', {
+                //         params: {
+                //             accessToken: this.$store.state.token,
+                //             phoneNo: value
+                //         }
+                //     })
+                //     .then( (res) => {
+                //         if (res.data.resultCode === 1) {
+                //             this.phoneHaveBind = false
+                //             return callback()
+                //         } else {
+                //             this.phoneHaveBind = true
+                //             callback(new Error(res.data.message))
+                //         }
+                //     })
+                //     .catch( err => {
+                //         console.log(err)
+                //     })
+                // } else {
+                //     callback(new Error('手机格式格式不正确！！！'))
+                // }
+                // }, 1000)
             }
         }
         var validateTelEdit = (rule, value, callback) => {
@@ -568,58 +566,72 @@ export default {
 		}
     },
     mounted () {
-        this.phoneHaveBind = false
 
         this.loadData ()
         this.$store.dispatch('menuActiveName', '/index/memberCenter')
     },
     methods: {
         getVerCode (val) {
-            if (this.phoneHaveBind === true) {
-                this.$Message.warning('手机号码已经存在，请更换手机号进行尝试！')
+            if (val === '') {
+                return
             } else {
-                var that = this
-                var $btn = $('button.sendCode')
-                var text = $btn.text()
-                this.initText = text
-                var initTime = 60
-                if(checkMobile(val)){
-                    this.isDisabled = true
-                    this.isPlain = false
-                    var timer = setInterval(function(){
-                        initTime--
-                        if(initTime<=0){
-                            that.isDisabled = false
-                            that.isPlain = true
-                            $btn.text('')
-                            $btn.text('发送验证码')
-                            clearInterval(timer)
-                            return
-                        }else {
-                            $btn.text(initTime + 's')
-                        }
-                    },1000)
-                    setTimeout(function(){
-                        that.$Message.warning('已向您的手机发送验证码，请查收！！！')
-                    },1000)
+                this.axios.get('/beefly/user/api/v1/sendPhoneCode', {
+                    params: {
+                        accessToken: this.$store.state.token,
+                        phoneNo: this.bindPhone.phoneNo
+                    }
+                })
+                .then( (res) => {
+                    if (res.data.resultCode === 1) {
+                        var that = this
+                        var $btn = $('button.sendCode')
+                        var text = $btn.text()
+                        this.initText = text
+                        var initTime = 60
+                        if(checkMobile(val)){
+                            this.isDisabled = true
+                            this.isPlain = false
+                            var timer = setInterval(function(){
+                                initTime--
+                                if(initTime<=0){
+                                    that.isDisabled = false
+                                    that.isPlain = true
+                                    $btn.text('')
+                                    $btn.text('发送验证码')
+                                    clearInterval(timer)
+                                    return
+                                }else {
+                                    $btn.text(initTime + 's')
+                                }
+                            },1000)
+                            setTimeout(function(){
+                                that.$Message.warning('已向您的手机发送验证码，请查收！！！')
+                            },1000)
 
-                    this.axios.get('/beefly/user/api/v1/sendPhoneCode', {
-                        params: {
-                            accessToken: this.$store.state.token,
-                            phoneNo: this.bindPhone.phoneNo
+                            // this.axios.get('/beefly/user/api/v1/sendPhoneCode', {
+                            //     params: {
+                            //         accessToken: this.$store.state.token,
+                            //         phoneNo: this.bindPhone.phoneNo
+                            //     }
+                            // })
+                            // .then( (res) => {
+                            //     this.checkLogin(res)
+                            //     // 发送成功后，改变手机号码是否绑定这个状态
+                            //     this.phoneHaveBind = false
+                            // })
+                            // .catch( (err) => {
+                            //     console.log(err)
+                            // })
                         }
-                    })
-                    .then( (res) => {
-                        this.checkLogin(res)
-                        // 发送成功后，改变手机号码是否绑定这个状态
-                        this.phoneHaveBind = false
-                    })
-                    .catch( (err) => {
-                        console.log(err)
-                    })
-                }
+                    } else {
+                        this.$Message.error(res.data.message)
+                    }
+                })
+                .catch( (err) => {
+                    console.log(err)
+                })
             }
-        },
+        }, 
         editGetVerCode (val) {
             if (val === '') {
                 
@@ -656,20 +668,20 @@ export default {
                             setTimeout(function(){
                                 that.$Message.warning('已向您的手机发送验证码，请查收！！！')
                             },1000)
-                            this.axios.get('/beefly/user/api/v1/sendPhoneCode', {
-                                params: {
-                                    accessToken: this.$store.state.token,
-                                    phoneNo: this.editPhone.phoneNo
-                                }
-                            })
-                            .then( (res) => {
-                                this.checkLogin(res)
-                                // 发送成功后，改变手机号码是否绑定这个状态
-                                this.phoneHaveBind = false
-                            })
-                            .catch( (err) => {
-                                console.log(err)
-                            })
+                            // this.axios.get('/beefly/user/api/v1/sendPhoneCode', {
+                            //     params: {
+                            //         accessToken: this.$store.state.token,
+                            //         phoneNo: this.editPhone.phoneNo
+                            //     }
+                            // })
+                            // .then( (res) => {
+                            //     this.checkLogin(res)
+                            //     // 发送成功后，改变手机号码是否绑定这个状态
+                            //     this.phoneHaveBind = false
+                            // })
+                            // .catch( (err) => {
+                            //     console.log(err)
+                            // })
                         }
                     } else {
                         this.$Message.error(res.data.message)

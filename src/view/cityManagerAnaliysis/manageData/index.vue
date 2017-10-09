@@ -70,7 +70,7 @@
                 </div>
                 <div slot="footer">
                     <Button class="cancel" @click="handleReset('editValidate')" style="margin-left: 8px">取消</Button>
-                    <Button type="warning" class="confirm" @click="handleSubmit('editValidate')">确认</Button>
+                    <Button type="warning" class="confirm" @click="handleSubmit('editValidate')">确定</Button>
                 </div>
             </Modal>
 
@@ -95,7 +95,7 @@
                 <Progress class="my_page" :percent="uploadPercent" v-show="isUploadPercent" status="active"></Progress>
                 <div slot="footer">
                     <Button class="cancel" @click="closeExport" style="margin-left: 8px">取消</Button>
-                    <Button type="warning" class="confirm" @click="confirmExport">确认</Button>
+                    <Button type="warning" class="confirm" @click="confirmExport">确定</Button>
                 </div>
             </Modal>
 
@@ -104,10 +104,10 @@
                 <p slot="header" class="editModal_head">
                     <span>Warning</span>
                 </p>
-                <p style="color: #444; font-weight: bold; font-size: 16px; text-align:left;text-indent:55px; height: 50px; line-height: 50px;">确认删除吗？</p>
+                <p style="color: #444; font-weight: bold; font-size: 16px; text-align:left;text-indent:55px; height: 50px; line-height: 50px;">确定删除吗？</p>
                 <div slot="footer">
                     <Button class="cancel" @click="delModal = false" style="margin-left: 8px">取消</Button>
-                    <Button type="warning" class="confirm" @click="closeDelModal">确认</Button>
+                    <Button type="warning" class="confirm" @click="closeDelModal">确定</Button>
                 </div>
             </Modal>
         </div>

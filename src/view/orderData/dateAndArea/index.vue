@@ -395,7 +395,7 @@ export default {
 
                         obj.title = item.cityName
                         obj.key = $('.dateAndArea_type_select button.active').attr("myType") + item.cityCode
-                        obj.width = firstData.length > 10?100:''
+                        obj.width = firstData.length > 11?100:''
 
                         arr.push(obj)
                         return arr
@@ -471,7 +471,7 @@ export default {
 
                         obj.title = item.cityName
                         obj.key = $('.dateAndArea_type_select button.active').attr("myType") + item.cityCode
-                        obj.width = firstData.length > 10?100:''
+                        obj.width = firstData.length > 11?100:''
 
                         arr.push(obj)
                         return arr
@@ -567,6 +567,7 @@ export default {
                     // })
                     var type = $('.dateAndArea_type_select button.active').attr("myType")
                     var res = chartData.map((item)=>{
+                        console.log('item',item)
                         var arrType = []
                         var arrTime = []
                         var obj = {}
@@ -596,9 +597,6 @@ export default {
                     setTimeout(function() {
                         that.initChart()
                     }, 500)
-                   
-
-                 
                 }
             })
             .catch( (err) => {
@@ -624,7 +622,9 @@ export default {
             })
             
             newArr[0].title = '平均'
+            newArr[0].cellClassName = {title: 'demo-table-info-cell-name'}
             newArr[1].title = '合计'
+            newArr[1].cellClassName = {title: 'demo-table-info-cell-name'}
             console.log('newArr000',newArr)
 
             return newArr

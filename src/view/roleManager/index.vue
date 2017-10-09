@@ -64,7 +64,7 @@
                 </div>
                 <div slot="footer">
                     <Button class="cancel" style="margin-left: 8px" @click="closeAddModel">取消</Button>
-                    <Button type="warning" class="confirm" @click="handleSubmit('addValidate')">确认</Button>
+                    <Button type="warning" class="confirm" @click="handleSubmit('addValidate')">确定</Button>
                 </div>
             </Modal>
             <!-- 删除模态框 -->
@@ -72,10 +72,10 @@
                 <p slot="header" style="color: #404040;">
                     <span>Warning</span>
                 </p>
-                <p style="color: #444; font-weight: bold; font-size: 16px; text-align:left;text-indent:55px; height: 50px; line-height: 50px;">确认删除吗？</p>
+                <p style="color: #444; font-weight: bold; font-size: 16px; text-align:left;text-indent:55px; height: 50px; line-height: 50px;">确定删除吗？</p>
                 <div slot="footer">
                     <Button class="cancel" @click="delModal = false" style="margin-left: 8px">取消</Button>
-                    <Button type="warning" class="confirm" @click="closeDelModal">确认</Button>
+                    <Button type="warning" class="confirm" @click="closeDelModal">确定</Button>
                 </div>
             </Modal>
     </Row>
