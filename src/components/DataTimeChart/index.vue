@@ -8,7 +8,7 @@ var Highcharts = require('highcharts');
 require('highcharts/modules/exporting')(Highcharts);
 export default {
     methods: {
-        initChart() {
+        initChart(msg) {
             var options = {
                 chart: {
                     type: 'column'
@@ -69,14 +69,14 @@ export default {
             new Highcharts.chart('container', options);
         },
     },
-    props:['message'],
-    computed:{
-        msg:function(){
-            return this.message
+    data:function(){
+        return {
+            msg:this.message
         }
     },
+    props:['message'],
     mounted(){
-        this.initChart()
+        this.initChart(this.msg)
     }
 }
 </script>
