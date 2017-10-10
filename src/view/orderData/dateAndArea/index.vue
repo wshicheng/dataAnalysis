@@ -567,7 +567,6 @@ export default {
                     // })
                     var type = $('.dateAndArea_type_select button.active').attr("myType")
                     var res = chartData.map((item)=>{
-                        console.log('item',item)
                         var arrType = []
                         var arrTime = []
                         var obj = {}
@@ -590,7 +589,6 @@ export default {
                            this.chartTime = item.time
                        }
                    })
-                    console.log(res)
                        this.chartData = res;
                         // 延时加载，确保x轴正常显示。
                         var that = this;
@@ -625,7 +623,6 @@ export default {
             newArr[0].cellClassName = {title: 'demo-table-info-cell-name'}
             newArr[1].title = '合计'
             newArr[1].cellClassName = {title: 'demo-table-info-cell-name'}
-            console.log('newArr000',newArr)
 
             return newArr
         },
@@ -685,7 +682,6 @@ export default {
                     valueSuffix: '',
                     formatter: function() { 
                         var type = $('.dateAndArea_type_select button.active').attr("myType")
-                        console.log(type)
                         if(type==='orderNum'){
                             if(this.point.y.length>3){
                              return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 2, ",", " ") + '单/天';
