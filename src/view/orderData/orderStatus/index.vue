@@ -330,7 +330,6 @@ export default {
                 
                 this.spinShow = true
                 this.noDataText = ''
-
                 var beginDate = moment(this.timeLine[0]).format('YYYY-MM-DD')
                 var endDate =  moment(this.timeLine[1]).format('YYYY-MM-DD')
                 this.axios.get('/beefly/orderState/getOrderState', {

@@ -63,7 +63,7 @@
                         </CheckboxGroup> -->
                          <div>
                             <Checkbox :indeterminate="indeterminate" :value="checkAll" @click.prevent.native="handleCheckAll">
-                                全选
+                                全部地区
                             </Checkbox>
                         </div>
                         <CheckboxGroup v-model="editValidate.cityList" @on-change="checkAllGroupChange">
@@ -96,7 +96,7 @@
             </div>
         </Modal>
         <!-- 模态框区域 增加数据 -->
-        <Modal v-model="addModal" width="800px" :styles="{top: '20%'}" :mask-closable="close" class="editModal_form">
+        <Modal v-model="addModal" width="800px" :styles="{top: '20%'}" :mask-closable="close" class="addModal_form">
             <p slot="header" class="editModal_head" style="color: #404040;">
                 <span>添加账号</span>
             </p>
@@ -471,9 +471,10 @@ export default {
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         this.addAccount()
-                       
+                        this.handleReset(name)
                     } else {
                         this.$Message.error('表单验证失败!');
+                        this.handleReset(name)
                     }
                 })
             } else {
@@ -515,7 +516,7 @@ export default {
         handleAdd() {
             /*增加数据*/
             this.addModal = true
-
+            this.checkAll = false;
             //this.data.unshift(this.editValidate)
         },
         handleReset(name) {
@@ -595,9 +596,11 @@ export default {
                      this.$Message.success(message);
                    this.data.unshift(Object.assign({},this.formValidate,{status:1}))
                     this.addModal = false
+                     this.checkAll = false;
                      this.formValidate = {}
                      this.query(this.currentPage)
                 } else{
+                     this.checkAll = false;
                     this.$Message.error(message);
                 }
             }) 
