@@ -1,5 +1,5 @@
 <template>
-    <div  v-show="cityList.length<=1?false:true" class="citySelect_area" style="margin-bottom: 5px;">
+    <div  class="citySelect_area" style="margin-bottom: 5px;">
         <span class="city">城市:</span>
         <div class="citySelect_area_span" >
             <span class="active" @click="areaClick" v-show="allCityHide">全部地区</span>
@@ -9,6 +9,7 @@
     </div>
 </template>
 <style lang='scss' scoped type="text/css">
+.citySelect_area{line-height:30px;}
 .citySelect_area span {
     width: 80px;
     height: 30px;
@@ -112,6 +113,7 @@ export default {
         .then(function (res) {
             _this.cityList = res.data.data||[]
             _this.$store.dispatch('keepCitys', res.data.data)
+            console.log()
             if(res.data.data.length===0){
                 _this.cityAuth = true
             }else{
