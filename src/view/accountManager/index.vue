@@ -592,11 +592,11 @@ export default {
             }).then((res) => {
                  var message = res.data.message
                 if (res.data.resultCode === 1) {
-                    
                      this.$Message.success(message);
                    this.data.unshift(Object.assign({},this.formValidate,{status:1}))
                     this.addModal = false
                      this.formValidate = {}
+                     this.query(this.currentPage)
                 } else{
                     this.$Message.error(message);
                 }
