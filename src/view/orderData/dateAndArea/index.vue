@@ -228,6 +228,7 @@
             overflow: hidden;
             background: #fff;
             position: relative;
+            margin-top: 20px;
             div.title {
                 float: left;
                 width: 200px;
@@ -339,7 +340,7 @@ export default {
             spinShow: false,
             spinShow2: false,
             spinShow3: false,
-            showHeader: false,
+            showHeader: true,
             chartTime: [],
             chartData: [],
             noDataText: '',
@@ -670,7 +671,13 @@ export default {
                     text: '分日期分地区 ' + this.chartTitleName
                 },
                 subtitle: {
-                    text: '*地区超过10个时，显示排名靠前的10个地区'
+                    text: '*地区超过10个时，显示排名靠前的10个地区',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    style: {
+                        color: '#ccc',
+                        fontSize: '12px'
+                    }
                 },
                 credits:{
                     enabled:false
