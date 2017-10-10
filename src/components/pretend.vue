@@ -208,7 +208,6 @@ import citySelect from './citySelect.vue'
               $('div.fiexedAssets').eq(4).height(height/2)
            setTimeout(()=>{
                 $('span.city').remove()
-             
            },200)
         }
     }
