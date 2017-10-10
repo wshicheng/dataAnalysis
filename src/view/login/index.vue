@@ -118,8 +118,10 @@ import {mapActions,mapState,mapGetters} from 'vuex'
                                         this.loadRoutes()  
                                     }
                                     this.getUser(res.data.data)
+                                    console.log('呱呱',res.data.data)
                                     window.sessionStorage.setItem('userInfo',JSON.stringify(this.userInfo))
                                     window.sessionStorage.setItem('headImg', res.data.data.adminUserIconUrl)
+                                    // window.sessionStorage.setItem('authList', )
                                     this.$router.push({path:'/index/dateAndArea'})
                                 }else{
                                     this.errorTextShow = true
