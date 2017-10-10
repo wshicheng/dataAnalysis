@@ -19,6 +19,15 @@
             <city-select></city-select>
         </div>
         <div class="table">
+            <div class="help">
+                <Poptip trigger="hover" style="float: right;"  placement="top-end" :title="poptipTitle">
+                    <span>?</span>
+                    <div class="content" slot="content">
+                        <p><b>订单数:</b>各订单状态的订单数（非运维订单）</p>
+                        <p><b>数量占比:</b>各订单状态的订单数（非运维订单）/订单总数</p>
+                    </div>
+                </Poptip> 
+            </div>
           <table>
             <thead>
               <tr>
@@ -91,7 +100,9 @@
             </tfoot>
           </table>
         </div>
-       
+        <div class="chart">
+            <chart message="hello"></chart>
+        </div>
     </div>
 </template>
 <style lang='scss' scoped type="text/css">
@@ -104,6 +115,42 @@
             line-height: 30px;
         }
         div.table{padding:20px;background:#fff;margin-top:20px;}
+        div.help {
+                width: 100%;
+                height: 30px;
+                line-height: 30px;
+                overflow: hidden;
+                margin-bottom: 10px;
+                span {
+                  
+                    display: inline-block;
+                    width: 30px;
+                    height: 30px;
+                    background: orange;
+                    color: #fff;
+                    font-weight: bolder;
+                    border-radius: 50%;
+                    text-align: center;
+                    font-size: 18px;
+                    cursor: pointer;
+                    margin-bottom: 10px;
+                }
+                .content {
+                    p {
+                        width: 100%;
+                        color: #444;
+                        font-size: 12px;
+                        b {
+                            width: 50px;
+                            color: #444;
+                            font-size: 12px;
+                            display: inline-block;
+                            text-align: right;
+                            margin-right: 10px;
+                        }
+                    }
+                }
+            }
         table{
           width:100%;
           border-collapse: collapse;
@@ -123,6 +170,7 @@
             }
           }
         }
+        div.chart{margin-top:20px;}
         #dateTime_head {
             -moz-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
             -webkit-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
@@ -225,12 +273,11 @@ import citySelect from '../../../components/citySelect.vue'
 import moment from 'moment'
 import { siblings } from '../../../util/util.js'
 import $ from 'jquery'
-var Highcharts = require('highcharts');
-// 在 Highcharts 加载之后加载功能模块
-require('highcharts/modules/exporting')(Highcharts);
+import chart from '../../../components/DataTimeChart/index.vue'
 export default {
     components: {
-        "city-select": citySelect
+        "city-select": citySelect,
+        chart
     },
     data () {
         return {
@@ -242,7 +289,8 @@ export default {
             },
             chartTitleName: '有效订单数',
             totalTitle: true,
-            ellipsis: true
+            ellipsis: true,
+            poptipTitle: '数据字段说明'
         }
     },
     mounted () {
