@@ -700,7 +700,7 @@ export default {
                             }
                         }
                         if(type=='orderAmount'||type=='avgAmount'||type=='payAmount'){
-                            if(new String(this.point.y).length>6){
+                            if(new String(this.point.y).length>5){
                                
                              return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 2, ".",",") + '元/天';
                             }else{
