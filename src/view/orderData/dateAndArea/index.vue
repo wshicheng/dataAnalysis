@@ -373,6 +373,7 @@ export default {
                 }
             })
             .then( (res) => {
+                // console.log(res.data.data)
                     $('#container').html('')
                 if (res.data.data.length === 0) {
                     this.noDataText = '暂无数据'
@@ -382,7 +383,7 @@ export default {
                     this.show1 = false
                     this.noData = true;
                 } else {
-                    this.noData = false;
+                      this.noData = false;
                     this.show1 = true
                     this.spinShow = false
                     var data = res.data.data
@@ -391,9 +392,11 @@ export default {
                     var firstData = data[0]
                     firstData.map( (item) => {
                         var obj = {}
+
                         obj.title = item.cityName
                         obj.key = $('.dateAndArea_type_select button.active').attr("myType") + item.cityCode
                         obj.width = firstData.length > 11?100:''
+
                         arr.push(obj)
                         return arr
                     })
@@ -403,6 +406,7 @@ export default {
                     totalTitle.key = $('.dateAndArea_type_select button.active').attr("myType")
                     totalTitle.fixed = 'right'
                     totalTitle.width = 120
+                    
                     arr.push(totalTitle)
                     // 讲日期插入动态title
                     arr.unshift({
@@ -420,6 +424,7 @@ export default {
                     // 关闭loading 
                     this.spinShow = false
                     this.noDataText = ''
+
                 }
                 
             })
@@ -463,9 +468,11 @@ export default {
                     var firstData = data[0]
                     firstData.map( (item) => {
                         var obj = {}
+
                         obj.title = item.cityName
                         obj.key = $('.dateAndArea_type_select button.active').attr("myType") + item.cityCode
                         obj.width = firstData.length > 11?100:''
+
                         arr.push(obj)
                         return arr
                     })
@@ -475,6 +482,7 @@ export default {
                     totalTitle.key = $('.dateAndArea_type_select button.active').attr("myType")
                     totalTitle.width = 120
                     totalTitle.fixed = 'right'
+                    
                     arr.push(totalTitle)
                     // 将平均字段插入动态title
                     arr.unshift({
@@ -487,6 +495,7 @@ export default {
                     this.columns_total = arr
                     var delData = this.tableTotalDataDel(data)
                     this.totalData = delData
+
                     // 关闭loading 
                     this.spinShow2 = false
                     this.noDataText = ''
@@ -558,6 +567,7 @@ export default {
                     // })
                     var type = $('.dateAndArea_type_select button.active').attr("myType")
                     var res = chartData.map((item)=>{
+                        console.log('item',item)
                         var arrType = []
                         var arrTime = []
                         var obj = {}
@@ -580,6 +590,7 @@ export default {
                            this.chartTime = item.time
                        }
                    })
+                    console.log(res)
                        this.chartData = res;
                         // 延时加载，确保x轴正常显示。
                         var that = this;
@@ -614,6 +625,8 @@ export default {
             newArr[0].cellClassName = {title: 'demo-table-info-cell-name'}
             newArr[1].title = '合计'
             newArr[1].cellClassName = {title: 'demo-table-info-cell-name'}
+            console.log('newArr000',newArr)
+
             return newArr
         },
         handleClick (e) {
@@ -671,7 +684,12 @@ export default {
                 tooltip: {
                     valueSuffix: '',
                     formatter: function() { 
-                        return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 2, ",", " ");
+                        if(this.point.y.length>3){
+                             return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 2, ",", " ");
+                        }else{
+                             return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + this.point.y;
+                        }
+                       
                     }                 
                 },
                 xAxis: {

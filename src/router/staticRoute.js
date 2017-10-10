@@ -10,6 +10,9 @@ import Login from '../view/login/index.vue'
 import orderAllData from '../view/orderData/orderAllData/index.vue'
 import dateAndArea from '../view/orderData/dateAndArea/index.vue'
 import orderStatus from '../view/orderData/orderStatus/index.vue'
+import orderTime from '../view/orderData/orderTime/index.vue'
+import orderMileage from '../view/orderData/orderMileage/index.vue'
+import orderRate from '../view/orderData/orderRate/index.vue'
 import NotFoundPage from '../view/nofound/index.vue'
 // 城市经营分析
 import cityManagerAnalysis from '../view/cityManagerAnaliysis/allData/index.vue'
@@ -48,6 +51,21 @@ let staticRoutes = [
                 path:'/index/orderStatus',
                 component: orderStatus,
                 name:'订单状态构成'
+            },
+            {
+                path:'/index/orderTime',
+                component: orderTime,
+                name:'订单时长分布'
+            },
+            {
+                path:'/index/orderMileage',
+                component: orderMileage,
+                name:'订单里程分布'
+            },
+            {
+                path:'/index/orderRate',
+                component: orderRate,
+                name:'使用频次分布'
             },
             {
                 path:'/index/memberCenter',
