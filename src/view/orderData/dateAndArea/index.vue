@@ -694,17 +694,17 @@ export default {
                              console.log("y:" + this.point.y)
                           
                             if(new String(this.point.y).length>3){
-                             return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 0,"",",") + '单/天';
+                             return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 0,"",",");
                             }else{
-                                return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + this.point.y + '单/天';
+                                return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + this.point.y;
                             }
                         }
                         if(type=='orderAmount'||type=='avgAmount'||type=='payAmount'){
-                            if(new String(this.point.y).length>6){
+                            if(new String(this.point.y).length>5){
                                
-                             return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 2, ".",",") + '元/天';
+                             return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 2, ".",",");
                             }else{
-                                return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + this.point.y + '元/天';
+                                return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + this.point.y;
                             }
                         }
                         
