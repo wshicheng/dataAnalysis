@@ -682,7 +682,10 @@ export default {
                     enabled:false
                 },
                 tooltip: {
-                    valueSuffix: ''
+                    valueSuffix: '',
+                    formatter: function() { 
+                        return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 2, ",", " ");
+                    }                 
                 },
                 xAxis: {
                     categories: this.chartTime
@@ -695,9 +698,9 @@ export default {
                 plotOptions: {
                     line: {
                         dataLabels: {
-                            enabled: false          // 开启数据标签
+                            enabled: false,        // 开启数据标签
                         },
-                        enableMouseTracking: true // 关闭鼠标跟踪，对应的提示框、点击事件会失效
+                        enableMouseTracking: true, // 关闭鼠标跟踪，对应的提示框、点击事件会失效
                     }
                 },
                 series: this.chartData
