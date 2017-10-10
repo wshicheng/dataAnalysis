@@ -684,7 +684,12 @@ export default {
                 tooltip: {
                     valueSuffix: '',
                     formatter: function() { 
-                        return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 2, ",", " ");
+                        if(this.point.y.length>3){
+                             return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 2, ",", " ");
+                        }else{
+                             return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + this.point.y;
+                        }
+                       
                     }                 
                 },
                 xAxis: {
