@@ -684,12 +684,23 @@ export default {
                 tooltip: {
                     valueSuffix: '',
                     formatter: function() { 
-                        if(this.point.y.length>3){
-                             return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 2, ",", " ");
-                        }else{
-                             return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + this.point.y;
+                        var type = $('.dateAndArea_type_select button.active').attr("myType")
+                        console.log(type)
+                        if(type==='orderNum'){
+                            if(this.point.y.length>3){
+                             return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 2, ",", " ") + '单/天';
+                            }else{
+                                return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + this.point.y + '单/天';
+                            }
                         }
-                       
+                        if(type=='orderAmount'||type=='avgAmount'||type=='payAmount'){
+                            if(this.point.y.length>7){
+                             return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 2, ",", " ") + '元/天';
+                            }else{
+                                return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + this.point.y + '元/天';
+                            }
+                        }
+                        
                     }                 
                 },
                 xAxis: {
