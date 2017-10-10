@@ -144,7 +144,7 @@
                 overflow: hidden;
                 margin-bottom: 10px;
                 span {
-                    float: right;
+                  
                     display: inline-block;
                     width: 30px;
                     height: 30px;
@@ -321,6 +321,9 @@ export default {
            }
         },
         searchByTimeLine () {
+             var type = $('.orderStatus_head_time button.active').attr('myId')
+            this.loadData(type)
+            return;
             if (this.timeLine[0] === '' || this.timeLine[0] === null) {
                 this.$Message.warning('请选择时间段')
             } else {

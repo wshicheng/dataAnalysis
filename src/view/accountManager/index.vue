@@ -579,7 +579,7 @@ export default {
                       this.$Message.success('修改成功!');
                       this.editModal = false
                       this.data.splice(this.index, 1,Object.assign({},this.editValidate,{status:this.initStatu}))
-                      this.query(1)
+                      this.query(this.currentPage)
                 } else if (res.data.resultCode === 0) {
                     this.$router.push('/login')
                 }
