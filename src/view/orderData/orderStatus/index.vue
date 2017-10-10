@@ -322,11 +322,12 @@ export default {
         },
         searchByTimeLine () {
              var type = $('.orderStatus_head_time button.active').attr('myId')
-            this.loadData(type)
-            return;
             if (this.timeLine[0] === '' || this.timeLine[0] === null) {
                 this.$Message.warning('请选择时间段')
             } else {
+                this.loadData(type)
+                return;
+                
                 this.spinShow = true
                 this.noDataText = ''
                 var beginDate = moment(this.timeLine[0]).format('YYYY-MM-DD')
