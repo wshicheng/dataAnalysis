@@ -36,9 +36,9 @@
                         <i v-else class="iconfont err">&#xe600;</i>
                     </span>
                     <span style="font-size: 16px;">手机验证</span>
-                    <span>{{this.phoneNoBand === 0?'未绑定':'已绑定'}}</span>
+                    <span style="font-size: 14px;">{{this.phoneNoBand === 0?'未绑定':'已绑定'}}</span>
                     <span v-if="this.phoneNoBand === 0">{{this.phoneNo === ''?'您尚未绑定手机号码，请尽快绑定手机号':'手机号码' + this.phoneNo + '未验证, 验证后可以使用手机号码进行登录'}}</span>
-                    <span v-else>{{this.phoneNo === ''?'您尚未绑定手机号码，请尽快绑定手机号':'手机号码' + this.phoneNo + '已验证'}}</span>
+                    <span v-else>{{this.phoneNo === ''?'您尚未绑定手机号码，请尽快绑定手机号':'你验证的手机号码:' + this.phoneNo + ',若已丢失或停用，请立即更换'}}</span>
 
                     <span v-show="bindShow">
                         <!-- <button disabled='isBinded' @click='$router.push({path:"/index/memberCenter/bindTel"})'>绑定手机号</button> -->
@@ -69,7 +69,7 @@
                         <i class="iconfont right">&#xe616;</i>
                     </span>
                     <span style="font-size: 16px;">登录密码</span>
-                    <span style="color: #ccc;">建议使用6-20个字符，包含字母、数字、下划线</span>
+                    <span style="color: #ccc; font-size: 14px;">建议使用6-20个字符，包含字母、数字、下划线</span>
                     <button @click="passWordModal = true">修改密码</button>
                 </li>
             </ul>
@@ -330,7 +330,7 @@
     }
 
     .homepage_select ul li:nth-of-type(1) span:nth-child(4) {
-        margin-left: 40px;
+        margin-left: 20px;
         color: #ccc;
         font-size: 14px;
     }
