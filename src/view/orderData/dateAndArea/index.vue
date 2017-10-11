@@ -671,7 +671,7 @@ export default {
                     text: '分日期分地区 ' + this.chartTitleName
                 },
                 subtitle: {
-                    text: '*地区超过10个时，显示排名靠前的10个地区',
+                    text: '*只显示排名靠前的10个地区',
                     align: 'right',
                     verticalAlign: 'top',
                     style: {
