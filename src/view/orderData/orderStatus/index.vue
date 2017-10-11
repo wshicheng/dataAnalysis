@@ -144,11 +144,11 @@
                 overflow: hidden;
                 margin-bottom: 10px;
                 span {
-                  
                     display: inline-block;
-                    width: 30px;
-                    height: 30px;
+                    width: 25px;
+                    height: 25px;
                     background: orange;
+                    line-height: 25px;
                     color: #fff;
                     font-weight: bolder;
                     border-radius: 50%;
@@ -227,7 +227,7 @@ export default {
             noDataText: '',
             chartArr: '',
             noData: false,
-            poptipTitle: '数据字段说明'
+            poptipTitle: '数据项说明'
         }
     },
     mounted () {
