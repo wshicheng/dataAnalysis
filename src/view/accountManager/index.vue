@@ -364,9 +364,9 @@ export default {
                     key: 'action',
                     render: (h, params) => {
                         return h('div', [
-                            h('Icon', {
-                                props: {
-                                    type: 'android-create'
+                            h('i', {
+                                attrs: {
+                                    class: 'iconfont icon-52'
                                 },
                                 style: {
                                     marginRight: '20px',
@@ -374,22 +374,22 @@ export default {
                                     fontSize: '18px',
                                     cursor: 'pointer'
                                 },
-                                nativeOn: {
+                                on: {
                                     click: () => {
                                         this.show(params)
                                     }
                                 }
                             }),
-                            h('Icon', {
-                                props: {
-                                    type: 'close-round'
+                            h('i', {
+                                attrs: {
+                                    class: 'iconfont icon-close-fat'
                                 },
                                 style: {
                                     display: 'blcok',
                                     fontSize: '18px',
                                     cursor: 'pointer'
                                 },
-                                nativeOn: {
+                                on: {
                                     click: () => {
                                         this.handleDelete(params.index, params.row.id)
                                     }

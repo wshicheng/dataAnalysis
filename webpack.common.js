@@ -7,18 +7,14 @@
  const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
  // Create multiple instances
- const extractCSS = new ExtractTextPlugin('[name].[hash].css');
- const extractLESS = new ExtractTextPlugin('[name].[hash].css');
- const extractSASS = new ExtractTextPlugin('[name].[hash].css');
+ const extractCSS = new ExtractTextPlugin('stylesheets/[name].[hash].css');
+ const extractLESS = new ExtractTextPlugin('stylesheets/[name].[hash].css');
+ const extractSASS = new ExtractTextPlugin('stylesheets/[name].[hash].css');
  module.exports = {
      entry: {
-         app: './src/app.js'
+         app:  ["babel-polyfill", "./src/app.js"]
      },
-     output:{
-        filename: '[name].[hash].js', 
-        path: BUILD_PATH,
-        publicPath:'/',
-     },
+    
      module: {
          rules: [{
             test: /\.(less|css)$/,
@@ -65,7 +61,7 @@
                  use: {
                     loader: 'url-loader',
                     options: {
-                      name: '[name].[hash:8].[ext]',
+                      name: 'img/[name].[hash:8].[ext]',
                       publicPath:'/'
                     }
                   }
@@ -75,7 +71,7 @@
                  use: {
                     loader: 'file-loader',
                     options: {
-                      name: '[name].[hash:8].[ext]'
+                      name: 'font/[name].[hash:8].[ext]'
                     }
                   }
              },

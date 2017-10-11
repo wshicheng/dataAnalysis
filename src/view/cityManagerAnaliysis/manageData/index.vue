@@ -491,9 +491,9 @@ export default {
                     align: 'center',
                     render: (h, params) => {
                         return h('div', [
-                            h('Icon', {
-                                props: {
-                                    type: 'android-create'
+                            h('i', {
+                                attrs: {
+                                    class: 'iconfont icon-o5'
                                 },
                                 style: {
                                     marginRight: '20px',
@@ -507,9 +507,9 @@ export default {
                                     }
                                 }
                             }),
-                            h('Icon', {
-                                props: {
-                                    type: 'close-round'
+                            h('i', {
+                                attrs: {
+                                    class: 'iconfont icon-close-fat'
                                 },
                                 style: {
                                     display: 'blcok',

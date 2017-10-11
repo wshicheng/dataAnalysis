@@ -4,7 +4,7 @@
         <!-- <Menu-item name="/">首页</Menu-item> -->
             <Submenu name="orderData">
                 <template slot="title">
-                    <Icon type="ios-paper"></Icon>
+                    <i class="iconfont icon-dingdan1"></i>
                     订单数据
                 </template>
                 <!-- <Menu-item name="/index/orderAllData">整体数据</Menu-item> -->
@@ -77,7 +77,7 @@
             </Menu-item>
             <Submenu name="9">
                 <template slot="title">
-                    <Icon type="stats-bars"></Icon>
+                   <i class="iconfont icon-icon3"></i>
                     城市经营分析
                 </template>
                 <Menu-item name="/index/cityManagerAnalysis">整体数据</Menu-item>
