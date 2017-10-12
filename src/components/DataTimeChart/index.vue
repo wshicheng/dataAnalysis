@@ -8,7 +8,7 @@ var Highcharts = require('highcharts');
 require('highcharts/modules/exporting')(Highcharts);
 export default {
     methods: {
-        initChart(msg) {
+        initChart(title,xAxis,data) {
             var options = {
                 chart: {
                     type: 'column'
@@ -20,7 +20,7 @@ export default {
                     enabled: false
                 },
                 title: {
-                    text: msg
+                    text: title
                 },
 
                 plotOptions: {
@@ -30,20 +30,7 @@ export default {
                     }
                 },
                 xAxis: {
-                    categories: [
-                        '一月',
-                        '二月',
-                        '三月',
-                        '四月',
-                        '五月',
-                        '六月',
-                        '七月',
-                        '八月',
-                        '九月',
-                        '十月',
-                        '十一月',
-                        '十二月'
-                    ],
+                    categories:xAxis ,
                     crosshair: true
                 },
                 yAxis: {
@@ -62,21 +49,16 @@ export default {
                 },
                 series: [{
                     name: '东京',
-                    data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+                    data:data
                 }]
             }
 
             new Highcharts.chart('container', options);
         },
     },
-    data:function(){
-        return {
-            msg:this.message
-        }
-    },
-    props:['message'],
+    props:['title','xAxis','chartData'],
     mounted(){
-        this.initChart(this.msg)
+        this.initChart(this.title,this.xAxis,this.chartData)
     }
 }
 </script>
