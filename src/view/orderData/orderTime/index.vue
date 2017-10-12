@@ -28,7 +28,7 @@
                     </div>
                 </Poptip> 
             </div>
-          <table>
+          <!-- <table>
             <thead>
               <tr>
                 <th>时间分布（m）</th>
@@ -98,7 +98,8 @@
                 <td></td>
               </tr>
             </tfoot>
-          </table>
+          </table> -->
+           <Table border  :columns="columns1" :data="data2"></Table>
         </div>
         <div class="chart">
             <chart message="hello"></chart>
@@ -281,6 +282,89 @@ export default {
     },
     data () {
         return {
+            columns1: [
+                    {
+                        title: '时间分布',
+                        key: 'time'
+                    },
+                    {
+                        title: '有效订单数',
+                        key: 'orderNum'
+                    },
+                    {
+                        title: '有效订单占比',
+                        key: 'validOrderRate'
+                    },
+                    {
+                        title: '订单金额',
+                        key: 'orderMoney',
+                        renderHeader:function(h){
+                            return h('div','订单金额（￥）')
+                        }
+                    },
+                     {
+                        title: '订单金额占比',
+                        key: 'orderMoneyRate'
+                    }
+                ],
+                data2: [
+                    {
+                        time: '0-5',
+                        orderNum: 12328,
+                        validOrderRate:'19%',
+                        orderMoney:23.01,
+                        orderMoneyRate: '23.02%'
+                    },
+                    {
+                        time: '5-10',
+                        orderNum: 12328,
+                        validOrderRate:'19%',
+                        orderMoney:23.01,
+                        orderMoneyRate: '23.02%'
+                    },
+                    {
+                        time: '10-15',
+                        orderNum: 12328,
+                        validOrderRate:'19%',
+                        orderMoney:23.01,
+                        orderMoneyRate: '23.02%'
+                    },
+                    {
+                        time: '15-20',
+                        orderNum: 12328,
+                        validOrderRate:'19%',
+                        orderMoney:23.01,
+                        orderMoneyRate: '23.02%'
+                    },
+                    {
+                        time: '20-25',
+                        orderNum: 12328,
+                        validOrderRate:'19%',
+                        orderMoney:23.01,
+                        orderMoneyRate: '23.02%'
+                    },
+                    {
+                        time: '25-30',
+                        orderNum: 12328,
+                        validOrderRate:'19%',
+                        orderMoney:23.01,
+                        orderMoneyRate: '23.02%'
+                    },
+                    {
+                        time: '30已上',
+                        orderNum: 12328,
+                        validOrderRate:'19%',
+                        orderMoney:23.01,
+                        orderMoneyRate: '23.02%'
+                    },
+                    {
+                        time: '合计',
+                        orderNum: '合计-12328',
+                        validOrderRate:'合计-19%',
+                        orderMoney:'合计',
+                        orderMoneyRate: '合计23.02%'
+                    }
+                ],
             timeSelectShow: false,
             timeLine: ['',''],
             page: {
