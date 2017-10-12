@@ -352,6 +352,7 @@ export default {
     },
     mounted () {
         this.$store.dispatch('menuActiveName', '/index/dateAndArea')
+        this.$store.state.cityList = []
         document.title = '订单数据 - 分日期分地区'
         this.loadData('1')
         this.loadTotalData('1')

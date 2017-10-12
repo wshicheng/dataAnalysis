@@ -13,6 +13,7 @@ import orderStatus from '../view/orderData/orderStatus/index.vue'
 import orderTime from '../view/orderData/orderTime/index.vue'
 import orderMileage from '../view/orderData/orderMileage/index.vue'
 import orderRate from '../view/orderData/orderRate/index.vue'
+import orderAllDayMap from '../view/orderData/orderAllDayMap/index.vue'
 import NotFoundPage from '../view/nofound/index.vue'
 // 城市经营分析
 import cityManagerAnalysis from '../view/cityManagerAnaliysis/allData/index.vue'
@@ -51,6 +52,11 @@ let staticRoutes = [
                 path:'/index/orderStatus',
                 component: orderStatus,
                 name:'订单状态构成'
+            },
+            {
+                path:'/index/orderAllDayMap',
+                component: orderAllDayMap,
+                name:'24小时趋势'
             },
             {
                 path:'/index/orderTime',

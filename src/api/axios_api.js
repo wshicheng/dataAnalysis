@@ -9,12 +9,12 @@ import router from '../router/router-config'
 // let baseURL = 'http://192.168.0.102:5080'
 // let baseURL = 'http://192.168.3.181:5080'
 // let baseURL = 'http://192.168.0.102:5080'
-//  let baseURL = 'http://47.93.48.250:5080'
+ let baseURL = 'http://47.93.48.250:5080'
 // let baseURL =  'http://192.168.3.50:5080'
 // let baseURL = 'http://192.168.3.78:5080'
 // let baseURL = 'http://192.168.3.116:5080'
 // let baseURL = 'http://192.168.3.17:5080'
-let baseURL = 'http://10.31.147.119:5080'
+// let baseURL = 'http://10.31.147.119:5080'
 
 // var instance = axios.create({
 //     baseURL: baseURL,
