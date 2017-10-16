@@ -6,6 +6,7 @@
 var Highcharts = require('highcharts');
 // 在 Highcharts 加载之后加载功能模块
 require('highcharts/modules/exporting')(Highcharts);
+
 export default {
     methods: {
         initChart(title,xAxis,data) {
@@ -36,21 +37,25 @@ export default {
                 yAxis: {
                     min: 0,
                     title: {
-                        text: '降雨量 (mm)'
+                        text: ''
                     }
                 },
-                tooltip: {
-                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-                    footerFormat: '</table>',
-                    shared: true,
-                    useHTML: true
+               tooltip: {
+                   
+                    formatter: function() {  
+                        console.log(this)
+                       return '时长分布:' + this.x + '<br>' + '单数' + ':' + Highcharts.numberFormat(this.point.y, 0,"",",");
+                        
+                    }                 
                 },
                 series: [{
                     name: '东京',
                     data:data
-                }]
+                },
+                ],
+                 legend: {
+                    enabled: false
+                },
             }
 
             new Highcharts.chart('container', options);
