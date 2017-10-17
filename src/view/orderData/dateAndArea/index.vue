@@ -375,6 +375,7 @@ export default {
                 }
             })
             .then( (res) => {
+                this.checkLogin(res)
                 // console.log(res.data.data)
                     $('#container').html('')
                 if (res.data.data.length === 0) {
@@ -450,7 +451,7 @@ export default {
                 }
             })
             .then( (res) => {
-                // console.log(res.data.data)
+                this.checkLogin(res)
                 
                 var data = res.data.data
                 if (data.length === 0) {
@@ -750,7 +751,12 @@ export default {
             this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
             this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
             // this.getChartData($('.dateAndArea_head_time button.active').attr('myId'))
-        }
+        },
+        checkLogin (res) {
+           if (res.data.message === '用户登录超时') {
+                this.$router.push('/login')
+           }
+        },
     },
     watch: {
         '$store.state.cityList': 'cityChange'

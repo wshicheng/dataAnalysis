@@ -6,9 +6,7 @@
       <div id="orderAllData_head">
         <div class="orderAllData_head_time">
             <span>时间:</span>
-            <button class="active" @click="handleClick">今日</button>
-            <button @click="handleClick">昨日</button>
-            <button @click="handleClick">近7日</button>
+            <button class="active" @click="handleClick">近7日</button>
             <button @click="handleClick">近30天</button>
             <button @click="handleClick">指定时间段</button>
         </div>
@@ -16,12 +14,11 @@
             <DatePicker type="daterange" v-model="timeLine" placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
             <div class="search"><button @click="searchByTimeLine">搜索</button></div>
         </div>
-        <city-select></city-select>
       </div>
 
       <div class="orderAllData_table">
         <div class="help">
-            <Poptip trigger="hover" style="float: right;"  placement="top-end" title="数据项说明" content="提示内容">
+            <Poptip trigger="hover" style="float: right;"  placement="bottom-end" title="数据项说明" content="提示内容">
                 <span>?</span>
                 <div class="content" slot="content">
                     <p><b>订单总数:</b>除运维订单以外所有状态的订单总数</p>
@@ -184,7 +181,7 @@ export default {
     data () {
         return {
             timeSelectShow: false,
-            timeLine: ['',''],
+            timeLine: '',
             page: {
                 'float': 'right',
                 'margin-top': '20px'
@@ -196,86 +193,78 @@ export default {
             pageShow: false,
             columns_orderData: [
                 {
-                    title: '地区',
-                    key: 'cityName',
-                    render: (h, params) => {
-                        return h('a', {
-                            style: {
-                                color: '#2d8cf0',
-                                cursor: 'pointer'
-                            },
-                            attrs: {
-                                target: '_blank',
-                                href: '#/index/orderAllData/detail/' + params.row.cityCode
-                            }
-                        }, params.row.cityName)
-                    }
+                    title: '日期',
+                    key: 'time'
                 },
                 {
                     title: '订单总数',
-                    key: 'orderAllNum',
+                    key: 'totalorderNum',
                     sortable: true
                 },
                 {
                     title: '有效订单数',
-                    key: 'orderNum'
+                    key: 'orderNum',
+                    sortable: true
                 },
                 {
                     title: '订单金额(￥)',
-                    key: 'orderAllAmount',
+                    key: 'orderMoney',
                     sortable: true
                 },
                 {
                     title: '均单价(总数)',
-                    key: 'avgAllAmount'
+                    key: 'totalPrice'
                 },
                 {
                     title: '均单价(有效)',
-                    key: 'avgAmount',
+                    key: 'price'
+                },
+                {
+                    title: '实收率',
+                    key: 'getRench'
+                },
+                {
+                    title: '实际支付金额',
+                    key: 'actualMoney',
                     sortable: true
                 },
                 {
                     title: '实收率',
-                    key: 'profitRate'
+                    key: 'earningMoney'
                 },
                 {
-                    title: '优惠订单占比',
-                    key: 'discountRate'
+                    title: '优惠卷订单数',
+                    key: 'discountsNum'
                 },
                 {
                     title: '平均订单时长(min)',
-                    key: 'avgTime',
-                    width: 140
+                    key: 'time',
+                    width: 150
                 },
                 {
-                    title: '平均订单里程(km)',
-                    key: 'avgMileage',
-                    width: 140
+                    title: '平均订单里程(m)',
+                    key: 'mileage'
                 }
             ],
             orderData: [
                 {
-                    cityName: '无为',
-                    orderAllNum: '432423',
-                    orderNum: '23213123',
+                    time: '无为',
+                    orderNum: '432423',
+                    orderMoney: '23213123',
                     price: '2',
                     actualMoney: '323',
                     earningMoney: '20%',
                     discountsNum: '234',
                     time: '232',
                     mileage: '20',
-                }
+                },
             ]
         }
     },
     mounted () {
-        this.$store.dispatch('menuActiveName', '/index/orderAllData')
         this.initChart()
     },
     methods: {
-        loadData () {
-            
-        },
         handleClick (e) {
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
@@ -356,17 +345,11 @@ export default {
         },
         initChart () {
             var options = {
-                title: {
-                    text: '分地区 订单金额及实收率统计图'
+                chart: {
+                    type: 'column'
                 },
-                subtitle: {
-                    text: '*只显示前10个地区',
-                    align: 'right',
-                    verticalAlign: 'top',
-                    style: {
-                        color: '#ccc',
-                        fontSize: '12px'
-                    }
+                title: {
+                    text: '堆叠柱形图'
                 },
                 credits:{
                     enabled:false
@@ -375,30 +358,48 @@ export default {
                     enabled:false
                 },
                 xAxis: {
-                    categories: ['无为', '蒙城', '禹州', '上海', '江苏']
+                    categories: ['苹果', '橘子', '梨', '葡萄', '香蕉']
                 },
-                yAxis: [{
+                yAxis: [{ // Primary yAxis
                             labels: {
+                                format: '{value}°C',
                                 style: {
-                                    color: Highcharts.getOptions().colors[1]
+                                    color: Highcharts.getOptions().colors[2]
                                 }
                             },
                             title: {
-                                text: '金额',
+                                text: '温度',
                                 style: {
-                                    color: Highcharts.getOptions().colors[1]
+                                    color: Highcharts.getOptions().colors[2]
+                                }
+                            },
+                            opposite: true
+                        }, { // Secondary yAxis
+                            gridLineWidth: 0,
+                            title: {
+                                text: '降雨量',
+                                style: {
+                                    color: Highcharts.getOptions().colors[0]
+                                }
+                            },
+                            labels: {
+                                format: '{value} mm',
+                                style: {
+                                    color: Highcharts.getOptions().colors[0]
                                 }
                             }
-                        }, {
+                        }, { // Tertiary yAxis
+                            gridLineWidth: 0,
                             title: {
-                                text: '实收率',
+                                text: '海平面气压',
                                 style: {
-                                    color: Highcharts.getOptions().colors[2]
+                                    color: Highcharts.getOptions().colors[1]
                                 }
                             },
                             labels: {
+                                format: '{value} mb',
                                 style: {
-                                    color: Highcharts.getOptions().colors[2]
+                                    color: Highcharts.getOptions().colors[1]
                                 }
                             },
                             opposite: true
@@ -410,6 +411,8 @@ export default {
                     y: 0,
                     floating: false,
                     backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                    // borderColor: '#CCC',
+                    // borderWidth: 1,
                     shadow: false
                 },
                 tooltip: {
@@ -423,7 +426,7 @@ export default {
                     column: {
                         stacking: 'normal',
                         dataLabels: {
-                            enabled: false,
+                            enabled: true,
                             color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
                             style: {
                                 textShadow: '0 0 3px black'
@@ -432,23 +435,21 @@ export default {
                     }
                 },
                 series: [{
-                    name: '实际支付金额',
-                    type: 'column',
-                    data: [5, 3, 4, 7, 2],
-                    yAxis: 0
+                    name: '小张',
+                    data: [5, 3, 4, 7, 2]
                 }, {
-                    name: '优惠卷抵扣金额',
-                    type: 'column',
-                    data: [2, 2, 3, 2, 1],
-                    yAxis: 0
+                    name: '小彭',
+                    data: [2, 2, 3, 2, 1]
                 }, {
-                    name: '实收率',
+                    name: '小潘',
+                    data: [3, 4, 4, 2, 5]
+                }, {
+                    name: '温度',
                     type: 'spline',
                     data: [7.0, 6.9, 9.5,6.9, 9.5],
                     tooltip: {
-                        valueSuffix: ''
-                    },
-                    yAxis: 1
+                        valueSuffix: ' °C'
+                    }
                 }]
             }
 
