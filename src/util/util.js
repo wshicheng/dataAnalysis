@@ -175,3 +175,12 @@ export function siblings (elem) {
     }
     return res;
    }
+   /*随即色*/
+   export function randomColor(){
+    var rgb = '255,255,255'
+    var r = Math.floor(Math.random()*255)+1
+    var g = Math.floor(Math.random()*255)+1
+    var b = Math.floor(Math.random()*255)+1
+    var color = 'rgba('+r+','+g+','+b+',0.7)'
+    return color
+  }
