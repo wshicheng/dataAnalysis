@@ -412,27 +412,32 @@ export default {
                     orderMoneyRate: '合计23.02%'
                 }
             ],
-            data3: [{
-                name: '0-5',
-                data: [250, 250]
-            }, {
-                name: '5-10',
-                data: [500, 400,]
-            }, {
-                name: '10-15',
-                data: [100, 600,]
-            }, {
-                name: '15-20',
-                data: [200, 80,]
-            },
-            {
-                name: '25-30',
-                data: [300, 150, ]
-            },
-            {
-                name: '30已上',
-                data: [400, 200,]
-            }],
+            data3: [
+                {
+                    name: '0-5',
+                    data: [250, 250]
+                }, 
+                {
+                    name: '5-10',
+                    data: [500, 400,]
+                }, 
+                {
+                    name: '10-15',
+                    data: [100, 600,]
+                }, 
+                {
+                    name: '15-20',
+                    data: [200, 80,]
+                },
+                {
+                    name: '25-30',
+                    data: [300, 150, ]
+                },
+                {
+                    name: '30已上',
+                    data: [400, 200,]
+                }
+            ],
             timeSelectShow: false,
             timeLine: ['', ''],
             page: {
@@ -447,14 +452,19 @@ export default {
     },
     computed: {
         xAxis: function() {
-            if (this.citySelectNum <= 1) {
-                return this.data2.map(item => item.time)
+            if (this.citySelectNum.length < 2) {
+                var data = [...this.data2]
+                data.pop()
+                return data.map(item => item.time)
             } else {
                 var arr = []
                 this.$store.state.keepCitys.map((item) => {
                     this.citySelectNum.map((id) => {
-                        if (item.code === id) { }
-                        arr.push(item.name)
+                        if (item.code === id) {
+                            console.log(item)
+                            arr.push(item.name)
+                         }
+                        
                     })
                 })
                 return arr.unique()
@@ -462,7 +472,7 @@ export default {
 
         },
         chartData: function() {
-            if (this.citySelectNum <= 1) {
+            if (this.citySelectNum.length <2) {
                 var data = [...this.data2];
                 data.pop()
                 return data.map(item => { return { color: randomColor(), y: item.orderNum } })
@@ -598,18 +608,7 @@ export default {
             this.current = 1
             this.citySelectNum = this.$store.state.cityList
             this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
-            if (this.citySelectNum <= 1) {
-               this.xAxis =  this.data2.map(item => item.time)
-            } else {
-                var arr = []
-                this.$store.state.keepCitys.map((item) => {
-                    this.citySelectNum.map((id) => {
-                        if (item.code === id) { }
-                        arr.push(item.name)
-                    })
-                })
-                this.xAxis = arr.unique()
-            }
+            
         }
     },
     watch: {

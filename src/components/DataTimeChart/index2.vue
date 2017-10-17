@@ -23,7 +23,7 @@ export default {
                 yAxis: {
                     min: 0,
                     title: {
-                        text: '水果消费总量'
+                        text: ' '
                     },
                     stackLabels: {
                         enabled: true,

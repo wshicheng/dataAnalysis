@@ -63,6 +63,7 @@ export default {
     },
     props:['title','xAxis','chartData'],
     mounted(){
+        console.log(this.xAxis)
         this.initChart(this.title,this.xAxis,this.chartData)
     }
 }
