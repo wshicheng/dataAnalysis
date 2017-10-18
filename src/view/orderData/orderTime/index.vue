@@ -106,7 +106,13 @@
             <Table border :columns="columns1" :data="data2"></Table>
         </div>
         <div class="chart">
-            <p class="vaildOrderNum">*数据来自有效订单数</p>
+           
+            <div v-if="citySelectNum.length<2?true:false">
+                 <p class="vaildOrderNum">*数据来自有效订单数</p>
+            </div>
+            <div v-else>
+                 <p class="vaildOrderNum">*地区超过10个时，显示排名靠前的10个地区,</p>
+            </div>
             <div v-if="citySelectNum.length<2?true:false">
                 <chart title="订单时长分布" :xAxis="xAxis" :chartData="chartData"></chart>
             </div>
@@ -354,90 +360,8 @@ export default {
                     key: 'orderMoneyRate'
                 }
             ],
-            data2: [
-                {
-                    time: '0-5',
-                    orderNum: 11328,
-                    validOrderRate: '19%',
-                    orderMoney: 23.01,
-                    orderMoneyRate: '23.02%'
-                },
-                {
-                    time: '5-10',
-                    orderNum: 11528,
-                    validOrderRate: '19%',
-                    orderMoney: 23.01,
-                    orderMoneyRate: '23.02%'
-                },
-                {
-                    time: '10-15',
-                    orderNum: 12821,
-                    validOrderRate: '19%',
-                    orderMoney: 23.01,
-                    orderMoneyRate: '23.02%'
-                },
-                {
-                    time: '15-20',
-                    orderNum: 22228,
-                    validOrderRate: '19%',
-                    orderMoney: 23.01,
-                    orderMoneyRate: '23.02%'
-                },
-                {
-                    time: '20-25',
-                    orderNum: 12123,
-                    validOrderRate: '19%',
-                    orderMoney: 23.01,
-                    orderMoneyRate: '23.02%'
-                },
-                {
-                    time: '25-30',
-                    orderNum: 8543,
-                    validOrderRate: '19%',
-                    orderMoney: 23.01,
-                    orderMoneyRate: '23.02%'
-                },
-                {
-                    time: '30已上',
-                    orderNum: 9332,
-                    validOrderRate: '19%',
-                    orderMoney: 23.01,
-                    orderMoneyRate: '23.02%'
-                },
-                {
-                    time: '合计',
-                    orderNum: '合计-12328',
-                    validOrderRate: '合计-19%',
-                    orderMoney: '合计-9999',
-                    orderMoneyRate: '合计23.02%'
-                }
-            ],
-            data3: [
-                {
-                    name: '0-5',
-                    data: [250, 250]
-                }, 
-                {
-                    name: '5-10',
-                    data: [500, 400,]
-                }, 
-                {
-                    name: '10-15',
-                    data: [100, 600,]
-                }, 
-                {
-                    name: '15-20',
-                    data: [200, 80,]
-                },
-                {
-                    name: '25-30',
-                    data: [300, 150, ]
-                },
-                {
-                    name: '30已上',
-                    data: [400, 200,]
-                }
-            ],
+            data2:[],
+            data3: [],
             timeSelectShow: false,
             timeLine: ['', ''],
             page: {
@@ -450,9 +374,71 @@ export default {
             poptipTitle: '数据字段说明'
         }
     },
+    created:function(){
+        // 发起ajax请求 默认 是全部地区（cityCode= 0） 近 7天的数据
+        this.data2 = [
+            {
+                time: '0-5',
+                orderNum: 11328,
+                validOrderRate: '19%',
+                orderMoney: 23.01,
+                orderMoneyRate: '23.02%'
+            },
+            {
+                time: '5-10',
+                orderNum: 11528,
+                validOrderRate: '19%',
+                orderMoney: 23.01,
+                orderMoneyRate: '23.02%'
+            },
+            {
+                time: '10-15',
+                orderNum: 12821,
+                validOrderRate: '19%',
+                orderMoney: 23.01,
+                orderMoneyRate: '23.02%'
+            },
+            {
+                time: '15-20',
+                orderNum: 22228,
+                validOrderRate: '19%',
+                orderMoney: 23.01,
+                orderMoneyRate: '23.02%'
+            },
+            {
+                time: '20-25',
+                orderNum: 12123,
+                validOrderRate: '19%',
+                orderMoney: 23.01,
+                orderMoneyRate: '23.02%'
+            },
+            {
+                time: '25-30',
+                orderNum: 8543,
+                validOrderRate: '19%',
+                orderMoney: 23.01,
+                orderMoneyRate: '23.02%'
+            },
+            {
+                time: '30已上',
+                orderNum: 9332,
+                validOrderRate: '19%',
+                orderMoney: 23.01,
+                orderMoneyRate: '23.02%'
+            },
+            {
+                time: '合计',
+                orderNum: '合计-12328',
+                validOrderRate: '合计-19%',
+                orderMoney: '合计-9999',
+                orderMoneyRate: '合计23.02%'
+            }
+        ]
+    },
     computed: {
         xAxis: function() {
             if (this.citySelectNum.length < 2) {
+                console.log('citySelect变化了')
                 var data = [...this.data2]
                 data.pop()
                 return data.map(item => item.time)
@@ -461,7 +447,6 @@ export default {
                 this.$store.state.keepCitys.map((item) => {
                     this.citySelectNum.map((id) => {
                         if (item.code === id) {
-                            console.log(item)
                             arr.push(item.name)
                          }
                         
@@ -483,12 +468,21 @@ export default {
 
         }
     },
+   
     mounted() {
-        this.citySelectNum = this.$store.state.cityList
+       
         this.$store.dispatch('menuActiveName', '/index/dateTime')
         document.title = '订单数据 - 订单时长分布'
+        
     },
     methods: {
+        generatArray(len) {
+            var arr = []
+            for(var i=0;i<len;i++){
+                arr[i] = Math.floor(100*(Math.random() + 1))
+            }
+            return arr
+        },
         loadData(type) {
             this.spinShow = true
             this.noDataText = ''
@@ -498,10 +492,6 @@ export default {
                 params: {
                     accessToken: this.$store.state.token,
                     type: type,
-                    beginDate: this.timeLine[0] === '' || this.timeLine[0] === null ? '' : moment(this.timeLine[0]).format('YYYY-MM-DD'),
-                    endDate: this.timeLine[0] === '' || this.timeLine[0] === null ? '' : moment(this.timeLine[1]).format('YYYY-MM-DD'),
-                    pageNo: this.current,
-                    pageSize: this.pageSize,
                     cityCode: this.$store.state.cityList.toString()
                 }
             })
@@ -544,69 +534,102 @@ export default {
                 this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
             }
         },
-        initChart() {
-            var options = {
-                chart: {
-                    type: 'line'
-                },
-                title: {
-                    text: '分日期分地区 ' + this.chartTitleName
-                },
-                subtitle: {
-                    text: '*地区超过10个时，显示排名靠前的10个地区'
-                },
-                credits: {
-                    enabled: false
-                },
-                exporting: {
-                    enabled: false
-                },
-                tooltip: {
-                    valueSuffix: '',
-                    formatter: function() {
-                        var type = $('.dateAndArea_type_select button.active').attr("myType")
-                        console.log(type)
-                        if (type === 'orderNum') {
-                            if (this.point.y.length > 3) {
-                                return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 2, ",", " ") + '单/天';
-                            } else {
-                                return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + this.point.y + '单/天';
-                            }
-                        }
-                        if (type == 'orderAmount' || type == 'avgAmount' || type == 'payAmount') {
-                            if (this.point.y.length > 7) {
-                                return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 2, ",", " ") + '元/天';
-                            } else {
-                                return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + this.point.y + '元/天';
-                            }
-                        }
-
-                    }
-                },
-                xAxis: {
-                    categories: this.chartTime
-                },
-                yAxis: {
-                    title: {
-                        text: ''
-                    }
-                },
-                plotOptions: {
-                    line: {
-                        dataLabels: {
-                            enabled: false,        // 开启数据标签
-                        },
-                        enableMouseTracking: true, // 关闭鼠标跟踪，对应的提示框、点击事件会失效
-                    }
-                },
-                series: this.chartData
-            }
-
-            new Highcharts.chart('container', options);
-        },
         cityChange() {
             this.current = 1
             this.citySelectNum = this.$store.state.cityList
+            if(this.citySelectNum.length<2){
+                //发送请求
+                console.log('单个城市')
+                console.log(this.$store.state.cityList.toString())
+                this.data2 = [
+                    {
+                        time: '0-5',
+                        orderNum: 11328,
+                        validOrderRate: '19%',
+                        orderMoney: 23.01,
+                        orderMoneyRate: '23.02%'
+                    },
+                    {
+                        time: '5-10',
+                        orderNum: 11528,
+                        validOrderRate: '19%',
+                        orderMoney: 23.01,
+                        orderMoneyRate: '23.02%'
+                    },
+                    {
+                        time: '10-15',
+                        orderNum: 12821,
+                        validOrderRate: '19%',
+                        orderMoney: 23.01,
+                        orderMoneyRate: '23.02%'
+                    },
+                    {
+                        time: '15-20',
+                        orderNum: 22228,
+                        validOrderRate: '19%',
+                        orderMoney: 23.01,
+                        orderMoneyRate: '23.02%'
+                    },
+                    {
+                        time: '20-25',
+                        orderNum: 12123,
+                        validOrderRate: '19%',
+                        orderMoney: 23.01,
+                        orderMoneyRate: '23.02%'
+                    },
+                    {
+                        time: '25-30',
+                        orderNum: 8543,
+                        validOrderRate: '19%',
+                        orderMoney: 23.01,
+                        orderMoneyRate: '23.02%'
+                    },
+                    {
+                        time: '30已上',
+                        orderNum: 9332,
+                        validOrderRate: '19%',
+                        orderMoney: 23.01,
+                        orderMoneyRate: '23.02%'
+                    },
+                    {
+                        time: '合计',
+                        orderNum: '合计-12328',
+                        validOrderRate: '合计-19%',
+                        orderMoney: '合计-9999',
+                        orderMoneyRate: '合计23.02%'
+                    }
+                ]
+            }else{
+                  console.log('多个城市')
+                  console.log(this.$store.state.cityList.toString())
+                this.data3 = [
+                    {
+                        name: '0-5',
+                        data: this.generatArray(2)
+                    },
+                    {
+                        name: '5-10',
+                        data: this.generatArray(2)
+                    },
+                    {
+                        name: '10-15',
+                        data: this.generatArray(2)
+                    },
+                    {
+                        name: '15-20',
+                        data: this.generatArray(2)
+                    },
+                    {
+                        name: '25-30',
+                        data: this.generatArray(2)
+                    },
+                    {
+                        name: '30已上',
+                        data: this.generatArray(2)
+                    }
+                ]
+            }
+            return;
             this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
             
         }

@@ -17,6 +17,9 @@ export default {
                 title: {
                     text: title
                 },
+                exporting: {
+                    enabled: false
+                },
                 xAxis: {
                     categories:xAxis
                 },
