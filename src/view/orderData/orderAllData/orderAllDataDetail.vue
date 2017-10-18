@@ -38,7 +38,7 @@
       </div>
 
       <div class="orderAllData_chart">
-          <div id="container" style="min-width:400px; height: 400px;"></div>
+          <div id="containerOrderAllData" style="min-width:400px; height: 400px;"></div>
       </div>
   </div>
 </template>
@@ -453,7 +453,7 @@ export default {
                 }]
             }
 
-            new Highcharts.chart('container', options);
+            new Highcharts.chart('containerOrderAllData', options);
         }
     }
 }
