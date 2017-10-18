@@ -108,16 +108,31 @@ export default {
                       children: [{
                           title: '整体数据',
                           name: 21,
-                          checked: false,
-                          // disableCheckbox: true
+                          checked: false
                       }, {
                           title: '分日期分地区',
                           name: 22,
-                          checked: false,
+                          checked: false
                       }, {
                           title: '订单状态构成',
                           name: 23,
-                          checked: false,
+                          checked: false
+                      }, {
+                          title: '24小时趋势',
+                          name: 24,
+                          checked: false
+                      }, {
+                          title: '订单时长分布',
+                          name: 25,
+                          checked: false
+                      }, {
+                          title: '订单里程分布',
+                          name: 26,
+                          checked: false
+                      }, {
+                          title: '使用频次分布',
+                          name: 27,
+                          checked: false
                       }]
                   }, {
                       title: '个人中心',

@@ -8,6 +8,7 @@ import Home from '../view/home/index.vue'
 import Login from '../view/login/index.vue'
 // 订单管理模块
 import orderAllData from '../view/orderData/orderAllData/index.vue'
+import orderAllDataDetail from '../view/orderData/orderAllData/orderAllDataDetail.vue'
 import dateAndArea from '../view/orderData/dateAndArea/index.vue'
 import orderStatus from '../view/orderData/orderStatus/index.vue'
 import orderTime from '../view/orderData/orderTime/index.vue'
@@ -104,6 +105,11 @@ let staticRoutes = [
         path:'/index/cityManagerAnalysis/month/:month',
         component: cityManagerAnalysisByMonth,
         name:'经营分析明细'
+    },
+    {
+        path:'/index/orderAllData/detail/:id',
+        component: orderAllDataDetail,
+        name:'订单整体数据地区详情'
     }
 ]
 

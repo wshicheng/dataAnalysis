@@ -6,11 +6,11 @@
       <div id="orderAllDayMap_head">
         <div class="orderAllDayMap_head_time">
             <span>时间:</span>
-            <button class="active" @click="handleClick">今日</button>
-            <button @click="handleClick">昨日</button>
-            <button @click="handleClick">近7日</button>
-            <button @click="handleClick">近30天</button>
-            <button @click="handleClick">指定时间段</button>
+            <button class="active" @click="handleClick" :myId='1'>今日</button>
+            <button @click="handleClick" :myId='2'>昨日</button>
+            <button @click="handleClick" :myId='3'>近7日</button>
+            <button @click="handleClick" :myId='4'>近30天</button>
+            <button @click="handleClick" :myId='5'>指定时间段</button>
         </div>
         <div class="timeSelectShow" v-show="timeSelectShow">
             <DatePicker type="daterange" v-model="timeLine" placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
@@ -20,6 +20,10 @@
       </div>
 
       <div class="orderAllDayMap_table">
+        <Spin fix size="large" v-if="spinShow"  class="spin">
+            <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+            <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+        </Spin>
         <div class="help">
             <Poptip trigger="hover" style="float: right;"  placement="top-end" title="数据项说明" content="提示内容">
                 <span>?</span>
@@ -35,13 +39,17 @@
                 </div>
             </Poptip>
         </div>
-        <Table border size='small' :columns="columns_orderData" :data="orderData"></Table>
+        <Table border size='small' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
       </div>
 
-      <div class="orderAllDayMap_chart">
+      <div class="orderAllDayMap_chart" v-show="noDataBox">
+        <Spin fix size="large" v-if="spinShow"  class="spin">
+            <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+            <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+        </Spin>
         <div class="select">
-            <button class="active" @click="chartType">订单数</button>
-            <button @click="chartType">订单金额</button>
+            <button class="active" @click="chartType" myType='orderNum'>订单数</button>
+            <button @click="chartType" myType='orderAmount'>订单金额</button>
         </div>
         <div id="container" style="min-width:400px; height: 400px;"></div>
       </div>
@@ -127,7 +135,14 @@
             padding: 10px;
             margin-top: 20px;
             background: #fff;
+            position: relative;
             overflow: hidden;
+            .spin {
+                position: absolute;
+                display: inline-block;
+                // background-color: rgba(253, 248, 248,0.0); 
+                background-color: rgba(255, 255, 255, 0.8); 
+            }
             .help {
                 width: 100%;
                 height: 30px;
@@ -166,6 +181,13 @@
             }
         }
         .orderAllDayMap_chart {
+            position: relative;
+            .spin {
+                position: absolute;
+                display: inline-block;
+                // background-color: rgba(253, 248, 248,0.0); 
+                background-color: rgba(255, 255, 255, 0.8); 
+            }
             .select {
                 width: 100%;
                 height: 40px;
@@ -194,6 +216,7 @@
     }
 </style>
 <script>
+import moment from 'moment'
 import citySelect from '../../../components/citySelect.vue'
 import { siblings } from '../../../util/util.js'
 import $ from 'jquery'
@@ -203,11 +226,11 @@ require('highcharts/modules/exporting')(Highcharts);
 export default {
     components: {
         "city-select": citySelect
-    },
+    },   
     data () {
         return {
             timeSelectShow: false,
-            timeLine: '',
+            timeLine: ['',''],
             page: {
                 'float': 'right',
                 'margin-top': '20px'
@@ -215,7 +238,7 @@ export default {
             columns_orderData: [
                 {
                     title: '时间段',
-                    key: 'timeLine'
+                    key: 'timeFlag'
                 },
                 {
                     title: '有效订单数',
@@ -223,184 +246,127 @@ export default {
                 },
                 {
                     title: '有效订单占比',
-                    key: 'orderNumPercent'
+                    key: 'orderNumProportion'
                 },
                 {
                     title: '累计有效订单',
-                    key: 'totalOrder'
+                    key: 'orderNumAccumulate'
                 },
                 {
                     title: '累计有效订单占比',
-                    key: 'totalOrderPercent'
+                    key: 'orderNumAccuProp'
                 },
                 {
                     title: '订单金额(￥)',
-                    key: 'orderMoney'
+                    key: 'orderAmount'
                 },
                 {
                     title: '订单金额占比',
-                    key: 'orderMoneyPercent'
+                    key: 'orderAmountProportion'
                 },
                 {
                     title: '累计订单金额(￥)',
-                    key: 'totalOrderMoney'
+                    key: 'orderAmountAccumulate'
                 },
                 {
                     title: '累计订单金额占比',
-                    key: 'totalOrderMoneyPercent'
+                    key: 'orderAmountAccuProp'
                 }
             ],
-            orderData: [
-                {
-                    timeLine: '0时',
-                    orderNum: '432423',
-                    orderNumPercent: '1%',
-                    totalOrder: '3277',
-                    totalOrderPercent: '2%',
-                    orderMoney: '21231',
-                    orderMoneyPercent: '10%',
-                    totalOrderMoney: '2312312',
-                    totalOrderMoneyPercent: '10%',
-                }, {
-                    timeLine: '0时',
-                    orderNum: '432423',
-                    orderNumPercent: '1%',
-                    totalOrder: '3277',
-                    totalOrderPercent: '2%',
-                    orderMoney: '21231',
-                    orderMoneyPercent: '10%',
-                    totalOrderMoney: '2312312',
-                    totalOrderMoneyPercent: '10%',
-                }, {
-                    timeLine: '0时',
-                    orderNum: '432423',
-                    orderNumPercent: '1%',
-                    totalOrder: '3277',
-                    totalOrderPercent: '2%',
-                    orderMoney: '21231',
-                    orderMoneyPercent: '10%',
-                    totalOrderMoney: '2312312',
-                    totalOrderMoneyPercent: '10%',
-                }, {
-                    timeLine: '0时',
-                    orderNum: '432423',
-                    orderNumPercent: '1%',
-                    totalOrder: '3277',
-                    totalOrderPercent: '2%',
-                    orderMoney: '21231',
-                    orderMoneyPercent: '10%',
-                    totalOrderMoney: '2312312',
-                    totalOrderMoneyPercent: '10%',
-                }, {
-                    timeLine: '0时',
-                    orderNum: '432423',
-                    orderNumPercent: '1%',
-                    totalOrder: '3277',
-                    totalOrderPercent: '2%',
-                    orderMoney: '21231',
-                    orderMoneyPercent: '10%',
-                    totalOrderMoney: '2312312',
-                    totalOrderMoneyPercent: '10%',
-                }, {
-                    timeLine: '0时',
-                    orderNum: '432423',
-                    orderNumPercent: '1%',
-                    totalOrder: '3277',
-                    totalOrderPercent: '2%',
-                    orderMoney: '21231',
-                    orderMoneyPercent: '10%',
-                    totalOrderMoney: '2312312',
-                    totalOrderMoneyPercent: '10%',
-                }, {
-                    timeLine: '0时',
-                    orderNum: '432423',
-                    orderNumPercent: '1%',
-                    totalOrder: '3277',
-                    totalOrderPercent: '2%',
-                    orderMoney: '21231',
-                    orderMoneyPercent: '10%',
-                    totalOrderMoney: '2312312',
-                    totalOrderMoneyPercent: '10%',
-                }, {
-                    timeLine: '0时',
-                    orderNum: '432423',
-                    orderNumPercent: '1%',
-                    totalOrder: '3277',
-                    totalOrderPercent: '2%',
-                    orderMoney: '21231',
-                    orderMoneyPercent: '10%',
-                    totalOrderMoney: '2312312',
-                    totalOrderMoneyPercent: '10%',
-                }, {
-                    timeLine: '0时',
-                    orderNum: '432423',
-                    orderNumPercent: '1%',
-                    totalOrder: '3277',
-                    totalOrderPercent: '2%',
-                    orderMoney: '21231',
-                    orderMoneyPercent: '10%',
-                    totalOrderMoney: '2312312',
-                    totalOrderMoneyPercent: '10%',
-                }, {
-                    timeLine: '0时',
-                    orderNum: '432423',
-                    orderNumPercent: '1%',
-                    totalOrder: '3277',
-                    totalOrderPercent: '2%',
-                    orderMoney: '21231',
-                    orderMoneyPercent: '10%',
-                    totalOrderMoney: '2312312',
-                    totalOrderMoneyPercent: '10%',
-                }, {
-                    timeLine: '0时',
-                    orderNum: '432423',
-                    orderNumPercent: '1%',
-                    totalOrder: '3277',
-                    totalOrderPercent: '2%',
-                    orderMoney: '21231',
-                    orderMoneyPercent: '10%',
-                    totalOrderMoney: '2312312',
-                    totalOrderMoneyPercent: '10%',
-                }, {
-                    timeLine: '0时',
-                    orderNum: '432423',
-                    orderNumPercent: '1%',
-                    totalOrder: '3277',
-                    totalOrderPercent: '2%',
-                    orderMoney: '21231',
-                    orderMoneyPercent: '10%',
-                    totalOrderMoney: '2312312',
-                    totalOrderMoneyPercent: '10%',
-                }, {
-                    timeLine: '0时',
-                    orderNum: '432423',
-                    orderNumPercent: '1%',
-                    totalOrder: '3277',
-                    totalOrderPercent: '2%',
-                    orderMoney: '21231',
-                    orderMoneyPercent: '10%',
-                    totalOrderMoney: '2312312',
-                    totalOrderMoneyPercent: '10%',
-                }, {
-                    timeLine: '0时',
-                    orderNum: '432423',
-                    orderNumPercent: '1%',
-                    totalOrder: '3277',
-                    totalOrderPercent: '2%',
-                    orderMoney: '21231',
-                    orderMoneyPercent: '10%',
-                    totalOrderMoney: '2312312',
-                    totalOrderMoneyPercent: '10%',
-                }
-            ]
+            orderData: [],
+            spinShow: false,
+            noDataText: '',
+            // 订单数图表数据
+            orderNumData: [],
+            orderNumProData: [],
+            // 订单金额图表数据
+            orderMoneyData: [],
+            orderMoneyProData: [],
+            noDataBox: false,
+            loadFlag: false
         }
     },
     mounted () {
+        this.$store.dispatch('menuActiveName', '/index/orderAllDayMap')
         document.title = '订单数据 - 24小时趋势'
-        this.initChart()
+        this.loadData('1')
     },
     methods: {
+        loadData (type) {
+            // console.log('this.timeLine',this.timeLine)
+            // console.log('this.timeLine[0]',this.timeLine[0])
+            // console.log("this.timeLine[0] === ''",this.timeLine[0] === '')
+            // console.log("this.timeLine[0] === null",this.timeLine[0] === null)
+
+            this.spinShow = true
+            this.noDataText = ''
+            // 节流防止用户快速点击时数据串行。
+            this.loadFlag = false
+
+            this.axios.get('/beefly/24HourTrend/api/v1/dataTrend', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    type: type,
+                    cityCode: this.$store.state.cityList.toString(),
+                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
+                }
+            })
+            .then( res => {
+                this.checkLogin(res)
+                // console.log(res.data.data)
+                var data = res.data.data
+                this.spinShow = false
+                
+                if (data.length === 0) {
+                    this.noDataText = '暂无数据'
+                    this.noDataBox = false
+                    this.orderData = []
+                } else {
+                    this.noDataBox = true
+                    this.orderData = res.data.data
+
+                    // 去除合计字段
+                    data.pop()
+                    // 处理图表
+                    // 清空chart数据
+                    this.orderNumData = []
+                    this.orderNumProData = []
+                    this.orderMoneyData = []
+                    this.orderMoneyProData = []
+                    var that = this
+                    setTimeout(function () {
+                        data.map( (item) => {
+                            that.orderNumData.push(Number(that.delcommafy(item.orderNum)))
+                            that.orderNumProData.push(Number(that.delcommafy(item.orderNumAccumulate)))
+                            that.orderMoneyData.push(Number(that.delcommafy(item.orderAmount)))
+                            that.orderMoneyProData.push(Number(that.delcommafy(item.orderAmountAccumulate)))
+                        })
+                        that.initChart($(".select button.active").attr('myType'))
+                        that.loadFlag = true
+                    }, 100)
+                }
+
+            })
+            .catch( err => {
+                this.spinShow = false
+                this.noDataText = '暂无数据'
+                console.log(err)
+            })
+        },
+        delcommafy(num){
+        //   if((num+"").Trim()==""){
+        //    return"";
+        //   }
+          num=num.replace(/,/gi,'');
+          return num;
+        },
         handleClick (e) {
+            // 清空chart数据
+            this.orderNumData = []
+            this.orderNumProData = []
+            this.orderMoneyData = []
+            this.orderMoneyProData = []
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
                 elems[i].setAttribute('class', '')
@@ -410,19 +376,30 @@ export default {
                 this.timeSelectShow = true
             } else {
                 this.timeSelectShow = false
-                this.timeLine = ''
+                if (this.loadFlag === true) {
+                    this.timeLine = ['','']
+                    this.loadData(e.target.getAttribute('myId'))
+                } else {
+                    return
+                }
             }
         },
-        searchByTimeLine () {},
+        searchByTimeLine () {
+            if (this.timeLine[0] === '' || this.timeLine[0] === null) {
+                this.$Message.warning('请选择时间段')
+            } else {
+                this.loadData('5')
+            }
+        },
         chartType (e) {
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
                 elems[i].setAttribute('class', '')
             }
             e.target.setAttribute('class', 'active')
-            this.initChart()
+            this.initChart($(".select button.active").attr('myType'))
         },
-        initChart () {
+        initChart (type) {
             var options = {
                     chart: {
                         zoomType: 'xy'
@@ -475,20 +452,28 @@ export default {
                         opposite: true
                     }],
                     tooltip: {
-                        shared: true
+                        shared: true,
+                        formatter: function() {
+                            // if(new String(this.point.y).length>5){
+                            //     return '订单数:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 2, ".",",");
+                            // }else{
+                            //     return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + this.point.y;
+                            // }
+                            return '时间:' + this.points[0].x + '<br>' + [type==='orderNum'?'订单数:':'订单金额:'] + Highcharts.numberFormat(this.points[1].y, 2, ".",",") + '<br>' + [type==='orderNum'?'累计订单数:':'累计订单金额:'] + Highcharts.numberFormat(this.points[0].y, 2, ".",",")
+                        } 
                     },
                     series: [{
-                        name: '订单数',
+                        name: type==='orderNum'?'订单数':'订单金额',
                         type: 'column',
                         yAxis: 1,
-                        data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4,49.9, 71.5, 106.4, 129.2, 144.0,49.9, 71.5, 106.4, 129.2, 144.0,129.2, 144.0],
+                        data: type==='orderNum'?this.orderNumData:this.orderMoneyData,
                         tooltip: {
                             valueSuffix: ''
                         }
                     }, {
-                        name: '累计订单数',
+                        name: type==='orderNum'?'累计订单数':'累计订单金额',
                         type: 'spline',
-                        data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6,7.0, 6.9, 9.5, 14.5, 18.2,7.0, 6.9, 9.5, 14.5, 18.2,18.2,18.2],
+                        data: type==='orderNum'?this.orderNumProData:this.orderMoneyProData,
                         tooltip: {
                             valueSuffix: ''
                         }
@@ -496,7 +481,18 @@ export default {
             }
 
             new Highcharts.chart('container', options);
+        },
+        cityChange () {
+            this.loadData($(".orderAllDayMap_head_time button.active").attr('myId'))
+        },
+        checkLogin (res) {
+           if (res.data.message === '用户登录超时') {
+                this.$router.push('/login')
+           }
         }
+    },
+    watch: {
+        '$store.state.cityList': 'cityChange'
     }
 }
 </script>
