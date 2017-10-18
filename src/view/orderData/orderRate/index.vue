@@ -526,49 +526,42 @@ export default {
                 console.log(this.$store.state.cityList.toString())
                 this.data2 = [
                     {
-                        time: '0-5',
+                        time: '1',
                         orderNum: 11328,
                         validOrderRate: '19%',
                         orderMoney: 23.01,
                         orderMoneyRate: '23.02%'
                     },
                     {
-                        time: '5-10',
+                        time: '2',
                         orderNum: 11528,
                         validOrderRate: '19%',
                         orderMoney: 23.01,
                         orderMoneyRate: '23.02%'
                     },
                     {
-                        time: '10-15',
+                        time: '3',
                         orderNum: 12821,
                         validOrderRate: '19%',
                         orderMoney: 23.01,
                         orderMoneyRate: '23.02%'
                     },
                     {
-                        time: '15-20',
+                        time: '4',
                         orderNum: 22228,
                         validOrderRate: '19%',
                         orderMoney: 23.01,
                         orderMoneyRate: '23.02%'
                     },
                     {
-                        time: '20-25',
+                        time: '5',
                         orderNum: 12123,
                         validOrderRate: '19%',
                         orderMoney: 23.01,
                         orderMoneyRate: '23.02%'
                     },
                     {
-                        time: '25-30',
-                        orderNum: 8543,
-                        validOrderRate: '19%',
-                        orderMoney: 23.01,
-                        orderMoneyRate: '23.02%'
-                    },
-                    {
-                        time: '30已上',
+                        time: '5已上',
                         orderNum: 9332,
                         validOrderRate: '19%',
                         orderMoney: 23.01,
@@ -587,27 +580,27 @@ export default {
                   console.log(this.$store.state.cityList.toString())
                 this.data3 = [
                     {
-                        name: '0-5',
+                        name: '1',
                         data: this.generatArray(2)
                     },
                     {
-                        name: '5-10',
+                        name: '2',
                         data: this.generatArray(2)
                     },
                     {
-                        name: '10-15',
+                        name: '3',
                         data: this.generatArray(2)
                     },
                     {
-                        name: '15-20',
+                        name: '4',
                         data: this.generatArray(2)
                     },
                     {
-                        name: '25-30',
+                        name: '5',
                         data: this.generatArray(2)
                     },
                     {
-                        name: '30已上',
+                        name: '5已上',
                         data: this.generatArray(2)
                     }
                 ]

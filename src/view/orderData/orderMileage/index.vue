@@ -378,50 +378,43 @@ export default {
         // 发起ajax请求 默认 是全部地区（cityCode= 0） 近 7天的数据
         this.data2 = [
             {
-                time: '0-5',
+                time: '0-1',
                 orderNum: 11328,
                 validOrderRate: '19%',
                 orderMoney: 23.01,
                 orderMoneyRate: '23.02%'
             },
             {
-                time: '5-10',
+                time: '1-2',
                 orderNum: 11528,
                 validOrderRate: '19%',
                 orderMoney: 23.01,
                 orderMoneyRate: '23.02%'
             },
             {
-                time: '10-15',
+                time: '2-3',
                 orderNum: 12821,
                 validOrderRate: '19%',
                 orderMoney: 23.01,
                 orderMoneyRate: '23.02%'
             },
             {
-                time: '15-20',
+                time: '3-5',
                 orderNum: 22228,
                 validOrderRate: '19%',
                 orderMoney: 23.01,
                 orderMoneyRate: '23.02%'
             },
             {
-                time: '20-25',
+                time: '5-10',
                 orderNum: 12123,
                 validOrderRate: '19%',
                 orderMoney: 23.01,
                 orderMoneyRate: '23.02%'
             },
             {
-                time: '25-30',
+                time: '10以上',
                 orderNum: 8543,
-                validOrderRate: '19%',
-                orderMoney: 23.01,
-                orderMoneyRate: '23.02%'
-            },
-            {
-                time: '30已上',
-                orderNum: 9332,
                 validOrderRate: '19%',
                 orderMoney: 23.01,
                 orderMoneyRate: '23.02%'
@@ -541,52 +534,45 @@ export default {
                 //发送请求
                 console.log('单个城市')
                 console.log(this.$store.state.cityList.toString())
-                this.data2 = [
+                 this.data2 = [
                     {
-                        time: '0-5',
+                        time: '0-1',
                         orderNum: 11328,
                         validOrderRate: '19%',
                         orderMoney: 23.01,
                         orderMoneyRate: '23.02%'
                     },
                     {
-                        time: '5-10',
+                        time: '1-2',
                         orderNum: 11528,
                         validOrderRate: '19%',
                         orderMoney: 23.01,
                         orderMoneyRate: '23.02%'
                     },
                     {
-                        time: '10-15',
+                        time: '2-3',
                         orderNum: 12821,
                         validOrderRate: '19%',
                         orderMoney: 23.01,
                         orderMoneyRate: '23.02%'
                     },
                     {
-                        time: '15-20',
+                        time: '3-5',
                         orderNum: 22228,
                         validOrderRate: '19%',
                         orderMoney: 23.01,
                         orderMoneyRate: '23.02%'
                     },
                     {
-                        time: '20-25',
+                        time: '5-10',
                         orderNum: 12123,
                         validOrderRate: '19%',
                         orderMoney: 23.01,
                         orderMoneyRate: '23.02%'
                     },
                     {
-                        time: '25-30',
+                        time: '10以上',
                         orderNum: 8543,
-                        validOrderRate: '19%',
-                        orderMoney: 23.01,
-                        orderMoneyRate: '23.02%'
-                    },
-                    {
-                        time: '30已上',
-                        orderNum: 9332,
                         validOrderRate: '19%',
                         orderMoney: 23.01,
                         orderMoneyRate: '23.02%'
@@ -604,7 +590,19 @@ export default {
                   console.log(this.$store.state.cityList.toString())
                 this.data3 = [
                     {
-                        name: '0-5',
+                        name: '0-1',
+                        data: this.generatArray(2)
+                    },
+                    {
+                        name: '1-2',
+                        data: this.generatArray(2)
+                    },
+                    {
+                        name: '2-3',
+                        data: this.generatArray(2)
+                    },
+                    {
+                        name: '3-5',
                         data: this.generatArray(2)
                     },
                     {
@@ -612,19 +610,7 @@ export default {
                         data: this.generatArray(2)
                     },
                     {
-                        name: '10-15',
-                        data: this.generatArray(2)
-                    },
-                    {
-                        name: '15-20',
-                        data: this.generatArray(2)
-                    },
-                    {
-                        name: '25-30',
-                        data: this.generatArray(2)
-                    },
-                    {
-                        name: '30已上',
+                        name: '10已上',
                         data: this.generatArray(2)
                     }
                 ]
