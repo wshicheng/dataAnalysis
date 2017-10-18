@@ -75,6 +75,20 @@ export default {
     props: ['title', 'xAxis', 'chartData'],
     mounted() {
         this.initChart(this.title,this.xAxis,this.chartData)
+    },
+     watch:{
+       xAxis:{
+           handler:function(n,o){
+               this.initChart(this.title,this.xAxis,this.chartData)
+           },
+           deep:true
+       },
+       chartData:{
+           handler:function(n,o){
+               this.initChart(this.title,this.xAxis,this.chartData)
+           },
+           deep:true
+       }  
     }
 }
 </script>
