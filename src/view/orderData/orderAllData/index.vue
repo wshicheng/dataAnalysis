@@ -45,7 +45,7 @@
       </div>
 
       <div class="orderAllData_chart" v-show="noDataBox">
-            <Spin fix size="large" v-if="spinShow"  class="spin">
+            <Spin fix size="large" v-if="spinShow2"  class="spin">
                 <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
             </Spin>
@@ -279,8 +279,13 @@ export default {
             orderData: [],
             noDataBox: false,
             spinShow: false,
+            spinShow2: false,
             noDataText: '',
-            chartDataX: []
+            chartDataX: [],
+            chartDataPayAmount: [],
+            chartDisCountAmount: [],
+            chartProfitRate: [],
+            loadFlag: false
         }
     },
     mounted () {
@@ -290,7 +295,16 @@ export default {
     methods: {
         loadData (type) {
             this.spinShow = true
+            this.spinShow2 = true
             this.noDataText = ''
+
+            // 调取数据前，清空chart数据
+            this.chartDataPayAmount = []
+            this.chartDisCountAmount = []
+            this.chartProfitRate = []
+            this.chartDataX = []
+            // 节流防止用户快速点击数据串行
+            this.loadFlag = false       
 
             this.axios.get('/beefly/dateCityOrders/api/v1/wholeDataPage', {
                 params: {
@@ -304,17 +318,16 @@ export default {
                 }
             })
             .then( res => {
-                console.log(res.data.data)
                 var data = res.data.data
                 this.spinShow = false
-                
                 if (res.data.resultCode === 0) {
                     this.noDataText = '暂无数据'
-                    this.noDataBox = false
+                    this.orderData = []
+                    this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
                 } else {
-                    this.noDataBox = true
                     this.orderData = data
 
+                    this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
                     // 处理分页数据
                     if (res.data.totalPage < 2) {
                         this.pageShow = false
@@ -322,11 +335,42 @@ export default {
                         this.pageShow = true
                     }
                     this.totalListNum = res.data.totalItems
-                    
-                    // 处理chart数据
-                    data.map( item => {
-                        this.chartDataX.push(item.cityName)
+                }
+
+            })
+            .catch( err => {
+                this.spinShow = false
+                this.noDataText = '暂无数据'
+                console.log(err)
+            })
+        },
+        loadChartData (type) {
+            this.axios.get('/beefly/dateCityOrders/api/v1/chartData', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    type: type,
+                    cityCode: this.$store.state.cityList.toString(),
+                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
+                }
+            })
+            .then( res => {
+                // console.log(res.data.data)
+                this.spinShow2 = false
+                var chartData = res.data.data
+                if (res.data.resultCode === 0) {
+                    this.noDataBox = false
+                    this.loadFlag = true
+                } else {
+                    this.noDataBox = true
+                    chartData.map( item => {
+                        this.chartDataPayAmount.push(Number(this.delcommafy(item.payAmount)))
+                        this.chartDisCountAmount.push(Number(this.delcommafy(item.disCountAmount)))
+                        this.chartProfitRate.push(Number(item.profitRate)) 
+                        this.chartDataX.push(item.cityName)    
                     })
+                    this.initChart()
+                    this.loadFlag = true
                 }
 
             })
@@ -337,6 +381,7 @@ export default {
             })
         },
         handleClick (e) {
+            this.currentPage = 1
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
                 elems[i].setAttribute('class', '')
@@ -347,7 +392,11 @@ export default {
             } else {
                 this.timeSelectShow = false
                 this.timeLine = ['','']
-                this.loadData(e.target.getAttribute('myId'))
+                if (this.loadFlag === true) {
+                    this.loadData(e.target.getAttribute('myId'))
+                } else {
+                    return
+                }
             }
         },
         searchByTimeLine () {
@@ -359,11 +408,22 @@ export default {
         },
         handleCurrentPage(currentPage) {
             this.currentPage = currentPage
-            this.loadData($('.orderAllData_head_time button.active').attr('myId'))
+            if (this.loadFlag === true) {
+                this.loadData($('.orderAllData_head_time button.active').attr('myId'))
+            }
         },
         handlePageSize(pageSize) {
             this.pageSize = pageSize
-            this.loadData($('.orderAllData_head_time button.active').attr('myId'))
+            if (this.loadFlag === true) {
+                this.loadData($('.orderAllData_head_time button.active').attr('myId'))
+            }
+        },
+        delcommafy(num){
+        //   if((num+"").Trim()==""){
+        //    return"";
+        //   }
+          num=num.replace(/,/gi,'');
+          return num;
         },
         initChart () {
             var options = {
@@ -390,6 +450,9 @@ export default {
                 },
                 yAxis: [{
                             labels: {
+                                formatter:function(){
+                                    return Highcharts.numberFormat(this.value, 2, ".",",") + '元'
+                                },
                                 style: {
                                     color: Highcharts.getOptions().colors[1]
                                 }
@@ -407,7 +470,10 @@ export default {
                                     color: Highcharts.getOptions().colors[2]
                                 }
                             },
-                            labels: {
+                            labels: {                                
+                                formatter:function(){
+                                    return this.value + '%'
+                                },
                                 style: {
                                     color: Highcharts.getOptions().colors[2]
                                 }
@@ -424,10 +490,12 @@ export default {
                     shadow: false
                 },
                 tooltip: {
+                    shared: true,
                     formatter: function () {
-                        return '<b>' + this.x + '</b><br/>' +
-                            this.series.name + ': ' + this.y + '<br/>' +
-                            '总量: ' + this.point.stackTotal;
+                        return '<b>' + this.x + '</b><br/>' + '<br/>' +
+                            '<b>实际支付金额: </b>' + Highcharts.numberFormat(this.points[0].y, 2, ".",",") + '<br/>'+
+                            '<b>优惠卷抵扣金额: </b>' + Highcharts.numberFormat(this.points[1].y, 2, ".",",") + '<br/>'+
+                            '<b>实收率: </b>' + this.points[2].y + '%'
                     }
                 },
                 plotOptions: {
@@ -445,17 +513,17 @@ export default {
                 series: [{
                     name: '实际支付金额',
                     type: 'column',
-                    data: [5, 3, 4, 7, 2],
+                    data: this.chartDataPayAmount,
                     yAxis: 0
-                }, {
+                }, { 
                     name: '优惠卷抵扣金额',
                     type: 'column',
-                    data: [2, 2, 3, 2, 1],
+                    data: this.chartDisCountAmount,
                     yAxis: 0
                 }, {
                     name: '实收率',
                     type: 'spline',
-                    data: [7.0, 6.9, 9.5,6.9, 9.5],
+                    data: this.chartProfitRate,
                     tooltip: {
                         valueSuffix: ''
                     },
@@ -466,7 +534,9 @@ export default {
             new Highcharts.chart('container', options);
         },
         cityChange () {
-            this.loadData($('.orderAllData_head_time button.active').attr('myId'))
+            if (this.loadFlag === true) {
+                this.loadData($('.orderAllData_head_time button.active').attr('myId'))
+            }
         }
     },
     watch: {

@@ -6,17 +6,21 @@
       <div id="orderAllData_head">
         <div class="orderAllData_head_time">
             <span>时间:</span>
-            <button class="active" @click="handleClick">近7日</button>
-            <button @click="handleClick">近30天</button>
-            <button @click="handleClick">指定时间段</button>
+            <button @click="handleClick" class="active" myId='1'>近7日</button>
+            <button @click="handleClick" myId='2'>近30天</button>
+            <button @click="handleClick" myId='3'>指定时间段</button>
         </div>
         <div class="timeSelectShow" v-show="timeSelectShow">
-            <DatePicker type="daterange" v-model="timeLine" placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
+            <DatePicker type="daterange" v-model="timeLine" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
             <div class="search"><button @click="searchByTimeLine">搜索</button></div>
         </div>
       </div>
 
       <div class="orderAllData_table">
+        <Spin fix size="large" v-if="spinShow"  class="spin">
+            <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+            <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+        </Spin>
         <div class="help">
             <Poptip trigger="hover" style="float: right;"  placement="bottom-end" title="数据项说明" content="提示内容">
                 <span>?</span>
@@ -33,12 +37,16 @@
                 </div>
             </Poptip>
         </div>
-        <Table border size='small' :columns="columns_orderData" :data="orderData"></Table>
-        <Page :total="totalListNum" show-sizer show-elevator  :styles='page' placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
+        <Table border size='small' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
+        <Page :total="totalListNum" show-sizer show-elevator  :styles='page' :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
       </div>
 
-      <div class="orderAllData_chart">
-          <div id="containerOrderAllData" style="min-width:400px; height: 400px;"></div>
+      <div class="orderAllData_chart" v-show="noDataBox">
+            <Spin fix size="large" v-if="spinShow2"  class="spin">
+                <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+                <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+            </Spin>
+            <div id="container" style="min-width:400px; height: 400px;"></div>
       </div>
   </div>
 </template>
@@ -57,8 +65,7 @@
             box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
             font-size: 14px;
             background: #fff;
-            padding: 12px 10px 0 10px;
-            overflow: hidden;
+            padding: 12px 10px 10px 10px;
             position: relative;
             div.orderAllData_head_time {
                 margin-bottom: 10px;
@@ -91,8 +98,8 @@
             div.timeSelectShow {
                 display: inline;
                 position: absolute;
-                left: 523px;
-                top: 9px;
+                left: 332px;
+                top: 11px;
                 div.search {
                     display: inline-block;
                     button {
@@ -122,7 +129,14 @@
             padding: 10px;
             margin-top: 20px;
             background: #fff;
+            position: relative;
             overflow: hidden;
+            .spin {
+                position: absolute;
+                display: inline-block;
+                // background-color: rgba(253, 248, 248,0.0); 
+                background-color: rgba(255, 255, 255, 0.8); 
+            }
             .help {
                 width: 100%;
                 height: 30px;
@@ -161,13 +175,21 @@
             }
         }
         .orderAllData_chart {
+            position: relative;
             margin-top: 20px;
             padding: 10px;
             background: #fff;
+            .spin {
+                position: absolute;
+                display: inline-block;
+                // background-color: rgba(253, 248, 248,0.0); 
+                background-color: rgba(255, 255, 255, 0.8); 
+            }
         }
     }
 </style>
 <script>
+import moment from 'moment'
 import citySelect from '../../../components/citySelect.vue'
 import { siblings } from '../../../util/util.js'
 import $ from 'jquery'
@@ -181,7 +203,7 @@ export default {
     data () {
         return {
             timeSelectShow: false,
-            timeLine: '',
+            timeLine: ['',''],
             page: {
                 'float': 'right',
                 'margin-top': '20px'
@@ -194,78 +216,157 @@ export default {
             columns_orderData: [
                 {
                     title: '日期',
-                    key: 'time'
+                    key: 'orderTime'
                 },
                 {
                     title: '订单总数',
-                    key: 'totalorderNum',
+                    key: 'orderAllNum',
                     sortable: true
                 },
                 {
                     title: '有效订单数',
-                    key: 'orderNum',
-                    sortable: true
+                    key: 'orderNum'
                 },
                 {
                     title: '订单金额(￥)',
-                    key: 'orderMoney',
+                    key: 'orderAllAmount',
                     sortable: true
                 },
                 {
                     title: '均单价(总数)',
-                    key: 'totalPrice'
+                    key: 'avgAllAmount'
                 },
                 {
                     title: '均单价(有效)',
-                    key: 'price'
-                },
-                {
-                    title: '实收率',
-                    key: 'getRench'
-                },
-                {
-                    title: '实际支付金额',
-                    key: 'actualMoney',
+                    key: 'avgAmount',
                     sortable: true
                 },
                 {
                     title: '实收率',
-                    key: 'earningMoney'
+                    key: 'profitRate'
                 },
                 {
-                    title: '优惠卷订单数',
-                    key: 'discountsNum'
+                    title: '优惠订单占比',
+                    key: 'discountRate'
                 },
                 {
                     title: '平均订单时长(min)',
-                    key: 'time',
-                    width: 150
+                    key: 'avgTime',
+                    width: 140
                 },
                 {
-                    title: '平均订单里程(m)',
-                    key: 'mileage'
+                    title: '平均订单里程(km)',
+                    key: 'avgMileage',
+                    width: 140
                 }
             ],
-            orderData: [
-                {
-                    time: '无为',
-                    orderNum: '432423',
-                    orderMoney: '23213123',
-                    price: '2',
-                    actualMoney: '323',
-                    earningMoney: '20%',
-                    discountsNum: '234',
-                    time: '232',
-                    mileage: '20',
-                },
-            ]
+            orderData: [],
+            noDataBox: false,
+            spinShow: false,
+            spinShow2: false,
+            noDataText: '',
+            chartDataX: [],
+            chartDataPayAmount: [],
+            chartDisCountAmount: [],
+            chartProfitRate: [],
+            loadFlag: false
         }
     },
     mounted () {
-        this.initChart()
+        this.loadData("1")
     },
     methods: {
+        loadData (type) {
+            this.spinShow = true
+            this.spinShow2 = true
+            this.noDataText = ''
+
+            // 调取数据前，清空chart数据
+            this.chartDataPayAmount = []
+            this.chartDisCountAmount = []
+            this.chartProfitRate = []
+            this.chartDataX = []
+            // 节流防止用户快速点击数据串行
+            this.loadFlag = false       
+
+            this.axios.get('/beefly/dateCityOrders/api/v1/cityDataPage', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    type: type,
+                    cityCode: this.$route.params.id.toString(),
+                    pageNo: this.currentPage,
+                    pageSize: this.pageSize,
+                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
+                }
+            })
+            .then( res => {
+                var data = res.data.data
+                this.spinShow = false
+                if (res.data.resultCode === 0) {
+                    this.noDataText = '暂无数据'
+                    this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
+                    this.orderData = []
+                } else {
+                    this.orderData = data
+
+                    this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
+                    // 处理分页数据
+                    if (res.data.totalPage < 2) {
+                        this.pageShow = false
+                    } else {
+                        this.pageShow = true
+                    }
+                    this.totalListNum = res.data.totalItems
+                }
+
+            })
+            .catch( err => {
+                this.spinShow = false
+                this.noDataText = '暂无数据'
+                console.log(err)
+            })
+        },
+        loadChartData (type) {
+            this.axios.get('/beefly/dateCityOrders/api/v1/cityDataPage', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    type: type,
+                    cityCode: this.$store.state.cityList.toString(),
+                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
+                }
+            })
+            .then( res => {
+                // console.log(res.data.data)
+                this.spinShow2 = false
+                var chartData = res.data.data
+                console.log(chartData)
+                return
+                if (res.data.resultCode === 0) {
+                    this.noDataBox = false
+                    this.loadFlag = true
+                } else {
+                    this.noDataBox = true
+                    chartData.map( item => {
+                        this.chartDataPayAmount.push(Number(this.delcommafy(item.payAmount)))
+                        this.chartDisCountAmount.push(Number(this.delcommafy(item.disCountAmount)))
+                        this.chartProfitRate.push(Number(item.profitRate))
+                        this.chartDataX.push(item.orderTime)
+                    })
+                    this.initChart()
+                    this.loadFlag = true
+                }
+
+            })
+            .catch( err => {
+                this.spinShow = false
+                this.noDataText = '暂无数据'
+                console.log(err)
+            })
+        },
         handleClick (e) {
+            this.currentPage = 1
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
                 elems[i].setAttribute('class', '')
@@ -275,81 +376,53 @@ export default {
                 this.timeSelectShow = true
             } else {
                 this.timeSelectShow = false
-                this.timeLine = ''
+                this.timeLine = ['','']
+                if (this.loadFlag === true) {
+                    this.loadData(e.target.getAttribute('myId'))
+                } else {
+                    return
+                }
             }
         },
-        searchByTimeLine () {},
+        searchByTimeLine () {
+            if (this.timeLine[0] === '' || this.timeLine[0] === null) {
+                this.$Message.warning('请选择时间段')
+            } else {
+                this.loadData('5')
+            }
+        },
         handleCurrentPage(currentPage) {
-            this.spinShow = true
-            this.noDataText = ''
-
             this.currentPage = currentPage
-            this.axios.get('/beefly/role/api/v1/page', {
-                params: {
-                    accessToken: this.$store.state.token,
-                    pageNo: currentPage,
-                    pageSize: this.pageSize
-                }
-            })
-            .then((res) => {
-                // 判断返回状态
-                this.checkLogin(res)
-                this.data = res.data.data
-                // 关闭Loading
-                this.spinShow = false
-                this.noDataText = '暂无数据'
-
-                if (res.data.totalPage > 1) {
-                    this.pageShow = true
-                }
-                this.totalListNum = res.data.totalItems
-            })
-            .catch((err) => {
-                // 关闭Loading
-                this.spinShow = false
-                this.noDataText = '暂无数据'
-                console.log(err)
-            })
+            if (this.loadFlag === true) {
+                this.loadData($('.orderAllData_head_time button.active').attr('myId'))
+            }
         },
         handlePageSize(pageSize) {
-            this.spinShow = true
-            this.noDataText = ''
-
             this.pageSize = pageSize
-            this.axios.get('/beefly/role/api/v1/page', {
-                params: {
-                    accessToken: this.$store.state.token,
-                    pageNo: this.currentPage,
-                    pageSize: pageSize
-                }
-            })
-            .then((res) => {
-                // 判断返回状态
-                this.checkLogin(res)
-                this.data = res.data.data
-                // 关闭Loading
-                this.spinShow = false
-                this.noDataText = '暂无数据'
-
-                if (res.data.totalPage > 1) {
-                    this.pageShow = true
-                }
-                this.totalListNum = res.data.totalItems
-            })
-            .catch((err) => {
-                // 关闭Loading
-                this.spinShow = false
-                this.noDataText = '暂无数据'
-                console.log(err)
-            })
+            if (this.loadFlag === true) {
+                this.loadData($('.orderAllData_head_time button.active').attr('myId'))
+            }
+        },
+        delcommafy(num){
+        //   if((num+"").Trim()==""){
+        //    return"";
+        //   }
+          num=num.replace(/,/gi,'');
+          return num;
         },
         initChart () {
             var options = {
-                chart: {
-                    type: 'column'
-                },
                 title: {
-                    text: '堆叠柱形图'
+                    text: '分地区 订单金额及实收率统计图'
+                },
+                subtitle: {
+                    text: '*只显示近10个月的运营数据',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    style: {
+                        color: '#ccc',
+                        fontSize: '12px'
+                    }
                 },
                 credits:{
                     enabled:false
@@ -358,48 +431,36 @@ export default {
                     enabled:false
                 },
                 xAxis: {
-                    categories: ['苹果', '橘子', '梨', '葡萄', '香蕉']
+                    categories: this.chartDataX
                 },
-                yAxis: [{ // Primary yAxis
+                yAxis: [{
                             labels: {
-                                format: '{value}°C',
+                                formatter:function(){
+                                    return Highcharts.numberFormat(this.value, 2, ".",",") + '元'
+                                },
                                 style: {
-                                    color: Highcharts.getOptions().colors[2]
+                                    color: Highcharts.getOptions().colors[1]
                                 }
                             },
                             title: {
-                                text: '温度',
+                                text: '金额',
                                 style: {
-                                    color: Highcharts.getOptions().colors[2]
-                                }
-                            },
-                            opposite: true
-                        }, { // Secondary yAxis
-                            gridLineWidth: 0,
-                            title: {
-                                text: '降雨量',
-                                style: {
-                                    color: Highcharts.getOptions().colors[0]
-                                }
-                            },
-                            labels: {
-                                format: '{value} mm',
-                                style: {
-                                    color: Highcharts.getOptions().colors[0]
+                                    color: Highcharts.getOptions().colors[1]
                                 }
                             }
-                        }, { // Tertiary yAxis
-                            gridLineWidth: 0,
+                        }, {
                             title: {
-                                text: '海平面气压',
+                                text: '实收率',
                                 style: {
-                                    color: Highcharts.getOptions().colors[1]
+                                    color: Highcharts.getOptions().colors[2]
                                 }
                             },
-                            labels: {
-                                format: '{value} mb',
+                            labels: {                                
+                                formatter:function(){
+                                    return this.value + '%'
+                                },
                                 style: {
-                                    color: Highcharts.getOptions().colors[1]
+                                    color: Highcharts.getOptions().colors[2]
                                 }
                             },
                             opposite: true
@@ -411,22 +472,22 @@ export default {
                     y: 0,
                     floating: false,
                     backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-                    // borderColor: '#CCC',
-                    // borderWidth: 1,
                     shadow: false
                 },
                 tooltip: {
+                    shared: true,
                     formatter: function () {
-                        return '<b>' + this.x + '</b><br/>' +
-                            this.series.name + ': ' + this.y + '<br/>' +
-                            '总量: ' + this.point.stackTotal;
+                        return '<b>' + this.x + '</b><br/>' + '<br/>' +
+                            '<b>实际支付金额: </b>' + Highcharts.numberFormat(this.points[0].y, 2, ".",",") + '<br/>'+
+                            '<b>优惠卷抵扣金额: </b>' + Highcharts.numberFormat(this.points[1].y, 2, ".",",") + '<br/>'+
+                            '<b>实收率: </b>' + this.points[2].y + '%'
                     }
                 },
                 plotOptions: {
                     column: {
                         stacking: 'normal',
                         dataLabels: {
-                            enabled: true,
+                            enabled: false,
                             color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
                             style: {
                                 textShadow: '0 0 3px black'
@@ -435,25 +496,27 @@ export default {
                     }
                 },
                 series: [{
-                    name: '小张',
-                    data: [5, 3, 4, 7, 2]
+                    name: '实际支付金额',
+                    type: 'column',
+                    data: this.chartDataPayAmount,
+                    yAxis: 0
+                }, { 
+                    name: '优惠卷抵扣金额',
+                    type: 'column',
+                    data: this.chartDisCountAmount,
+                    yAxis: 0
                 }, {
-                    name: '小彭',
-                    data: [2, 2, 3, 2, 1]
-                }, {
-                    name: '小潘',
-                    data: [3, 4, 4, 2, 5]
-                }, {
-                    name: '温度',
+                    name: '实收率',
                     type: 'spline',
-                    data: [7.0, 6.9, 9.5,6.9, 9.5],
+                    data: this.chartProfitRate,
                     tooltip: {
-                        valueSuffix: ' °C'
-                    }
+                        valueSuffix: ''
+                    },
+                    yAxis: 1
                 }]
             }
 
-            new Highcharts.chart('containerOrderAllData', options);
+            new Highcharts.chart('container', options);
         }
     }
 }
