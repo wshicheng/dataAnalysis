@@ -6,11 +6,11 @@
       <div id="orderAllData_head">
         <div class="orderAllData_head_time">
             <span>时间:</span>
-            <button class="active" @click="handleClick">今日</button>
-            <button @click="handleClick">昨日</button>
-            <button @click="handleClick">近7日</button>
-            <button @click="handleClick">近30天</button>
-            <button @click="handleClick">指定时间段</button>
+            <button class="active" @click="handleClick" myId='1'>今日</button>
+            <button @click="handleClick" myId='2'>昨日</button>
+            <button @click="handleClick" myId='3'>近7日</button>
+            <button @click="handleClick" myId='4'>近30天</button>
+            <button @click="handleClick" myId='5'>指定时间段</button>
         </div>
         <div class="timeSelectShow" v-show="timeSelectShow">
             <DatePicker type="daterange" v-model="timeLine" placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
@@ -20,6 +20,10 @@
       </div>
 
       <div class="orderAllData_table">
+        <Spin fix size="large" v-if="spinShow"  class="spin">
+            <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+            <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+        </Spin>
         <div class="help">
             <Poptip trigger="hover" style="float: right;"  placement="top-end" title="数据项说明" content="提示内容">
                 <span>?</span>
@@ -36,12 +40,16 @@
                 </div>
             </Poptip>
         </div>
-        <Table border size='small' :columns="columns_orderData" :data="orderData"></Table>
+        <Table border size='small' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
         <Page :total="totalListNum" show-sizer show-elevator  :styles='page' placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
       </div>
 
-      <div class="orderAllData_chart">
-          <div id="container" style="min-width:400px; height: 400px;"></div>
+      <div class="orderAllData_chart" v-show="noDataBox">
+            <Spin fix size="large" v-if="spinShow2"  class="spin">
+                <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+                <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+            </Spin>
+            <div id="container" style="min-width:400px; height: 400px;"></div>
       </div>
   </div>
 </template>
@@ -125,7 +133,14 @@
             padding: 10px;
             margin-top: 20px;
             background: #fff;
+            position: relative;
             overflow: hidden;
+            .spin {
+                position: absolute;
+                display: inline-block;
+                // background-color: rgba(253, 248, 248,0.0); 
+                background-color: rgba(255, 255, 255, 0.8); 
+            }
             .help {
                 width: 100%;
                 height: 30px;
@@ -164,13 +179,21 @@
             }
         }
         .orderAllData_chart {
+            position: relative;
             margin-top: 20px;
             padding: 10px;
             background: #fff;
+            .spin {
+                position: absolute;
+                display: inline-block;
+                // background-color: rgba(253, 248, 248,0.0); 
+                background-color: rgba(255, 255, 255, 0.8); 
+            }
         }
     }
 </style>
 <script>
+import moment from 'moment'
 import citySelect from '../../../components/citySelect.vue'
 import { siblings } from '../../../util/util.js'
 import $ from 'jquery'
@@ -253,30 +276,112 @@ export default {
                     width: 140
                 }
             ],
-            orderData: [
-                {
-                    cityName: '无为',
-                    orderAllNum: '432423',
-                    orderNum: '23213123',
-                    price: '2',
-                    actualMoney: '323',
-                    earningMoney: '20%',
-                    discountsNum: '234',
-                    time: '232',
-                    mileage: '20',
-                }
-            ]
+            orderData: [],
+            noDataBox: false,
+            spinShow: false,
+            spinShow2: false,
+            noDataText: '',
+            chartDataX: [],
+            chartDataPayAmount: [],
+            chartDisCountAmount: [],
+            chartProfitRate: [],
+            loadFlag: false
         }
     },
     mounted () {
         this.$store.dispatch('menuActiveName', '/index/orderAllData')
-        this.initChart()
+        this.loadData("1")
     },
     methods: {
-        loadData () {
-            
+        loadData (type) {
+            this.spinShow = true
+            this.spinShow2 = true
+            this.noDataText = ''
+
+            // 调取数据前，清空chart数据
+            this.chartDataPayAmount = []
+            this.chartDisCountAmount = []
+            this.chartProfitRate = []
+            this.chartDataX = []
+            // 节流防止用户快速点击数据串行
+            this.loadFlag = false       
+
+            this.axios.get('/beefly/dateCityOrders/api/v1/wholeDataPage', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    type: type,
+                    cityCode: this.$store.state.cityList.toString(),
+                    pageNo: this.currentPage,
+                    pageSize: this.pageSize,
+                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
+                }
+            })
+            .then( res => {
+                var data = res.data.data
+                this.spinShow = false
+                if (res.data.resultCode === 0) {
+                    this.noDataText = '暂无数据'
+                    this.orderData = []
+                    this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
+                } else {
+                    this.orderData = data
+
+                    this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
+                    // 处理分页数据
+                    if (res.data.totalPage < 2) {
+                        this.pageShow = false
+                    } else {
+                        this.pageShow = true
+                    }
+                    this.totalListNum = res.data.totalItems
+                }
+
+            })
+            .catch( err => {
+                this.spinShow = false
+                this.noDataText = '暂无数据'
+                console.log(err)
+            })
+        },
+        loadChartData (type) {
+            this.axios.get('/beefly/dateCityOrders/api/v1/chartData', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    type: type,
+                    cityCode: this.$store.state.cityList.toString(),
+                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
+                }
+            })
+            .then( res => {
+                // console.log(res.data.data)
+                this.spinShow2 = false
+                var chartData = res.data.data
+                if (res.data.resultCode === 0) {
+                    this.noDataBox = false
+                    this.loadFlag = true
+                } else {
+                    this.noDataBox = true
+                    chartData.map( item => {
+                        this.chartDataPayAmount.push(Number(this.delcommafy(item.payAmount)))
+                        this.chartDisCountAmount.push(Number(this.delcommafy(item.disCountAmount)))
+                        this.chartProfitRate.push(Number(item.profitRate)) 
+                        this.chartDataX.push(item.cityName)    
+                    })
+                    this.initChart()
+                    this.loadFlag = true
+                }
+
+            })
+            .catch( err => {
+                this.spinShow = false
+                this.noDataText = '暂无数据'
+                console.log(err)
+            })
         },
         handleClick (e) {
+            this.currentPage = 1
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
                 elems[i].setAttribute('class', '')
@@ -286,73 +391,39 @@ export default {
                 this.timeSelectShow = true
             } else {
                 this.timeSelectShow = false
-                this.timeLine = ''
+                this.timeLine = ['','']
+                if (this.loadFlag === true) {
+                    this.loadData(e.target.getAttribute('myId'))
+                } else {
+                    return
+                }
             }
         },
-        searchByTimeLine () {},
+        searchByTimeLine () {
+            if (this.timeLine[0] === '' || this.timeLine[0] === null) {
+                this.$Message.warning('请选择时间段')
+            } else {
+                this.loadData('5')
+            }
+        },
         handleCurrentPage(currentPage) {
-            this.spinShow = true
-            this.noDataText = ''
-
             this.currentPage = currentPage
-            this.axios.get('/beefly/role/api/v1/page', {
-                params: {
-                    accessToken: this.$store.state.token,
-                    pageNo: currentPage,
-                    pageSize: this.pageSize
-                }
-            })
-            .then((res) => {
-                // 判断返回状态
-                this.checkLogin(res)
-                this.data = res.data.data
-                // 关闭Loading
-                this.spinShow = false
-                this.noDataText = '暂无数据'
-
-                if (res.data.totalPage > 1) {
-                    this.pageShow = true
-                }
-                this.totalListNum = res.data.totalItems
-            })
-            .catch((err) => {
-                // 关闭Loading
-                this.spinShow = false
-                this.noDataText = '暂无数据'
-                console.log(err)
-            })
+            if (this.loadFlag === true) {
+                this.loadData($('.orderAllData_head_time button.active').attr('myId'))
+            }
         },
         handlePageSize(pageSize) {
-            this.spinShow = true
-            this.noDataText = ''
-
             this.pageSize = pageSize
-            this.axios.get('/beefly/role/api/v1/page', {
-                params: {
-                    accessToken: this.$store.state.token,
-                    pageNo: this.currentPage,
-                    pageSize: pageSize
-                }
-            })
-            .then((res) => {
-                // 判断返回状态
-                this.checkLogin(res)
-                this.data = res.data.data
-                // 关闭Loading
-                this.spinShow = false
-                this.noDataText = '暂无数据'
-
-                if (res.data.totalPage > 1) {
-                    this.pageShow = true
-                }
-                this.totalListNum = res.data.totalItems
-            })
-            .catch((err) => {
-                // 关闭Loading
-                this.spinShow = false
-                this.noDataText = '暂无数据'
-                console.log(err)
-            })
+            if (this.loadFlag === true) {
+                this.loadData($('.orderAllData_head_time button.active').attr('myId'))
+            }
+        },
+        delcommafy(num){
+        //   if((num+"").Trim()==""){
+        //    return"";
+        //   }
+          num=num.replace(/,/gi,'');
+          return num;
         },
         initChart () {
             var options = {
@@ -375,10 +446,13 @@ export default {
                     enabled:false
                 },
                 xAxis: {
-                    categories: ['无为', '蒙城', '禹州', '上海', '江苏']
+                    categories: this.chartDataX
                 },
                 yAxis: [{
                             labels: {
+                                formatter:function(){
+                                    return Highcharts.numberFormat(this.value, 2, ".",",") + '元'
+                                },
                                 style: {
                                     color: Highcharts.getOptions().colors[1]
                                 }
@@ -396,7 +470,10 @@ export default {
                                     color: Highcharts.getOptions().colors[2]
                                 }
                             },
-                            labels: {
+                            labels: {                                
+                                formatter:function(){
+                                    return this.value + '%'
+                                },
                                 style: {
                                     color: Highcharts.getOptions().colors[2]
                                 }
@@ -413,10 +490,12 @@ export default {
                     shadow: false
                 },
                 tooltip: {
+                    shared: true,
                     formatter: function () {
-                        return '<b>' + this.x + '</b><br/>' +
-                            this.series.name + ': ' + this.y + '<br/>' +
-                            '总量: ' + this.point.stackTotal;
+                        return '<b>' + this.x + '</b><br/>' + '<br/>' +
+                            '<b>实际支付金额: </b>' + Highcharts.numberFormat(this.points[0].y, 2, ".",",") + '<br/>'+
+                            '<b>优惠卷抵扣金额: </b>' + Highcharts.numberFormat(this.points[1].y, 2, ".",",") + '<br/>'+
+                            '<b>实收率: </b>' + this.points[2].y + '%'
                     }
                 },
                 plotOptions: {
@@ -434,17 +513,17 @@ export default {
                 series: [{
                     name: '实际支付金额',
                     type: 'column',
-                    data: [5, 3, 4, 7, 2],
+                    data: this.chartDataPayAmount,
                     yAxis: 0
-                }, {
+                }, { 
                     name: '优惠卷抵扣金额',
                     type: 'column',
-                    data: [2, 2, 3, 2, 1],
+                    data: this.chartDisCountAmount,
                     yAxis: 0
                 }, {
                     name: '实收率',
                     type: 'spline',
-                    data: [7.0, 6.9, 9.5,6.9, 9.5],
+                    data: this.chartProfitRate,
                     tooltip: {
                         valueSuffix: ''
                     },
@@ -453,7 +532,15 @@ export default {
             }
 
             new Highcharts.chart('container', options);
+        },
+        cityChange () {
+            if (this.loadFlag === true) {
+                this.loadData($('.orderAllData_head_time button.active').attr('myId'))
+            }
         }
+    },
+    watch: {
+        '$store.state.cityList': 'cityChange'
     }
 }
 </script>

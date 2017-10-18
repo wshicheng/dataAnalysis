@@ -322,6 +322,7 @@ export default {
                     this.noDataText = '暂无数据'
                     this.noDataBox = false
                     this.orderData = []
+                    this.loadFlag = true
                 } else {
                     this.noDataBox = true
                     this.orderData = res.data.data
