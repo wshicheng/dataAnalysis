@@ -43,7 +43,7 @@ export default {
                tooltip: {
                    
                     formatter: function() {  
-                        console.log(this)
+                      
                        return '时长分布:' + this.x + '<br>' + '单数' + ':' + Highcharts.numberFormat(this.point.y, 0,"",",");
                         
                     }                 

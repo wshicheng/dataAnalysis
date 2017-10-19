@@ -6,11 +6,11 @@
         <div id="dateTime_head">
             <div class="dateTime_head_time">
                 <span>时间:</span>
-                <button @click="handleClick" :myId='0'>今日</button>
-                <button @click="handleClick" :myId='-1'>昨日</button>
-                <button class="active" @click="handleClick" :myId='1'>近7日</button>
-                <button @click="handleClick" :myId='2'>近30天</button>
-                <button @click="handleClick" :myId='3'>指定时间段</button>
+                <button @click="handleClick" :myId='1'>今日</button>
+                <button @click="handleClick" :myId='2'>昨日</button>
+                <button class="active" @click="handleClick" :myId='3'>近7日</button>
+                <button @click="handleClick" :myId='4'>近30天</button>
+                <button @click="handleClick" :myId='5'>指定时间段</button>
             </div>
             <div class="timeSelectShow" v-show="timeSelectShow">
                 <DatePicker type="daterange" v-model="timeLine" placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
@@ -32,86 +32,22 @@
                     </div>
                 </Poptip>
             </div>
-            <!-- <table>
-                    <thead>
-                      <tr>
-                        <th>时间分布（m）</th>
-                        <th>有效订单数</th>
-                        <th>有效订单占比</th>
-                        <th>订单金额</th>
-                        <th>订单金额占比</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>0-5</td>
-                        <td>3277</td>
-                        <td>1%</td>
-                        <td>3277</td>
-                        <td>9%</td>
-                      </tr>
-                      <tr>
-                        <td>5-10</td>
-                        <td>3277</td>
-                        <td>1%</td>
-                        <td>3277</td>
-                        <td>9%</td>
-                      </tr>
-                      <tr>
-                        <td>10-15</td>
-                        <td>3277</td>
-                        <td>1%</td>
-                        <td>3277</td>
-                        <td>9%</td>
-                      </tr>
-                      <tr>
-                        <td>15-20</td>
-                        <td>3277</td>
-                        <td>1%</td>
-                        <td>3277</td>
-                        <td>9%</td>
-                      </tr>
-                      <tr>
-                         <td>20-25</td>
-                        <td>3277</td>
-                        <td>1%</td>
-                        <td>3277</td>
-                        <td>9%</td>
-                      </tr>
-                      <tr>
-                         <td>25-30</td>
-                        <td>3277</td>
-                        <td>1%</td>
-                        <td>3277</td>
-                        <td>9%</td>
-                      </tr>
-                      <tr>
-                         <td>30已上</td>
-                        <td>3277</td>
-                        <td>1%</td>
-                        <td>3277</td>
-                        <td>9%</td>
-                      </tr>
-                    </tbody>
-                    <tfoot>
-                      <tr>
-                        <td>合计</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                    </tfoot>
-                  </table> -->
-            <Table border :columns="columns1" :data="data2"></Table>
-        </div>
-        <div class="chart">
+            <div class="loading">
+                 <Table border  :columns="columns1" :data="data2"></Table>
+                    <Spin fix size="large" v-show="loading"  class="spin">
+                        <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+                        <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+                    </Spin>
+            </div>
            
+        </div>
+        <div class="chart" v-show="data2.length>0">
+
             <div v-if="citySelectNum.length<2?true:false">
-                 <p class="vaildOrderNum">*数据来自有效订单数</p>
+                <p class="vaildOrderNum">*数据来自有效订单数</p>
             </div>
             <div v-else>
-                 <p class="vaildOrderNum">*地区超过10个时，显示排名靠前的10个地区,</p>
+                <p class="vaildOrderNum">*地区超过10个时，显示10个地区,数据来自有效订单数</p>
             </div>
             <div v-if="citySelectNum.length<2?true:false">
                 <chart title="订单时长分布" :xAxis="xAxis" :chartData="chartData"></chart>
@@ -119,11 +55,23 @@
             <div v-else>
                 <chart-more title="分地区订单时长分布" :xAxis="xAxis" :chartData="chartData"></chart-more>
             </div>
-
         </div>
     </div>
 </template>
 <style lang='scss' scoped type="text/css">
+div.loading{position:relative;
+     .spin {
+                position: absolute;
+                display: inline-block;
+                // background-color: rgba(253, 248, 248,0.0); 
+                background-color: rgba(255, 255, 255, 0.8); 
+            }
+    .demo-spin-icon-load{
+        animation: ani-demo-spin 1s linear infinite;
+            color:#ccc;
+    }
+    div.load-text{color:#ccc;}        
+}
 #dateTime_body {
     background: #ececec;
     .Breadcrumb {
@@ -263,7 +211,7 @@
         div.timeSelectShow {
             display: inline;
             position: absolute;
-            left: 335px;
+            left: 426px;
             top: 11px;
             div.search {
                 display: inline-block;
@@ -334,33 +282,46 @@ export default {
     },
     data() {
         return {
+            loading:true,
             citySelectNum: '',
             columns1: [
                 {
-                    title: '时间分布',
-                    key: 'time'
+                    title: '时长分布（m）',
+                    key: 'duration'
                 },
                 {
                     title: '有效订单数',
-                    key: 'orderNum'
+                    key: 'orderNum',
+                    render:function(h,params){
+                        return h('div',new Number(params.row.orderNum).thousand())
+                    }
                 },
                 {
                     title: '有效订单占比',
-                    key: 'validOrderRate'
+                    key: 'orderNumProportion',
+                    render:function(h,params){
+                        return h('div',params.row.orderNumProportion + '%')
+                    }
                 },
                 {
-                    title: '订单金额',
-                    key: 'orderMoney',
+                    title: '订单金额（￥）',
+                    key: 'orderAmount',
                     renderHeader: function(h) {
                         return h('div', '订单金额（￥）')
+                    },
+                    render:function(h,params){
+                        return h('div',new Number(params.row.orderAmount).thousandFormat())
                     }
                 },
                 {
                     title: '订单金额占比',
-                    key: 'orderMoneyRate'
+                    key: 'orderAmountProportion',
+                     render:function(h,params){
+                        return h('div',params.row.orderAmountProportion + '%')
+                    }
                 }
             ],
-            data2:[],
+            data2: [],
             data3: [],
             timeSelectShow: false,
             timeLine: ['', ''],
@@ -374,90 +335,24 @@ export default {
             poptipTitle: '数据字段说明'
         }
     },
-    created:function(){
+    created: function() {
         // 发起ajax请求 默认 是全部地区（cityCode= 0） 近 7天的数据
-        this.data2 = [
-            {
-                time: '0-5',
-                orderNum: 11328,
-                validOrderRate: '19%',
-                orderMoney: 23.01,
-                orderMoneyRate: '23.02%'
-            },
-            {
-                time: '5-10',
-                orderNum: 11528,
-                validOrderRate: '19%',
-                orderMoney: 23.01,
-                orderMoneyRate: '23.02%'
-            },
-            {
-                time: '10-15',
-                orderNum: 12821,
-                validOrderRate: '19%',
-                orderMoney: 23.01,
-                orderMoneyRate: '23.02%'
-            },
-            {
-                time: '15-20',
-                orderNum: 22228,
-                validOrderRate: '19%',
-                orderMoney: 23.01,
-                orderMoneyRate: '23.02%'
-            },
-            {
-                time: '20-25',
-                orderNum: 12123,
-                validOrderRate: '19%',
-                orderMoney: 23.01,
-                orderMoneyRate: '23.02%'
-            },
-            {
-                time: '25-30',
-                orderNum: 8543,
-                validOrderRate: '19%',
-                orderMoney: 23.01,
-                orderMoneyRate: '23.02%'
-            },
-            {
-                time: '30已上',
-                orderNum: 9332,
-                validOrderRate: '19%',
-                orderMoney: 23.01,
-                orderMoneyRate: '23.02%'
-            },
-            {
-                time: '合计',
-                orderNum: '合计-12328',
-                validOrderRate: '合计-19%',
-                orderMoney: '合计-9999',
-                orderMoneyRate: '合计23.02%'
-            }
-        ]
+        var cityCode = this.$store.state.cityList.join()
+        this.loadData(3, cityCode)
     },
     computed: {
         xAxis: function() {
             if (this.citySelectNum.length < 2) {
-                console.log('citySelect变化了')
                 var data = [...this.data2]
                 data.pop()
-                return data.map(item => item.time)
+                return data.map(item => item.duration)
             } else {
-                var arr = []
-                this.$store.state.keepCitys.map((item) => {
-                    this.citySelectNum.map((id) => {
-                        if (item.code === id) {
-                            arr.push(item.name)
-                         }
-                        
-                    })
-                })
-                return arr.unique()
+                 return this.citySelectNum;
             }
 
         },
         chartData: function() {
-            if (this.citySelectNum.length <2) {
+            if (this.citySelectNum.length < 2) {
                 var data = [...this.data2];
                 data.pop()
                 return data.map(item => { return { color: randomColor(), y: item.orderNum } })
@@ -468,39 +363,120 @@ export default {
 
         }
     },
-   
+
     mounted() {
-       
+
         this.$store.dispatch('menuActiveName', '/index/dateTime')
         document.title = '订单数据 - 订单时长分布'
-        
+
     },
     methods: {
         generatArray(len) {
             var arr = []
-            for(var i=0;i<len;i++){
-                arr[i] = Math.floor(100*(Math.random() + 1))
+            for (var i = 0; i < len; i++) {
+                arr[i] = Math.floor(100 * (Math.random() + 1))
             }
             return arr
         },
-        loadData(type) {
-            this.spinShow = true
-            this.noDataText = ''
-            // 默认加载时去掉无数据图片
-
-            this.axios.get('/beefly/dateCityOrders/api/v1/page', {
+        loadData(type, cityCode, beginDate, endDate) {
+            // 默认请求
+            this.loading = true;
+            this.axios.get('/beefly/orderDuration/getOrderDuration', {
                 params: {
-                    accessToken: this.$store.state.token,
+                    cityCode: cityCode,
                     type: type,
-                    cityCode: this.$store.state.cityList.toString()
+                    accessToken: this.$store.state.token,
+                    beginDate: beginDate,
+                    endDate: endDate
+
                 }
+            }).then((res) => {
+                var data = res.data.data
+                if (Object.prototype.toString.call(data) != '[object Array]') {
+                    this.data2 = []
+                    this.loading = false
+                    return;
+                }
+                this.loading = false
+                this.data2 = data.map((list)=>{
+                    return {
+                            duration:list.duration,
+                            orderAmount:parseFloat(list.orderAmount),
+                            orderAmountProportion:parseFloat(list.orderAmountProportion),
+                            orderNum:parseFloat(list.orderNum),
+                            orderNumProportion:parseFloat(list.orderNumProportion)
+                        }
+                })
             })
-                .then((res) => {
-                    console.log(res.data.data)
+        },
+        loadMultData(type, cityCode, beginDate, endDate) {
+            // 默认请求
+            this.axios.get('/beefly/orderDuration/getStackNumber', {
+                params: {
+                    cityCode: cityCode,
+                    type: type,
+                    accessToken: this.$store.state.token,
+                    beginDate: beginDate,
+                    endDate: endDate
+                }
+            }).then((res) => {
+                var data = res.data.data
+                if (Object.prototype.toString.call(data) != '[object Array]') {
+                    this.data3 = []
+                    return;
+                }
+                var zeroStart = []
+                var oneStart = []
+                var twoStart = []
+                var threeStart = []
+                var fiveStart = []
+                var tenStart = []
+                var genThirty = []
+                var recodeCity = []
+                data.map((list) => {
+                    zeroStart.push(parseFloat(list.zeroToFiveCount))
+                    oneStart.push(parseFloat(list.fiveToTenCount))
+                    twoStart.push(parseFloat(list.tenToFifCount))
+                    threeStart.push(parseFloat(list.fifToTwentyCount))
+                    fiveStart.push(parseFloat(list.tweToTweFiveCount))
+                    tenStart.push(parseFloat(list.tweFiveToThiCount))
+                    genThirty.push(parseFloat(list.gtThirtyCount ))
+                    recodeCity.push(list.cityName)
                 })
-                .catch((err) => {
-                    console.log(err)
-                })
+                console.log(recodeCity)
+                this.citySelectNum = recodeCity
+                this.data3 = [
+                    {
+                        name: '0-5',
+                        data: zeroStart
+                    },
+                    {
+                        name: '5-10',
+                        data: oneStart
+                    },
+                    {
+                        name: '10-15',
+                        data: twoStart
+                    },
+                    {
+                        name: '15-20',
+                        data: threeStart
+                    },
+                    {
+                        name: '20-25',
+                        data: fiveStart
+                    },
+                    {
+                        name: '25-30',
+                        data: tenStart
+                    },
+                    {
+                        name: '30已上',
+                        data: genThirty
+                    }]
+                return;
+
+            })
         },
         handleClick(e) {
             this.current = 1
@@ -511,127 +487,63 @@ export default {
             e.target.setAttribute('class', 'active')
             if (e.target.innerHTML === '指定时间段') {
                 this.timeSelectShow = true
+                return;
             } else {
                 this.timeSelectShow = false
                 this.timeLine = ['', '']
-                this.loadData(e.target.getAttribute('myId'))
             }
-        },
-        handleTypeClick(e) {
-            this.chartTitleName = e.target.innerHTML
-            this.current = 1
-            var elems = siblings(e.target)
-            for (var i = 0; i < elems.length; i++) {
-                elems[i].setAttribute('class', '')
+            if (this.citySelectNum.length < 2) {
+                var cityCode = this.$store.state.cityList.join()
+                var type = $('button.active').attr('myid')
+                var beginDate = this.timeLine[0] ? moment(this.timeLine[0]).format('YYYY-MM-DD') : ''
+                var endDate = this.timeLine[1] ? moment(this.timeLine[1]).format('YYYY-MM-DD') : ''
+                this.loadData(type, cityCode, beginDate, endDate)
+            } else {
+                var cityCode = this.$store.state.cityList.join()
+                var type = $('button.active').attr('myid')
+                var beginDate = this.timeLine[0] ? moment(this.timeLine[0]).format('YYYY-MM-DD') : ''
+                var endDate = this.timeLine[1] ? moment(this.timeLine[1]).format('YYYY-MM-DD') : ''
+                this.loadMultData(type, cityCode, beginDate, endDate)
             }
-            e.target.setAttribute('class', 'active')
-            this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
         },
         searchByTimeLine() {
             if (this.timeLine[0] === '' || this.timeLine[0] === null) {
                 this.$Message.warning('请选择时间段')
             } else {
-                this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
+                if (this.citySelectNum.length < 2) {
+                    var cityCode = this.$store.state.cityList.join()
+                    var type = $('button.active').attr('myid')
+                    var beginDate = this.timeLine[0] ? moment(this.timeLine[0]).format('YYYY-MM-DD') : ''
+                    var endDate = this.timeLine[1] ? moment(this.timeLine[1]).format('YYYY-MM-DD') : ''
+                    this.loadData(type, cityCode, beginDate, endDate)
+                } else {
+                    var cityCode = this.$store.state.cityList.join()
+                    var type = $('button.active').attr('myid')
+                    var beginDate = this.timeLine[0] ? moment(this.timeLine[0]).format('YYYY-MM-DD') : ''
+                    var endDate = this.timeLine[1] ? moment(this.timeLine[1]).format('YYYY-MM-DD') : ''
+                    this.loadMultData(type, cityCode, beginDate, endDate)
+                }
             }
         },
         cityChange() {
             this.current = 1
             this.citySelectNum = this.$store.state.cityList
-            if(this.citySelectNum.length<2){
+            if (this.citySelectNum.length < 2) {
                 //发送请求
-                console.log('单个城市')
-                console.log(this.$store.state.cityList.toString())
-                this.data2 = [
-                    {
-                        time: '0-5',
-                        orderNum: 11328,
-                        validOrderRate: '19%',
-                        orderMoney: 23.01,
-                        orderMoneyRate: '23.02%'
-                    },
-                    {
-                        time: '5-10',
-                        orderNum: 11528,
-                        validOrderRate: '19%',
-                        orderMoney: 23.01,
-                        orderMoneyRate: '23.02%'
-                    },
-                    {
-                        time: '10-15',
-                        orderNum: 12821,
-                        validOrderRate: '19%',
-                        orderMoney: 23.01,
-                        orderMoneyRate: '23.02%'
-                    },
-                    {
-                        time: '15-20',
-                        orderNum: 22228,
-                        validOrderRate: '19%',
-                        orderMoney: 23.01,
-                        orderMoneyRate: '23.02%'
-                    },
-                    {
-                        time: '20-25',
-                        orderNum: 12123,
-                        validOrderRate: '19%',
-                        orderMoney: 23.01,
-                        orderMoneyRate: '23.02%'
-                    },
-                    {
-                        time: '25-30',
-                        orderNum: 8543,
-                        validOrderRate: '19%',
-                        orderMoney: 23.01,
-                        orderMoneyRate: '23.02%'
-                    },
-                    {
-                        time: '30已上',
-                        orderNum: 9332,
-                        validOrderRate: '19%',
-                        orderMoney: 23.01,
-                        orderMoneyRate: '23.02%'
-                    },
-                    {
-                        time: '合计',
-                        orderNum: '合计-12328',
-                        validOrderRate: '合计-19%',
-                        orderMoney: '合计-9999',
-                        orderMoneyRate: '合计23.02%'
-                    }
-                ]
-            }else{
-                  console.log('多个城市')
-                  console.log(this.$store.state.cityList.toString())
-                this.data3 = [
-                    {
-                        name: '0-5',
-                        data: this.generatArray(2)
-                    },
-                    {
-                        name: '5-10',
-                        data: this.generatArray(2)
-                    },
-                    {
-                        name: '10-15',
-                        data: this.generatArray(2)
-                    },
-                    {
-                        name: '15-20',
-                        data: this.generatArray(2)
-                    },
-                    {
-                        name: '25-30',
-                        data: this.generatArray(2)
-                    },
-                    {
-                        name: '30已上',
-                        data: this.generatArray(2)
-                    }
-                ]
+                var cityCode = this.$store.state.cityList.join()
+                var type = $('button.active').attr('myid')
+                var beginDate = this.timeLine[0] ? moment(this.timeLine[0]).format('YYYY-MM-DD') : ''
+                var endDate = this.timeLine[1] ? moment(this.timeLine[1]).format('YYYY-MM-DD') : ''
+                this.loadData(type, cityCode, beginDate, endDate)
+            } else {
+                var cityCode = this.$store.state.cityList.join()
+                var type = $('button.active').attr('myid')
+                var beginDate = this.timeLine[0] ? moment(this.timeLine[0]).format('YYYY-MM-DD') : ''
+                var endDate = this.timeLine[1] ? moment(this.timeLine[1]).format('YYYY-MM-DD') : ''
+                this.loadData(type, cityCode, beginDate, endDate)
+                this.loadMultData(type, cityCode, beginDate, endDate)
+
             }
-            return;
-            this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
-            
         }
     },
     watch: {

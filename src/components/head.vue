@@ -48,20 +48,20 @@ export default {
         }
     },
     mounted() {
-        this.headImg = window.sessionStorage.getItem('headImg')
+        this.headImg = window.localStorage.getItem('headImg')
 
     },
     methods: {
         handleLoginOut() {
             this.$router.push('/login')
             this.removeToken()
-            window.sessionStorage.removeItem('token')
-            window.sessionStorage.removeItem('userInfo')
-            window.sessionStorage.removeItem('openNames')
+            window.localStorage.removeItem('token')
+            window.localStorage.removeItem('userInfo')
+            window.localStorage.removeItem('openNames')
         },
         getImage() {
             if (this.$store.state.imageUrl === '') {
-                this.headImg = window.sessionStorage.getItem('headImg')
+                this.headImg = window.localStorage.getItem('headImg')
             } else {
                 this.headImg = this.$store.state.imageUrl
             }

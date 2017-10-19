@@ -20,6 +20,9 @@ export default {
                 exporting: {
                     enabled: false
                 },
+                credits:{
+                   enabled:false
+                },
                 xAxis: {
                     categories:xAxis
                 },
@@ -51,7 +54,7 @@ export default {
                     formatter: function() {
                         return '<b>' + this.x + '</b><br/>' +
                             this.series.name + ': ' + this.y + '<br/>' +
-                            '总量: ' + this.point.stackTotal;
+                            '总量: ' + Highcharts.numberFormat(this.point.stackTotal, 0,"",",");
                     }
                 },
                 plotOptions: {
