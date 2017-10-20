@@ -1,18 +1,35 @@
 <template>
   <div id="orderAllData_body">
-        <Breadcrumb class="Breadcrumb2">
+        <Breadcrumb class="Breadcrumb" v-if="cityType === 1">
+            <BreadcrumbItem>整体数据</BreadcrumbItem>
+        </Breadcrumb>
+        <Breadcrumb class="Breadcrumb2" v-else>
             <BreadcrumbItem>{{city}}订单整体数据</BreadcrumbItem>
         </Breadcrumb>
       <div id="orderAllData_head">
-        <div class="orderAllData_head_time">
+        <div class="orderAllData_head_time" v-if="cityType === 1">
+            <span>时间:</span>
+            <button class="active" @click="handleClick" myId='1'>今日</button>
+            <button @click="handleClick" myId='2'>昨日</button>
+            <button @click="handleClick" myId='3'>近7日</button>
+            <button @click="handleClick" myId='4'>近30天</button>
+            <button @click="handleClick" myId='5'>指定时间段</button>
+        </div>
+        <div class="orderAllData_head_time" v-else>
             <span>时间:</span>
             <button @click="handleClick" class="active" myId='1'>近7日</button>
             <button @click="handleClick" myId='2'>近30天</button>
             <button @click="handleClick" myId='3'>指定时间段</button>
         </div>
         <div class="timeSelectShow" v-show="timeSelectShow">
-            <DatePicker type="daterange" v-model="timeLine" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
+            <DatePicker type="daterange" v-model="timeLine" placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
             <div class="search"><button @click="searchByTimeLine">搜索</button></div>
+        </div>
+        <div v-if="cityType === 1">
+            <city-select></city-select>
+        </div>
+        <div v-else>
+            
         </div>
       </div>
 
@@ -22,7 +39,7 @@
             <div style="color: #ccc; text-indent: 5px;">  loading...</div>
         </Spin>
         <div class="help">
-            <Poptip trigger="hover" style="float: right;" placement="bottom-end" title="数据项说明" content="提示内容">
+            <Poptip trigger="hover" style="float: right;"  placement="top-end" title="数据项说明" content="提示内容">
                 <span>?</span>
                 <div class="content" slot="content">
                     <p><b>订单总数:</b>除运维订单以外所有状态的订单总数</p>
@@ -37,8 +54,8 @@
                 </div>
             </Poptip>
         </div>
-        <Table border size='small' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
-        <Page :total="totalListNum" show-sizer show-elevator  placement="top" :styles='page' :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
+        <Table border size='small' :no-data-text='noDataText' :columns="cityType === 1?columns_orderData:columns_orderData2" :data="orderData"></Table>
+        <Page :total="totalListNum" show-sizer show-elevator  :styles='page' placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
       </div>
 
       <div class="orderAllData_chart" v-show="noDataBox">
@@ -77,7 +94,8 @@
             box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
             font-size: 14px;
             background: #fff;
-            padding: 12px 10px 10px 10px;
+            padding: 12px 10px 0 10px;
+            overflow: hidden;
             position: relative;
             div.orderAllData_head_time {
                 margin-bottom: 10px;
@@ -110,8 +128,8 @@
             div.timeSelectShow {
                 display: inline;
                 position: absolute;
-                left: 332px;
-                top: 11px;
+                left: 523px;
+                top: 9px;
                 div.search {
                     display: inline-block;
                     button {
@@ -142,6 +160,7 @@
             margin-top: 20px;
             background: #fff;
             position: relative;
+            overflow: hidden;
             .spin {
                 position: absolute;
                 display: inline-block;
@@ -213,6 +232,7 @@ export default {
     },
     data () {
         return {
+            cityType: 1,
             timeSelectShow: false,
             timeLine: ['',''],
             page: {
@@ -224,8 +244,66 @@ export default {
             pageSize: 10,
             currentPage: 1,
             pageShow: false,
-            city: '',
             columns_orderData: [
+                {
+                    title: '地区',
+                    key: 'cityName',
+                    render: (h, params) => {
+                        return h('a', {
+                            style: {
+                                color: '#2d8cf0',
+                                cursor: 'pointer'
+                            },
+                            attrs: {
+                                target: '_blank',
+                                href: '#/index/orderAllData/detail/' + params.row.cityCode + '&' + params.row.cityName
+                            }
+                        }, params.row.cityName)
+                    }
+                },
+                {
+                    title: '订单总数',
+                    key: 'orderAllNum',
+                    sortable: true
+                },
+                {
+                    title: '有效订单数',
+                    key: 'orderNum'
+                },
+                {
+                    title: '订单金额(￥)',
+                    key: 'orderAllAmount',
+                    sortable: true
+                },
+                {
+                    title: '均单价(总数)',
+                    key: 'avgAllAmount'
+                },
+                {
+                    title: '均单价(有效)',
+                    key: 'avgAmount',
+                    sortable: true
+                },
+                {
+                    title: '实收率',
+                    key: 'profitRate'
+                },
+                {
+                    title: '优惠订单占比',
+                    key: 'discountRate'
+                },
+                {
+                    title: '平均订单时长(min)',
+                    key: 'avgTime',
+                    width: 140
+                },
+                {
+                    title: '平均订单里程(km)',
+                    key: 'avgMileage',
+                    width: 140
+                }
+            ],
+            columns_orderData2: [
                 {
                     title: '日期',
                     key: 'orderTime'
@@ -285,6 +363,7 @@ export default {
         }
     },
     mounted () {
+        this.$store.dispatch('menuActiveName', '/index/orderAllData')
         this.loadData("1")
     },
     methods: {
@@ -292,21 +371,19 @@ export default {
             this.spinShow = true
             this.spinShow2 = true
             this.noDataText = ''
-
             // 调取数据前，清空chart数据
             this.chartDataPayAmount = []
             this.chartDisCountAmount = []
             this.chartProfitRate = []
             this.chartDataX = []
-
-            this.city = this.$route.params.id.split('&')[1]
             // 节流防止用户快速点击数据串行
-            this.loadFlag = false
-            this.axios.get('/beefly/dateCityOrders/api/v1/cityDataPage', {
+            this.loadFlag = false       
+
+            this.axios.get('/beefly/dateCityOrders/api/v1/wholeDataPage', {
                 params: {
                     accessToken: this.$store.state.token,
                     type: type,
-                    cityCode: this.$route.params.id.split('&')[0].toString(),
+                    cityCode: this.$store.state.cityList.toString(),
                     pageNo: this.currentPage,
                     pageSize: this.pageSize,
                     beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
@@ -315,11 +392,21 @@ export default {
             })
             .then( res => {
                 var data = res.data.data
+
+                // 判断message字段是1 or 0 , 1:多个城市，0:一个城市
+                if (Number(res.data.message) === 0) {
+                    this.cityType === 0
+                } else {
+                    this.cityType === 1
+                }
+
                 this.spinShow = false
+                // 先展示下面的图表加载状 态
+                this.noDataBox = true
                 if (res.data.resultCode === 0) {
                     this.noDataText = '暂无数据'
-                    this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
                     this.orderData = []
+                    this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
                 } else {
                     this.orderData = data
 
@@ -341,11 +428,11 @@ export default {
             })
         },
         loadChartData (type) {
-            this.axios.get('/beefly/dateCityOrders/api/v1/cityDataChart', {
+            this.axios.get('/beefly/dateCityOrders/api/v1/chartData', {
                 params: {
                     accessToken: this.$store.state.token,
                     type: type,
-                    cityCode: this.$route.params.id.split('&')[0].toString(),
+                    cityCode: this.$store.state.cityList.toString(),
                     beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
                     endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
                 }
@@ -354,7 +441,6 @@ export default {
                 // console.log(res.data.data)
                 this.spinShow2 = false
                 var chartData = res.data.data
-                console.log(chartData)
                 if (res.data.resultCode === 0) {
                     this.noDataBox = false
                     this.loadFlag = true
@@ -363,13 +449,9 @@ export default {
                     chartData.map( item => {
                         this.chartDataPayAmount.push(Number(this.delcommafy(item.payAmount)))
                         this.chartDisCountAmount.push(Number(this.delcommafy(item.disCountAmount)))
-                        this.chartProfitRate.push(Number(item.profitRate))
-                        this.chartDataX.push(item.orderTime)
+                        this.chartProfitRate.push(Number(item.profitRate)) 
+                        this.chartDataX.push(item.cityName)    
                     })
-                    console.log(this.chartDataPayAmount)
-                    console.log(this.chartDisCountAmount)
-                    console.log(this.chartProfitRate)
-                    console.log(this.chartDataX)
                     this.initChart()
                     this.loadFlag = true
                 }
@@ -430,10 +512,10 @@ export default {
         initChart () {
             var options = {
                 title: {
-                    text: this.city + '订单金额及实收率统计图'
+                    text: '分地区 订单金额及实收率统计图'
                 },
                 subtitle: {
-                    text: '*只显示近10个月的运营数据',
+                    text: '*只显示前10个地区',
                     align: 'right',
                     verticalAlign: 'top',
                     style: {
@@ -536,7 +618,15 @@ export default {
             }
 
             new Highcharts.chart('container', options);
+        },
+        cityChange () {
+            if (this.loadFlag === true) {
+                this.loadData($('.orderAllData_head_time button.active').attr('myId'))
+            }
         }
+    },
+    watch: {
+        '$store.state.cityList': 'cityChange'
     }
 }
 </script>

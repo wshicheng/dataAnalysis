@@ -314,7 +314,6 @@ export default {
             })
             .then( res => {
                 this.checkLogin(res)
-                // console.log(res.data.data)
                 var data = res.data.data
                 this.spinShow = false
                 
@@ -326,9 +325,10 @@ export default {
                 } else {
                     this.noDataBox = true
                     this.orderData = res.data.data
-
                     // 去除合计字段
-                    data.pop()
+                    var newData =  [...data]
+                    newData.pop()
+                
                     // 处理图表
                     // 清空chart数据
                     this.orderNumData = []
@@ -337,7 +337,7 @@ export default {
                     this.orderMoneyProData = []
                     var that = this
                     setTimeout(function () {
-                        data.map( (item) => {
+                        newData.map( (item) => {
                             that.orderNumData.push(Number(that.delcommafy(item.orderNum)))
                             that.orderNumProData.push(Number(that.delcommafy(item.orderNumAccumulate)))
                             that.orderMoneyData.push(Number(that.delcommafy(item.orderAmount)))
@@ -428,26 +428,28 @@ export default {
                         labels: {
                             format: '{value}',
                             style: {
-                                color: Highcharts.getOptions().colors[1]
+                                color: '#ed833b'
                             }
                         },
                         title: {
                             text: $('.select button.active')[0].innerHTML === '订单数'?'订单数':'订单金额',
                             style: {
-                                color: Highcharts.getOptions().colors[1]
+                                color: '#ed833b',
+                                fontWeight: 'bolder'
                             }
                         }
                     }, { // Secondary yAxis
                         title: {
                             text: $('.select button.active')[0].innerHTML === '订单数'?'累计订单数':'累计订单金额',
                             style: {
-                                color: Highcharts.getOptions().colors[0]
+                                color: '#4473c4',
+                                fontWeight: 'bolder'
                             }
                         },
                         labels: {
                             format: '{value} ',
                             style: {
-                                color: Highcharts.getOptions().colors[0]
+                                color: '#4473c4'
                             }
                         },
                         opposite: true
@@ -460,8 +462,19 @@ export default {
                             // }else{
                             //     return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + this.point.y;
                             // }
-                            return '时间:' + this.points[0].x + '<br>' + [type==='orderNum'?'订单数:':'订单金额:'] + Highcharts.numberFormat(this.points[1].y, 2, ".",",") + '<br>' + [type==='orderNum'?'累计订单数:':'累计订单金额:'] + Highcharts.numberFormat(this.points[0].y, 2, ".",",")
+                            return '时间:' + this.points[0].x + '<br>' + [type==='orderNum'?'累计订单数:':'累计订单金额:'] + 
+                            [type==='orderNum' || new String(this.points[0].y).length<3?this.points[0].y:Highcharts.numberFormat(this.points[0].y, 2, ".",",")] + '<br>' + 
+                            [type==='orderNum'?'订单数:':'订单金额:'] + 
+                            [type==='orderNum' || new String(this.points[1].y).length<3?this.points[1].y:Highcharts.numberFormat(this.points[1].y, 2, ".",",")]
                         } 
+                    },
+                    plotOptions: {
+                        spline: {
+                            color: '#ed833b'
+                        },
+                        column: {
+                            color: '#4473c4'
+                        }
                     },
                     series: [{
                         name: type==='orderNum'?'订单数':'订单金额',
