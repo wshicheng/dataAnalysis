@@ -24,11 +24,15 @@
             <div class="help">
                 <Poptip trigger="hover" style="float: right;" placement="top-end" :title="poptipTitle">
                     <span>?</span>
-                    <div class="content" slot="content">
+                   <div class="content" slot="content">
                         <p>
-                            <b>订单数:</b>各订单状态的订单数（非运维订单）</p>
+                            <b>有效订单数:</b>各时长分布对应有效订单数</p>
                         <p>
-                            <b>数量占比:</b>各订单状态的订单数（非运维订单）/订单总数</p>
+                            <b>有效订单数占比:</b>各时长分布对应有效订单数/有效订单数</p>
+                             <p>
+                            <b>订单金额（￥）:</b>各时长分布对应订单金额</p>
+                             <p>
+                            <b>订单金额占比:</b>各时长分布对应订单金额/订单金额总和</p>
                     </div>
                 </Poptip>
             </div>
@@ -121,7 +125,6 @@ div.loading {
         color: #444;
         font-size: 12px;
         b {
-          width: 50px;
           color: #444;
           font-size: 12px;
           display: inline-block;
@@ -330,7 +333,7 @@ export default {
       chartTitleName: "有效订单数",
       totalTitle: true,
       ellipsis: true,
-      poptipTitle: "数据字段说明"
+      poptipTitle: "数据项说明"
     };
   },
   created: function() {
