@@ -142,6 +142,7 @@
             margin-top: 20px;
             background: #fff;
             position: relative;
+            overflow: hidden;
             .spin {
                 position: absolute;
                 display: inline-block;
