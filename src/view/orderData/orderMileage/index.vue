@@ -47,7 +47,7 @@
                         <p class="vaildOrderNum">*数据来自有效订单数</p>
                     </div>
                     <div>
-                        <chart type="里程分布" title="订单里程分布" :xAxis="xAxis" :chartData="chartData"></chart>
+                        <chart toolType="单数" type="里程分布" title="订单里程分布" :xAxis="xAxis" :chartData="chartData"></chart>
                     </div>
                  </div>
             </div>
@@ -57,7 +57,7 @@
                         <p class="vaildOrderNum">*地区超过10个时，显示10个地区,数据来自有效订单数</p>
                     </div>
                     <div>
-                        <chart-more type="里程分布" title="分地区订单里程分布" :xAxis="xAxis" :chartData="chartData"></chart-more>
+                        <chart-more toolType="单数" type="里程分布" title="分地区订单里程分布" :xAxis="xAxis" :chartData="chartData"></chart-more>
                     </div>
                 </div>
                
@@ -394,54 +394,58 @@ export default {
             this.data2 = [];
             return;
           }
+          if(data.length==0){
+              this.data2 = []
+              return;
+          }
           this.data2 = [
             {
               time: "0-1",
-              orderNum: data[0].validCount,
+              orderNum: parseFloat(data[0].validCount).thousand(),
               validOrderRate: data[0].validCountRate,
-              orderMoney: data[0].validAmount,
+              orderMoney: parseFloat(data[0].validAmount).thousandFormat(),
               orderMoneyRate: data[0].validAmountRate
             },
             {
               time: "1-2",
-              orderNum: data[1].validCount,
+              orderNum: parseFloat(data[1].validCount).thousand(),
               validOrderRate: data[1].validCountRate,
-              orderMoney: data[1].validAmount,
+              orderMoney: parseFloat(data[1].validAmount).thousandFormat(),
               orderMoneyRate: data[1].validAmountRate
             },
             {
               time: "2-3",
-              orderNum: data[2].validCount,
+              orderNum: parseFloat(data[2].validCount).thousand(),
               validOrderRate: data[2].validCountRate,
-              orderMoney: data[2].validAmount,
+              orderMoney: parseFloat(data[2].validAmount).thousandFormat(),
               orderMoneyRate: data[2].validAmountRate
             },
             {
               time: "3-5",
-              orderNum: data[3].validCount,
+              orderNum: parseFloat(data[3].validCount).thousand(),
               validOrderRate: data[3].validCountRate,
-              orderMoney: data[3].validAmount,
+              orderMoney: parseFloat(data[3].validAmount).thousandFormat(),
               orderMoneyRate: data[3].validAmountRate
             },
             {
               time: "5-10",
-              orderNum: data[4].validCount,
+              orderNum: parseFloat(data[4].validCount).thousand(),
               validOrderRate: data[4].validCountRate,
-              orderMoney: data[4].validAmount,
+              orderMoney: parseFloat(data[4].validAmount).thousandFormat(),
               orderMoneyRate: data[4].validAmountRate
             },
             {
               time: "10以上",
-              orderNum: data[5].validCount,
+              orderNum: parseFloat(data[5].validCount).thousand(),
               validOrderRate: data[5].validCountRate,
-              orderMoney: data[5].validAmount,
+              orderMoney: parseFloat(data[5].validAmount).thousandFormat(),
               orderMoneyRate: data[5].validAmountRate
             },
             {
               time: "合计",
-              orderNum: data[6].validCount,
+              orderNum: parseFloat(data[6].validCount).thousand(),
               validOrderRate: data[6].validCountRate,
-              orderMoney: data[6].validAmount,
+              orderMoney:parseFloat(data[6].validAmount).thousandFormat(),
               orderMoneyRate: data[6].validAmountRate
             }
           ];
@@ -469,6 +473,11 @@ export default {
             this.data3 = [];
             return;
           }
+          if(data.length==0){
+            this.data3 = []
+            return;
+          }
+          
           var zeroStart = [];
           var oneStart = [];
           var twoStart = [];

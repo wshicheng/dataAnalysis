@@ -48,7 +48,7 @@
                         <p class="vaildOrderNum">*数据来自有效订单数</p>
                     </div>
                     <div>
-                        <chart type="时长分布" title="订单时长分布" :xAxis="xAxis" :chartData="chartData"></chart>
+                        <chart toolType="单数" type="时长分布" title="订单时长分布" :xAxis="xAxis" :chartData="chartData"></chart>
                     </div>
                  </div>
             </div>
@@ -59,7 +59,7 @@
                         <p class="vaildOrderNum">*地区超过10个时，显示10个地区,数据来自有效订单数</p>
                     </div>
                     <div>
-                        <chart-more type="时长分布" title="分地区订单时长分布" :xAxis="xAxis" :chartData="chartData"></chart-more>
+                        <chart-more toolType="单数" type="时长分布" title="分地区订单时长分布" :xAxis="xAxis" :chartData="chartData"></chart-more>
                     </div>
                 </div>
                
@@ -407,6 +407,10 @@ export default {
                     this.loading = false
                     return;
                 }
+                if(data.length==0){
+                    this.data2 = []
+                    return;
+                }
                 this.loading = false
                 this.data2 = data.map((list)=>{
                     return {
@@ -436,6 +440,10 @@ export default {
             }).then((res) => {
                 var data = res.data.data
                 if (Object.prototype.toString.call(data) != '[object Array]') {
+                    this.data3 = []
+                    return;
+                }
+                if(data.length==0){
                     this.data3 = []
                     return;
                 }

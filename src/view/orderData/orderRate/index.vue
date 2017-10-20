@@ -46,10 +46,10 @@
             <div v-if="citySelectNum.length<2">
                  <div v-show="data2.length>0">
                      <div>
-                        <p class="vaildOrderNum">*数据来自有效订单数</p>
+                        <!-- <p class="vaildOrderNum">*数据来自有效订单数</p> -->
                     </div>
                     <div>
-                        <chart type="频次分布" title="使用频次分布" :xAxis="xAxis" :chartData="chartData"></chart>
+                        <chart toolType="用户数" type="频次分布" title="使用频次分布" :xAxis="xAxis" :chartData="chartData"></chart>
                     </div>
                  </div>
             </div>
@@ -57,10 +57,10 @@
             <div v-else>
                 <div v-show="data3.length>0">
                      <div>
-                        <p class="vaildOrderNum">*地区超过10个时，显示10个地区,数据来自有效订单数</p>
+                        <p class="vaildOrderNum">*地区超过10个时，显示10个地区,</p>
                     </div>
                     <div>
-                        <chart-more type="频次分布" title="分地区使用频次分布" :xAxis="xAxis" :chartData="chartData"></chart-more>
+                        <chart-more toolType="用户数" type="频次分布" title="分地区使用频次分布" :xAxis="xAxis" :chartData="chartData"></chart-more>
                     </div>
                 </div>
                

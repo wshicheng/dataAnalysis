@@ -9,7 +9,7 @@ require('highcharts/modules/exporting')(Highcharts);
 
 export default {
     methods: {
-        initChart(type,title,xAxis,data) {
+        initChart(toolType,type,title,xAxis,data) {
             var options = {
                 chart: {
                     type: 'column'
@@ -44,7 +44,7 @@ export default {
                    
                     formatter: function() {  
                       
-                       return type + ':' + this.x + '<br>' + '单数' + ':' + Highcharts.numberFormat(this.point.y, 0,"",",");
+                       return type + ':' + this.x + '<br>' + toolType + ':' + Highcharts.numberFormat(this.point.y, 0,"",",");
                         
                     }                 
                 },
@@ -61,20 +61,20 @@ export default {
             new Highcharts.chart('container', options);
         },
     },
-    props:['type','title','xAxis','chartData'],
+    props:['toolType','type','title','xAxis','chartData'],
     mounted(){
-        this.initChart(this.type,this.title,this.xAxis,this.chartData)
+        this.initChart(this.toolType,this.type,this.title,this.xAxis,this.chartData)
     },
     watch:{
        xAxis:{
            handler:function(n,o){
-               this.initChart(this.type,this.title,this.xAxis,this.chartData)
+               this.initChart(this.toolType,this.type,this.title,this.xAxis,this.chartData)
            },
            deep:true
        },
         chartData:{
            handler:function(n,o){
-               this.initChart(this.type,this.title,this.xAxis,this.chartData)
+               this.initChart(this.toolType,this.type,this.title,this.xAxis,this.chartData)
            },
            deep:true
        } 
