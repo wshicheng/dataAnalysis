@@ -1,10 +1,13 @@
 <template>
   <div id="orderAllData_body">
-        <Breadcrumb class="Breadcrumb">
+        <Breadcrumb class="Breadcrumb" v-if="cityType === 1">
             <BreadcrumbItem>整体数据</BreadcrumbItem>
         </Breadcrumb>
+        <Breadcrumb class="Breadcrumb2" v-else>
+            <BreadcrumbItem>{{city}}订单整体数据</BreadcrumbItem>
+        </Breadcrumb>
       <div id="orderAllData_head">
-        <div class="orderAllData_head_time">
+        <div class="orderAllData_head_time" v-if="cityType === 1">
             <span>时间:</span>
             <button class="active" @click="handleClick" myId='1'>今日</button>
             <button @click="handleClick" myId='2'>昨日</button>
@@ -12,11 +15,26 @@
             <button @click="handleClick" myId='4'>近30天</button>
             <button @click="handleClick" myId='5'>指定时间段</button>
         </div>
-        <div class="timeSelectShow" v-show="timeSelectShow">
+        <div class="orderAllData_head_time" v-else>
+            <span>时间:</span>
+            <button @click="handleClick" class="active" myId='1'>近7日</button>
+            <button @click="handleClick" myId='2'>近30天</button>
+            <button @click="handleClick" myId='3'>指定时间段</button>
+        </div>
+        <div class="timeSelectShow" v-show="timeSelectShow" v-if="cityType === 1">
             <DatePicker type="daterange" v-model="timeLine" placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
             <div class="search"><button @click="searchByTimeLine">搜索</button></div>
         </div>
-        <city-select></city-select>
+        <div class="timeSelectShow2" v-show="timeSelectShow" v-else>
+            <DatePicker type="daterange" v-model="timeLine" placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
+            <div class="search"><button @click="searchByTimeLine">搜索</button></div>
+        </div>
+        <div v-if="cityType === 1">
+            <city-select></city-select>
+        </div>
+        <div v-else>
+            
+        </div>
       </div>
 
       <div class="orderAllData_table">
@@ -62,6 +80,18 @@
             font-size: 16px;
             line-height: 30px;
         }
+        .Breadcrumb2 {
+            width: 100%;
+            height: 60px;
+            line-height: 60px;
+            background: #797979;
+            padding-left: 10px;
+            font-size: 23px;
+            font-weight: bolder;
+            span {
+                color: #fff;
+            }
+        }
         #orderAllData_head {
             -moz-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
             -webkit-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
@@ -104,6 +134,35 @@
                 position: absolute;
                 left: 523px;
                 top: 9px;
+                div.search {
+                    display: inline-block;
+                    button {
+                        width: 80px;
+                        height: 32px;
+                        line-height: 32px;
+                        cursor: pointer;
+                        margin-left: 3px;
+                        display: inline-block;
+                        border-radius: 4px;
+                        text-align: center;
+                        outline: none;
+                        margin-right: 10px;
+                        color: #fff;
+                        background: #444;
+                        font-weight: bolder;
+                        border: 1px solid #444;
+                    }
+                    button:hover {
+                        background: #666;
+                        border: 1px solid #666;
+                    }
+                }
+            }
+            div.timeSelectShow2 {
+                display: inline;
+                position: absolute;
+                left: 332px;
+                top: 11px;
                 div.search {
                     display: inline-block;
                     button {
@@ -205,7 +264,9 @@ export default {
         "city-select": citySelect
     },
     data () {
+        var that = this;
         return {
+            cityType: 1,
             timeSelectShow: false,
             timeLine: ['',''],
             page: {
@@ -219,19 +280,28 @@ export default {
             pageShow: false,
             columns_orderData: [
                 {
-                    title: '地区',
-                    key: 'cityName',
+                    renderHeader: (h) => {
+                        // title: that.cityType === undefined?'地区':'日期2',
+                        // key: that.cityType === '1'?'cityName':'orderTime',
+                        console.log(that.cityType)
+                        return h('span', that.cityType === 1?'地区':'日期')
+                    },
                     render: (h, params) => {
-                        return h('a', {
-                            style: {
-                                color: '#2d8cf0',
-                                cursor: 'pointer'
-                            },
-                            attrs: {
-                                target: '_blank',
-                                href: '#/index/orderAllData/detail/' + params.row.cityCode
-                            }
-                        }, params.row.cityName)
+                        if (that.cityType === 1) {
+                            return h('a', {
+                                style: {
+                                    color: '#2d8cf0',
+                                    cursor: 'pointer'
+                                },
+                                attrs: {
+                                    target: '_blank',
+                                    href: '#/index/orderAllData/detail/' + params.row.cityCode + '&' + params.row.cityName
+                                }
+                            }, params.row.cityName)
+                        } else {
+                            return h('p', {
+                            }, params.row.orderTime)
+                        }
                     }
                 },
                 {
@@ -285,7 +355,9 @@ export default {
             chartDataPayAmount: [],
             chartDisCountAmount: [],
             chartProfitRate: [],
-            loadFlag: false
+            loadFlag: false,
+            // 当只有一个城市时，用来显示的城市名
+            city: ''
         }
     },
     mounted () {
@@ -297,7 +369,6 @@ export default {
             this.spinShow = true
             this.spinShow2 = true
             this.noDataText = ''
-
             // 调取数据前，清空chart数据
             this.chartDataPayAmount = []
             this.chartDisCountAmount = []
@@ -319,7 +390,17 @@ export default {
             })
             .then( res => {
                 var data = res.data.data
+                // 判断message字段是1 or 0 , 1:多个城市，0:一个城市
+                if (Number(res.data.message) === 0) {
+                    this.cityType = 0
+                } else {
+                    this.cityType = 1
+                }
+
+
                 this.spinShow = false
+                // 先展示下面的图表加载状 态
+                this.noDataBox = true
                 if (res.data.resultCode === 0) {
                     this.noDataText = '暂无数据'
                     this.orderData = []
@@ -329,7 +410,7 @@ export default {
 
                     this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
                     // 处理分页数据
-                    if (res.data.totalPage < 2) {
+                    if (res.data.totalPage < 2 && this.pageSize === 10) {
                         this.pageShow = false
                     } else {
                         this.pageShow = true
@@ -366,8 +447,8 @@ export default {
                     chartData.map( item => {
                         this.chartDataPayAmount.push(Number(this.delcommafy(item.payAmount)))
                         this.chartDisCountAmount.push(Number(this.delcommafy(item.disCountAmount)))
-                        this.chartProfitRate.push(Number(item.profitRate)) 
-                        this.chartDataX.push(item.cityName)    
+                        this.chartProfitRate.push(Number(item.profitRate))
+                        this.chartDataX.push(this.cityType === 1?item.cityName:item.orderTime)
                     })
                     this.initChart()
                     this.loadFlag = true
@@ -382,6 +463,7 @@ export default {
         },
         handleClick (e) {
             this.currentPage = 1
+            this.pageSize = 10
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
                 elems[i].setAttribute('class', '')
@@ -428,7 +510,7 @@ export default {
         initChart () {
             var options = {
                 title: {
-                    text: '分地区 订单金额及实收率统计图'
+                    text: this.cityType===1?'分地区 订单金额及实收率统计图':this.city+'订单金额及实收率统计图'
                 },
                 subtitle: {
                     text: '*只显示前10个地区',
@@ -495,7 +577,7 @@ export default {
                         return '<b>' + this.x + '</b><br/>' + '<br/>' +
                             '<b>实际支付金额: </b>' + Highcharts.numberFormat(this.points[0].y, 2, ".",",") + '<br/>'+
                             '<b>优惠卷抵扣金额: </b>' + Highcharts.numberFormat(this.points[1].y, 2, ".",",") + '<br/>'+
-                            '<b>实收率: </b>' + this.points[2].y + '%'
+                            '<b>实收率: </b>' + Highcharts.numberFormat(this.points[2].y, 1) + '%'
                     }
                 },
                 plotOptions: {
@@ -514,12 +596,14 @@ export default {
                     name: '实际支付金额',
                     type: 'column',
                     data: this.chartDataPayAmount,
-                    yAxis: 0
+                    yAxis: 0,
+                    maxPointWidth: 100
                 }, { 
                     name: '优惠卷抵扣金额',
                     type: 'column',
                     data: this.chartDisCountAmount,
-                    yAxis: 0
+                    yAxis: 0,
+                    maxPointWidth: 100
                 }, {
                     name: '实收率',
                     type: 'spline',
