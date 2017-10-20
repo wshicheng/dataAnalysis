@@ -24,11 +24,15 @@
             <div class="help">
                 <Poptip trigger="hover" style="float: right;" placement="top-end" :title="poptipTitle">
                     <span>?</span>
-                    <div class="content" slot="content">
+                   <div class="content" slot="content">
                         <p>
-                            <b>订单数:</b>各订单状态的订单数（非运维订单）</p>
+                            <b>有效订单数:</b>各时长分布对应有效订单数</p>
                         <p>
-                            <b>数量占比:</b>各订单状态的订单数（非运维订单）/订单总数</p>
+                            <b>有效订单数占比:</b>各时长分布对应有效订单数/有效订单数</p>
+                             <p>
+                            <b>订单金额（￥）:</b>各时长分布对应订单金额</p>
+                             <p>
+                            <b>订单金额占比:</b>各时长分布对应订单金额/订单金额总和</p>
                     </div>
                 </Poptip>
             </div>
@@ -39,23 +43,29 @@
                         <div style="color: #ccc; text-indent: 5px;">  loading...</div>
                     </Spin>
             </div>
-           
         </div>
-        <div class="chart" v-show="data2.length>0">
-
-            <div v-if="citySelectNum.length<2?true:false">
-                <p class="vaildOrderNum">*数据来自有效订单数</p>
+        <div class="chart">
+            <div v-if="citySelectNum.length<2">
+                 <div v-show="data2.length>0">
+                     <div>
+                        <p class="vaildOrderNum">*数据来自有效订单数</p>
+                    </div>
+                    <div>
+                        <chart toolType="单数" type="里程分布" title="订单里程分布" :xAxis="xAxis" :chartData="chartData"></chart>
+                    </div>
+                 </div>
             </div>
             <div v-else>
-                <p class="vaildOrderNum">*地区超过10个时，显示10个地区,数据来自有效订单数</p>
+                <div v-show="data3.length>0">
+                     <div>
+                        <p class="vaildOrderNum">*地区超过10个时，显示10个地区,数据来自有效订单数</p>
+                    </div>
+                    <div>
+                        <chart-more toolType="单数" type="里程分布" title="分地区订单里程分布" :xAxis="xAxis" :chartData="chartData"></chart-more>
+                    </div>
+                </div>
+               
             </div>
-            <div v-if="citySelectNum.length<2?true:false">
-                <chart title="订单里程分布" :xAxis="xAxis" :chartData="chartData"></chart>
-            </div>
-            <div v-else>
-                <chart-more title="分地区订单里程分布" :xAxis="xAxis" :chartData="chartData"></chart-more>
-            </div>
-
         </div>
     </div>
 </template>
@@ -115,7 +125,6 @@ div.loading {
         color: #444;
         font-size: 12px;
         b {
-          width: 50px;
           color: #444;
           font-size: 12px;
           display: inline-block;
@@ -287,7 +296,7 @@ export default {
   data() {
     return {
       loading: true,
-      citySelectNum: "",
+      citySelectNum: [],
       columns1: [
         {
           title: "里程分布（km）",
@@ -324,7 +333,7 @@ export default {
       chartTitleName: "有效订单数",
       totalTitle: true,
       ellipsis: true,
-      poptipTitle: "数据字段说明"
+      poptipTitle: "数据项说明"
     };
   },
   created: function() {
@@ -388,57 +397,65 @@ export default {
             this.data2 = [];
             return;
           }
+          if(data.length==0){
+              this.data2 = []
+              return;
+          }
           this.data2 = [
             {
               time: "0-1",
-              orderNum: data[0].validCount,
+              orderNum: parseFloat(data[0].validCount).thousand(),
               validOrderRate: data[0].validCountRate,
-              orderMoney: data[0].validAmount,
+              orderMoney: parseFloat(data[0].validAmount).thousandFormat(),
               orderMoneyRate: data[0].validAmountRate
             },
             {
               time: "1-2",
-              orderNum: data[1].validCount,
+              orderNum: parseFloat(data[1].validCount).thousand(),
               validOrderRate: data[1].validCountRate,
-              orderMoney: data[1].validAmount,
+              orderMoney: parseFloat(data[1].validAmount).thousandFormat(),
               orderMoneyRate: data[1].validAmountRate
             },
             {
               time: "2-3",
-              orderNum: data[2].validCount,
+              orderNum: parseFloat(data[2].validCount).thousand(),
               validOrderRate: data[2].validCountRate,
-              orderMoney: data[2].validAmount,
+              orderMoney: parseFloat(data[2].validAmount).thousandFormat(),
               orderMoneyRate: data[2].validAmountRate
             },
             {
               time: "3-5",
-              orderNum: data[3].validCount,
+              orderNum: parseFloat(data[3].validCount).thousand(),
               validOrderRate: data[3].validCountRate,
-              orderMoney: data[3].validAmount,
+              orderMoney: parseFloat(data[3].validAmount).thousandFormat(),
               orderMoneyRate: data[3].validAmountRate
             },
             {
               time: "5-10",
-              orderNum: data[4].validCount,
+              orderNum: parseFloat(data[4].validCount).thousand(),
               validOrderRate: data[4].validCountRate,
-              orderMoney: data[4].validAmount,
+              orderMoney: parseFloat(data[4].validAmount).thousandFormat(),
               orderMoneyRate: data[4].validAmountRate
             },
             {
               time: "10以上",
-              orderNum: data[5].validCount,
+              orderNum: parseFloat(data[5].validCount).thousand(),
               validOrderRate: data[5].validCountRate,
-              orderMoney: data[5].validAmount,
+              orderMoney: parseFloat(data[5].validAmount).thousandFormat(),
               orderMoneyRate: data[5].validAmountRate
             },
             {
               time: "合计",
-              orderNum: data[6].validCount,
+              orderNum: parseFloat(data[6].validCount).thousand(),
               validOrderRate: data[6].validCountRate,
-              orderMoney: data[6].validAmount,
+              orderMoney:parseFloat(data[6].validAmount).thousandFormat(),
               orderMoneyRate: data[6].validAmountRate
             }
           ];
+        })
+        .catch(err => {
+          console.log(err);
+          this.loading = false;
         });
     },
     loadMultData(type, cityCode, beginDate, endDate) {
@@ -459,6 +476,11 @@ export default {
             this.data3 = [];
             return;
           }
+          if(data.length==0){
+            this.data3 = []
+            return;
+          }
+          
           var zeroStart = [];
           var oneStart = [];
           var twoStart = [];
@@ -504,6 +526,9 @@ export default {
             }
           ];
           return;
+        })
+        .catch(err => {
+          console.log(err);
         });
     },
     handleClick(e) {
@@ -539,6 +564,7 @@ export default {
         var endDate = this.timeLine[1]
           ? moment(this.timeLine[1]).format("YYYY-MM-DD")
           : "";
+        this.loadData(type, cityCode, beginDate, endDate);
         this.loadMultData(type, cityCode, beginDate, endDate);
       }
     },
@@ -575,13 +601,21 @@ export default {
           var endDate = this.timeLine[1]
             ? moment(this.timeLine[1]).format("YYYY-MM-DD")
             : "";
+           this.loadData(type, cityCode, beginDate, endDate)  
           this.loadMultData(type, cityCode, beginDate, endDate);
         }
       }
     },
     cityChange() {
       this.current = 1;
-      this.citySelectNum = this.$store.state.cityList;
+      var res = this.$store.state.keepCitys.map(item => {
+        if (this.$store.state.cityList.indexOf(item.code) != -1) {
+          return item.name;
+        }
+      });
+      this.citySelectNum = res.filter(item => {
+        return item !== undefined;
+      });
       if (this.citySelectNum.length < 2) {
         //发送请求
         var cityCode = this.$store.state.cityList.join();

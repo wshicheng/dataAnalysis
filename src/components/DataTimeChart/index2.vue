@@ -27,6 +27,7 @@ export default {
                     categories:xAxis
                 },
                 yAxis: {
+                    visible:false,
                     min: 0,
                     title: {
                         text: ' '
