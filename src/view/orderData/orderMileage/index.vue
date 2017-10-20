@@ -39,23 +39,29 @@
                         <div style="color: #ccc; text-indent: 5px;">  loading...</div>
                     </Spin>
             </div>
-           
         </div>
-        <div class="chart" v-show="data2.length>0">
-
-            <div v-if="citySelectNum.length<2?true:false">
-                <p class="vaildOrderNum">*数据来自有效订单数</p>
+        <div class="chart">
+            <div v-if="citySelectNum.length<2">
+                 <div v-show="data2.length>0">
+                     <div>
+                        <p class="vaildOrderNum">*数据来自有效订单数</p>
+                    </div>
+                    <div>
+                        <chart type="里程分布" title="订单里程分布" :xAxis="xAxis" :chartData="chartData"></chart>
+                    </div>
+                 </div>
             </div>
             <div v-else>
-                <p class="vaildOrderNum">*地区超过10个时，显示10个地区,数据来自有效订单数</p>
+                <div v-show="data3.length>0">
+                     <div>
+                        <p class="vaildOrderNum">*地区超过10个时，显示10个地区,数据来自有效订单数</p>
+                    </div>
+                    <div>
+                        <chart-more type="里程分布" title="分地区订单里程分布" :xAxis="xAxis" :chartData="chartData"></chart-more>
+                    </div>
+                </div>
+               
             </div>
-            <div v-if="citySelectNum.length<2?true:false">
-                <chart title="订单里程分布" :xAxis="xAxis" :chartData="chartData"></chart>
-            </div>
-            <div v-else>
-                <chart-more title="分地区订单里程分布" :xAxis="xAxis" :chartData="chartData"></chart-more>
-            </div>
-
         </div>
     </div>
 </template>
@@ -287,7 +293,7 @@ export default {
   data() {
     return {
       loading: true,
-      citySelectNum: "",
+      citySelectNum: [],
       columns1: [
         {
           title: "里程分布（km）",
@@ -439,6 +445,10 @@ export default {
               orderMoneyRate: data[6].validAmountRate
             }
           ];
+        })
+        .catch(err => {
+          console.log(err);
+          this.loading = false;
         });
     },
     loadMultData(type, cityCode, beginDate, endDate) {
@@ -504,6 +514,9 @@ export default {
             }
           ];
           return;
+        })
+        .catch(err => {
+          console.log(err);
         });
     },
     handleClick(e) {
@@ -539,6 +552,7 @@ export default {
         var endDate = this.timeLine[1]
           ? moment(this.timeLine[1]).format("YYYY-MM-DD")
           : "";
+        this.loadData(type, cityCode, beginDate, endDate);
         this.loadMultData(type, cityCode, beginDate, endDate);
       }
     },
@@ -575,13 +589,21 @@ export default {
           var endDate = this.timeLine[1]
             ? moment(this.timeLine[1]).format("YYYY-MM-DD")
             : "";
+           this.loadData(type, cityCode, beginDate, endDate)  
           this.loadMultData(type, cityCode, beginDate, endDate);
         }
       }
     },
     cityChange() {
       this.current = 1;
-      this.citySelectNum = this.$store.state.cityList;
+      var res = this.$store.state.keepCitys.map(item => {
+        if (this.$store.state.cityList.indexOf(item.code) != -1) {
+          return item.name;
+        }
+      });
+      this.citySelectNum = res.filter(item => {
+        return item !== undefined;
+      });
       if (this.citySelectNum.length < 2) {
         //发送请求
         var cityCode = this.$store.state.cityList.join();

@@ -41,20 +41,30 @@
             </div>
            
         </div>
-        <div class="chart" v-show="data2.length>0">
-
-            <div v-if="citySelectNum.length<2?true:false">
-                <p class="vaildOrderNum">*数据来自有效订单数</p>
+        <div class="chart">
+            <div v-if="citySelectNum.length<2">
+                 <div v-show="data2.length>0">
+                     <div>
+                        <p class="vaildOrderNum">*数据来自有效订单数</p>
+                    </div>
+                    <div>
+                        <chart type="时长分布" title="订单时长分布" :xAxis="xAxis" :chartData="chartData"></chart>
+                    </div>
+                 </div>
             </div>
+            
             <div v-else>
-                <p class="vaildOrderNum">*地区超过10个时，显示10个地区,数据来自有效订单数</p>
+                <div v-show="data3.length>0">
+                     <div>
+                        <p class="vaildOrderNum">*地区超过10个时，显示10个地区,数据来自有效订单数</p>
+                    </div>
+                    <div>
+                        <chart-more type="时长分布" title="分地区订单时长分布" :xAxis="xAxis" :chartData="chartData"></chart-more>
+                    </div>
+                </div>
+               
             </div>
-            <div v-if="citySelectNum.length<2?true:false">
-                <chart title="订单时长分布" :xAxis="xAxis" :chartData="chartData"></chart>
-            </div>
-            <div v-else>
-                <chart-more title="分地区订单时长分布" :xAxis="xAxis" :chartData="chartData"></chart-more>
-            </div>
+           
         </div>
     </div>
 </template>
@@ -283,7 +293,7 @@ export default {
     data() {
         return {
             loading:true,
-            citySelectNum: '',
+            citySelectNum: [],
             columns1: [
                 {
                     title: '时长分布（m）',
@@ -300,7 +310,7 @@ export default {
                     title: '有效订单占比',
                     key: 'orderNumProportion',
                     render:function(h,params){
-                        return h('div',params.row.orderNumProportion + '%')
+                        return h('div',parseFloat(params.row.orderNumProportion).toFixed(1)  + '%')
                     }
                 },
                 {
@@ -317,7 +327,7 @@ export default {
                     title: '订单金额占比',
                     key: 'orderAmountProportion',
                      render:function(h,params){
-                        return h('div',params.row.orderAmountProportion + '%')
+                        return h('div',parseFloat(params.row.orderAmountProportion).toFixed(1) + '%')
                     }
                 }
             ],
@@ -407,6 +417,10 @@ export default {
                             orderNumProportion:parseFloat(list.orderNumProportion)
                         }
                 })
+            }).catch( (err) => {
+                console.log(err)
+                this.loading = false;
+               
             })
         },
         loadMultData(type, cityCode, beginDate, endDate) {
@@ -443,7 +457,6 @@ export default {
                     genThirty.push(parseFloat(list.gtThirtyCount ))
                     recodeCity.push(list.cityName)
                 })
-                console.log(recodeCity)
                 this.citySelectNum = recodeCity
                 this.data3 = [
                     {
@@ -473,10 +486,11 @@ export default {
                     {
                         name: '30已上',
                         data: genThirty
-                    }]
-                return;
-
-            })
+                    }
+                ]
+            }).catch( (err) => {
+                console.log(err)
+            });
         },
         handleClick(e) {
             this.current = 1
@@ -503,6 +517,7 @@ export default {
                 var type = $('button.active').attr('myid')
                 var beginDate = this.timeLine[0] ? moment(this.timeLine[0]).format('YYYY-MM-DD') : ''
                 var endDate = this.timeLine[1] ? moment(this.timeLine[1]).format('YYYY-MM-DD') : ''
+                 this.loadData(type, cityCode, beginDate, endDate)
                 this.loadMultData(type, cityCode, beginDate, endDate)
             }
         },
@@ -521,13 +536,19 @@ export default {
                     var type = $('button.active').attr('myid')
                     var beginDate = this.timeLine[0] ? moment(this.timeLine[0]).format('YYYY-MM-DD') : ''
                     var endDate = this.timeLine[1] ? moment(this.timeLine[1]).format('YYYY-MM-DD') : ''
+                    this.loadData(type, cityCode, beginDate, endDate)
                     this.loadMultData(type, cityCode, beginDate, endDate)
                 }
             }
         },
         cityChange() {
             this.current = 1
-            this.citySelectNum = this.$store.state.cityList
+            var res = this.$store.state.keepCitys.map((item)=>{
+                if(this.$store.state.cityList.indexOf(item.code)!=-1){
+                    return item.name
+                }
+            })
+            this.citySelectNum = res.filter((item)=>{return item!==undefined})
             if (this.citySelectNum.length < 2) {
                 //发送请求
                 var cityCode = this.$store.state.cityList.join()
