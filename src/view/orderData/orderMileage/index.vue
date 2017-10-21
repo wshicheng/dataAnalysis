@@ -306,7 +306,6 @@ export default {
           title: "有效订单数",
           key: "orderNum",
           render:(h,params)=>{
-            console.log(params)
             return h('span',parseFloat(params.row.orderNum).thousand())
           }
         },
@@ -501,7 +500,6 @@ export default {
             tenStart.push(list.gtTen);
             recodeCity.push(list.cityName);
           });
-          console.log(recodeCity);
           this.citySelectNum = recodeCity;
           this.data3 = [
             {

@@ -386,7 +386,6 @@ export default {
         .then(res => {
           this.loading = false;
           var data = res.data.data;
-          console.log(data)
           if (Object.prototype.toString.call(data) != "[object Array]") {
             this.data2 = [];
             return;
