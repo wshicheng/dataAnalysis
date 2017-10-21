@@ -304,7 +304,11 @@ export default {
         },
         {
           title: "有效订单数",
-          key: "orderNum"
+          key: "orderNum",
+          render:(h,params)=>{
+            console.log(params)
+            return h('span',parseFloat(params.row.orderNum).thousand())
+          }
         },
         {
           title: "有效订单占比",
@@ -404,49 +408,49 @@ export default {
           this.data2 = [
             {
               time: "0-1",
-              orderNum: parseFloat(data[0].validCount).thousand(),
+              orderNum: parseFloat(data[0].validCount),
               validOrderRate: data[0].validCountRate,
               orderMoney: parseFloat(data[0].validAmount).thousandFormat(),
               orderMoneyRate: data[0].validAmountRate
             },
             {
               time: "1-2",
-              orderNum: parseFloat(data[1].validCount).thousand(),
+              orderNum: parseFloat(data[1].validCount),
               validOrderRate: data[1].validCountRate,
               orderMoney: parseFloat(data[1].validAmount).thousandFormat(),
               orderMoneyRate: data[1].validAmountRate
             },
             {
               time: "2-3",
-              orderNum: parseFloat(data[2].validCount).thousand(),
+              orderNum: parseFloat(data[2].validCount),
               validOrderRate: data[2].validCountRate,
               orderMoney: parseFloat(data[2].validAmount).thousandFormat(),
               orderMoneyRate: data[2].validAmountRate
             },
             {
               time: "3-5",
-              orderNum: parseFloat(data[3].validCount).thousand(),
+              orderNum: parseFloat(data[3].validCount),
               validOrderRate: data[3].validCountRate,
               orderMoney: parseFloat(data[3].validAmount).thousandFormat(),
               orderMoneyRate: data[3].validAmountRate
             },
             {
               time: "5-10",
-              orderNum: parseFloat(data[4].validCount).thousand(),
+              orderNum: parseFloat(data[4].validCount),
               validOrderRate: data[4].validCountRate,
               orderMoney: parseFloat(data[4].validAmount).thousandFormat(),
               orderMoneyRate: data[4].validAmountRate
             },
             {
               time: "10以上",
-              orderNum: parseFloat(data[5].validCount).thousand(),
+              orderNum: parseFloat(data[5].validCount),
               validOrderRate: data[5].validCountRate,
               orderMoney: parseFloat(data[5].validAmount).thousandFormat(),
               orderMoneyRate: data[5].validAmountRate
             },
             {
               time: "合计",
-              orderNum: parseFloat(data[6].validCount).thousand(),
+              orderNum: parseFloat(data[6].validCount),
               validOrderRate: data[6].validCountRate,
               orderMoney:parseFloat(data[6].validAmount).thousandFormat(),
               orderMoneyRate: data[6].validAmountRate

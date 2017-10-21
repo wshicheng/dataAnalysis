@@ -325,7 +325,7 @@ export default {
       chartTitleName: "有效订单数",
       totalTitle: true,
       ellipsis: true,
-      poptipTitle: "数项说明"
+      poptipTitle: "数据项说明"
     };
   },
   created: function() {
