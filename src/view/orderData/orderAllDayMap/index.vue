@@ -462,9 +462,9 @@ export default {
                             // }else{
                             //     return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + this.point.y;
                             // }
-                            return '时间:' + this.points[0].x + '<br>' + [type==='orderNum'?'累计订单数:':'累计订单金额:'] + 
+                            return '时间:' + this.points[0].x + '<br>' + [type==='orderNum'?'订单数:':'订单金额:'] + 
                             [type==='orderNum' || new String(this.points[0].y).length<3?this.points[0].y:Highcharts.numberFormat(this.points[0].y, 2, ".",",")] + '<br>' + 
-                            [type==='orderNum'?'订单数:':'订单金额:'] + 
+                            [type==='orderNum'?'累计订单数:':'累计订单金额:'] + 
                             [type==='orderNum' || new String(this.points[1].y).length<3?this.points[1].y:Highcharts.numberFormat(this.points[1].y, 2, ".",",")]
                         } 
                     },
