@@ -38,9 +38,9 @@
                     <FormItem label="用户名" prop="username">
                         <Input v-model="editValidate.userName" style="width:300px;" placeholder="不超过100个字符"></Input>
                     </FormItem>
-                    <!-- <FormItem label="密码" prop="password">
+                    <FormItem label="密码" prop="password">
                         <Input v-model="editValidate.passWord" type="password" style="width:300px;" placeholder="6-20位字符，可包括字母和数字，区分大小写"></Input>
-                    </FormItem> -->
+                    </FormItem>
                     <FormItem label="所属角色" prop="roleName">
                         <!-- <Select style="width:300px;" @on-change="handleSelect" v-model="editValidate.roleName" :value="editValidate.roleName" placeholder="请选择所属角色">
                             <Option value="角色1">角色1</Option>
@@ -165,6 +165,28 @@ import $ from 'jquery'
 import { mapGetters } from 'vuex'
 export default {
     data() {
+         var validateAddUserName = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入用户名'));
+                } else {
+                    if (value !== '') {
+                        // 对用户名进行重复性严重
+                        console.log('添加用户名验证')
+                    }
+                    callback();
+                }
+            };
+         var validateEditUserName = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入用户名'));
+                } else {
+                    if (value !== '') {
+                        //编辑账号时候对用户名进行重复性严重
+                         console.log('编辑用户名验证')
+                    }
+                    callback();
+                }
+            };   
         return {
             close:false,
             initStatu:'',
@@ -188,7 +210,7 @@ export default {
             },
             editValidateRule: {
                 username: [
-                    { required: true, message: '用户名不能为空', trigger: 'blur' }
+                    { validator: validateEditUserName,required:true, trigger: 'blur' }
                 ],
                 password: [
                     { required: true, message: '密码不能为空', trigger: 'blur' },
@@ -227,7 +249,7 @@ export default {
             },
             ruleValidate: {
                 userName: [
-                    { required: true, message: '用户名不能为空', trigger: 'blur' }
+                    { validator: validateAddUserName,required:true, trigger: 'blur' }
                 ],
                 passWord: [
                     { required: true, message: '密码不能为空', trigger: 'blur' },
@@ -455,11 +477,11 @@ export default {
             })
         },
         show(params) {
-            console.log(params.row)
             /*显示弹窗*/
             var that = this
             this.editModal = true
             this.editValidate = params.row
+            this.editValidate.passWord='********'
             this.index = params.index
             this.recodeCityList = params.row.cityList.map((item)=>{return item.name})
             this.editValidate.cityList = this.recodeCityList
@@ -499,6 +521,8 @@ export default {
         },
         closeAddModel () {
             this.$refs.formValidate.resetFields()
+            this.checkAll = false
+            this.formValidate.cityList = []
             this.addModal = false
         },
         handleDelete(index, id) {
@@ -569,7 +593,6 @@ export default {
             delete this.editValidate.token;
             delete this.editValidate.adminUserIconUrl;
             delete this.editValidate.createTime;
-            delete this.editValidate.passWord;
             delete this.editValidate.roleName;
             delete this.editValidate.status;
             delete this.editValidate.updateDate;

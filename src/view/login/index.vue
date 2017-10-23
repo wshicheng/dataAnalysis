@@ -123,7 +123,11 @@ import {mapActions,mapState,mapGetters} from 'vuex'
                                     window.localStorage.setItem('cityStr', res.data.data.cityStr)
                                     // window.localStorage.setItem('authList', )
                                     // 登录相关操作
-                                    this.$router.push({path:'/index/orderAllData'})
+                                    // this.$router.push({path:'/index/orderAllData'})
+                                    // window.sessionStorage.setItem('userInfo',JSON.stringify(this.userInfo))
+                                    // window.sessionStorage.setItem('headImg', res.data.data.adminUserIconUrl)
+                                    // // window.sessionStorage.setItem('authList', )
+                                    this.$router.push({path:'/index/dateAndArea'})
                                 }else{
                                     this.errorTextShow = true
                                      this.errorText = message

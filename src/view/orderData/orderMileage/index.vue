@@ -26,18 +26,18 @@
                     <span>?</span>
                    <div class="content" slot="content">
                         <p>
-                            <b>有效订单数:</b>各时长分布对应有效订单数</p>
+                            <b>有效订单数:</b>各里程分布对应有效订单数</p>
                         <p>
-                            <b>有效订单数占比:</b>各时长分布对应有效订单数/有效订单数</p>
+                            <b>有效订单数占比:</b>各里程分布对应有效订单数/有效订单数</p>
                              <p>
-                            <b>订单金额（￥）:</b>各时长分布对应订单金额</p>
+                            <b>订单金额（￥）:</b>各里程分布对应订单金额</p>
                              <p>
-                            <b>订单金额占比:</b>各时长分布对应订单金额/订单金额总和</p>
+                            <b>订单金额占比:</b>各里程分布对应订单金额/订单金额总和</p>
                     </div>
                 </Poptip>
             </div>
             <div class="loading">
-                 <Table border :columns="columns1" :data="data2"></Table>
+                 <Table :no-data-text="noDataText" border :columns="columns1" :data="data2"></Table>
                     <Spin fix size="large" v-show="loading"  class="spin">
                         <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                         <div style="color: #ccc; text-indent: 5px;">  loading...</div>
@@ -295,6 +295,7 @@ export default {
   },
   data() {
     return {
+      noDataText:'',
       loading: true,
       citySelectNum: [],
       columns1: [
@@ -369,8 +370,8 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch("menuActiveName", "/index/dateTime");
-    document.title = "订单数据 - 订单时长分布";
+    this.$store.dispatch("menuActiveName", "/index/orderMileage");
+    document.title = "订单数据 - 订单里程分布";
   },
   methods: {
     generatArray(len) {
@@ -381,6 +382,7 @@ export default {
       return arr;
     },
     loadData(type, cityCode, beginDate, endDate) {
+       this.noDataText = ''
       // 默认请求
       this.loading = true;
       this.axios
@@ -398,10 +400,12 @@ export default {
           var data = res.data.data;
           if (Object.prototype.toString.call(data) != "[object Array]") {
             this.data2 = [];
+            this.noDataText = '暂无数据'
             return;
           }
           if(data.length==0){
               this.data2 = []
+              this.noDataText = '暂无数据'
               return;
           }
           this.data2 = [
@@ -458,6 +462,7 @@ export default {
         })
         .catch(err => {
           console.log(err);
+          this.noDataText = '暂无数据'
           this.loading = false;
         });
     },
