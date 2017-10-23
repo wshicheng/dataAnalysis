@@ -558,11 +558,7 @@ export default {
         if (this.citySelectNum.length < 2) {
           var cityCode = this.$store.state.cityList.join();
           var type = "";
-          if (this.timeSelectShow == true) {
-            type = "";
-          } else {
-            type = $("button.active").attr("myid");
-          }
+          type = $("button.active").attr("myid");
           var beginDate = this.timeLine[0]
             ? moment(this.timeLine[0]).format("YYYY-MM-DD")
             : "";
@@ -573,11 +569,7 @@ export default {
         } else {
           var cityCode = this.$store.state.cityList.join();
           var type = "";
-          if (this.timeSelectShow == true) {
-            type = "";
-          } else {
-            type = $("button.active").attr("myid");
-          }
+          type = $("button.active").attr("myid");
           var beginDate = this.timeLine[0]
             ? moment(this.timeLine[0]).format("YYYY-MM-DD")
             : "";
