@@ -325,7 +325,7 @@ export default {
       chartTitleName: "有效订单数",
       totalTitle: true,
       ellipsis: true,
-      poptipTitle: "数项说明"
+      poptipTitle: "数据项说明"
     };
   },
   created: function() {
@@ -386,7 +386,6 @@ export default {
         .then(res => {
           this.loading = false;
           var data = res.data.data;
-          console.log(data)
           if (Object.prototype.toString.call(data) != "[object Array]") {
             this.data2 = [];
             return;
