@@ -58,7 +58,7 @@
                 </div>
             </Poptip>
         </div>
-        <Table border size='small' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
+        <Table @on-sort-change="handleSort" border size='small' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
         <Page :total="totalListNum" show-sizer show-elevator  :styles='page' placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
       </div>
 
@@ -307,7 +307,7 @@ export default {
                 {
                     title: '订单总数',
                     key: 'orderAllNum',
-                    sortable: true
+                    sortable: 'custom'
                 },
                 {
                     title: '有效订单数',
@@ -365,6 +365,9 @@ export default {
         this.loadData("1")
     },
     methods: {
+        handleSort(column,key,order){
+            console.log(column,key,order)
+        },
         loadData (type) {
             this.spinShow = true
             this.spinShow2 = true

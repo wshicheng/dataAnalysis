@@ -38,9 +38,9 @@
                     <FormItem label="用户名" prop="username">
                         <Input v-model="editValidate.userName" style="width:300px;" placeholder="不超过100个字符"></Input>
                     </FormItem>
-                    <!-- <FormItem label="密码" prop="password">
+                    <FormItem label="密码" prop="password">
                         <Input v-model="editValidate.passWord" type="password" style="width:300px;" placeholder="6-20位字符，可包括字母和数字，区分大小写"></Input>
-                    </FormItem> -->
+                    </FormItem>
                     <FormItem label="所属角色" prop="roleName">
                         <!-- <Select style="width:300px;" @on-change="handleSelect" v-model="editValidate.roleName" :value="editValidate.roleName" placeholder="请选择所属角色">
                             <Option value="角色1">角色1</Option>
@@ -455,11 +455,11 @@ export default {
             })
         },
         show(params) {
-            console.log(params.row)
             /*显示弹窗*/
             var that = this
             this.editModal = true
             this.editValidate = params.row
+            this.editValidate.passWord='********'
             this.index = params.index
             this.recodeCityList = params.row.cityList.map((item)=>{return item.name})
             this.editValidate.cityList = this.recodeCityList
@@ -571,7 +571,6 @@ export default {
             delete this.editValidate.token;
             delete this.editValidate.adminUserIconUrl;
             delete this.editValidate.createTime;
-            delete this.editValidate.passWord;
             delete this.editValidate.roleName;
             delete this.editValidate.status;
             delete this.editValidate.updateDate;
