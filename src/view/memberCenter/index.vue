@@ -121,7 +121,7 @@
                         <Input v-model="editPhone.phoneCode" placeholder="请输入手机收到的验证码"></Input>
                     </FormItem>
                     <FormItem label="账户密码" prop="passWord" class="pwd">
-                        <Input v-model="editPhone.passWord" type='password' placeholder="为保障账号安全，您需要填写当前登录账号与密码"></Input>
+                        <Input v-model="editPhone.passWord" type='password' placeholder="为保障账号安全，您需要填写当前登录账号的密码"></Input>
                     </FormItem>
                 </Form>
             </div>
