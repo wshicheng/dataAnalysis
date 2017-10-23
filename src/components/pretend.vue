@@ -122,9 +122,13 @@ import citySelect from './citySelect.vue'
                var res =  Array.prototype.slice.call($proress)
                res.forEach(function(item,index){
                    var $percent = $(item).attr('percent')
-                    $(item).css({
-                        width:$percent,
+                     $(item).css({
+                        backgroundColor:'#8db4e2',
                     })
+                    $(item).animate({width:$percent},500)
+                    // $(item).css({
+                    //     width:$percent,
+                    // })
     
                    if($percent.fixed(2)!=='100%'){
                        $(item).parent().prev().css({
@@ -270,7 +274,6 @@ import citySelect from './citySelect.vue'
                                 .progress-bg{
                                     height: 30px;
                                     width:100%;
-                                    background:#8db4e2;
                                     position: relative;
                                 }
                                 .progress-bg.active{
