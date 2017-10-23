@@ -70,9 +70,25 @@ export default {
     },
     computed: {
         ...mapGetters(['userInfo']),
-        city: function() {
-            this.cityList = this.userInfo.cityList
-            return this.userInfo.cityList.map((item) => { return item.name }).join('、')
+        // city: function() {
+        //     this.cityList = this.userInfo.cityList
+        //     window.localStorage.setItem('city', this.cityList[0].name)
+        //     // return this.userInfo.cityList.map((item) => { return item.name }).join('、')
+        //     return this.city = window.localStorage.getItem('cityStr')
+        // }
+        city: {
+            get: function () {
+                this.cityList = this.userInfo.cityList
+                window.localStorage.setItem('city', this.cityList[0].name)
+                if (window.localStorage.getItem('cityStr') != '全部地区' && window.localStorage.getItem('cityStr').length > 3) {
+                    return this.userInfo.cityList.map((item) => { return item.name }).join('、')
+                } else {
+                    return this.city = window.localStorage.getItem('cityStr')
+                } 
+            },
+            set: function () {
+                return
+            }
         }
     },
     watch: {

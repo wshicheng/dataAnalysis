@@ -22,7 +22,7 @@
             <div style="color: #ccc; text-indent: 5px;">  loading...</div>
         </Spin>
         <div class="help">
-            <Poptip trigger="hover" style="float: right;" placement="bottom-end" title="数据项说明" content="提示内容">
+            <Poptip trigger="hover" style="float: right;" placement="left-start" title="数据项说明" content="提示内容">
                 <span>?</span>
                 <div class="content" slot="content">
                     <p><b>订单总数:</b>除运维订单以外所有状态的订单总数</p>
@@ -30,7 +30,7 @@
                     <p><b>订单金额（￥）:</b>订单总数的订单金额总和</p>
                     <p><b>均单价（总数）:</b>订单金额/订单总数</p>
                     <p><b>均单价（有效）:</b>订单金额/有效订单数</p>
-                    <p><b>实收率:</b></p>
+                    <p><b>实收率:</b>订单金额中的实际支付金额/订单金额</p>
                     <p><b>优惠订单占比:</b>有效订单数中使用优惠券的订单数/有效订单数</p>
                     <p><b>平均订单时长（分）:</b>有效订单数的总订单时长/有效订单数</p>
                     <p><b>平均订单里程（公里）:</b>有效订单数的总订单里程/有效订单数/1000</p>
@@ -156,11 +156,11 @@
                 overflow: hidden;
                 margin-bottom: 10px;
                 span {
-                    float: right;
                     display: inline-block;
-                    width: 30px;
-                    height: 30px;
+                    width: 25px;
+                    height: 25px;
                     background: orange;
+                    line-height: 25px;
                     color: #fff;
                     font-weight: bolder;
                     border-radius: 50%;
@@ -234,7 +234,7 @@ export default {
                 {
                     title: '订单总数',
                     key: 'orderAllNum',
-                    sortable: true
+                    // sortable: true
                 },
                 {
                     title: '有效订单数',
@@ -243,7 +243,7 @@ export default {
                 {
                     title: '订单金额(￥)',
                     key: 'orderAllAmount',
-                    sortable: true
+                    // sortable: true
                 },
                 {
                     title: '均单价(总数)',
@@ -252,7 +252,7 @@ export default {
                 {
                     title: '均单价(有效)',
                     key: 'avgAmount',
-                    sortable: true
+                    // sortable: true
                 },
                 {
                     title: '实收率',
@@ -494,11 +494,18 @@ export default {
                 },
                 tooltip: {
                     shared: true,
-                    formatter: function () {
-                        return '<b>' + this.x + '</b><br/>' + '<br/>' +
-                            '<b>实际支付金额: </b>' + Highcharts.numberFormat(this.points[0].y, 2, ".",",") + '<br/>'+
-                            '<b>优惠卷抵扣金额: </b>' + Highcharts.numberFormat(this.points[1].y, 2, ".",",") + '<br/>'+
-                            '<b>实收率: </b>' + Highcharts.numberFormat(this.points[2].y, 1) + '%'
+                    useHTML: true,
+                    headerFormat: "<b style='font-size: 12px; color: #f60; font-weight: bolder;'>{point.key}</b>",
+                    pointFormatter:function () {
+                        if (this.series.name != '实收率') {
+                            return "<p style='color:" + this.color + "; font-weight: bolder;'>" 
+                            + this.series.name + ':  </p>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")]
+                            + '<br><br>'
+                        } else {
+                            return "<p style='color:" + this.color + "; font-weight: bolder;'>" 
+                            + this.series.name + ':  </p>' + Highcharts.numberFormat(this.y, 1)
+                            + '%' + '<br><br>'
+                        }
                     }
                 },
                 plotOptions: {
@@ -520,14 +527,14 @@ export default {
                     yAxis: 0,
                     maxPointWidth: 100
                 }, { 
-                    name: '优惠卷抵扣金额',
+                    name: '优惠劵抵扣金额',
                     type: 'column',
                     data: this.chartDisCountAmount,
                     yAxis: 0,
                     maxPointWidth: 100
                 }, {
                     name: '实收率',
-                    type: 'spline',
+                    type: 'line',
                     data: this.chartProfitRate,
                     tooltip: {
                         valueSuffix: ''

@@ -120,8 +120,10 @@ import {mapActions,mapState,mapGetters} from 'vuex'
                                     this.getUser(res.data.data)
                                     window.localStorage.setItem('userInfo',JSON.stringify(this.userInfo))
                                     window.localStorage.setItem('headImg', res.data.data.adminUserIconUrl)
+                                    window.localStorage.setItem('cityStr', res.data.data.cityStr)
                                     // window.localStorage.setItem('authList', )
-                                    this.$router.push({path:'/index/dateAndArea'})
+                                    // 登录相关操作
+                                    this.$router.push({path:'/index/orderAllData'})
                                 }else{
                                     this.errorTextShow = true
                                      this.errorText = message

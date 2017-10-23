@@ -51,7 +51,7 @@
                     <p><b>订单金额（￥）:</b>订单总数的订单金额总和</p>
                     <p><b>均单价（总数）:</b>订单金额/订单总数</p>
                     <p><b>均单价（有效）:</b>订单金额/有效订单数</p>
-                    <p><b>实收率:</b></p>
+                    <p><b>实收率:</b>订单金额中的实际支付金额/订单金额</p>
                     <p><b>优惠订单占比:</b>有效订单数中使用优惠券的订单数/有效订单数</p>
                     <p><b>平均订单时长（分）:</b>有效订单数的总订单时长/有效订单数</p>
                     <p><b>平均订单里程（公里）:</b>有效订单数的总订单里程/有效订单数/1000</p>
@@ -207,11 +207,11 @@
                 overflow: hidden;
                 margin-bottom: 10px;
                 span {
-                    float: right;
                     display: inline-block;
-                    width: 30px;
-                    height: 30px;
+                    width: 25px;
+                    height: 25px;
                     background: orange;
+                    line-height: 25px;
                     color: #fff;
                     font-weight: bolder;
                     border-radius: 50%;
@@ -283,7 +283,6 @@ export default {
                     renderHeader: (h) => {
                         // title: that.cityType === undefined?'地区':'日期2',
                         // key: that.cityType === '1'?'cityName':'orderTime',
-                        console.log(that.cityType)
                         return h('span', that.cityType === 1?'地区':'日期')
                     },
                     render: (h, params) => {
@@ -307,7 +306,7 @@ export default {
                 {
                     title: '订单总数',
                     key: 'orderAllNum',
-                    sortable: true
+                    // sortable: true
                 },
                 {
                     title: '有效订单数',
@@ -316,7 +315,7 @@ export default {
                 {
                     title: '订单金额(￥)',
                     key: 'orderAllAmount',
-                    sortable: true
+                    // sortable: true
                 },
                 {
                     title: '均单价(总数)',
@@ -325,7 +324,7 @@ export default {
                 {
                     title: '均单价(有效)',
                     key: 'avgAmount',
-                    sortable: true
+                    // sortable: true
                 },
                 {
                     title: '实收率',
@@ -355,15 +354,24 @@ export default {
             chartDataPayAmount: [],
             chartDisCountAmount: [],
             chartProfitRate: [],
-            loadFlag: false,
-            // 当只有一个城市时，用来显示的城市名
-            city: ''
+            loadFlag: false
         }
     },
     mounted () {
         this.$store.dispatch('menuActiveName', '/index/orderAllData')
         this.loadData("1")
     },
+    computed: {
+        city:{
+            get () {
+                return this.city = window.localStorage.getItem('city')
+            },
+            set () {
+                // 当只有一个城市时，用来显示的城市名
+                return 
+            }
+        }
+    },  
     methods: {
         loadData (type) {
             this.spinShow = true
@@ -513,7 +521,7 @@ export default {
                     text: this.cityType===1?'分地区 订单金额及实收率统计图':this.city+'订单金额及实收率统计图'
                 },
                 subtitle: {
-                    text: '*只显示前10个地区',
+                    text: this.cityType===1?'*只显示前10个地区':'',
                     align: 'right',
                     verticalAlign: 'top',
                     style: {
@@ -573,11 +581,18 @@ export default {
                 },
                 tooltip: {
                     shared: true,
-                    formatter: function () {
-                        return '<b>' + this.x + '</b><br/>' + '<br/>' +
-                            '<b>实际支付金额: </b>' + Highcharts.numberFormat(this.points[0].y, 2, ".",",") + '<br/>'+
-                            '<b>优惠卷抵扣金额: </b>' + Highcharts.numberFormat(this.points[1].y, 2, ".",",") + '<br/>'+
-                            '<b>实收率: </b>' + Highcharts.numberFormat(this.points[2].y, 1) + '%'
+                    useHTML: true,
+                    headerFormat: "<p style='font-size: 12px; color: #f60; font-weight: bolder;'>{point.key}</p>",
+                    pointFormatter:function () {
+                        if (this.series.name != '实收率') {
+                            return "<br><span style='color:" + this.color + "; font-weight: bolder;'>" 
+                            + this.series.name + ':  </span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")]
+                            + '<br>'
+                        } else {
+                            return "<br><span style='color:" + this.color + "; font-weight: bolder;'>" 
+                            + this.series.name + ':  </span>' + Highcharts.numberFormat(this.y, 1)
+                            + '%' + '<br>'
+                        }
                     }
                 },
                 plotOptions: {
@@ -599,14 +614,14 @@ export default {
                     yAxis: 0,
                     maxPointWidth: 100
                 }, { 
-                    name: '优惠卷抵扣金额',
+                    name: '优惠劵抵扣金额',
                     type: 'column',
                     data: this.chartDisCountAmount,
                     yAxis: 0,
                     maxPointWidth: 100
                 }, {
                     name: '实收率',
-                    type: 'spline',
+                    type: 'line',
                     data: this.chartProfitRate,
                     tooltip: {
                         valueSuffix: ''

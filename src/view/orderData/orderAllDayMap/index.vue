@@ -426,21 +426,22 @@ export default {
                     }],
                     yAxis: [{ // Primary yAxis
                         labels: {
-                            format: '{value}',
+                            format: '{value} ',
                             style: {
                                 color: '#ed833b'
                             }
                         },
                         title: {
-                            text: $('.select button.active')[0].innerHTML === '订单数'?'订单数':'订单金额',
+                            text: $('.select button.active')[0].innerHTML === '订单数'?'累计订单数':'累计订单金额',
                             style: {
                                 color: '#ed833b',
                                 fontWeight: 'bolder'
                             }
-                        }
+                        },
+                        allowDecimals: false
                     }, { // Secondary yAxis
                         title: {
-                            text: $('.select button.active')[0].innerHTML === '订单数'?'累计订单数':'累计订单金额',
+                            text: $('.select button.active')[0].innerHTML === '订单数'?'订单数':'订单金额',
                             style: {
                                 color: '#4473c4',
                                 fontWeight: 'bolder'
@@ -452,21 +453,17 @@ export default {
                                 color: '#4473c4'
                             }
                         },
-                        opposite: true
+                        opposite: true,
+                        allowDecimals: false
                     }],
                     tooltip: {
                         shared: true,
-                        formatter: function() {
-                            // if(new String(this.point.y).length>5){
-                            //     return '订单数:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 2, ".",",");
-                            // }else{
-                            //     return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + this.point.y;
-                            // }
-                            return '时间:' + this.points[0].x + '<br>' + [type==='orderNum'?'订单数:':'订单金额:'] + 
-                            [type==='orderNum' || new String(this.points[0].y).length<3?this.points[0].y:Highcharts.numberFormat(this.points[0].y, 2, ".",",")] + '<br>' + 
-                            [type==='orderNum'?'累计订单数:':'累计订单金额:'] + 
-                            [type==='orderNum' || new String(this.points[1].y).length<3?this.points[1].y:Highcharts.numberFormat(this.points[1].y, 2, ".",",")]
-                        } 
+                        useHTML: true,
+                        headerFormat: "<p style='font-size: 12px; color: #f60; font-weight: bolder;'>{point.key}</p>",
+                        pointFormatter:function () {
+                            return "<br><span style='color:" + this.color + "; font-weight: bolder;'>" + 
+                             this.series.name + ':</span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")]
+                        }
                     },
                     plotOptions: {
                         spline: {

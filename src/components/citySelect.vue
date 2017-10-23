@@ -1,5 +1,5 @@
 <template>
-    <div  class="citySelect_area" style="margin-bottom: 5px;">
+    <div  class="citySelect_area" style="margin-bottom: 5px;" v-show="singleCityShow">
         <span class="city">城市:</span>
         <div class="citySelect_area_span" >
             <span class="active" @click="areaClick" v-show="allCityHide">全部地区</span>
@@ -64,7 +64,8 @@ export default {
             cityAuth:false,
             cityList: [],
             citySelect: [],
-            allCityHide: false
+            allCityHide: false,
+            singleCityShow: false
         }
     },
     methods: {
@@ -121,8 +122,10 @@ export default {
             }
             if (res.data.data.length >1) {
                 _this.allCityHide = true
+                _this.singleCityShow = true
             } else {
                 _this.allCityHide = false
+                _this.singleCityShow = false
                 // setTimeout( function () {
                 //     $('.citySelect_area_span span')[0].setAttribute('active')
                 // }, 10)        

@@ -29,15 +29,17 @@
                 <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
             </Spin>
-            <!-- <div class="help">
+            <div class="help">
                 <Poptip trigger="hover" style="float: right;"  placement="top-end" title="数据字段说明">
                     <span>?</span>
                     <div class="content" slot="content">
-                        <p><b>订单数:</b>各订单状态的订单数（非运维订单）</p>
-                        <p><b>数量占比:</b>各订单状态的订单数（非运维订单）/订单总数</p>
+                        <p><b>有效订单数:</b>订单状态为人工结束和已结束；非运维订单；订单金额>0</p>
+                        <p><b>订单金额(￥):</b>订单总数的订单金额总和</p>
+                        <p><b>均单价(有效):</b>订单金额/有效订单数</p>
+                        <p><b>实收金额:</b>订单金额中的实际支付金额</p>
                     </div>
                 </Poptip>
-            </div> -->
+            </div>
             <Table :no-data-text='noDataText' :ellipsis='ellipsis' :loading='loading' border size='small' :columns="columns_orderData" :data="orderData"></Table>
             <Page :total="totalListNum" show-sizer show-elevator :styles='page' :current='current' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </div>
@@ -192,11 +194,11 @@
                 overflow: hidden;
                 margin-bottom: 10px;
                 span {
-                    float: right;
                     display: inline-block;
-                    width: 30px;
-                    height: 30px;
+                    width: 25px;
+                    height: 25px;
                     background: orange;
+                    line-height: 25px;
                     color: #fff;
                     font-weight: bolder;
                     border-radius: 50%;
@@ -211,7 +213,7 @@
                         color: #444;
                         font-size: 12px;
                         b {
-                            width: 50px;
+                            width: 80px;
                             color: #444;
                             font-size: 12px;
                             display: inline-block;
