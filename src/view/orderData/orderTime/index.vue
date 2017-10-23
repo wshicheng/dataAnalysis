@@ -391,7 +391,7 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch("menuActiveName", "/index/dateTime");
+    this.$store.dispatch("menuActiveName", "/index/orderTime");
     document.title = "订单数据 - 订单时长分布";
   },
   methods: {

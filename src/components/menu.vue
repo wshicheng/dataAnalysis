@@ -93,7 +93,7 @@ export default {
             theme2: 'dark',
             menuActiveName: "",
             accord: true,
-            openNames: ['orderData']
+            openNames: []
         }
     },
     beforeMount () {
@@ -113,7 +113,7 @@ export default {
             this.menuActiveName = this.$store.state.menuActiveName
         },
         openChange (name) {
-            // console.log('name', name)
+            console.log('name', name)
             this.openNames = name
             window.sessionStorage.setItem('openNames', name)
         }

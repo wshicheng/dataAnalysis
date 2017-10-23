@@ -27,11 +27,11 @@ export default new Vuex.Store({
     mutations: {
         [types.LOGIN](state, data){
             state.token = data;
-            window.localStorage.setItem('token',data)
+            window.sessionStorage.setItem('token',data)
         },
         [types.LOGOUT](state){
             state.token = ''
-            window.localStorage.removeItem('token')
+            window.sessionStorage.removeItem('token')
         },
         [types.TITLE](state, data){
             state.title = data;

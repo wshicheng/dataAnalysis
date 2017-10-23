@@ -8,17 +8,17 @@ let routes = [
         component:Login,
         name:'登录'
     },
-    {
-        path: '/',
-        component: index,
-        children:[
-            {
-                path: '/nofound',
-                component: NotFoundPage,
-                name:'notfound'
-            }
-        ]
-    },
+    // {
+    //     path: '/',
+    //     component: index,
+    //     children:[
+    //         {
+    //             path: '/nofound',
+    //             component: NotFoundPage,
+    //             name:'notfound'
+    //         }
+    //     ]
+    // },
     // ...generateRoutesFromMenu(MenuModule.state.items)
 ]
 

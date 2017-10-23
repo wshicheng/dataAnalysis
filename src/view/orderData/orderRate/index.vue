@@ -360,7 +360,8 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch("menuActiveName", "/index/dateTime");
+    
+    this.$store.dispatch("menuActiveName", "/index/orderRate");
     document.title = "订单数据 - 使用频次分布";
   },
   methods: {

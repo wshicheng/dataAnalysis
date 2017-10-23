@@ -370,8 +370,8 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch("menuActiveName", "/index/dateTime");
-    document.title = "订单数据 - 订单时长分布";
+    this.$store.dispatch("menuActiveName", "/index/orderMileage");
+    document.title = "订单数据 - 订单里程分布";
   },
   methods: {
     generatArray(len) {
