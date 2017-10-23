@@ -499,6 +499,8 @@ export default {
         },
         closeAddModel () {
             this.$refs.formValidate.resetFields()
+            this.checkAll = false
+            this.formValidate.cityList = []
             this.addModal = false
         },
         handleDelete(index, id) {

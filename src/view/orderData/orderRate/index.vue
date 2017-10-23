@@ -34,7 +34,8 @@
                 </Poptip>
             </div>
             <div class="loading">
-                 <Table border :columns="columns1" :data="data2"></Table>
+               
+                 <Table :no-data-text="noDataText" border  :columns="columns1" :data="data2"></Table>
                     <Spin fix size="large" v-show="loading"  class="spin">
                         <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                         <div style="color: #ccc; text-indent: 5px;">  loading...</div>
@@ -297,11 +298,12 @@ export default {
   },
   data() {
     return {
+      noDataText:'',
       loading: true,
       citySelectNum: [],
       columns1: [
         {
-          title: "次数（km）",
+          title: "次数",
           key: "time"
         },
         {
@@ -370,6 +372,7 @@ export default {
       return arr;
     },
     loadData(type, cityCode, beginDate, endDate) {
+       this.noDataText = ''
       // 默认请求
       this.loading = true;
       this.axios
@@ -388,10 +391,12 @@ export default {
           var data = res.data.data;
           if (Object.prototype.toString.call(data) != "[object Array]") {
             this.data2 = [];
+            this.noDataText = '暂无数据'
             return;
           }
           if(data.length==0){
               this.data2 = []
+              this.noDataText = '暂无数据'
               return;
           }
           this.data2 = [
@@ -433,6 +438,7 @@ export default {
           ];
         }).catch( (err) => {
                 console.log(err)
+                this.noDataText = '暂无数据'
                 this.loading = false;
             });
     },
