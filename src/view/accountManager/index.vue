@@ -165,6 +165,28 @@ import $ from 'jquery'
 import { mapGetters } from 'vuex'
 export default {
     data() {
+         var validateAddUserName = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入用户名'));
+                } else {
+                    if (value !== '') {
+                        // 对用户名进行重复性严重
+                        console.log('添加用户名验证')
+                    }
+                    callback();
+                }
+            };
+         var validateEditUserName = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入用户名'));
+                } else {
+                    if (value !== '') {
+                        //编辑账号时候对用户名进行重复性严重
+                         console.log('编辑用户名验证')
+                    }
+                    callback();
+                }
+            };   
         return {
             close:false,
             initStatu:'',
@@ -188,7 +210,7 @@ export default {
             },
             editValidateRule: {
                 username: [
-                    { required: true, message: '用户名不能为空', trigger: 'blur' }
+                    { validator: validateEditUserName,required:true, trigger: 'blur' }
                 ],
                 password: [
                     { required: true, message: '密码不能为空', trigger: 'blur' },
@@ -227,7 +249,7 @@ export default {
             },
             ruleValidate: {
                 userName: [
-                    { required: true, message: '用户名不能为空', trigger: 'blur' }
+                    { validator: validateAddUserName,required:true, trigger: 'blur' }
                 ],
                 passWord: [
                     { required: true, message: '密码不能为空', trigger: 'blur' },

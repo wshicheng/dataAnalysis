@@ -58,7 +58,7 @@
                 </div>
             </Poptip>
         </div>
-        <Table @on-sort-change="handleSort" border size='small' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
+        <Table  border size='small' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
         <Page :total="totalListNum" show-sizer show-elevator  :styles='page' placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
       </div>
 
@@ -283,7 +283,6 @@ export default {
                     renderHeader: (h) => {
                         // title: that.cityType === undefined?'地区':'日期2',
                         // key: that.cityType === '1'?'cityName':'orderTime',
-                        console.log(that.cityType)
                         return h('span', that.cityType === 1?'地区':'日期')
                     },
                     render: (h, params) => {
@@ -307,7 +306,10 @@ export default {
                 {
                     title: '订单总数',
                     key: 'orderAllNum',
-                    sortable: 'custom'
+                    sortable:true,
+                    sortMethod:function(a,b,type){
+                        console.log(a,b,type)
+                    }
                 },
                 {
                     title: '有效订单数',

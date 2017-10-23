@@ -113,7 +113,6 @@ export default {
             this.menuActiveName = this.$store.state.menuActiveName
         },
         openChange (name) {
-            console.log('name', name)
             this.openNames = name
             window.sessionStorage.setItem('openNames', name)
         }
