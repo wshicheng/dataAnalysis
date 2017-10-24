@@ -72,18 +72,18 @@ export default {
         ...mapGetters(['userInfo']),
         // city: function() {
         //     this.cityList = this.userInfo.cityList
-        //     window.localStorage.setItem('city', this.cityList[0].name)
+        //     window.sessionStorage.setItem('city', this.cityList[0].name)
         //     // return this.userInfo.cityList.map((item) => { return item.name }).join('、')
-        //     return this.city = window.localStorage.getItem('cityStr')
+        //     return this.city = window.sessionStorage.getItem('cityStr')
         // }
         city: {
             get: function () {
                 this.cityList = this.userInfo.cityList
-                window.localStorage.setItem('city', this.cityList[0].name)
-                if (window.localStorage.getItem('cityStr') != '全部地区' && window.localStorage.getItem('cityStr').length > 3) {
+                window.sessionStorage.setItem('city', this.cityList[0].name)
+                if (window.sessionStorage.getItem('cityStr') != '全部地区' && window.sessionStorage.getItem('cityStr').length > 3) {
                     return this.userInfo.cityList.map((item) => { return item.name }).join('、')
                 } else {
-                    return this.city = window.localStorage.getItem('cityStr')
+                    return this.city = window.sessionStorage.getItem('cityStr')
                 } 
             },
             set: function () {
