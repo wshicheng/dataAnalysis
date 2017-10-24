@@ -473,15 +473,13 @@ export default {
                                     color: Highcharts.getOptions().colors[2]
                                 }
                             },
-                            labels: {                                
-                                formatter:function(){
-                                    return this.value + '%'
-                                },
+                            labels: {
                                 style: {
                                     color: Highcharts.getOptions().colors[2]
                                 }
                             },
-                            opposite: true
+                            opposite: true,
+                            max: 100
                         }],
                 legend: {
                     align: 'center',
@@ -495,7 +493,7 @@ export default {
                 tooltip: {
                     shared: true,
                     useHTML: true,
-                    headerFormat: "<b style='font-size: 12px; color: #f60; font-weight: bolder;'>{point.key}</b>",
+                    headerFormat: "<b style='font-size: 12px; color: #444; font-weight: bolder;'>{point.key}</b>",
                     pointFormatter:function () {
                         if (this.series.name != '实收率') {
                             return "<p style='color:" + this.color + "; font-weight: bolder;'>" 

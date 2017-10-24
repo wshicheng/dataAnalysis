@@ -459,7 +459,7 @@ export default {
                     tooltip: {
                         shared: true,
                         useHTML: true,
-                        headerFormat: "<p style='font-size: 12px; color: #f60; font-weight: bolder;'>{point.key}</p>",
+                        headerFormat: "<p style='font-size: 12px; color: #444; font-weight: bolder;'>{point.key}</p>",
                         pointFormatter:function () {
                             return "<br><span style='color:" + this.color + "; font-weight: bolder;'>" + 
                              this.series.name + ':</span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")]

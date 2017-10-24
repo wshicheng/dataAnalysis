@@ -563,15 +563,22 @@ export default {
                                     color: Highcharts.getOptions().colors[2]
                                 }
                             },
-                            labels: {                                
-                                formatter:function(){
-                                    return this.value + '%'
-                                },
+                            labels: {                        
+                                // formatter:function(){
+                                //     if (Number(this.value) <= 100) {
+                                //         return this.value + '%'
+                                //     } else {
+                                //         return 100 + '%'
+                                //     }
+                                // },
+                                // format: '{value}%',
                                 style: {
                                     color: Highcharts.getOptions().colors[2]
                                 }
                             },
-                            opposite: true
+                            opposite: true,
+                            // tickAmount: 10
+                            max: 100,
                         }],
                 legend: {
                     align: 'center',
@@ -585,7 +592,7 @@ export default {
                 tooltip: {
                     shared: true,
                     useHTML: true,
-                    headerFormat: "<p style='font-size: 12px; color: #f60; font-weight: bolder;'>{point.key}</p>",
+                    headerFormat: "<p style='font-size: 12px; color: #444; font-weight: bolder;'>{point.key}</p>",
                     pointFormatter:function () {
                         if (this.series.name != '实收率') {
                             return "<br><span style='color:" + this.color + "; font-weight: bolder;'>" 
