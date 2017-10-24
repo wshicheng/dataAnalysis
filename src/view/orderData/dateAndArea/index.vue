@@ -41,7 +41,7 @@
                 </Poptip>
             </div>
             <Table :no-data-text='noDataText' :ellipsis='ellipsis' :loading='loading' border size='small' :columns="columns_orderData" :data="orderData"></Table>
-            <Page :total="totalListNum" show-sizer show-elevator :styles='page' :current='current' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
+            <Page :total="totalListNum" show-sizer show-elevator :styles='page' v-show="pageShow" :current='current' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </div>
 
         <div v-show="show2" class="dateAndArea_table_total">
@@ -346,6 +346,7 @@ export default {
             chartTime: [],
             chartData: [],
             noDataText: '',
+            pageShow: false,
             noData: false,
             chartTitleName: '有效订单数',
             totalTitle: true,
@@ -392,6 +393,7 @@ export default {
                     this.show1 = true
                     this.spinShow = false
                     var data = res.data.data
+
                     //随机取出一个数据制作表头
                     var arr = []
                     var firstData = data[0]
@@ -424,7 +426,15 @@ export default {
                     this.columns_orderData = arr
                     var delData = this.tableDataDel(data)
                     this.orderData = delData
+
+                    // 处理分页
+                    if (res.data.totalPage < 2 && this.pageSize === 10) {
+                        this.pageShow = false
+                    } else {
+                        this.pageShow = true
+                    }
                     this.totalListNum = res.data.totalItems
+                    
                     this.getChartData($('.dateAndArea_head_time button.active').attr('myId'))
                     // 关闭loading 
                     this.spinShow = false
