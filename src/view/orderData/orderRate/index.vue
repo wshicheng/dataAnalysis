@@ -228,7 +228,7 @@ div.loading {
     div.timeSelectShow {
       display: inline;
       position: absolute;
-      left: 426px;
+      left: 520px;
       top: 11px;
       div.search {
         display: inline-block;
@@ -648,7 +648,7 @@ export default {
         var cityCode = this.$store.state.cityList.join();
         var type = "";
         if (this.timeSelectShow == true) {
-          type = "";
+          type = $("button.active").attr("myid");
         } else {
           type = $("button.active").attr("myid");
         }
@@ -663,7 +663,7 @@ export default {
         var cityCode = this.$store.state.cityList.join();
         var type = "";
         if (this.timeSelectShow == true) {
-          type = "";
+          type = $("button.active").attr("myid");
         } else {
           type = $("button.active").attr("myid");
         }
