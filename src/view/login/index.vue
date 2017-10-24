@@ -19,12 +19,41 @@
           </FormItem>
           <FormItem>
               <button type="button" @click="handleSubmit('formInline')" style="font-weight: bolder;">登录</button>
-          </FormItem>
+              <p class="forgotPwd"  @click="openForgetPwdModal">忘记密码</p> 
+          </FormItem>  
       </Form>
     </div>
     <div id="login_footer">
       <h4>北京蜜蜂出行科技有限公司版权所有©2017</h4>
     </div>
+
+        <!-- 忘记密码模态框 -->
+        <!-- <Modal v-model="forgotPwdModal" :mask-closable='close' width="431" :styles="{top: '20%'}">
+            <p slot="header">
+                <span>修改手机号码</span>
+            </p>
+            <div>
+                <Form ref="editPhone" :model="editPhone" :rules="editPhoneRule" :label-width="80">
+                    <FormItem label="手机号" prop="phoneNo" class="phone">
+                        <Input v-model="editPhone.phoneNo" placeholder="请输入新手机号"></Input>
+                        <Button class="sendCode2" 
+                        @click="editGetVerCode(editPhone.phoneNo)"
+                        :plain="isPlain"
+                        :disabled="isDisabled">发送验证码</Button>
+                    </FormItem>
+                    <FormItem label="验证码" prop="phoneCode" class="pc">
+                        <Input v-model="editPhone.phoneCode" placeholder="请输入手机收到的验证码"></Input>
+                    </FormItem>
+                    <FormItem label="账户密码" prop="passWord" class="pwd">
+                        <Input v-model="editPhone.passWord" type='password' placeholder="为保障账号安全，您需要填写当前登录账号的密码"></Input>
+                    </FormItem>
+                </Form>
+            </div>
+            <div slot="footer">
+                <Button class="cancel" @click="handleReset2('editPhone')" style="margin-left: 8px">取消</Button>
+                <Button type="warning" class="confirm" @click="handleSubmit2('editPhone')">立即绑定</Button>
+            </div>
+        </Modal> -->
   </div>
 </template>
 <script>
@@ -47,7 +76,8 @@ import {mapActions,mapState,mapGetters} from 'vuex'
                         { required: true, message: '请填写密码', trigger: 'change' },
                         { type: 'string', min: 6, message: '密码长度不能小于6位', trigger: 'change' }
                     ]
-                }
+                },
+                forgotPwdModal: false
             }
         },
        computed:{
@@ -121,16 +151,13 @@ import {mapActions,mapState,mapGetters} from 'vuex'
                                     window.sessionStorage.setItem('userInfo',JSON.stringify(this.userInfo))
                                     window.sessionStorage.setItem('headImg', res.data.data.adminUserIconUrl)
                                     window.sessionStorage.setItem('cityStr', res.data.data.cityStr)
+                                    window.sessionStorage.setItem('cityList', JSON.stringify(res.data.data.cityList))
                                     // window.sessionStorage.setItem('authList', )
                                     // 登录相关操作
-                                    // this.$router.push({path:'/index/orderAllData'})
-                                    // window.sessionStorage.setItem('userInfo',JSON.stringify(this.userInfo))
-                                    // window.sessionStorage.setItem('headImg', res.data.data.adminUserIconUrl)
-                                    // window.sessionStorage.setItem('authList', )
-                                    this.$router.push({path:'/index/dateAndArea'})
+                                    this.$router.push({path:'/index/orderAllData'})
                                 }else{
                                     this.errorTextShow = true
-                                     this.errorText = message
+                                    this.errorText = message
                                 }
                             })
                             .then( (err) => {
@@ -142,6 +169,9 @@ import {mapActions,mapState,mapGetters} from 'vuex'
                         }
                     })
                 }
+            },
+            openForgetPwdModal () {
+                this.forgotPwdModal = true
             }
         }
     }
@@ -170,7 +200,7 @@ import {mapActions,mapState,mapGetters} from 'vuex'
     bottom: 90px;
     top: 75px;
   form {
-    padding: 40px 50px 20px 50px;
+    padding: 40px 50px 10px 50px;
     background: #fff;
     border: 1px solid #444;
     border-radius: 4px;
@@ -192,6 +222,12 @@ import {mapActions,mapState,mapGetters} from 'vuex'
       background: rgba(241, 194, 52, 1);
       color: #fff !important;
       cursor: pointer;
+    }
+    .forgotPwd {
+        position: relative;
+        text-decoration: underline;
+        font-size: 12px;
+        margin-top: 10px;
     }
   }
 }

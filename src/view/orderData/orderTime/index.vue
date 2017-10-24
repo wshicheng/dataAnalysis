@@ -363,8 +363,15 @@ export default {
   },
   created: function() {
     // 发起ajax请求 默认 是全部地区（cityCode= 0） 近 7天的数据
-    var cityCode = this.$store.state.cityList.join();
+     var cityList = JSON.parse(window.sessionStorage.getItem('cityList'));
+     var cityCode
+    if(cityList.length==1){
+      cityCode = cityList.map((list)=>{return list.code}).join()
+    }else{
+      cityCode = this.$store.state.cityList.join();
+    }
     this.loadData(3, cityCode);
+   
   },
   computed: {
     xAxis: function() {
@@ -538,7 +545,13 @@ export default {
         this.timeLine = ["", ""];
       }
       if (this.citySelectNum.length < 2) {
-        var cityCode = this.$store.state.cityList.join();
+         var cityList = JSON.parse(window.sessionStorage.getItem('cityList'));
+          var cityCode
+          if(cityList.length==1){
+            cityCode = cityList.map((list)=>{return list.code}).join()
+          }else{
+            cityCode = this.$store.state.cityList.join();
+          }
         var type = $("button.active").attr("myid");
         var beginDate = this.timeLine[0]
           ? moment(this.timeLine[0]).format("YYYY-MM-DD")
@@ -548,7 +561,13 @@ export default {
           : "";
         this.loadData(type, cityCode, beginDate, endDate);
       } else {
-        var cityCode = this.$store.state.cityList.join();
+         var cityList = JSON.parse(window.sessionStorage.getItem('cityList'));
+          var cityCode
+          if(cityList.lengt==1){
+            cityCode = cityList.map((list)=>{return list.code}).join()
+          }else{
+            cityCode = this.$store.state.cityList.join();
+          }
         var type = $("button.active").attr("myid");
         var beginDate = this.timeLine[0]
           ? moment(this.timeLine[0]).format("YYYY-MM-DD")
@@ -565,7 +584,13 @@ export default {
         this.$Message.warning("请选择时间段");
       } else {
         if (this.citySelectNum.length < 2) {
-          var cityCode = this.$store.state.cityList.join();
+          var cityList = JSON.parse(window.sessionStorage.getItem('cityList'));
+          var cityCode
+          if(cityList.length==1){
+            cityCode = cityList.map((list)=>{return list.code}).join()
+          }else{
+            cityCode = this.$store.state.cityList.join();
+          }
           var type = $("button.active").attr("myid");
           var beginDate = this.timeLine[0]
             ? moment(this.timeLine[0]).format("YYYY-MM-DD")
@@ -575,7 +600,13 @@ export default {
             : "";
           this.loadData(type, cityCode, beginDate, endDate);
         } else {
-          var cityCode = this.$store.state.cityList.join();
+           var cityList = JSON.parse(window.sessionStorage.getItem('cityList'));
+          var cityCode
+          if(cityList.length==1){
+            cityCode = cityList.map((list)=>{return list.code}).join()
+          }else{
+            cityCode = this.$store.state.cityList.join();
+          }
           var type = $("button.active").attr("myid");
           var beginDate = this.timeLine[0]
             ? moment(this.timeLine[0]).format("YYYY-MM-DD")

@@ -127,7 +127,6 @@ div.loading {
         color: #444;
         font-size: 12px;
         b {
-         
           color: #444;
           font-size: 12px;
           display: inline-block;
@@ -298,7 +297,7 @@ export default {
   },
   data() {
     return {
-      noDataText:'',
+      noDataText: "",
       loading: true,
       citySelectNum: [],
       columns1: [
@@ -332,7 +331,17 @@ export default {
   },
   created: function() {
     // 发起ajax请求 默认 是全部地区（cityCode= 0） 近 7天的数据
-    var cityCode = this.$store.state.cityList.join();
+    var cityList = JSON.parse(window.sessionStorage.getItem("cityList"));
+    var cityCode;
+    if (cityList.length == 1) {
+      cityCode = cityList
+        .map(list => {
+          return list.code;
+        })
+        .join();
+    } else {
+      cityCode = this.$store.state.cityList.join();
+    }
     this.loadData(3, cityCode);
   },
   computed: {
@@ -360,7 +369,6 @@ export default {
   },
 
   mounted() {
-    
     this.$store.dispatch("menuActiveName", "/index/orderRate");
     document.title = "订单数据 - 使用频次分布";
   },
@@ -373,13 +381,13 @@ export default {
       return arr;
     },
     loadData(type, cityCode, beginDate, endDate) {
-       this.noDataText = ''
+      this.noDataText = "";
       // 默认请求
       this.loading = true;
       this.axios
         .get("/beefly/Frequency/getOrderFrequency", {
           params: {
-            graphicsType:1,  
+            graphicsType: 1,
             cityCode: cityCode,
             type: type,
             accessToken: this.$store.state.token,
@@ -392,28 +400,28 @@ export default {
           var data = res.data.data;
           if (Object.prototype.toString.call(data) != "[object Array]") {
             this.data2 = [];
-            this.noDataText = '暂无数据'
+            this.noDataText = "暂无数据";
             return;
           }
-          if(data.length==0){
-              this.data2 = []
-              this.noDataText = '暂无数据'
-              return;
+          if (data.length == 0) {
+            this.data2 = [];
+            this.noDataText = "暂无数据";
+            return;
           }
           this.data2 = [
             {
               time: "1",
               userCont: parseFloat(data[0].userCont),
-              percentage: data[0].percentage,
+              percentage: data[0].percentage
             },
             {
               time: "2",
               userCont: parseFloat(data[1].userCont),
-              percentage: data[1].percentage,
+              percentage: data[1].percentage
             },
             {
               time: "3",
-               userCont: parseFloat(data[2].userCont),
+              userCont: parseFloat(data[2].userCont),
               percentage: data[2].percentage
             },
             {
@@ -423,32 +431,33 @@ export default {
             },
             {
               time: "5",
-               userCont: parseFloat(data[4].userCont),
-              percentage: data[4].percentage,
+              userCont: parseFloat(data[4].userCont),
+              percentage: data[4].percentage
             },
             {
               time: "5次以上",
               userCont: parseFloat(data[5].userCont),
-              percentage: data[5].percentage,
+              percentage: data[5].percentage
             },
             {
               time: "合计",
-               userCont: parseFloat(data[6].userCont),
-              percentage: data[6].percentage,
+              userCont: parseFloat(data[6].userCont),
+              percentage: data[6].percentage
             }
           ];
-        }).catch( (err) => {
-                console.log(err)
-                this.noDataText = '暂无数据'
-                this.loading = false;
-            });
+        })
+        .catch(err => {
+          console.log(err);
+          this.noDataText = "暂无数据";
+          this.loading = false;
+        });
     },
     loadMultData(type, cityCode, beginDate, endDate) {
       // 默认请求
       this.axios
         .get("/beefly/Frequency/getOrderFrequency", {
           params: {
-            graphicsType:2,  
+            graphicsType: 2,
             cityCode: cityCode,
             type: type,
             accessToken: this.$store.state.token,
@@ -462,9 +471,9 @@ export default {
             this.data3 = [];
             return;
           }
-          if(data.length==0){
-              this.data3 = []
-              return;
+          if (data.length == 0) {
+            this.data3 = [];
+            return;
           }
           var zeroStart = [];
           var oneStart = [];
@@ -479,10 +488,10 @@ export default {
             twoStart.push(parseFloat(list.freq_3));
             threeStart.push(parseFloat(list.freq_4));
             fiveStart.push(parseFloat(list.freq_5));
-            tenStart.push(parseFloat(list['freq_5+']));
+            tenStart.push(parseFloat(list["freq_5+"]));
             recodeCity.push(list.cityName);
           });
-         // this.citySelectNum = recodeCity;
+          // this.citySelectNum = recodeCity;
           this.data3 = [
             {
               name: "1",
@@ -510,9 +519,10 @@ export default {
             }
           ];
           return;
-        }).catch( (err) => {
-                console.log(err)
-            });
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     handleClick(e) {
       this.current = 1;
@@ -529,7 +539,17 @@ export default {
         this.timeLine = ["", ""];
       }
       if (this.citySelectNum.length < 2) {
-        var cityCode = this.$store.state.cityList.join();
+        var cityList = JSON.parse(window.sessionStorage.getItem("cityList"));
+        var cityCode;
+        if (cityList.length == 1) {
+          cityCode = cityList
+            .map(list => {
+              return list.code;
+            })
+            .join();
+        } else {
+          cityCode = this.$store.state.cityList.join();
+        }
         var type = $("button.active").attr("myid");
         var beginDate = this.timeLine[0]
           ? moment(this.timeLine[0]).format("YYYY-MM-DD")
@@ -539,7 +559,17 @@ export default {
           : "";
         this.loadData(type, cityCode, beginDate, endDate);
       } else {
-        var cityCode = this.$store.state.cityList.join();
+        var cityList = JSON.parse(window.sessionStorage.getItem("cityList"));
+        var cityCode;
+        if (cityList.length == 1) {
+          cityCode = cityList
+            .map(list => {
+              return list.code;
+            })
+            .join();
+        } else {
+          cityCode = this.$store.state.cityList.join();
+        }
         var type = $("button.active").attr("myid");
         var beginDate = this.timeLine[0]
           ? moment(this.timeLine[0]).format("YYYY-MM-DD")
@@ -547,7 +577,7 @@ export default {
         var endDate = this.timeLine[1]
           ? moment(this.timeLine[1]).format("YYYY-MM-DD")
           : "";
-        this.loadData(type, cityCode, beginDate, endDate);  
+        this.loadData(type, cityCode, beginDate, endDate);
         this.loadMultData(type, cityCode, beginDate, endDate);
       }
     },
@@ -556,7 +586,17 @@ export default {
         this.$Message.warning("请选择时间段");
       } else {
         if (this.citySelectNum.length < 2) {
-          var cityCode = this.$store.state.cityList.join();
+          var cityList = JSON.parse(window.sessionStorage.getItem("cityList"));
+          var cityCode;
+          if (cityList.length == 1) {
+            cityCode = cityList
+              .map(list => {
+                return list.code;
+              })
+              .join();
+          } else {
+            cityCode = this.$store.state.cityList.join();
+          }
           var type = "";
           type = $("button.active").attr("myid");
           var beginDate = this.timeLine[0]
@@ -567,7 +607,17 @@ export default {
             : "";
           this.loadData(type, cityCode, beginDate, endDate);
         } else {
-          var cityCode = this.$store.state.cityList.join();
+          var cityList = JSON.parse(window.sessionStorage.getItem("cityList"));
+          var cityCode;
+          if (cityList.length == 1) {
+            cityCode = cityList
+              .map(list => {
+                return list.code;
+              })
+              .join();
+          } else {
+            cityCode = this.$store.state.cityList.join();
+          }
           var type = "";
           type = $("button.active").attr("myid");
           var beginDate = this.timeLine[0]
@@ -576,19 +626,21 @@ export default {
           var endDate = this.timeLine[1]
             ? moment(this.timeLine[1]).format("YYYY-MM-DD")
             : "";
-           this.loadData(type, cityCode, beginDate, endDate);  
+          this.loadData(type, cityCode, beginDate, endDate);
           this.loadMultData(type, cityCode, beginDate, endDate);
         }
       }
     },
     cityChange() {
       this.current = 1;
-      var res = this.$store.state.keepCitys.map((item)=>{
-         if(this.$store.state.cityList.indexOf(item.code)!=-1){
-             return item.name
-         }
-      })
-      this.citySelectNum = res.filter((item)=>{return item!==undefined})
+      var res = this.$store.state.keepCitys.map(item => {
+        if (this.$store.state.cityList.indexOf(item.code) != -1) {
+          return item.name;
+        }
+      });
+      this.citySelectNum = res.filter(item => {
+        return item !== undefined;
+      });
       if (this.citySelectNum.length < 2) {
         //发送请求
         var cityCode = this.$store.state.cityList.join();

@@ -295,7 +295,7 @@ export default {
   },
   data() {
     return {
-      noDataText:'',
+      noDataText: "",
       loading: true,
       citySelectNum: [],
       columns1: [
@@ -306,8 +306,8 @@ export default {
         {
           title: "有效订单数",
           key: "orderNum",
-          render:(h,params)=>{
-            return h('span',parseFloat(params.row.orderNum).thousand())
+          render: (h, params) => {
+            return h("span", parseFloat(params.row.orderNum).thousand());
           }
         },
         {
@@ -342,7 +342,17 @@ export default {
   },
   created: function() {
     // 发起ajax请求 默认 是全部地区（cityCode= 0） 近 7天的数据
-    var cityCode = this.$store.state.cityList.join();
+    var cityList = JSON.parse(window.sessionStorage.getItem("cityList"));
+    var cityCode;
+    if (cityList.length == 1) {
+      cityCode = cityList
+        .map(list => {
+          return list.code;
+        })
+        .join();
+    } else {
+      cityCode = this.$store.state.cityList.join();
+    }
     this.loadData(7, cityCode);
   },
   computed: {
@@ -382,7 +392,7 @@ export default {
       return arr;
     },
     loadData(type, cityCode, beginDate, endDate) {
-       this.noDataText = ''
+      this.noDataText = "";
       // 默认请求
       this.loading = true;
       this.axios
@@ -400,13 +410,13 @@ export default {
           var data = res.data.data;
           if (Object.prototype.toString.call(data) != "[object Array]") {
             this.data2 = [];
-            this.noDataText = '暂无数据'
+            this.noDataText = "暂无数据";
             return;
           }
-          if(data.length==0){
-              this.data2 = []
-              this.noDataText = '暂无数据'
-              return;
+          if (data.length == 0) {
+            this.data2 = [];
+            this.noDataText = "暂无数据";
+            return;
           }
           this.data2 = [
             {
@@ -455,14 +465,14 @@ export default {
               time: "合计",
               orderNum: parseFloat(data[6].validCount),
               validOrderRate: data[6].validCountRate,
-              orderMoney:parseFloat(data[6].validAmount).thousandFormat(),
+              orderMoney: parseFloat(data[6].validAmount).thousandFormat(),
               orderMoneyRate: data[6].validAmountRate
             }
           ];
         })
         .catch(err => {
           console.log(err);
-          this.noDataText = '暂无数据'
+          this.noDataText = "暂无数据";
           this.loading = false;
         });
     },
@@ -484,11 +494,11 @@ export default {
             this.data3 = [];
             return;
           }
-          if(data.length==0){
-            this.data3 = []
+          if (data.length == 0) {
+            this.data3 = [];
             return;
           }
-          
+
           var zeroStart = [];
           var oneStart = [];
           var twoStart = [];
@@ -553,7 +563,17 @@ export default {
         this.timeLine = ["", ""];
       }
       if (this.citySelectNum.length < 2) {
-        var cityCode = this.$store.state.cityList.join();
+        var cityList = JSON.parse(window.sessionStorage.getItem("cityList"));
+        var cityCode;
+        if (cityList.length == 1) {
+          cityCode = cityList
+            .map(list => {
+              return list.code;
+            })
+            .join();
+        } else {
+          cityCode = this.$store.state.cityList.join();
+        }
         var type = $("button.active").attr("myid");
         var beginDate = this.timeLine[0]
           ? moment(this.timeLine[0]).format("YYYY-MM-DD")
@@ -563,7 +583,17 @@ export default {
           : "";
         this.loadData(type, cityCode, beginDate, endDate);
       } else {
-        var cityCode = this.$store.state.cityList.join();
+        var cityList = JSON.parse(window.sessionStorage.getItem("cityList"));
+        var cityCode;
+        if (cityList.length == 1) {
+          cityCode = cityList
+            .map(list => {
+              return list.code;
+            })
+            .join();
+        } else {
+          cityCode = this.$store.state.cityList.join();
+        }
         var type = $("button.active").attr("myid");
         var beginDate = this.timeLine[0]
           ? moment(this.timeLine[0]).format("YYYY-MM-DD")
@@ -580,7 +610,17 @@ export default {
         this.$Message.warning("请选择时间段");
       } else {
         if (this.citySelectNum.length < 2) {
-          var cityCode = this.$store.state.cityList.join();
+          var cityList = JSON.parse(window.sessionStorage.getItem("cityList"));
+          var cityCode;
+          if (cityList.length == 1) {
+            cityCode = cityList
+              .map(list => {
+                return list.code;
+              })
+              .join();
+          } else {
+            cityCode = this.$store.state.cityList.join();
+          }
           var type = "";
           if (this.timeSelectShow == true) {
             type = "";
@@ -595,7 +635,17 @@ export default {
             : "";
           this.loadData(type, cityCode, beginDate, endDate);
         } else {
-          var cityCode = this.$store.state.cityList.join();
+          var cityList = JSON.parse(window.sessionStorage.getItem("cityList"));
+          var cityCode;
+          if (cityList.length == 1) {
+            cityCode = cityList
+              .map(list => {
+                return list.code;
+              })
+              .join();
+          } else {
+            cityCode = this.$store.state.cityList.join();
+          }
           var type = "";
           if (this.timeSelectShow == true) {
             type = "";
@@ -608,7 +658,7 @@ export default {
           var endDate = this.timeLine[1]
             ? moment(this.timeLine[1]).format("YYYY-MM-DD")
             : "";
-           this.loadData(type, cityCode, beginDate, endDate)  
+          this.loadData(type, cityCode, beginDate, endDate);
           this.loadMultData(type, cityCode, beginDate, endDate);
         }
       }
