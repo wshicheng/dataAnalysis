@@ -34,11 +34,11 @@
                 <span>编辑账号</span>
             </p>
             <div class="editModal_content">
-                <Form ref="editValidate" :model="editValidate" :rules="editValidate" :label-width="100">
-                    <FormItem label="用户名" prop="username">
+                <Form ref="editValidate" :model="editValidate" :rules="editValidateRule" :label-width="100">
+                    <FormItem label="用户名" prop="userName">
                         <Input v-model="editValidate.userName" style="width:300px;" placeholder="不超过100个字符"></Input>
                     </FormItem>
-                    <FormItem label="密码" prop="password">
+                    <FormItem label="密码" prop="passWord">
                         <Input v-model="editValidate.passWord" type="password" style="width:300px;" placeholder="6-20位字符，可包括字母和数字，区分大小写"></Input>
                     </FormItem>
                     <FormItem label="所属角色" prop="roleName">
@@ -171,9 +171,22 @@ export default {
                 } else {
                     if (value !== '') {
                         // 对用户名进行重复性严重
-                        console.log('添加用户名验证')
+                        this.axios.get('/beefly/user/api/v1/validateUserName',{
+                            params:{
+                                userName:this.formValidate.userName,
+                                accessToken:this.accessToken
+                            }
+                        }).then((res)=>{
+                             var message = res.data.message
+                            var resultCode = res.data.resultCode
+                            if(resultCode==1){
+                                 callback();
+                            }else{
+                                 callback(new Error(message));
+                            }
+                        })
                     }
-                    callback();
+                   
                 }
             };
          var validateEditUserName = (rule, value, callback) => {
@@ -182,9 +195,23 @@ export default {
                 } else {
                     if (value !== '') {
                         //编辑账号时候对用户名进行重复性严重
-                         console.log('编辑用户名验证')
+                        this.axios.get('/beefly/user/api/v1/validateUserName',{
+                            params:{
+                                userName:this.editValidate.userName,
+                                accessToken:this.accessToken,
+                                id: this.editValidate.id
+                            }
+                        }).then((res)=>{
+                            var message = res.data.message
+                            var resultCode = res.data.resultCode
+                            if(resultCode==1){
+                                 callback();
+                            }else{
+                                 callback(new Error(message));
+                            }
+                        })
                     }
-                    callback();
+                   
                 }
             };   
         return {
@@ -209,10 +236,10 @@ export default {
 
             },
             editValidateRule: {
-                username: [
+                userName: [
                     { validator: validateEditUserName,required:true, trigger: 'blur' }
                 ],
-                password: [
+                passWord: [
                     { required: true, message: '密码不能为空', trigger: 'blur' },
                 ],
                 roleName: [
