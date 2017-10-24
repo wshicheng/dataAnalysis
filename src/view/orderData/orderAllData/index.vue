@@ -43,7 +43,7 @@
             <div style="color: #ccc; text-indent: 5px;">  loading...</div>
         </Spin>
         <div class="help">
-            <Poptip trigger="hover" style="float: right;"  placement="top-end" title="数据项说明" content="提示内容">
+            <Poptip trigger="hover" style="float: right;"  placement="left" title="数据项说明" content="提示内容">
                 <span>?</span>
                 <div class="content" slot="content">
                     <p><b>订单总数:</b>除运维订单以外所有状态的订单总数</p>
@@ -208,15 +208,15 @@
                 margin-bottom: 10px;
                 span {
                     display: inline-block;
-                    width: 25px;
-                    height: 25px;
+                    width: 18px;
+                    height: 18px;
                     background: orange;
-                    line-height: 25px;
+                    line-height: 18px;
                     color: #fff;
                     font-weight: bolder;
                     border-radius: 50%;
                     text-align: center;
-                    font-size: 18px;
+                    font-size: 16px;
                     cursor: pointer;
                     margin-bottom: 10px;
                 }
@@ -558,10 +558,12 @@ export default {
                                 }
                             }
                         }, {
+                            opposite: true,
+                            tickPositions: [20, 40, 60, 80, 100],
                             title: {
                                 text: '实收率',
                                 style: {
-                                    color: Highcharts.getOptions().colors[2]
+                                    color: '#9999ff'
                                 }
                             },
                             labels: {                        
@@ -572,14 +574,11 @@ export default {
                                 //         return 100 + '%'
                                 //     }
                                 // },
-                                // format: '{value}%',
+                                format: '{value}%',
                                 style: {
-                                    color: Highcharts.getOptions().colors[2]
+                                    color: '#9999ff'
                                 }
-                            },
-                            opposite: true,
-                            // tickAmount: 10
-                            max: 100,
+                            }
                         }],
                 legend: {
                     align: 'center',
@@ -593,18 +592,16 @@ export default {
                 tooltip: {
                     shared: true,
                     useHTML: true,
-                    headerFormat: "<p style='font-size: 12px; color: #444; font-weight: bolder;'>{point.key}</p>",
+                    headerFormat: "<p'>{point.key}</p>",
                     pointFormatter:function () {
                         if (this.series.name != '实收率') {
-                            return "<br><span style='color:" + this.color + "; font-weight: bolder;'>" 
-                            + this.series.name + ':  </span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")]
+                            return "<span>" + this.series.name + ':  </span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")] + '<br>'
                         } else {
-                            return "<br><span style='color:" + this.color + "; font-weight: bolder;'>" 
-                            + this.series.name + ':  </span>' + Highcharts.numberFormat(this.y, 1)
-                            + '%'
+                            return "<span>" + this.series.name + ':  </span>' + Highcharts.numberFormat(this.y, 1) + '%'
                         }
                     }
                 },
+                colors: ['#4472c4', '#ed7d31', '#9999ff', '#ffc000', '#5b9bd5', '#70ad48', '#264478', '#9e480e', '#636363', '#997300'],
                 plotOptions: {
                     column: {
                         stacking: 'normal',

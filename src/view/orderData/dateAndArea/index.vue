@@ -199,15 +199,15 @@
                 margin-bottom: 10px;
                 span {
                     display: inline-block;
-                    width: 25px;
-                    height: 25px;
+                    width: 18px;
+                    height: 18px;
                     background: orange;
-                    line-height: 25px;
+                    line-height: 18px;
                     color: #fff;
                     font-weight: bolder;
                     border-radius: 50%;
                     text-align: center;
-                    font-size: 18px;
+                    font-size: 16px;
                     cursor: pointer;
                     margin-bottom: 10px;
                 }
@@ -703,13 +703,13 @@ export default {
                 exporting:{
                     enabled:false
                 },
+                colors: ['#4472c4', '#ed7d31', '#9999ff', '#ffc000', '#5b9bd5', '#70ad48', '#264478', '#9e480e', '#636363', '#997300'],
                 tooltip: {
                     valueSuffix: '',
                     formatter: function() { 
                         var type = $('.dateAndArea_type_select button.active').attr("myType")
                          
                         if(type==='orderNum'){
-                             console.log("y:" + this.point.y)
                           
                             if(new String(this.point.y).length>3){
                              return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 0,"",",");

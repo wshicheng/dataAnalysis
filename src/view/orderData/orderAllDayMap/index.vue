@@ -151,15 +151,15 @@
                 margin-bottom: 10px;
                 span {
                     display: inline-block;
-                    width: 25px;
-                    height: 25px;
+                    width: 18px;
+                    height: 18px;
                     background: orange;
-                    line-height: 25px;
+                    line-height: 18px;
                     color: #fff;
                     font-weight: bolder;
                     border-radius: 50%;
                     text-align: center;
-                    font-size: 18px;
+                    font-size: 16px;
                     cursor: pointer;
                     margin-bottom: 10px;
                 }
@@ -194,11 +194,12 @@
                 padding-left: 30px;
                 line-height: 40px;
                 button {
-                    width: 48px;
+                    width: 60px;
                     height: 30px;
                     line-height: 30px;
                     text-align: center;
                     border: none;
+                    font-size: 14px;
                     margin-right: 10px;
                     font-weight: bolder;
                     outline: none;
@@ -417,6 +418,7 @@ export default {
                     exporting:{
                         enabled:false
                     },
+                    colors: ['#4472c4', '#ed7d31', '#9999ff', '#ffc000', '#5b9bd5', '#70ad48', '#264478', '#9e480e', '#636363', '#997300'],
                     xAxis: [{
                         categories: ['0时', '1时', '2时', '3时', '4时', '5时',
                                     '6时', '7时', '8时', '9时', '10时', '11时',
@@ -428,14 +430,14 @@ export default {
                         labels: {
                             format: '{value} ',
                             style: {
-                                color: '#ed833b'
+                                color: '#ed7d31'
                             }
                         },
                         title: {
                             text: $('.select button.active')[0].innerHTML === '订单数'?'累计订单数':'累计订单金额',
                             style: {
-                                color: '#ed833b',
-                                fontWeight: 'bolder'
+                                color: '#ed7d31',
+                                // fontWeight: 'bolder'
                             }
                         },
                         allowDecimals: false
@@ -443,14 +445,14 @@ export default {
                         title: {
                             text: $('.select button.active')[0].innerHTML === '订单数'?'订单数':'订单金额',
                             style: {
-                                color: '#4473c4',
-                                fontWeight: 'bolder'
+                                color: '#4472c4',
+                                // fontWeight: 'bolder'
                             }
                         },
                         labels: {
                             format: '{value} ',
                             style: {
-                                color: '#4473c4'
+                                color: '#4472c4'
                             }
                         },
                         opposite: true,
@@ -459,18 +461,13 @@ export default {
                     tooltip: {
                         shared: true,
                         useHTML: true,
-                        headerFormat: "<p style='font-size: 12px; color: #444; font-weight: bolder;'>{point.key}</p>",
+                        headerFormat: "<p>时间: {point.key}</p>",
+                        // pointFormatter:function () {
+                        //     return "<br><span style='color:" + this.color + "; font-weight: bolder;'>" + 
+                        //      this.series.name + ':</span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")]
+                        // }
                         pointFormatter:function () {
-                            return "<br><span style='color:" + this.color + "; font-weight: bolder;'>" + 
-                             this.series.name + ':</span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")]
-                        }
-                    },
-                    plotOptions: {
-                        spline: {
-                            color: '#ed833b'
-                        },
-                        column: {
-                            color: '#4473c4'
+                            return "<span>" + this.series.name + ':</span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")] + '<br>'
                         }
                     },
                     series: [{

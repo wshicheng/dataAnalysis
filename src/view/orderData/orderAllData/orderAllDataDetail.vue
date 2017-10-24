@@ -157,15 +157,15 @@
                 margin-bottom: 10px;
                 span {
                     display: inline-block;
-                    width: 25px;
-                    height: 25px;
+                    width: 18px;
+                    height: 18px;
                     background: orange;
-                    line-height: 25px;
+                    line-height: 18px;
                     color: #fff;
                     font-weight: bolder;
                     border-radius: 50%;
                     text-align: center;
-                    font-size: 18px;
+                    font-size: 16px;
                     cursor: pointer;
                     margin-bottom: 10px;
                 }
@@ -368,10 +368,6 @@ export default {
                         this.chartProfitRate.push(Number(item.profitRate))
                         this.chartDataX.push(item.orderTime)
                     })
-                    console.log(this.chartDataPayAmount)
-                    console.log(this.chartDisCountAmount)
-                    console.log(this.chartProfitRate)
-                    console.log(this.chartDataX)
                     this.initChart()
                     this.loadFlag = true
                 }
@@ -468,19 +464,27 @@ export default {
                                 }
                             }
                         }, {
+                            opposite: true,
+                            tickPositions: [20, 40, 60, 80, 100],
                             title: {
                                 text: '实收率',
                                 style: {
-                                    color: Highcharts.getOptions().colors[2]
+                                    color: '#9999ff'
                                 }
                             },
-                            labels: {
+                            labels: {                        
+                                // formatter:function(){
+                                //     if (Number(this.value) <= 100) {
+                                //         return this.value + '%'
+                                //     } else {
+                                //         return 100 + '%'
+                                //     }
+                                // },
+                                format: '{value}%',
                                 style: {
-                                    color: Highcharts.getOptions().colors[2]
+                                    color: '#9999ff'
                                 }
-                            },
-                            opposite: true,
-                            max: 100
+                            }
                         }],
                 legend: {
                     align: 'center',
@@ -491,18 +495,16 @@ export default {
                     backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
                     shadow: false
                 },
+                colors: ['#4472c4', '#ed7d31', '#9999ff', '#ffc000', '#5b9bd5', '#70ad48', '#264478', '#9e480e', '#636363', '#997300'],
                 tooltip: {
                     shared: true,
                     useHTML: true,
-                    headerFormat: "<p style='font-size: 12px; color: #444; font-weight: bolder;'>{point.key}</p>",
+                    headerFormat: "<p'>{point.key}</p>",
                     pointFormatter:function () {
                         if (this.series.name != '实收率') {
-                            return "<br><span style='color:" + this.color + "; font-weight: bolder;'>" 
-                            + this.series.name + ':  </span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")]
+                            return "<span>" + this.series.name + ':  </span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")] + '<br>'
                         } else {
-                            return "<br><span style='color:" + this.color + "; font-weight: bolder;'>" 
-                            + this.series.name + ':  </span>' + Highcharts.numberFormat(this.y, 1)
-                            + '%'
+                            return "<span>" + this.series.name + ':  </span>' + Highcharts.numberFormat(this.y, 1) + '%'
                         }
                     }
                 },
@@ -540,8 +542,12 @@ export default {
                     yAxis: 1
                 }]
             }
-
+            // Highcharts.getOptions().plotOptions.pie.colors = (function () {
+            //         var colors = ['#4472c4', '#ed7d31', '#9999ff']
+            //         return colors;
+            // }());
             new Highcharts.chart('container', options);
+            
         }
     }
 }
