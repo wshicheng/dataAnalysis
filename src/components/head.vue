@@ -73,8 +73,8 @@ export default {
         // city: function() {
         //     this.cityList = this.userInfo.cityList
         //     window.localStorage.setItem('city', this.cityList[0].name)
-        //     // return this.userInfo.cityList.map((item) => { return item.name }).join('、')
-        //     return this.city = window.localStorage.getItem('cityStr')
+        //     return this.userInfo.cityList.map((item) => { return item.name }).join('、')
+        //     // return this.city = window.localStorage.getItem('cityStr')
         // }
         city: {
             get: function () {
