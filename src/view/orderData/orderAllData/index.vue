@@ -82,11 +82,11 @@
         }
         .Breadcrumb2 {
             width: 100%;
-            height: 60px;
-            line-height: 60px;
+            height: 40px;
+            line-height: 40px;
             background: #797979;
             padding-left: 10px;
-            font-size: 23px;
+            font-size: 18px;
             font-weight: bolder;
             span {
                 color: #fff;
@@ -358,6 +358,7 @@ export default {
         }
     },
     mounted () {
+        document.title = '订单数据 - 整体数据'
         this.$store.dispatch('menuActiveName', '/index/orderAllData')
         this.loadData("1")
     },
@@ -597,11 +598,10 @@ export default {
                         if (this.series.name != '实收率') {
                             return "<br><span style='color:" + this.color + "; font-weight: bolder;'>" 
                             + this.series.name + ':  </span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")]
-                            + '<br>'
                         } else {
                             return "<br><span style='color:" + this.color + "; font-weight: bolder;'>" 
                             + this.series.name + ':  </span>' + Highcharts.numberFormat(this.y, 1)
-                            + '%' + '<br>'
+                            + '%'
                         }
                     }
                 },

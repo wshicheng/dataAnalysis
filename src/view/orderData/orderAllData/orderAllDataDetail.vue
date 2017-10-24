@@ -286,6 +286,7 @@ export default {
         }
     },
     mounted () {
+        document.title = '订单数据 - 分地区数据详情'
         this.loadData("1")
     },
     methods: {
@@ -493,16 +494,15 @@ export default {
                 tooltip: {
                     shared: true,
                     useHTML: true,
-                    headerFormat: "<b style='font-size: 12px; color: #444; font-weight: bolder;'>{point.key}</b>",
+                    headerFormat: "<p style='font-size: 12px; color: #444; font-weight: bolder;'>{point.key}</p>",
                     pointFormatter:function () {
                         if (this.series.name != '实收率') {
-                            return "<p style='color:" + this.color + "; font-weight: bolder;'>" 
-                            + this.series.name + ':  </p>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")]
-                            + '<br><br>'
+                            return "<br><span style='color:" + this.color + "; font-weight: bolder;'>" 
+                            + this.series.name + ':  </span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")]
                         } else {
-                            return "<p style='color:" + this.color + "; font-weight: bolder;'>" 
-                            + this.series.name + ':  </p>' + Highcharts.numberFormat(this.y, 1)
-                            + '%' + '<br><br>'
+                            return "<br><span style='color:" + this.color + "; font-weight: bolder;'>" 
+                            + this.series.name + ':  </span>' + Highcharts.numberFormat(this.y, 1)
+                            + '%'
                         }
                     }
                 },
