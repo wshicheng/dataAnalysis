@@ -7,13 +7,13 @@
                     <i class="iconfont icon-dingdan1"></i>
                     订单数据
                 </template>
-                <Menu-item name="/index/orderAllData">整体数据</Menu-item>
+                <!-- <Menu-item name="/index/orderAllData">整体数据</Menu-item> -->
                 <Menu-item name="/index/dateAndArea">分日期分地区</Menu-item>
                 <Menu-item name="/index/orderStatus">订单状态构成</Menu-item>
-                <Menu-item name="/index/orderAllDayMap">24小时趋势</Menu-item>
+                <!-- <Menu-item name="/index/orderAllDayMap">24小时趋势</Menu-item>
                 <Menu-item name="/index/orderTime">订单时长分布</Menu-item>
                 <Menu-item name="/index/orderMileage">订单里程分布</Menu-item>
-                <Menu-item name="/index/orderRate">使用频次分布</Menu-item>
+                <Menu-item name="/index/orderRate">使用频次分布</Menu-item> -->
             </Submenu>
             <!-- <Submenu name="2">
                 <template slot="title">

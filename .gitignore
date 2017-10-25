@@ -11,6 +11,7 @@
 *.swo
 *.swp
 *.zip
+*.rar
 *.vi
 *~
 *.sass-cache
