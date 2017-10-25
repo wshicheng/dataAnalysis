@@ -401,6 +401,7 @@ export default {
                 }
             })
             .then( res => {
+                this.checkLogin(res)
                 var data = res.data.data
                 // 判断message字段是1 or 0 , 1:多个城市，0:一个城市
                 if (Number(res.data.message) === 0) {
@@ -448,6 +449,7 @@ export default {
                 }
             })
             .then( res => {
+                this.checkLogin(res)
                 // console.log(res.data.data)
                 this.spinShow2 = false
                 var chartData = res.data.data
@@ -644,6 +646,11 @@ export default {
             if (this.loadFlag === true) {
                 this.loadData($('.orderAllData_head_time button.active').attr('myId'))
             }
+        },
+        checkLogin (res) {
+           if (res.data.message === '用户登录超时') {
+                this.$router.push('/login')
+           }
         }
     },
     watch: {

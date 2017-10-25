@@ -363,6 +363,33 @@ export default {
         return data.map(item => {
           return { color: randomColor(), y: item.userCont };
         });
+        // var newArr = []
+        // newArr.push({
+        //   color: '#4472c4',
+        //   y: data[0].userCont
+        // })
+        // newArr.push({
+        //   color: '#ed7d31',
+        //   y: data[1].userCont
+        // })
+        // newArr.push({
+        //   color: '#9999ff',
+        //   y: data[2].userCont
+        // })
+        // newArr.push({
+        //   color: '#ffc000',
+        //   y: data[3].userCont
+        // })
+        // newArr.push({
+        //   color: '#5b9bd5',
+        //   y: data[4].userCont
+        // })
+        // newArr.push({
+        //   color: '#70ad48',
+        //   y: data[5].userCont
+        // })
+
+        // return newArr
       } else {
         var data = [...this.data3];
         return data;
@@ -398,6 +425,7 @@ export default {
           }
         })
         .then(res => {
+          this.checkLogin(res)
           this.loading = false;
           var data = res.data.data;
           if (Object.prototype.toString.call(data) != "[object Array]") {
@@ -468,6 +496,7 @@ export default {
           }
         })
         .then(res => {
+          this.checkLogin(res)
           var data = res.data.data;
           if (Object.prototype.toString.call(data) != "[object Array]") {
             this.data3 = [];
@@ -676,6 +705,11 @@ export default {
         this.loadData(type, cityCode, beginDate, endDate);
         this.loadMultData(type, cityCode, beginDate, endDate);
       }
+    },
+    checkLogin (res) {
+        if (res.data.message === '用户登录超时') {
+            this.$router.push('/login')
+        }
     }
   },
   watch: {

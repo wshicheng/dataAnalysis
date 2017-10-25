@@ -508,7 +508,7 @@ export default {
             var that = this
             // 打开弹窗前清除错误提示。
             this.$refs.editValidate.resetFields()
-
+            
             this.editModal = true
             this.editValidate = params.row
             this.editValidate.passWord='********'

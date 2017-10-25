@@ -35,7 +35,7 @@ export default {
     data() {
         setTimeout(function() {
             $('span.cityList').hover(function() {
-                $('div.cityShowHiden').animate({ height: '200px', opacity: 1 }, 200)
+                $('div.cityShowHiden').animate({ height: '130px', opacity: 1 }, 200)
             }, function() {
                 $('div.cityShowHiden').animate({ height: '0', opacity: 0 }, 200)
             })
