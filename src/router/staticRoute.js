@@ -26,79 +26,78 @@ let staticRoutes = [
         path: '/',
         component: index,
         children:[
-            // {
-            //     path:'/system/home',
-            //     component:Home,
-            //     name:'home',
-            //     meta: {
-            //         requireAuth: true,
-            //     },
-            // },
-            // {
-            //     path: '/index/bikeAllData',
-            //     component: bikeAllData,
-            //     name:'车辆所有数据'
-            // },
             {
                 path:'/index/orderAllData',
                 component: orderAllData,
-                name:'订单整体数据'
+                name:'订单整体数据',
+                auth: 21
             },
             {
                 path:'/index/dateAndArea',
                 component: dateAndArea,
-                name:'订单分日期分地区'
+                name:'订单分日期分地区',
+                auth: 22
             },
             {
                 path:'/index/orderStatus',
                 component: orderStatus,
-                name:'订单状态构成'
+                name:'订单状态构成',
+                auth: 23
             },
             {
                 path:'/index/orderAllDayMap',
                 component: orderAllDayMap,
-                name:'24小时趋势'
+                name:'24小时趋势',
+                auth: 24
             },
             {
                 path:'/index/orderTime',
                 component: orderTime,
-                name:'订单时长分布'
+                name:'订单时长分布',
+                auth: 25
             },
             {
                 path:'/index/orderMileage',
                 component: orderMileage,
-                name:'订单里程分布'
+                name:'订单里程分布',
+                auth: 26
             },
             {
                 path:'/index/orderRate',
                 component: orderRate,
-                name:'使用频次分布'
+                name:'使用频次分布',
+                auth: 27
             },
             {
                 path:'/index/memberCenter',
                 component: memberCenter,
-                name:'个人中心'
+                name:'个人中心',
+                auth: 70
             },
             {
                 path:'/index/accountManager',
                 component: accountManager,
-                name:'账号管理'
+                name:'账号管理',
+                auth: 80
             },
             {
                 path:'/index/roleManager',
                 component: roleManager,
-                name: '角色管理'
-            },
-            {
-                path: '/index/managerData',
-                component: managerData,
-                name:'管理数据'
+                name: '角色管理',
+                auth: 90
             },
             {
                 path:'/index/cityManagerAnalysis',
                 component: cityManagerAnalysis,
-                name:'城市经营分析'
+                name:'城市经营分析',
+                auth: 101
             },
+            {
+                path: '/index/managerData',
+                component: managerData,
+                name:'管理数据',
+                auth: 102
+            }
         ]
     },
     {

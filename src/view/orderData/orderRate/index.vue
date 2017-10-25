@@ -412,27 +412,27 @@ export default {
           }
           this.data2 = [
             {
-              time: "1",
+              time: "0-1",
               userCont: parseFloat(data[0].userCont),
               percentage: data[0].percentage
             },
             {
-              time: "2",
+              time: "1-2",
               userCont: parseFloat(data[1].userCont),
               percentage: data[1].percentage
             },
             {
-              time: "3",
+              time: "2-3",
               userCont: parseFloat(data[2].userCont),
               percentage: data[2].percentage
             },
             {
-              time: "4",
+              time: "3-4",
               userCont: parseFloat(data[3].userCont),
               percentage: data[3].percentage
             },
             {
-              time: "5",
+              time: "4-5",
               userCont: parseFloat(data[4].userCont),
               percentage: data[4].percentage
             },

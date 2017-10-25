@@ -26,10 +26,11 @@ Vue.use(iView)
 Vue.prototype.axios = axios
 let token = window.sessionStorage.getItem('token')
 let userInfo = window.sessionStorage.getItem('userInfo')
+let authList = window.sessionStorage.getItem('authList')
 //页面刷新时，重新赋值token
 if (token) {
     store.commit(types.LOGIN, token)
-    store.commit(types.ADD_MENU, token)
+    store.commit(types.ADD_MENU, authList)
     store.commit(types.GET_USER,JSON.parse(userInfo))
     router.addRoutes(store.state.menus.items)
 }

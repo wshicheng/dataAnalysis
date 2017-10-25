@@ -506,6 +506,9 @@ export default {
         show(params) {
             /*显示弹窗*/
             var that = this
+            // 打开弹窗前清除错误提示。
+            this.$refs.editValidate.resetFields()
+
             this.editModal = true
             this.editValidate = params.row
             this.editValidate.passWord='********'
@@ -542,8 +545,8 @@ export default {
             this.$refs[name].resetFields();
         },
         closeEditModel () {
-            // this.$refs.editValidate.resetFields()
             this.query()
+            // this.$refs.editValidate.resetFields()
             this.editModal = false
         },
         closeAddModel () {

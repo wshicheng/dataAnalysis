@@ -358,6 +358,7 @@ export default {
                 var chartData = res.data.data
                 console.log(chartData)
                 if (res.data.resultCode === 0) {
+                    $('#container').html('')
                     this.noDataBox = false
                     this.loadFlag = true
                 } else {

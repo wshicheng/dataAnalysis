@@ -2,18 +2,18 @@
     <div class="menu">
         <Menu v-on:on-select="handleRoute" @on-open-change='openChange' :active-name='menuActiveName' id="ul" :theme="theme2" :open-names="openNames" :accordion='accord' width="auto">
         <!-- <Menu-item name="/">首页</Menu-item> -->
-            <Submenu name="orderData">
+            <Submenu name="orderData" class="siderBar">
                 <template slot="title">
                     <i class="iconfont icon-dingdan1"></i>
                     订单数据
                 </template>
-                <Menu-item name="/index/orderAllData">整体数据</Menu-item>
-                <Menu-item name="/index/dateAndArea">分日期分地区</Menu-item>
-                <Menu-item name="/index/orderStatus">订单状态构成</Menu-item>
-                <Menu-item name="/index/orderAllDayMap">24小时趋势</Menu-item>
-                <Menu-item name="/index/orderTime">订单时长分布</Menu-item>
-                <Menu-item name="/index/orderMileage">订单里程分布</Menu-item>
-                <Menu-item name="/index/orderRate">使用频次分布</Menu-item>
+                <Menu-item name="/index/orderAllData" class="sign" auth='21'>整体数据</Menu-item>
+                <Menu-item name="/index/dateAndArea" class="sign" auth='22'>分日期分地区</Menu-item>
+                <Menu-item name="/index/orderStatus" class="sign" auth='23'>订单状态构成</Menu-item>
+                <Menu-item name="/index/orderAllDayMap" class="sign" auth='24'>24小时趋势</Menu-item>
+                <Menu-item name="/index/orderTime" class="sign" auth='25'>订单时长分布</Menu-item>
+                <Menu-item name="/index/orderMileage" class="sign" auth='26'>订单里程分布</Menu-item>
+                <Menu-item name="/index/orderRate" class="sign" auth='27'>使用频次分布</Menu-item>
             </Submenu>
             <!-- <Submenu name="2">
                 <template slot="title">
@@ -62,25 +62,25 @@
                 <Menu-item name="5-4">使用情况</Menu-item>
                 <Menu-item name="5-5">充值金额分布</Menu-item>
             </Submenu> -->
-            <Menu-item name="/index/memberCenter">
+            <Menu-item name="/index/memberCenter" class="sign" auth='70'>
                 <i class="iconfont icon-center contPostion"></i>
                 个人中心
             </Menu-item>
-            <Menu-item name="/index/accountManager">
+            <Menu-item name="/index/accountManager" class="sign" auth='80'>
                 <i class="iconfont icon-jiaoseguanli2 contPostion"></i>
                 账号管理
             </Menu-item>
-            <Menu-item name="/index/roleManager">
+            <Menu-item name="/index/roleManager" class="sign" auth='90'>
                 <i class="iconfont icon-jiaoseguanli contPostion"></i>
                 角色管理
             </Menu-item>
-            <Submenu name="9">
+            <Submenu name="9" class="sign" auth='101'>
                 <template slot="title">
                    <i class="iconfont icon-icon3"></i>
                     城市经营分析
                 </template>
-                <Menu-item name="/index/cityManagerAnalysis">整体数据</Menu-item>
-                <Menu-item name="/index/managerData">我管理的数据</Menu-item>
+                <Menu-item name="/index/cityManagerAnalysis" class="sign" auth='101'>整体数据</Menu-item>
+                <Menu-item name="/index/managerData" class="sign" auth='102'>我管理的数据</Menu-item>
             </Submenu>
         </Menu>
     </div>
@@ -93,8 +93,12 @@ export default {
             theme2: 'dark',
             menuActiveName: "",
             accord: true,
-            openNames: []
+            openNames: [],
+            authList: []
         }
+    },
+    mounted () {
+        this.generateMenu()
     },
     beforeMount () {
         //  window.sessionStorage.setItem('openNames', '')
@@ -115,6 +119,20 @@ export default {
         openChange (name) {
             this.openNames = name
             window.sessionStorage.setItem('openNames', name)
+        },
+        generateMenu () {
+            this.authList = window.sessionStorage.getItem('authList')
+                var all  = $('.sign')
+                if( this.authList.length === 0) {
+                        $('.siderBar').hide()
+                    }else{
+                        for(var i =0;i < all.length; i++) {
+                            var res = this.authList.indexOf(all[i].getAttribute('auth'))
+                            if (res === -1) {
+                                $('.sign').eq(i).hide()
+                            }
+                        } 
+                }
         }
     },
     watch: {

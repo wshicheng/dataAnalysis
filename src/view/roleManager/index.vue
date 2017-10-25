@@ -102,7 +102,7 @@ export default {
                   name: 0,
                   children: [{
                       title: '订单数据',
-                      name: 20,
+                      name: 21,
                       expand: false,
                       checked: false,
                       children: [{
@@ -149,7 +149,7 @@ export default {
                   }, {
                       title: '城市经营分析',
                       checked: false,
-                      name: 100,
+                      name: 101,
                       children: [{
                         title: '整体数据',
                         checked: false,
@@ -256,6 +256,7 @@ export default {
     },
     methods: {
         loadData () {
+            this.currentPage = 1
             this.spinShow = true
             this.noDataText = ''
             this.axios.get('/beefly/role/api/v1/page', {
@@ -270,7 +271,9 @@ export default {
                 // 关闭Loading
                 this.spinShow = false
                 this.noDataText = '暂无数据'
-                if (res.data.totalPage > 1) {
+                if (res.data.totalPage < 2 && this.pageSize === 10) {
+                    this.pageShow = false
+                } else {
                     this.pageShow = true
                 }
                 this.totalListNum = res.data.totalItems
@@ -375,7 +378,6 @@ export default {
         // },
         handleDelete(params){
           this.deleteRow = params
-          console.log(this.deleteRow)
           if(this.deleteRow.row.userList.length>0){
               this.$Message.error('该角色下有用户，不可删除！');
           }else{
@@ -428,6 +430,7 @@ export default {
             this.axios.get('/beefly/role/api/v1/page', {
                 params: {
                     accessToken: this.$store.state.token,
+                    keyword: this.keyword,
                     pageNo: currentPage,
                     pageSize: this.pageSize
                 }
@@ -440,9 +443,12 @@ export default {
                 this.spinShow = false
                 this.noDataText = '暂无数据'
 
-                if (res.data.totalPage > 1) {
+                if (res.data.totalPage < 2 && this.pageSize === 10) {
+                    this.pageShow = false
+                } else {
                     this.pageShow = true
                 }
+
                 this.totalListNum = res.data.totalItems
             })
             .catch((err) => {
@@ -460,6 +466,7 @@ export default {
             this.axios.get('/beefly/role/api/v1/page', {
                 params: {
                     accessToken: this.$store.state.token,
+                    keyword: this.keyword,
                     pageNo: this.currentPage,
                     pageSize: pageSize
                 }
@@ -472,9 +479,12 @@ export default {
                 this.spinShow = false
                 this.noDataText = '暂无数据'
 
-                if (res.data.totalPage > 1) {
+                if (res.data.totalPage < 2 && this.pageSize === 10) {
+                    this.pageShow = false
+                } else {
                     this.pageShow = true
                 }
+
                 this.totalListNum = res.data.totalItems
             })
             .catch((err) => {
@@ -553,6 +563,7 @@ export default {
            }
         },
         searchByName () {
+            this.currentPage = 1
             if (this.keyword === '') {    
                 this.$Message.warning('请输入要查询的角色名称！');
             } else {
@@ -565,7 +576,9 @@ export default {
                 .then((res) => {
                     this.checkLogin(res)
                     this.data = res.data.data
-                    if (res.data.totalPage > 1) {
+                    if (res.data.totalPage < 2 && this.pageSize === 10) {
+                        this.pageShow = false
+                    } else {
                         this.pageShow = true
                     }
                     this.totalListNum = res.data.totalItems

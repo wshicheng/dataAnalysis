@@ -203,7 +203,8 @@ import $ from 'jquery'
                 isDisabled:false,
                 close: false,
                 setNewPassWordModel: false,
-                closeX: false
+                closeX: false,
+                authList: []
             }
         },
        computed:{
@@ -266,21 +267,35 @@ import $ from 'jquery'
                             .then((res) => {
                                 var resultCode = res.data.resultCode
                                 var message = res.data.message
+                                var resData = res.data.data
+
+                                resData.authList.map( (item) => {
+                                    this.authList.push(item.menuCode)
+                                })
+                                console.log(this.authList)
+
                                 if(resultCode === 1){
                                     this.setToken(res.data.data.token)
-                                    this.addMenu(res.data.data.token)
+                                    // this.addMenu(res.data.data.token)
+                                    this.addMenu(this.authList)
+                                    console.log('login menuitems', this.menuitems)
                                     if (!this.isLoadRoutes) {  
                                         this.$router.addRoutes(this.menuitems)
                                         this.loadRoutes()  
                                     }
                                     this.getUser(res.data.data)
                                     window.sessionStorage.setItem('userInfo',JSON.stringify(this.userInfo))
+                                    window.sessionStorage.setItem('authList',this.authList)
                                     window.sessionStorage.setItem('headImg', res.data.data.adminUserIconUrl)
                                     window.sessionStorage.setItem('cityStr', res.data.data.cityStr)
                                     window.sessionStorage.setItem('cityList', JSON.stringify(res.data.data.cityList))
                                     // window.sessionStorage.setItem('authList', )
                                     // 登录相关操作
-                                    this.$router.push({path:'/index/orderAllData'})
+                                    if (this.menuitems.length === 0) {
+                                        this.$router.push('/nofound')
+                                    } else {
+                                        this.$router.push(this.menuitems[0].children[0].path)
+                                    }
                                 }else{
                                     this.errorTextShow = true
                                     this.errorText = message

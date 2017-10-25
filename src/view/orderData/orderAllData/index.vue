@@ -452,6 +452,7 @@ export default {
                 this.spinShow2 = false
                 var chartData = res.data.data
                 if (res.data.resultCode === 0) {
+                    $('#container').html('')
                     this.noDataBox = false
                     this.loadFlag = true
                 } else {
