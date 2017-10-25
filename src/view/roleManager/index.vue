@@ -102,7 +102,7 @@ export default {
                   name: 0,
                   children: [{
                       title: '订单数据',
-                      name: 21,
+                      name: 20,
                       expand: false,
                       checked: false,
                       children: [{
@@ -149,7 +149,7 @@ export default {
                   }, {
                       title: '城市经营分析',
                       checked: false,
-                      name: 101,
+                      name: 100,
                       children: [{
                         title: '整体数据',
                         checked: false,

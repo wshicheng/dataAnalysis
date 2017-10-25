@@ -59,7 +59,8 @@ export default {
                 },
                 series: [{
                     name: '东京',
-                    data:data
+                    data:data,
+                    maxPointWidth: 100
                 },
                 ],
                  legend: {

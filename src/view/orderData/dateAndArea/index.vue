@@ -772,7 +772,7 @@ export default {
            if (res.data.message === '用户登录超时') {
                 this.$router.push('/login')
            }
-        },
+        }
     },
     watch: {
         '$store.state.cityList': 'cityChange'

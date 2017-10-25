@@ -426,6 +426,7 @@ export default {
           }
         })
         .then(res => {
+          this.checkLogin(res)
           var data = res.data.data;
           if (Object.prototype.toString.call(data) != "[object Array]") {
             this.data2 = [];
@@ -469,6 +470,7 @@ export default {
           }
         })
         .then(res => {
+          this.checkLogin(res)
           var data = res.data.data;
           if (Object.prototype.toString.call(data) != "[object Array]") {
             this.data3 = [];
@@ -654,6 +656,11 @@ export default {
         this.loadData(type, cityCode, beginDate, endDate);
         this.loadMultData(type, cityCode, beginDate, endDate);
       }
+    },
+    checkLogin (res) {
+        if (res.data.message === '用户登录超时') {
+            this.$router.push('/login')
+        }
     }
   },
   watch: {

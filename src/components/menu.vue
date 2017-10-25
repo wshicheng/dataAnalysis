@@ -1,8 +1,8 @@
 <template>
     <div class="menu">
-        <Menu v-on:on-select="handleRoute" @on-open-change='openChange' :active-name='menuActiveName' id="ul" :theme="theme2" :open-names="openNames" :accordion='accord' width="auto">
+        <Menu v-on:on-select="handleRoute" class="siderBar" @on-open-change='openChange' :active-name='menuActiveName' id="ul" :theme="theme2" :open-names="openNames" :accordion='accord' width="auto">
         <!-- <Menu-item name="/">首页</Menu-item> -->
-            <Submenu name="orderData" class="siderBar">
+            <Submenu name="orderData" v-show="orderShow">
                 <template slot="title">
                     <i class="iconfont icon-dingdan1"></i>
                     订单数据
@@ -74,7 +74,7 @@
                 <i class="iconfont icon-jiaoseguanli contPostion"></i>
                 角色管理
             </Menu-item>
-            <Submenu name="9" class="sign" auth='101'>
+            <Submenu name="9" v-show="cityShow">
                 <template slot="title">
                    <i class="iconfont icon-icon3"></i>
                     城市经营分析
@@ -94,7 +94,10 @@ export default {
             menuActiveName: "",
             accord: true,
             openNames: [],
-            authList: []
+            authList: [],
+            // 权限展示相关
+            orderShow: false,
+            cityShow: false,
         }
     },
     mounted () {
@@ -133,6 +136,26 @@ export default {
                             }
                         } 
                 }
+
+                var delArr = this.authList.split(',')
+                for (var i = 0; i < delArr.length; i++) {
+                    if (Number(delArr[i]) < 30 && Number(delArr[i]) > 19) {
+                        this.orderShow = true
+                        break
+                    } else {
+                        this.orderShow = false
+                    }
+                }
+                
+                for (var i = 0; i < delArr.length; i++) {
+                    if (Number(delArr[i]) < 109 && Number(delArr[i]) > 100) {
+                        this.cityShow = true
+                        break
+                    } else {
+                        this.cityShow = false
+                    }
+                }
+                
         }
     },
     watch: {
