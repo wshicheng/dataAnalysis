@@ -7,6 +7,15 @@
                     <i class="iconfont icon-dingdan1"></i>
                     订单数据
                 </template>
+<<<<<<< HEAD
+                <!-- <Menu-item name="/index/orderAllData">整体数据</Menu-item> -->
+                <Menu-item name="/index/dateAndArea">分日期分地区</Menu-item>
+                <Menu-item name="/index/orderStatus">订单状态构成</Menu-item>
+                <!-- <Menu-item name="/index/orderAllDayMap">24小时趋势</Menu-item>
+                <Menu-item name="/index/orderTime">订单时长分布</Menu-item>
+                <Menu-item name="/index/orderMileage">订单里程分布</Menu-item>
+                <Menu-item name="/index/orderRate">使用频次分布</Menu-item> -->
+=======
                 <Menu-item name="/index/orderAllData" class="sign" auth='21'>整体数据</Menu-item>
                 <Menu-item name="/index/dateAndArea" class="sign" auth='22'>分日期分地区</Menu-item>
                 <Menu-item name="/index/orderStatus" class="sign" auth='23'>订单状态构成</Menu-item>
@@ -14,6 +23,7 @@
                 <Menu-item name="/index/orderTime" class="sign" auth='25'>订单时长分布</Menu-item>
                 <Menu-item name="/index/orderMileage" class="sign" auth='26'>订单里程分布</Menu-item>
                 <Menu-item name="/index/orderRate" class="sign" auth='27'>使用频次分布</Menu-item>
+>>>>>>> 2b87e27b3f73163d0c5be54ec32f82cc40c4f8fa
             </Submenu>
             <!-- <Submenu name="2">
                 <template slot="title">
