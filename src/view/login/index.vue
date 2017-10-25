@@ -28,38 +28,127 @@
     </div>
 
         <!-- 忘记密码模态框 -->
-        <!-- <Modal v-model="forgotPwdModal" :mask-closable='close' width="431" :styles="{top: '20%'}">
+        <Modal v-model="forgotPwdModal" :mask-closable='close' :closable='closeX' width="531" :styles="{top: '20%'}">
             <p slot="header">
-                <span>修改手机号码</span>
+                <span>忘记密码</span>
             </p>
             <div>
-                <Form ref="editPhone" :model="editPhone" :rules="editPhoneRule" :label-width="80">
+                <Form ref="forgotPassWord" :model="forgotPassWord" :rules="forgotPassWordRule" :label-width="80">
                     <FormItem label="手机号" prop="phoneNo" class="phone">
-                        <Input v-model="editPhone.phoneNo" placeholder="请输入新手机号"></Input>
-                        <Button class="sendCode2" 
-                        @click="editGetVerCode(editPhone.phoneNo)"
+                        <Input v-model="forgotPassWord.phoneNo" placeholder="请输入新手机号" style="width: 323px"></Input>
+                        <Button class="sendCode" 
+                        @click="getVerCode(forgotPassWord.phoneNo)"
+                        style="width: 92px;"
                         :plain="isPlain"
                         :disabled="isDisabled">发送验证码</Button>
                     </FormItem>
                     <FormItem label="验证码" prop="phoneCode" class="pc">
-                        <Input v-model="editPhone.phoneCode" placeholder="请输入手机收到的验证码"></Input>
-                    </FormItem>
-                    <FormItem label="账户密码" prop="passWord" class="pwd">
-                        <Input v-model="editPhone.passWord" type='password' placeholder="为保障账号安全，您需要填写当前登录账号的密码"></Input>
+                        <Input v-model="forgotPassWord.phoneCode" placeholder="请输入手机收到的验证码"></Input>
                     </FormItem>
                 </Form>
             </div>
             <div slot="footer">
-                <Button class="cancel" @click="handleReset2('editPhone')" style="margin-left: 8px">取消</Button>
-                <Button type="warning" class="confirm" @click="handleSubmit2('editPhone')">立即绑定</Button>
+                <Button class="cancel" @click="handleReset2('forgotPassWord')" style="margin-left: 8px">取消</Button>
+                <Button type="warning" class="confirm" @click="handleSubmit2('forgotPassWord')">设置新密码</Button>
             </div>
-        </Modal> -->
+        </Modal>
+
+        <!-- 设置新密码模态框 -->
+        <Modal v-model="setNewPassWordModel" :mask-closable='close' width="531" :styles="{top: '20%'}">
+            <p slot="header">
+                <span>设置新密码</span>
+            </p>
+            <div>
+                <Form ref="setNewPassWord" :model="setNewPassWord" :rules="setNewPassWordRule" :label-width="80">\
+                    <FormItem label="新密码"  prop="newPassWord">
+                        <Input v-model="setNewPassWord.newPassWord" type='password' placeholder="密码为6-20位字符，可包含数字、字母、下划线"></Input>
+                    </FormItem>
+                    <FormItem label="确认密码" prop="confirmPassWord">
+                        <Input v-model="setNewPassWord.confirmPassWord" type='password' placeholder="确认密码"></Input>
+                    </FormItem>
+                </Form>
+            </div>
+            <div slot="footer">
+                <Button class="cancel" @click="cancelSetPassWord('setNewPassWord')" style="margin-left: 8px">取消</Button>
+                <Button type="warning" class="confirm" @click="confirmSetPassWord('setNewPassWord')">确认修改</Button>
+            </div>
+        </Modal>
   </div>
 </template>
 <script>
+import {checkMobile, IsEmpty} from '../../util/util.js'
 import {mapActions,mapState,mapGetters} from 'vuex'
+import $ from 'jquery'
     export default {
         data () {
+            var validateTel = (rule, value, callback) => {
+                if (!value) {
+                    return callback(new Error('手机号码不能为空'))
+                } else {
+                    callback()
+                    // setTimeout(() => {
+                    // var res = checkMobile(value)
+                    // if (res === true) {
+                    //     this.axios.get('/beefly/user/api/v1/sendPhoneCode', {
+                    //         params: {
+                    //             accessToken: this.$store.state.token,
+                    //             phoneNo: value
+                    //         }
+                    //     })
+                    //     .then( (res) => {
+                    //         if (res.data.resultCode === 1) {
+                    //             this.phoneHaveBind = false
+                    //             return callback()
+                    //         } else {
+                    //             this.phoneHaveBind = true
+                    //             callback(new Error(res.data.message))
+                    //         }
+                    //     })
+                    //     .catch( err => {
+                    //         console.log(err)
+                    //     })
+                    // } else {
+                    //     callback(new Error('手机格式格式不正确！！！'))
+                    // }
+                    // }, 1000)
+                }
+            }
+            var validateTelForgot = (rule, value, callback) => {
+                var reg = /^[1][3-9][0-9]{9}$/
+                if (value === '') {
+                    return callback(new Error('手机号码不能为空'))
+                } else if (reg.test(value)) {
+                    return callback()
+                } else {
+                    return callback(new Error('请输入正确的手机号码'))
+                }
+            }
+            var validateVerCode = (rule,value,callback) => {
+                if(!value) {
+                    return callback(new Error('验证码不能为空'))
+                } else {
+                    callback()
+                }
+            }
+            var validatePass = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入密码'))
+                } else {
+                    if (this.setNewPassWord.confirmPassWord !== '') {
+                        this.$refs.setNewPassWord.validateField('confirmPassWord')
+                    }
+                    callback()
+                }
+            }
+            var validateCheckPass = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'))
+                } else if (value !== this.setNewPassWord.newPassWord) {
+                    callback(new Error('两次输入密码不一致!'))
+                } else {
+                    callback()
+                }
+            }
             return {
                 bg:require('../../assets/img/1.jpg'),
                 errorText:'',
@@ -77,7 +166,45 @@ import {mapActions,mapState,mapGetters} from 'vuex'
                         { type: 'string', min: 6, message: '密码长度不能小于6位', trigger: 'change' }
                     ]
                 },
-                forgotPwdModal: false
+                forgotPwdModal: false,
+                forgotPassWord: {
+                    phoneNo: '',
+                    phoneCode: '',
+                },
+                forgotPassWordRule: {
+                    phoneNo: [
+                        {
+                            required: true, trigger: 'blur', validator: validateTelForgot
+                        }
+                    ],
+                    phoneCode: [
+                        {
+                            required: true, message: '请输入验证码', validator: validateVerCode 
+                        }
+                    ]
+                },
+                // 修改密码字段与规则
+                setNewPassWord: {
+                    newPassWord: '',
+                    confirmPassWord: '',
+                    id: ''
+                },
+                setNewPassWordRule: {
+                    newPassWord: [
+                        // { required: true, validator: validatePass, trigger: 'blur' },
+                        { required: true, min: 6, max: 20, message: '密码长度应该在6-20位之间', trigger: 'change' },
+                        { min: 6, max: 20, message: '密码长度应该在6-20位之间', trigger: 'blur' }
+                    ],
+                    confirmPassWord: [
+                        { required: true, validator: validateCheckPass, trigger: 'blur' }
+                    ]
+                },
+                isPlain:true,
+                isDisabled:false,
+                close: false,
+                setNewPassWordModel: false,
+                closeX: false,
+                authList: []
             }
         },
        computed:{
@@ -140,21 +267,35 @@ import {mapActions,mapState,mapGetters} from 'vuex'
                             .then((res) => {
                                 var resultCode = res.data.resultCode
                                 var message = res.data.message
+                                var resData = res.data.data
+
+                                resData.authList.map( (item) => {
+                                    this.authList.push(item.menuCode)
+                                })
+                                console.log(this.authList)
+
                                 if(resultCode === 1){
                                     this.setToken(res.data.data.token)
-                                    this.addMenu(res.data.data.token)
+                                    // this.addMenu(res.data.data.token)
+                                    this.addMenu(this.authList)
+                                    console.log('login menuitems', this.menuitems)
                                     if (!this.isLoadRoutes) {  
                                         this.$router.addRoutes(this.menuitems)
                                         this.loadRoutes()  
                                     }
                                     this.getUser(res.data.data)
                                     window.sessionStorage.setItem('userInfo',JSON.stringify(this.userInfo))
+                                    window.sessionStorage.setItem('authList',this.authList)
                                     window.sessionStorage.setItem('headImg', res.data.data.adminUserIconUrl)
                                     window.sessionStorage.setItem('cityStr', res.data.data.cityStr)
                                     window.sessionStorage.setItem('cityList', JSON.stringify(res.data.data.cityList))
                                     // window.sessionStorage.setItem('authList', )
                                     // 登录相关操作
-                                    this.$router.push({path:'/index/orderAllData'})
+                                    if (this.menuitems.length === 0) {
+                                        this.$router.push('/nofound')
+                                    } else {
+                                        this.$router.push(this.menuitems[0].children[0].path)
+                                    }
                                 }else{
                                     this.errorTextShow = true
                                     this.errorText = message
@@ -172,6 +313,112 @@ import {mapActions,mapState,mapGetters} from 'vuex'
             },
             openForgetPwdModal () {
                 this.forgotPwdModal = true
+            },
+            handleReset2 (name) {
+                this.forgotPwdModal = false
+                this.$refs[name].resetFields();
+            },
+            handleSubmit2 (name) {
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        this.axios.get('/system/validateCode', {
+                            params: {
+                                phoneNo: this.forgotPassWord.phoneNo,
+                                phoneCode: this.forgotPassWord.phoneCode
+                            }
+                        })
+                        .then( (res) => {
+                            var message = res.data.message
+                            if (res.data.resultCode === 1) {
+                                this.$Message.success(message);
+                                // 记录user的ID
+                                this.setNewPassWord.id = res.data.data.id
+                                this.$refs[name].resetFields()
+                                this.forgotPwdModal = false
+                                var that = this
+                                setTimeout(function () {
+                                    that.setNewPassWordModel = true
+                                }, 300)
+                            } else {
+                                this.$Message.error(res.data.message);
+                            }
+                        })
+                    } else {
+                        // this.$Message.error('表单验证失败!');
+                    }
+                })
+            },
+            cancelSetPassWord () {
+                this.setNewPassWord = false
+                this.$refs[name].resetFields();
+            },
+            confirmSetPassWord (name) {
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        this.axios.get('/system/resetPassWord', {
+                            params: {
+                                id: this.setNewPassWord.id,
+                                passWord: this.setNewPassWord.newPassWord
+                            }
+                        })
+                        .then( (res) => {
+                            if (res.data.resultCode === 1) {
+                                this.$Message.success('新密码设置成功!');
+                                this.$refs.setNewPassWord.resetFields()
+                                this.setNewPassWordModel = false
+                            } else {
+                                this.$Message.error(res.data.message);
+                            }
+                        })
+                    } else {
+                        // this.$Message.error('表单验证失败!');
+                    }
+                })
+            },
+            getVerCode (val) {
+                if (val === '') {
+                    return
+                } else {
+                    this.axios.get('/system/sendCode', {
+                        params: {
+                            phoneNo: this.forgotPassWord.phoneNo
+                        }
+                    })
+                    .then( (res) => {
+                        if (res.data.resultCode === 1) {
+                            var that = this
+                            var $btn = $('button.sendCode')
+                            var text = $btn.text()
+                            this.initText = text
+                            var initTime = 60
+                            if(checkMobile(val)){
+                                this.isDisabled = true
+                                this.isPlain = false
+                                var timer = setInterval(function(){
+                                    initTime--
+                                    if(initTime<=0){
+                                        that.isDisabled = false
+                                        that.isPlain = true
+                                        $btn.text('')
+                                        $btn.text('发送验证码')
+                                        clearInterval(timer)
+                                        return
+                                    }else {
+                                        $btn.text(initTime + 's')
+                                    }
+                                },1000)
+                                setTimeout(function(){
+                                    that.$Message.warning('已向您的手机发送验证码，请查收！！！')
+                                },1000)
+                            }
+                        } else {
+                            this.$Message.error(res.data.message)
+                        }
+                    })
+                    .catch( (err) => {
+                        console.log(err)
+                    })
+                }
             }
         }
     }
@@ -228,6 +475,14 @@ import {mapActions,mapState,mapGetters} from 'vuex'
         text-decoration: underline;
         font-size: 12px;
         margin-top: 10px;
+        cursor: pointer;
+    }
+    button.sendCode {
+        width: 92px;
+        text-align: center;
+        position: absolute;
+        right: -95px;
+        top: 1px;
     }
   }
 }

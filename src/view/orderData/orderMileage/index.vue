@@ -47,21 +47,21 @@
         <div class="chart">
             <div v-if="citySelectNum.length<2">
                  <div v-show="data2.length>0">
-                     <div>
+                     <!-- <div>
                         <p class="vaildOrderNum">*数据来自有效订单数</p>
-                    </div>
+                    </div> -->
                     <div>
-                        <chart toolType="单数" type="里程分布" title="订单里程分布" :xAxis="xAxis" :chartData="chartData"></chart>
+                        <chart toolType="单数" type="里程分布" title="订单里程分布" :xAxis="xAxis" :chartData="chartData" subtitle="*数据来自有效订单数"></chart>
                     </div>
                  </div>
             </div>
             <div v-else>
                 <div v-show="data3.length>0">
-                     <div>
+                     <!-- <div>
                         <p class="vaildOrderNum">*地区超过10个时，显示10个地区,数据来自有效订单数</p>
-                    </div>
+                    </div> -->
                     <div>
-                        <chart-more toolType="单数" type="里程分布" title="分地区订单里程分布" :xAxis="xAxis" :chartData="chartData"></chart-more>
+                        <chart-more toolType="单数" type="里程分布" title="分地区订单里程分布" :xAxis="xAxis" :chartData="chartData" subtitle="*地区超过10个时，显示10个地区,数据来自有效订单数"></chart-more>
                     </div>
                 </div>
                
@@ -99,6 +99,7 @@ div.loading {
     padding: 20px;
     background: #fff;
     margin-top: 20px;
+    padding-top: 10px;
   }
   div.help {
     width: 100%;
@@ -108,14 +109,15 @@ div.loading {
     margin-bottom: 10px;
     span {
       display: inline-block;
-      width: 30px;
-      height: 30px;
+      width: 18px;
+      height: 18px;
+      line-height: 18px;
       background: orange;
       color: #fff;
       font-weight: bolder;
       border-radius: 50%;
       text-align: center;
-      font-size: 18px;
+      font-size: 16px;
       cursor: pointer;
       margin-bottom: 10px;
     }
@@ -224,7 +226,7 @@ div.loading {
     div.timeSelectShow {
       display: inline;
       position: absolute;
-      left: 426px;
+      left: 520px;
       top: 11px;
       div.search {
         display: inline-block;

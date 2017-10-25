@@ -145,15 +145,15 @@
                 margin-bottom: 10px;
                 span {
                     display: inline-block;
-                    width: 25px;
-                    height: 25px;
+                    width: 18px;
+                    height: 18px;
                     background: orange;
-                    line-height: 25px;
+                    line-height: 18px;
                     color: #fff;
                     font-weight: bolder;
                     border-radius: 50%;
                     text-align: center;
-                    font-size: 18px;
+                    font-size: 16px;
                     cursor: pointer;
                     margin-bottom: 10px;
                 }
@@ -416,6 +416,7 @@ export default {
                     headerFormat: '{series.name}<br>',
                     pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
                 },
+                colors: ['#4472c4', '#ed7d31', '#9999ff', '#ffc000', '#5b9bd5', '#70ad48', '#264478', '#9e480e', '#636363', '#997300'],
                 plotOptions: {
                     pie: {
                         allowPointSelect: true,

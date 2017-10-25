@@ -33,10 +33,14 @@
                 <Poptip trigger="hover" style="float: right;"  placement="top-end" title="数据字段说明">
                     <span>?</span>
                     <div class="content" slot="content">
-                        <p><b>有效订单数:</b>订单状态为人工结束和已结束；非运维订单；订单金额>0</p>
-                        <p><b>订单金额(￥):</b>订单总数的订单金额总和</p>
-                        <p><b>均单价(有效):</b>订单金额/有效订单数</p>
-                        <p><b>实收金额:</b>订单金额中的实际支付金额</p>
+                        <p><b>有效订单数:</b>当前时段有效订单数</p>
+                        <p><b>有效订单占比:</b>当前时段有效订单数/全时段有效订单数</p>
+                        <p><b>累计有效订单:</b>累计到当前时段的有效订单数</p>
+                        <p><b>累计有效订单占比:</b>累计到当前时段有效订单数/全时段有效订单数</p>
+                        <p><b>订单金额(￥):</b>当前时段订单金额</p>
+                        <p><b>订单金额占比:</b>当前时段订单金额/全时段订单金额</p>
+                        <p><b>累计订单金额(￥):</b>累计到当前时段的订单金额</p>
+                        <p><b>累计订单金额占比:</b>累计到当前时段订单金额/全时段订单金额</p>
                     </div>
                 </Poptip>
             </div>
@@ -195,15 +199,15 @@
                 margin-bottom: 10px;
                 span {
                     display: inline-block;
-                    width: 25px;
-                    height: 25px;
+                    width: 18px;
+                    height: 18px;
                     background: orange;
-                    line-height: 25px;
+                    line-height: 18px;
                     color: #fff;
                     font-weight: bolder;
                     border-radius: 50%;
                     text-align: center;
-                    font-size: 18px;
+                    font-size: 16px;
                     cursor: pointer;
                     margin-bottom: 10px;
                 }
@@ -699,13 +703,13 @@ export default {
                 exporting:{
                     enabled:false
                 },
+                colors: ['#4472c4', '#ed7d31', '#9999ff', '#ffc000', '#5b9bd5', '#70ad48', '#264478', '#9e480e', '#636363', '#997300'],
                 tooltip: {
                     valueSuffix: '',
                     formatter: function() { 
                         var type = $('.dateAndArea_type_select button.active').attr("myType")
                          
                         if(type==='orderNum'){
-                             console.log("y:" + this.point.y)
                           
                             if(new String(this.point.y).length>3){
                              return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 0,"",",");

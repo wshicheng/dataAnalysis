@@ -9,7 +9,7 @@ require('highcharts/modules/exporting')(Highcharts);
 
 export default {
     methods: {
-        initChart(title,xAxis,data) {
+        initChart(title,xAxis,data,subtitle) {
             var options = {
                 chart: {
                     type: 'column'
@@ -17,12 +17,22 @@ export default {
                 title: {
                     text: title
                 },
+                subtitle: {
+                    text: subtitle,
+                    align: 'right',
+                    verticalAlign: 'top',
+                    style: {
+                        color: '#ccc',
+                        fontSize: '12px'
+                    }
+                },
                 exporting: {
                     enabled: false
                 },
                 credits:{
                    enabled:false
                 },
+                colors: ['#4472c4', '#ed7d31', '#9999ff', '#ffc000', '#5b9bd5', '#70ad48', '#264478', '#9e480e', '#636363', '#997300'],
                 xAxis: {
                     categories:xAxis
                 },
@@ -63,7 +73,7 @@ export default {
                         stacking: 'normal',
                         dataLabels: {
                             enabled: true,
-                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                            // color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
                             style: {
                                 textShadow: '0 0 3px black'
                             }
@@ -76,20 +86,20 @@ export default {
             new Highcharts.chart('container', options);
         },
     },
-    props: ['title', 'xAxis', 'chartData'],
+    props: ['title', 'xAxis', 'chartData', 'subtitle'],
     mounted() {
-        this.initChart(this.title,this.xAxis,this.chartData)
+        this.initChart(this.title,this.xAxis,this.chartData, this.subtitle)
     },
      watch:{
        xAxis:{
            handler:function(n,o){
-               this.initChart(this.title,this.xAxis,this.chartData)
+               this.initChart(this.title,this.xAxis,this.chartData, this.subtitle)
            },
            deep:true
        },
        chartData:{
            handler:function(n,o){
-               this.initChart(this.title,this.xAxis,this.chartData)
+               this.initChart(this.title,this.xAxis,this.chartData, this.subtitle)
            },
            deep:true
        }  
