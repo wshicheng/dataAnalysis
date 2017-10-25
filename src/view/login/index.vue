@@ -270,9 +270,7 @@ import $ from 'jquery'
                                 var resData = res.data.data
 
                                 resData.authList.map( (item) => {
-                                    if (item.menuCode != [20, 30, 40, 50, 60, 100]) {
-                                        this.authList.push(item.menuCode)
-                                    }
+                                    this.authList.push(item.menuCode)
                                 })
                                 console.log(this.authList)
 

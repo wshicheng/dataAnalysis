@@ -247,7 +247,8 @@ export default {
             pageSizeOpts: [10, 20, 30, 40],
             pageSize: 10,
             currentPage: 1,
-            pageShow: false
+            pageShow: false,
+            isSearch: false
         }
     },
     mounted () {
@@ -325,6 +326,7 @@ export default {
         },
         inputChange () {
             if (this.keyword === '') {
+                this.isSearch = false
                 this.loadData()
             }
         },
@@ -430,7 +432,7 @@ export default {
             this.axios.get('/beefly/role/api/v1/page', {
                 params: {
                     accessToken: this.$store.state.token,
-                    keyword: this.keyword,
+                    keyword: this.isSearch === false?'':this.keyword,
                     pageNo: currentPage,
                     pageSize: this.pageSize
                 }
@@ -466,7 +468,7 @@ export default {
             this.axios.get('/beefly/role/api/v1/page', {
                 params: {
                     accessToken: this.$store.state.token,
-                    keyword: this.keyword,
+                    keyword: this.isSearch === false?'':this.keyword,
                     pageNo: this.currentPage,
                     pageSize: pageSize
                 }
@@ -563,6 +565,7 @@ export default {
            }
         },
         searchByName () {
+            this.isSearch = true
             this.currentPage = 1
             if (this.keyword === '') {    
                 this.$Message.warning('请输入要查询的角色名称！');
@@ -604,7 +607,7 @@ export default {
                 this.$router.push('/login')
             }
         }
-    },
+    }
 }
 </script>
 <style lang="scss" type="text/css" scoped>

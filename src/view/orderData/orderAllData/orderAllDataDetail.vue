@@ -432,7 +432,7 @@ export default {
                     text: this.city + '订单金额及实收率统计图'
                 },
                 subtitle: {
-                    text: '*只显示近10个月的运营数据',
+                    text: '*只显示近10天的运营数据',
                     align: 'right',
                     verticalAlign: 'top',
                     style: {
