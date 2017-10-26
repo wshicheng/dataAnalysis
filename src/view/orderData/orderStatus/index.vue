@@ -6,9 +6,9 @@
       <div id="orderStatus_head">
         <div class="orderStatus_head_time">
             <span>时间:</span>
-            <button class="active" @click="handleClick"  :myId='1'>今日</button>
+            <button@click="handleClick"  :myId='1'>今日</button>
             <button @click="handleClick" :myId='2'>昨日</button>
-            <button @click="handleClick" :myId='3'>近7日</button>
+            <button class="active" @click="handleClick" :myId='3'>近7日</button>
             <button @click="handleClick" :myId='4'>近30天</button>
             <button @click="handleClick" :myId='5'>指定时间段</button>
         </div>
@@ -130,6 +130,7 @@
             padding: 10px;
             margin-top: 20px;
             background: #fff;
+            padding-top: 3px;
             overflow: hidden;
             .spin {
                 position: absolute;
@@ -142,7 +143,6 @@
                 height: 30px;
                 line-height: 30px;
                 overflow: hidden;
-                margin-bottom: 10px;
                 span {
                     display: inline-block;
                     width: 18px;
@@ -233,7 +233,7 @@ export default {
     mounted () {
         this.$store.dispatch('menuActiveName', '/index/orderStatus')
         document.title = '订单数据 - 订单状态构成'
-        this.loadData('1')
+        this.loadData('3')
     },
     methods: {
         loadData (type) {

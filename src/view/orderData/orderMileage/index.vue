@@ -99,14 +99,13 @@ div.loading {
     padding: 20px;
     background: #fff;
     margin-top: 20px;
-    padding-top: 10px;
+    padding-top: 3px;
   }
   div.help {
     width: 100%;
     height: 30px;
     line-height: 30px;
     overflow: hidden;
-    margin-bottom: 10px;
     span {
       display: inline-block;
       width: 18px;

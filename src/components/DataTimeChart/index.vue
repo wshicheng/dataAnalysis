@@ -47,7 +47,8 @@ export default {
                     min: 0,
                     title: {
                         text: ''
-                    }
+                    },
+                    allowDecimals: false
                 },
                tooltip: {
                    

@@ -58,6 +58,8 @@ export default {
             window.sessionStorage.removeItem('token')
             window.sessionStorage.removeItem('userInfo')
             window.sessionStorage.removeItem('openNames')
+            window.sessionStorage.removeItem('authList')
+            window.sessionStorage.removeItem('cityStr')
         },
         getImage() {
             if (this.$store.state.imageUrl === '') {

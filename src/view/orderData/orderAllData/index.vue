@@ -1,17 +1,14 @@
 <template>
   <div id="orderAllData_body">
-        <Breadcrumb class="Breadcrumb" v-if="cityType === 1">
+        <Breadcrumb class="Breadcrumb">
             <BreadcrumbItem>整体数据</BreadcrumbItem>
-        </Breadcrumb>
-        <Breadcrumb class="Breadcrumb2" v-else>
-            <BreadcrumbItem>{{city}}订单整体数据</BreadcrumbItem>
         </Breadcrumb>
       <div id="orderAllData_head">
         <div class="orderAllData_head_time" v-if="cityType === 1">
             <span>时间:</span>
-            <button class="active" @click="handleClick" myId='1'>今日</button>
+            <button @click="handleClick" myId='1'>今日</button>
             <button @click="handleClick" myId='2'>昨日</button>
-            <button @click="handleClick" myId='3'>近7日</button>
+            <button class="active" @click="handleClick" myId='3'>近7日</button>
             <button @click="handleClick" myId='4'>近30天</button>
             <button @click="handleClick" myId='5'>指定时间段</button>
         </div>
@@ -22,11 +19,11 @@
             <button @click="handleClick" myId='3'>指定时间段</button>
         </div>
         <div class="timeSelectShow" v-show="timeSelectShow" v-if="cityType === 1">
-            <DatePicker type="daterange" v-model="timeLine" placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
+            <DatePicker type="daterange" v-model="timeLine" :options='options' placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
             <div class="search"><button @click="searchByTimeLine">搜索</button></div>
         </div>
         <div class="timeSelectShow2" v-show="timeSelectShow" v-else>
-            <DatePicker type="daterange" v-model="timeLine" placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
+            <DatePicker type="daterange" v-model="timeLine" :options='options'  placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
             <div class="search"><button @click="searchByTimeLine">搜索</button></div>
         </div>
         <div v-if="cityType === 1">
@@ -194,6 +191,7 @@
             background: #fff;
             position: relative;
             overflow: hidden;
+            padding-top: 3px;
             .spin {
                 position: absolute;
                 display: inline-block;
@@ -205,7 +203,6 @@
                 height: 30px;
                 line-height: 30px;
                 overflow: hidden;
-                margin-bottom: 10px;
                 span {
                     display: inline-block;
                     width: 18px;
@@ -354,13 +351,21 @@ export default {
             chartDataPayAmount: [],
             chartDisCountAmount: [],
             chartProfitRate: [],
-            loadFlag: false
+            loadFlag: false,
+            options: {
+                disabledDate(date) {
+                    let initdate = new Date("2017-07-01") - 86400000;
+                    
+                    return (date && date.valueOf() < initdate) || (date && date.valueOf() >= new Date())
+                    // return false
+                }
+            }
         }
     },
     mounted () {
         document.title = '订单数据 - 整体数据'
         this.$store.dispatch('menuActiveName', '/index/orderAllData')
-        this.loadData("1")
+        this.loadData("3")
     },
     computed: {
         city:{
@@ -528,7 +533,7 @@ export default {
                     text: this.cityType===1?'分地区 订单金额及实收率统计图':this.city+'订单金额及实收率统计图'
                 },
                 subtitle: {
-                    text: this.cityType===1?'*只显示前10个地区':'',
+                    text: this.cityType===1?'':'',
                     align: 'right',
                     verticalAlign: 'top',
                     style: {
