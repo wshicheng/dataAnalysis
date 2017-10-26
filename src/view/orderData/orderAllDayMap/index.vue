@@ -6,9 +6,9 @@
       <div id="orderAllDayMap_head">
         <div class="orderAllDayMap_head_time">
             <span>时间:</span>
-            <button class="active" @click="handleClick" :myId='1'>今日</button>
+            <button @click="handleClick" :myId='1'>今日</button>
             <button @click="handleClick" :myId='2'>昨日</button>
-            <button @click="handleClick" :myId='3'>近7日</button>
+            <button class="active" @click="handleClick" :myId='3'>近7日</button>
             <button @click="handleClick" :myId='4'>近30天</button>
             <button @click="handleClick" :myId='5'>指定时间段</button>
         </div>
@@ -137,6 +137,7 @@
             background: #fff;
             position: relative;
             overflow: hidden;
+            padding-top: 3px;
             .spin {
                 position: absolute;
                 display: inline-block;
@@ -148,7 +149,6 @@
                 height: 30px;
                 line-height: 30px;
                 overflow: hidden;
-                margin-bottom: 10px;
                 span {
                     display: inline-block;
                     width: 18px;
@@ -290,7 +290,7 @@ export default {
     mounted () {
         this.$store.dispatch('menuActiveName', '/index/orderAllDayMap')
         document.title = '订单数据 - 24小时趋势'
-        this.loadData('1')
+        this.loadData('3')
     },
     methods: {
         loadData (type) {

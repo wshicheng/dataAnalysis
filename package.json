@@ -43,9 +43,11 @@
     "babel-polyfill": "^6.26.0",
     "element-ui": "^1.4.3",
     "element-upload": "^1.0.0",
+    "minireset.css": "^0.0.3",
     "moment": "^2.18.1",
     "qs": "^6.5.1",
-    "url-loader": "^0.5.9"
+    "url-loader": "^0.5.9",
+    "xlsx": "^0.11.6"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

@@ -26,7 +26,7 @@
             <div style="position:relative;">
                 <Table :no-data-text='noDataText' :columns="columns" :data="data"></Table>
             </div>
-            <Page v-show="pageShow" :total="totalListNum" class="tableGrid_page" placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts' show-elevator></Page>
+            <Page v-show="pageShow" :total="totalListNum" :current='currentPage' class="tableGrid_page" placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts' show-elevator></Page>
         </Row>
         <!-- 模态框区域 编辑数据 -->
         <Modal v-model="editModal" width="800px" :mask-closable="close" :styles="{top: '20%'}" class="editModal_form">
@@ -545,6 +545,7 @@ export default {
             this.$refs[name].resetFields();
         },
         closeEditModel () {
+            this.currentPage = 1
             this.query()
             // this.$refs.editValidate.resetFields()
             this.editModal = false
@@ -634,6 +635,7 @@ export default {
                       this.editModal = false
                       this.data.splice(this.index, 1,Object.assign({},this.editValidate,{status:this.initStatu}))
                       this.query(this.currentPage)
+                      this.currentPage = 1
                 } else if (res.data.resultCode === 0) {
                     this.$router.push('/login')
                 }

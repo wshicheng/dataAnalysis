@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <div v-show="show1" class="dateAndArea_table">
+        <div class="dateAndArea_table">
             <Spin fix size="large" v-if="spinShow"  class="spin">
                 <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
@@ -48,7 +48,7 @@
             <Page :total="totalListNum" show-sizer show-elevator :styles='page' v-show="pageShow" :current='current' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </div>
 
-        <div v-show="show2" class="dateAndArea_table_total">
+        <div class="dateAndArea_table_total" v-show="noDataBox">
             <Spin fix size="large" v-if="spinShow2"  class="spin">
                 <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
@@ -61,17 +61,17 @@
                     合计
                 </div>
             </div> -->
-            <Table :no-data-text='noDataText' class="totalTable" :show-header='showHeader' border size='small' :columns="columns_total" :data="totalData"></Table>
+            <Table :no-data-text='noDataText2' class="totalTable" :show-header='showHeader' border size='small' :columns="columns_total" :data="totalData"></Table>
         </div>
 
-        <div class="dateAndArea_chart">
-            <Spin fix size="large" v-if="spinShow"  class="spin">
+        <div class="dateAndArea_chart"  v-show="noDataBox">
+            <Spin fix size="large" v-if="spinShow3"  class="spin">
                 <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
             </Spin>
-            <div class="nodata" v-show="noData" style="text-align:center;">
+            <!-- <div class="nodata" v-show="noData" style="text-align:center;">
                 <i class="iconfont icon-zanwushuju" style="font-size:400px;color:#dedcdc;"></i>
-            </div>
+            </div> -->
             <div id="container" style="min-width:400px; height: 400px;"></div>
         </div>
     </div>
@@ -185,6 +185,7 @@
             background: #fff;
             position: relative;
             overflow: hidden;
+            padding-top: 3px;
             .spin {
                 position: absolute;
                 display: inline-block;
@@ -196,7 +197,6 @@
                 height: 30px;
                 line-height: 30px;
                 overflow: hidden;
-                margin-bottom: 10px;
                 span {
                     display: inline-block;
                     width: 18px;
@@ -235,6 +235,12 @@
             background: #fff;
             position: relative;
             margin-top: 20px;
+            .spin {
+                position: absolute;
+                display: inline-block;
+                // background-color: rgba(253, 248, 248,0.0); 
+                background-color: rgba(255, 255, 255, 0.8); 
+            }
             div.title {
                 float: left;
                 width: 200px;
@@ -330,8 +336,6 @@ export default {
                     key: 'total'
                 }
             ],
-            show1:false,
-            show2:false,
             totalData: [                
                 {
                     orderTime: '1111',
@@ -350,11 +354,12 @@ export default {
             chartTime: [],
             chartData: [],
             noDataText: '',
+            noDataText2: '',
             pageShow: false,
-            noData: false,
             chartTitleName: '有效订单数',
             totalTitle: true,
-            ellipsis: true
+            ellipsis: true,
+            noDataBox: false
         }
     },
     mounted () {
@@ -367,6 +372,7 @@ export default {
     methods: {
         loadData (type) {
             this.spinShow = true
+            this.spinShow3 = true
             this.noDataText = ''
             // 默认加载时去掉无数据图片
 
@@ -388,13 +394,12 @@ export default {
                 if (res.data.data.length === 0) {
                     this.noDataText = '暂无数据'
                     this.spinShow = false
+                    this.spinShow3 = false
                     this.orderData = []
+                    this.noDataBox = false
                     this.totalListNum = 1
-                    this.show1 = false
-                    this.noData = true;
                 } else {
-                      this.noData = false;
-                    this.show1 = true
+                    this.noDataBox = true
                     this.spinShow = false
                     var data = res.data.data
 
@@ -455,7 +460,7 @@ export default {
         },
         loadTotalData (type) {
             this.spinShow2 = true
-            this.noDataText = ''
+            this.noDataText2 = ''
             
             this.axios.get('/beefly/dateCityOrders/api/v1/avgTotal', {
                 params: {
@@ -473,14 +478,11 @@ export default {
                 if (data.length === 0) {
                     this.totalTitle = false
                     this.totalData = []
-                    this.show2 = false
                    
                     // 关闭loading 
                     this.spinShow2 = false
-                    this.noDataText = ''
+                    this.noDataText2 = ''
                 } else {
-                   
-                    this.show2 = true
                     this.totalTitle = true
                     //随机取出一个数据制作表头  
                     var arr = []
@@ -517,7 +519,7 @@ export default {
 
                     // 关闭loading 
                     this.spinShow2 = false
-                    this.noDataText = ''
+                    this.noDataText2 = ''
                 }
                 
 
@@ -525,7 +527,7 @@ export default {
             .catch( (err) => {
                 console.log(err)
                 this.spinShow2 = false
-                this.noDataText = '暂无数据'
+                this.noDataText2 = '暂无数据'
             })
         },
         tableDataDel (arr) {
@@ -551,9 +553,6 @@ export default {
             return newArr
         },
         getChartData (type) {
-            this.spinShow = true
-            // 加载中不显示noData图片
-            this.noData = false
             this.axios.get('/beefly/dateCityOrders/lineNum', {
                 params: {
                     accessToken: this.$store.state.token,
@@ -566,10 +565,10 @@ export default {
             .then( (res) => {
                 var chartData = res.data.data
                 if (chartData.length === 0) {
+                    this.spinShow3 = false
                     $('#container').html('')
-                    this.noData = true
                 } else {
-                    this.spinShow = false
+                    this.spinShow3 = false
                     // var newArr = []
                     // var type = $('.dateAndArea_type_select button.active').attr("myType")
                     // chartData.map( item => {
@@ -689,7 +688,7 @@ export default {
                     text: '分日期分地区 ' + this.chartTitleName
                 },
                 subtitle: {
-                    text: '*只显示前10个地区',
+                    text: '',
                     align: 'right',
                     verticalAlign: 'top',
                     style: {

@@ -143,6 +143,7 @@
             background: #fff;
             position: relative;
             overflow: hidden;
+            padding-top: 3px;
             .spin {
                 position: absolute;
                 display: inline-block;
@@ -154,7 +155,6 @@
                 height: 30px;
                 line-height: 30px;
                 overflow: hidden;
-                margin-bottom: 10px;
                 span {
                     display: inline-block;
                     width: 18px;
@@ -432,7 +432,7 @@ export default {
                     text: this.city + '订单金额及实收率统计图'
                 },
                 subtitle: {
-                    text: '*只显示近10个月的运营数据',
+                    text: '',
                     align: 'right',
                     verticalAlign: 'top',
                     style: {
