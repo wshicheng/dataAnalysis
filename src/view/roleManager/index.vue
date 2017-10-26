@@ -292,7 +292,7 @@ export default {
             this.editValidate = params.row
             this.editId = params.row.id
             var menuStr = params.row.menuStr
-            console.log('menuStr',menuStr )
+            // console.log('menuStr',menuStr )
             // console.log('checkList',this.baseData )
             var that = this
             setTimeout(function () {

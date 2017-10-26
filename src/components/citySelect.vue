@@ -68,6 +68,37 @@ export default {
             singleCityShow: false
         }
     },
+    mounted () {
+        var _this = this
+        this.axios.get('/beefly/user/api/v1/city', {
+            params: {
+                accessToken: this.$store.state.token
+            }
+        })
+        .then(function (res) {
+            _this.cityList = res.data.data||[]
+            _this.$store.dispatch('keepCitys', res.data.data)
+            console.log()
+            if(res.data.data.length===0){
+                _this.cityAuth = true
+            }else{
+                _this.cityAuth = false
+            }
+            if (res.data.data.length >1) {
+                _this.allCityHide = true
+                _this.singleCityShow = true
+            } else {
+                _this.allCityHide = false
+                _this.singleCityShow = false
+                // setTimeout( function () {
+                //     $('.citySelect_area_span span')[0].setAttribute('active')
+                // }, 10)        
+            }
+        })
+        .catch(function (err) {
+            console.log('err', err)
+        });
+    },
     methods: {
         areaClick (e) {
             var that = this
@@ -103,37 +134,6 @@ export default {
         citySelectChange () {
             this.$store.dispatch('setCityList', this.citySelect)
         }
-    },
-    mounted () {
-        var _this = this
-        this.axios.get('/beefly/user/api/v1/city', {
-            params: {
-                accessToken: this.$store.state.token
-            }
-        })
-        .then(function (res) {
-            _this.cityList = res.data.data||[]
-            _this.$store.dispatch('keepCitys', res.data.data)
-            console.log()
-            if(res.data.data.length===0){
-                _this.cityAuth = true
-            }else{
-                _this.cityAuth = false
-            }
-            if (res.data.data.length >1) {
-                _this.allCityHide = true
-                _this.singleCityShow = true
-            } else {
-                _this.allCityHide = false
-                _this.singleCityShow = false
-                // setTimeout( function () {
-                //     $('.citySelect_area_span span')[0].setAttribute('active')
-                // }, 10)        
-            }
-        })
-        .catch(function (err) {
-            console.log('err', err)
-        });
     },
     watch: {
         'citySelect': 'citySelectChange'

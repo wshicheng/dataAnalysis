@@ -93,7 +93,7 @@ export default {
             theme2: 'dark',
             menuActiveName: "",
             accord: true,
-            openNames: [],
+            openNames: ['orderData'],
             authList: [],
             // 权限展示相关
             orderShow: false,
@@ -102,6 +102,7 @@ export default {
     },
     mounted () {
         this.generateMenu()
+        // this.openNames.push('orderData')
     },
     beforeMount () {
         //  window.sessionStorage.setItem('openNames', '')

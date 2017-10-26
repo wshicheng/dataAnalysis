@@ -12,7 +12,7 @@
             <span class="lable" style="margin-left: 30px;">联系方式：</span>
             <Input v-model="phone" @on-change="handleQuery" placeholder="手机号\邮箱" style="width: 160px"></Input>
             <!-- </Col> -->
-            <button class="DIY_button" @click="query(1)" style="margin-left: 30px;position: relative;top: 1px;">查询</button>
+            <button class="DIY_button" @click="query2(1)" style="margin-left: 30px;position: relative;top: 1px;">查询</button>
 
         </Row>
         <Row class="tableGrid" style="position:relative">
@@ -455,7 +455,8 @@ export default {
             pageSizeOpts: [10, 20, 30, 40],
             pageSize: 10,
             currentPage: 1,
-            timer: null
+            timer: null,
+            isSearch: false
         }
     },
     computed: {
@@ -592,10 +593,30 @@ export default {
             var phone = this.phone
             // 发起查询请求 
             if (name.length === 0 && phone.length === 0) {
+                this.currentPage = 1
+                this.isSearch = false
                 this.query(1)
             }
         },
         query(pageNo) {
+            // 点击查询按钮 实际执行函数
+            var keyword, tel
+            if (this.isSearch) {
+                keyword = this.userName
+                tel = this.phone
+            } else {
+                keyword = ''
+                tel = ''
+            }
+            
+            var pageSize = this.pageSize
+            var accessToken = this.accessToken
+            this.throttle(this.queryData, null, 500, { keyword, tel, pageNo:pageNo, pageSize, accessToken })
+
+        },
+        query2(pageNo) {
+            this.currentPage = 1
+            this.isSearch = true
             // 点击查询按钮 实际执行函数
             var keyword = this.userName
             var tel = this.phone
@@ -682,7 +703,6 @@ export default {
                 params: { keyword, tel, pageNo, pageSize, accessToken }
             }).then((res) => {
                 this.spinShow = false
-                console.log(res.data.data)
                 if (res.data.data.length > 0) {
                     this.pageShow = true
                 }

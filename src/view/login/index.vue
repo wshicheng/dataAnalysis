@@ -59,7 +59,7 @@
                 <span>设置新密码</span>
             </p>
             <div>
-                <Form ref="setNewPassWord" :model="setNewPassWord" :rules="setNewPassWordRule" :label-width="80">\
+                <Form ref="setNewPassWord" :model="setNewPassWord" :rules="setNewPassWordRule" :label-width="80">
                     <FormItem label="新密码"  prop="newPassWord">
                         <Input v-model="setNewPassWord.newPassWord" type='password' placeholder="密码为6-20位字符，可包含数字、字母、下划线"></Input>
                     </FormItem>
@@ -267,18 +267,19 @@ import $ from 'jquery'
                             .then((res) => {
                                 var resultCode = res.data.resultCode
                                 var message = res.data.message
-                                var resData = res.data.data
-
-                                resData.authList.map( (item) => {
-                                    this.authList.push(item.menuCode)
-                                })
-                                console.log(this.authList)
 
                                 if(resultCode === 1){
+
+                                    var resData = res.data.data
+
+                                    resData.authList.map( (item) => {
+                                        this.authList.push(item.menuCode)
+                                    })
+
+                                    
                                     this.setToken(res.data.data.token)
                                     // this.addMenu(res.data.data.token)
                                     this.addMenu(this.authList)
-                                    console.log('login menuitems', this.menuitems)
                                     if (!this.isLoadRoutes) {  
                                         this.$router.addRoutes(this.menuitems)
                                         this.loadRoutes()  
@@ -301,7 +302,7 @@ import $ from 'jquery'
                                     this.errorText = message
                                 }
                             })
-                            .then( (err) => {
+                            .catch( (err) => {
                                 console.log(err)
                                 //this.errorText = err
                             })
@@ -348,8 +349,8 @@ import $ from 'jquery'
                     }
                 })
             },
-            cancelSetPassWord () {
-                this.setNewPassWord = false
+            cancelSetPassWord (name) {
+                this.setNewPassWordModel = false
                 this.$refs[name].resetFields();
             },
             confirmSetPassWord (name) {

@@ -13,7 +13,7 @@
                 <button @click="handleClick" :myId='5'>指定时间段</button>
             </div>
             <div class="timeSelectShow" v-show="timeSelectShow">
-                <DatePicker type="daterange" v-model="timeLine" placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
+                <DatePicker type="daterange" v-model="timeLine" :options='options' placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
                 <div class="search">
                     <button class="DIY_button" @click="searchByTimeLine">查询</button>
                 </div>
@@ -51,7 +51,7 @@
                         <!-- <p class="vaildOrderNum">*数据来自有效订单数</p> -->
                     </div>
                     <div>
-                        <chart toolType="用户数" type="频次分布" title="使用频次分布" :xAxis="xAxis" :chartData="chartData" subtitle=""></chart>
+                        <chart toolType="用户数" type="频次分布" title="使用频次分布" :xAxis="xAxis" :chartData="chartData" subtitle="*数据来自有效订单数"></chart>
                     </div>
                  </div>
             </div>
@@ -62,7 +62,7 @@
                         <p class="vaildOrderNum">*地区超过10个时，显示10个地区,</p>
                     </div> -->
                     <div>
-                        <chart-more toolType="用户数" type="频次分布" title="分地区使用频次分布" :xAxis="xAxis" :chartData="chartData" subtitle="*地区超过10个时，显示10个地区"></chart-more>
+                        <chart-more toolType="用户数" type="频次分布" title="分地区使用频次分布" :xAxis="xAxis" :chartData="chartData" subtitle=""></chart-more>
                     </div>
                 </div>
                
@@ -303,7 +303,7 @@ export default {
       citySelectNum: [],
       columns1: [
         {
-          title: "次数",
+          title: "次数(次/天)",
           key: "time"
         },
         {
@@ -327,7 +327,12 @@ export default {
       chartTitleName: "有效订单数",
       totalTitle: true,
       ellipsis: true,
-      poptipTitle: "数据项说明"
+      poptipTitle: "数据项说明",
+      options: {
+          disabledDate(date) {
+              return date&&date.valueOf()> Date.now() - 86400000
+          }
+      }
     };
   },
   created: function() {
@@ -524,27 +529,27 @@ export default {
           // this.citySelectNum = recodeCity;
           this.data3 = [
             {
-              name: "1",
+              name: "0-1",
               data: zeroStart
             },
             {
-              name: "2",
+              name: "1-2",
               data: oneStart
             },
             {
-              name: "3",
+              name: "2-3",
               data: twoStart
             },
             {
-              name: "4",
+              name: "3-4",
               data: threeStart
             },
             {
-              name: "5",
+              name: "4-5",
               data: fiveStart
             },
             {
-              name: "5次已上",
+              name: "5次以上",
               data: tenStart
             }
           ];

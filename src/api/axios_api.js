@@ -3,6 +3,10 @@ import store from '../store/store'
 import * as types from '../store/types'
 import router from '../router/router-config'
 
+/**
+ * 生产 
+ */
+let baseURL = 'http://10.31.147.119:5080'
 
 // let baseURL = 'http://192.168.0.129:5080'
 // let baseURL = 'http://192.168.0.121:5080'
@@ -13,7 +17,7 @@ import router from '../router/router-config'
 // let baseURL = 'http://47.93.48.250:5080'
 // let baseURL = 'http://47.93.48.250:5080'
 // let baseURL = 'http://192.168.0.129:5080'
-let baseURL = 'http://47.93.48.250:5080'
+// let baseURL = 'http://47.93.48.250:5080'
 // let baseURL =  'http://192.168.3.50:5080'
 // let baseURL = 'http://192.168.3.78:5080'
 // let baseURL = 'http://192.168.3.116:5080'

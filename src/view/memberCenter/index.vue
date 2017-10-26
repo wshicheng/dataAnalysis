@@ -114,8 +114,8 @@
                         <Input v-model="editPhone.phoneNo" placeholder="请输入新手机号"></Input>
                         <Button class="sendCode2" 
                         @click="editGetVerCode(editPhone.phoneNo)"
-                        :plain="isPlain"
-                        :disabled="isDisabled">发送验证码</Button>
+                        :plain="isPlain2"
+                        :disabled="isDisabled2">发送验证码</Button>
                     </FormItem>
                     <FormItem label="验证码" prop="phoneCode" class="pc">
                         <Input v-model="editPhone.phoneCode" placeholder="请输入手机收到的验证码"></Input>
@@ -127,7 +127,7 @@
             </div>
             <div slot="footer">
                 <Button class="cancel" @click="handleReset2('editPhone')" style="margin-left: 8px">取消</Button>
-                <Button type="warning" class="confirm" @click="handleSubmit2('editPhone')">立即绑定</Button>
+                <Button type="warning" class="confirm" @click="handleSubmit2('editPhone')">确认修改</Button>
             </div>
         </Modal>
 
@@ -562,6 +562,8 @@ export default {
             passWordModal: false,
             isPlain:true,
             isDisabled:false,
+            isPlain2:true,
+            isDisabled2:false,
             initText: ''
 		}
     },
@@ -650,13 +652,13 @@ export default {
                         this.initText = text
                         var initTime = 60
                         if(checkMobile(val)){
-                            this.isDisabled = true
-                            this.isPlain = false
+                            this.isDisabled2 = true
+                            this.isPlain2 = false
                             var timer = setInterval(function(){
                                 initTime--
                                 if(initTime<=0){
-                                    that.isDisabled = false
-                                    that.isPlain = true
+                                    that.isDisabled2 = false
+                                    that.isPlain2 = true
                                     $btn.text('')
                                     $btn.text('发送验证码')
                                     clearInterval(timer)
@@ -700,7 +702,6 @@ export default {
             })
             .then( (res) => {
                 this.checkLogin(res)
-                console.log(res)
 
                 // 填写用户信息
                 this.name = res.data.data.name
@@ -723,7 +724,6 @@ export default {
                     this.imageUrl = res.data.data.adminUserIconUrl
                 }
 
-                console.log(this.imageUrl)
             })
             .catch( (err) => {
                 console.log(err)
@@ -857,7 +857,6 @@ export default {
                     })
                 )
                 .then( (res) => {
-                    console.log(res)
                     if (res.data.resultCode === 1) {
                         that.$Message.success('头像保存成功！')
                         that.imageUrl = res.data.data.adminUserIconUrl

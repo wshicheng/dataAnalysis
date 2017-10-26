@@ -354,10 +354,8 @@ export default {
             loadFlag: false,
             options: {
                 disabledDate(date) {
-                    let initdate = new Date("2017-07-01") - 86400000;
-                    
-                    return (date && date.valueOf() < initdate) || (date && date.valueOf() >= new Date())
-                    // return false
+                    return date&&date.valueOf()> Date.now() - 86400000
+                    // return date&&date.valueOf() > now.getDay() - 1
                 }
             }
         }
@@ -530,7 +528,7 @@ export default {
         initChart () {
             var options = {
                 title: {
-                    text: this.cityType===1?'分地区 订单金额及实收率统计图':this.city+'订单金额及实收率统计图'
+                    text: this.cityType===1?'分地区 订单金额及实收率统计图':'订单金额及实收率统计图'
                 },
                 subtitle: {
                     text: this.cityType===1?'':'',

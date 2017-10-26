@@ -94,7 +94,13 @@ export default {
         }
     },
     watch: {
-        '$store.state.imageUrl': 'getImage'
+        '$store.state.imageUrl': 'getImage',
+        '$route': {
+            handler: function() {
+                this.$store.dispatch('setCityList', [])
+            },
+            deep: true
+        }
     }
 }
 </script>
@@ -214,7 +220,6 @@ div.cityShowHiden {
     top: 59px;
     border: 1px solid #797979;
     z-index: 33;
-    overflow-y: auto;
     opacity: 0;
     background: rgba(121, 121, 121, .8);
 }
