@@ -290,6 +290,8 @@ import $ from 'jquery'
                                     window.sessionStorage.setItem('headImg', res.data.data.adminUserIconUrl)
                                     window.sessionStorage.setItem('cityStr', res.data.data.cityStr)
                                     window.sessionStorage.setItem('cityList', JSON.stringify(res.data.data.cityList))
+                                    // 后台将totalPage的值在这里用来表示单个/多个城市， 1:多个，0：单个
+                                    window.sessionStorage.setItem('cityType', res.data.totalPage)
                                     // window.sessionStorage.setItem('authList', )
                                     // 登录相关操作
                                     if (this.menuitems.length === 0) {

@@ -6,7 +6,7 @@
       <div id="orderAllDayMap_head">
         <div class="orderAllDayMap_head_time">
             <span>时间:</span>
-            <button @click="handleClick" :myId='1'>今日</button>
+            <!-- <button @click="handleClick" :myId='1'>今日</button> -->
             <button @click="handleClick" :myId='2'>昨日</button>
             <button class="active" @click="handleClick" :myId='3'>近7日</button>
             <button @click="handleClick" :myId='4'>近30天</button>
@@ -104,8 +104,10 @@
             div.timeSelectShow {
                 display: inline;
                 position: absolute;
-                left: 523px;
-                top: 9px;
+                // left: 523px;
+                // top: 9px;
+                left: 427px;
+                top: 10px;
                 div.search {
                     display: inline-block;
                     button {

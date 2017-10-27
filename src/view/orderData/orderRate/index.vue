@@ -6,7 +6,7 @@
         <div id="dateTime_head">
             <div class="dateTime_head_time">
                 <span>时间:</span>
-                <button @click="handleClick" :myId='1'>今日</button>
+                <!-- <button @click="handleClick" :myId='1'>今日</button> -->
                 <button @click="handleClick" :myId='2'>昨日</button>
                 <button class="active" @click="handleClick" :myId='3'>近7日</button>
                 <button @click="handleClick" :myId='4'>近30天</button>
@@ -227,8 +227,10 @@ div.loading {
     div.timeSelectShow {
       display: inline;
       position: absolute;
-      left: 520px;
-      top: 11px;
+      // left: 523px;
+      // top: 9px;
+      left: 427px;
+      top: 10px;
       div.search {
         display: inline-block;
         button {
@@ -518,11 +520,11 @@ export default {
           var tenStart = [];
           var recodeCity = [];
           data.map(list => {
-            zeroStart.push(parseFloat(list.freq_1));
-            oneStart.push(parseFloat(list.freq_2));
-            twoStart.push(parseFloat(list.freq_3));
-            threeStart.push(parseFloat(list.freq_4));
-            fiveStart.push(parseFloat(list.freq_5));
+            zeroStart.push(parseFloat(list.freq_0));
+            oneStart.push(parseFloat(list.freq_1));
+            twoStart.push(parseFloat(list.freq_2));
+            threeStart.push(parseFloat(list.freq_3));
+            fiveStart.push(parseFloat(list.freq_4));
             tenStart.push(parseFloat(list["freq_5+"]));
             recodeCity.push(list.cityName);
           });

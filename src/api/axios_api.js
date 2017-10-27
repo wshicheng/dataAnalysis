@@ -6,13 +6,14 @@ import router from '../router/router-config'
 /**
  * 生产 
  */
-let baseURL = 'http://10.31.147.119:5080'
+// let baseURL = 'http://10.31.147.119:5080'
 
 // let baseURL = 'http://192.168.0.129:5080'
 // let baseURL = 'http://192.168.0.121:5080'
+// let baseURL = 'http://192.168.0.129:5080'
 // let baseURL = 'http://192.168.0.102:5080'
 // let baseURL = 'http://192.168.3.181:5080'
-// let baseURL = 'http://192.168.0.129:5080'
+let baseURL = 'http://192.168.0.129:5080'
 // let baseURL = 'http://192.168.0.102:5080'
 // let baseURL = 'http://47.93.48.250:5080'
 // let baseURL = 'http://47.93.48.250:5080'

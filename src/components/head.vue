@@ -35,9 +35,9 @@ export default {
     data() {
         setTimeout(function() {
             $('span.cityList').hover(function() {
-                $('div.cityShowHiden').animate({ height: '130px', opacity: 1 }, 200)
+                $('div.cityShowHiden').show(300)
             }, function() {
-                $('div.cityShowHiden').animate({ height: '0', opacity: 0 }, 200)
+                $('div.cityShowHiden').hide()
             })
         }, 1000)
         return {
@@ -60,6 +60,7 @@ export default {
             window.sessionStorage.removeItem('openNames')
             window.sessionStorage.removeItem('authList')
             window.sessionStorage.removeItem('cityStr')
+            window.sessionStorage.removeItem('cityType')
         },
         getImage() {
             if (this.$store.state.imageUrl === '') {
@@ -213,14 +214,15 @@ div.cityShowHiden ul {
 div.cityShowHiden {
     cursor: pointer;
     width: 400px;
-    height: 0;
+    height: auto;
     transition: all linear .2s;
     position: absolute;
     left: 241px;
     top: 59px;
     border: 1px solid #797979;
     z-index: 33;
-    opacity: 0;
+    opacity: 1;
+    display: none;
     background: rgba(121, 121, 121, .8);
 }
 

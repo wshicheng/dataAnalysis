@@ -6,7 +6,7 @@
       <div id="orderAllData_head">
         <div class="orderAllData_head_time" v-if="cityType === 1">
             <span>时间:</span>
-            <button @click="handleClick" myId='1'>今日</button>
+            <!-- <button @click="handleClick" myId='1'>今日</button> -->
             <button @click="handleClick" myId='2'>昨日</button>
             <button class="active" @click="handleClick" myId='3'>近7日</button>
             <button @click="handleClick" myId='4'>近30天</button>
@@ -129,8 +129,10 @@
             div.timeSelectShow {
                 display: inline;
                 position: absolute;
-                left: 523px;
-                top: 9px;
+                // left: 523px;
+                // top: 9px;
+                left: 427px;
+                top: 10px;
                 div.search {
                     display: inline-block;
                     button {
@@ -263,7 +265,7 @@ export default {
     data () {
         var that = this;
         return {
-            cityType: 1,
+            cityType: '',
             timeSelectShow: false,
             timeLine: ['',''],
             page: {
@@ -363,7 +365,14 @@ export default {
     mounted () {
         document.title = '订单数据 - 整体数据'
         this.$store.dispatch('menuActiveName', '/index/orderAllData')
-        this.loadData("3")
+        var type = Number(window.sessionStorage.getItem('cityType'))
+        this.cityType = type
+        console.log('this.cityType', typeof this.cityType)
+        console.log('this.cityType === 1', this.cityType === 1)
+        var that = this
+        setTimeout( function () {
+            that.loadData($('.orderAllData_head_time button.active').attr('myId'))
+        }, 200)
     },
     computed: {
         city:{
@@ -407,11 +416,11 @@ export default {
                 this.checkLogin(res)
                 var data = res.data.data
                 // 判断message字段是1 or 0 , 1:多个城市，0:一个城市
-                if (Number(res.data.message) === 0) {
-                    this.cityType = 0
-                } else {
-                    this.cityType = 1
-                }
+                // if (Number(res.data.message) === 0) {
+                //     this.cityType = 0
+                // } else {
+                //     this.cityType = 1
+                // }
 
 
                 this.spinShow = false
