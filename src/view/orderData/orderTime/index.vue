@@ -6,7 +6,7 @@
         <div id="dateTime_head">
             <div class="dateTime_head_time">
                 <span>时间:</span>
-                <!-- <button @click="handleClick" :myId='1'>今日</button> -->
+                <button @click="handleClick" :myId='1'>今日</button>
                 <button @click="handleClick" :myId='2'>昨日</button>
                 <button class="active" @click="handleClick" :myId='3'>近7日</button>
                 <button @click="handleClick" :myId='4'>近30天</button>

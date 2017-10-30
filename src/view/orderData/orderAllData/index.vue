@@ -6,7 +6,7 @@
       <div id="orderAllData_head">
         <div class="orderAllData_head_time" v-if="cityType === 1">
             <span>时间:</span>
-            <!-- <button @click="handleClick" myId='1'>今日</button> -->
+            <button @click="handleClick" myId='1'>今日</button>
             <button @click="handleClick" myId='2'>昨日</button>
             <button class="active" @click="handleClick" myId='3'>近7日</button>
             <button @click="handleClick" myId='4'>近30天</button>
@@ -367,8 +367,6 @@ export default {
         this.$store.dispatch('menuActiveName', '/index/orderAllData')
         var type = Number(window.sessionStorage.getItem('cityType'))
         this.cityType = type
-        console.log('this.cityType', typeof this.cityType)
-        console.log('this.cityType === 1', this.cityType === 1)
         var that = this
         setTimeout( function () {
             that.loadData($('.orderAllData_head_time button.active').attr('myId'))
