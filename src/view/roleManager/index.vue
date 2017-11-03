@@ -137,7 +137,7 @@ export default {
                   }, {
                       title: '个人中心',
                       name: 70,
-                      checked: false,
+                      checked: false
                   }, {
                       title: '账号管理',
                       name: 80,

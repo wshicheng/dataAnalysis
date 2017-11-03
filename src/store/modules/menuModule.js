@@ -65,7 +65,9 @@ function generateMenuItems(state, authList){
     }
     // console.log('hehehe',newArr)
     var res = Object.assign({},state.staticRoute[0],{children:newArr})
-    state.items = [res,state.staticRoute[1],state.staticRoute[2]]
+    state.items = state.staticRoute
+    // state.items = [res,state.staticRoute[1],state.staticRoute[2]] 解开为动态路由解开
+
     // console.log('state.items', state.items)
     // state.items = state.staticRoute
     return

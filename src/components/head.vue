@@ -1,15 +1,29 @@
 <template>
     <div class="header">
-        <div v-show="cityList.length>3?true:false" class="cityShowHiden">
+        <!-- <div v-show="cityList.length>3?true:false" class="cityShowHiden">
             <ul>
                 <li v-bind:key="list.code" v-for="list of cityList">{{list.name}}</li>
             </ul>
-        </div>
+        </div> -->
         <Menu mode="horizontal" theme="dark" active-name="1">
             <div class="layout-logo">蜜蜂出行数据运营平台
 
             </div>
-            <div class="cityList">
+            <Tooltip placement="bottom" v-if="cityList.length>3">
+                <div class="cityList">
+                    <span class="cityList">{{city}}
+                    </span>
+                    <!-- <span class="cityList">全部地区</span> -->
+                </div>
+                <div slot="content">
+                    <div style="width: 200px; overflow: hidden;">
+                        <ul>
+                            <li style="float: left; margin: 5px 8px; width: 30px; " v-bind:key="list.code" v-for="list of cityList">{{list.name}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </Tooltip>
+            <div class="cityList" v-else>
                 <span class="cityList">{{city}}
                 </span>
                 <!-- <span class="cityList">全部地区</span> -->
@@ -49,7 +63,6 @@ export default {
     },
     mounted() {
         this.headImg = window.sessionStorage.getItem('headImg')
-
     },
     methods: {
         handleLoginOut() {
@@ -186,6 +199,7 @@ i.icon-zhuxiao_logout {
 div.cityList {
     display: inline-block;
     position: relative;
+    width: 300px;
     left: 50px;
     height: 30px;
     line-height: 30px;

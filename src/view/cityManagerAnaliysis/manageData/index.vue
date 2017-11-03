@@ -501,7 +501,7 @@ export default {
                                     fontSize: '18px',
                                     cursor: 'pointer'
                                 },
-                                nativeOn: {
+                                on: {
                                     click: () => {
                                         this.show(params.index, params.row)
                                     }
@@ -516,7 +516,7 @@ export default {
                                     fontSize: '18px',
                                     cursor: 'pointer'
                                 },
-                                nativeOn: {
+                                on: {
                                     click: () => {
                                         this.remove(params.index, params.row)
                                     }

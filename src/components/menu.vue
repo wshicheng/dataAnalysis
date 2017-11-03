@@ -15,18 +15,18 @@
                 <Menu-item name="/index/orderMileage" class="sign" auth='26'>订单里程分布</Menu-item>
                 <Menu-item name="/index/orderRate" class="sign" auth='27'>使用频次分布</Menu-item>
             </Submenu>
-            <!-- <Submenu name="2">
+            <Submenu name="userData">
                 <template slot="title">
                     <Icon type="ios-people"></Icon>
                     用户数据
                 </template>
-                <Menu-item name="2-1">整体数据</Menu-item>
-                <Menu-item name="2-2">分日期分地区</Menu-item>
-                <Menu-item name="2-3">新用户</Menu-item>
-                <Menu-item name="2-4">活跃用户</Menu-item>
-                <Menu-item name="2-5">用户留存_日留存</Menu-item>
+                <Menu-item name="/index/userAllData">整体数据</Menu-item>
+                <Menu-item name="/index/userDateAndArea">分日期分地区</Menu-item>
+                <Menu-item name="/index/newUser">新用户</Menu-item>
+                <Menu-item name="/index/activeUser">活跃用户</Menu-item>
+                <Menu-item name="/index/userKeep">用户留存_日留存</Menu-item>
             </Submenu>
-            <Submenu name="3">
+            <!-- <Submenu name="3">
                 <template slot="title">
                     <Icon type="stats-bars"></Icon>
                     车辆数据
@@ -93,7 +93,7 @@ export default {
             theme2: 'dark',
             menuActiveName: "",
             accord: true,
-            openNames: ['orderData'],
+            openNames: [''],
             authList: [],
             // 权限展示相关
             orderShow: false,

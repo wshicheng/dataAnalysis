@@ -16,6 +16,16 @@ import orderMileage from '../view/orderData/orderMileage/index.vue'
 import orderRate from '../view/orderData/orderRate/index.vue'
 import orderAllDayMap from '../view/orderData/orderAllDayMap/index.vue'
 import NotFoundPage from '../view/nofound/index.vue'
+// 用户数据模块
+import userAllData from '../view/userData/userAllData/index.vue'
+import userAllDataDetail from '../view/userData/userAllData/detail.vue'
+import userDateAndArea from '../view/userData/dateAndArea/index.vue'
+import newUser from '../view/userData/newUser/index.vue'
+import newUserDetail from '../view/userData/newUser/detail.vue'
+import activeUser from '../view/userData/activeUser/index.vue'
+import activeUserDetail from '../view/userData/userAllData/detail.vue'
+import userKeep from '../view/userData/userAllData/index.vue'
+
 // 城市经营分析
 import cityManagerAnalysis from '../view/cityManagerAnaliysis/allData/index.vue'
 import cityManagerAnalysisByMonth from '../view/cityManagerAnaliysis/allData/detail.vue'
@@ -69,6 +79,36 @@ let staticRoutes = [
                 auth: 27
             },
             {
+                path:'/index/userAllData',
+                component: userAllData,
+                name:'用户整体数据',
+                auth: 31
+            },
+            {
+                path:'/index/userDateAndArea',
+                component: userDateAndArea,
+                name:'用户分地区分地区',
+                auth: 32
+            },
+            {
+                path:'/index/newUser',
+                component: newUser,
+                name:'新用户',
+                auth: 32
+            },
+            {
+                path:'/index/activeUser',
+                component: activeUser,
+                name:'活跃用户',
+                auth: 33
+            },
+            {
+                path:'/index/userKeep',
+                component: userKeep,
+                name:'用户留存',
+                auth: 34
+            },
+            {
                 path:'/index/memberCenter',
                 component: memberCenter,
                 name:'个人中心',
@@ -109,6 +149,21 @@ let staticRoutes = [
         path:'/index/orderAllData/detail/:id',
         component: orderAllDataDetail,
         name:'订单整体数据地区详情'
+    },
+    {
+        path:'/index/userAlldata/detail/:id',
+        component: userAllDataDetail,
+        name:'用户整体数据地区详情'
+    },
+    {
+        path:'/index/newUserDetail/detail/:id',
+        component: newUserDetail,
+        name:'新用户数据地区详情'
+    },
+    {
+        path:'/index/activeUserDetail/detail/:id',
+        component: activeUserDetail,
+        name: '活跃用户详情'
     }
 ]
 

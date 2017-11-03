@@ -228,10 +228,8 @@ div.loading {
     div.timeSelectShow {
       display: inline;
       position: absolute;
-      // left: 523px;
-      // top: 9px;
-      left: 427px;
-      top: 10px;
+      left: 523px;
+      top: 9px;
       div.search {
         display: inline-block;
         button {

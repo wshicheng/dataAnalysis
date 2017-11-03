@@ -1,30 +1,12 @@
 <template>
-  <div id="orderAllData_body">
+  <div id="userAllData_body">
         <Breadcrumb class="Breadcrumb">
             <BreadcrumbItem>整体数据</BreadcrumbItem>
         </Breadcrumb>
-      <div id="orderAllData_head">
-        <div class="orderAllData_head_time" v-if="cityType === 1">
+      <div id="userAllData_head">
+        <div class="userAllData_head_time">
             <span>时间:</span>
-            <button @click="handleClick" myId='1'>今日</button>
-            <button @click="handleClick" myId='2'>昨日</button>
-            <button class="active" @click="handleClick" myId='3'>近7日</button>
-            <button @click="handleClick" myId='4'>近30天</button>
-            <button @click="handleClick" myId='5'>指定时间段</button>
-        </div>
-        <div class="orderAllData_head_time" v-else>
-            <span>时间:</span>
-            <button @click="handleClick" class="active" myId='1'>近7日</button>
-            <button @click="handleClick" myId='2'>近30天</button>
-            <button @click="handleClick" myId='3'>指定时间段</button>
-        </div>
-        <div class="timeSelectShow" v-show="timeSelectShow" v-if="cityType === 1">
-            <DatePicker type="daterange" v-model="timeLine" :options='options' placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
-            <div class="search"><button @click="searchByTimeLine">搜索</button></div>
-        </div>
-        <div class="timeSelectShow2" v-show="timeSelectShow" v-else>
-            <DatePicker type="daterange" v-model="timeLine" :options='options'  placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
-            <div class="search"><button @click="searchByTimeLine">搜索</button></div>
+            <DatePicker v-model="time" :clearable='clearable' @on-change='timeChange' type="date" :options='options' placeholder="选择日期" style="width: 216px;"></DatePicker>
         </div>
         <div v-if="cityType === 1">
             <city-select></city-select>
@@ -34,7 +16,7 @@
         </div>
       </div>
 
-      <div class="orderAllData_table">
+      <div class="userAllData_table">
         <Spin fix size="large" v-if="spinShow"  class="spin">
             <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
             <div style="color: #ccc; text-indent: 5px;">  loading...</div>
@@ -43,15 +25,14 @@
             <Poptip trigger="hover" style="float: right;"  placement="left" title="数据项说明" content="提示内容">
                 <span>?</span>
                 <div class="content" slot="content">
-                    <p><b>订单总数:</b>除运维订单以外所有状态的订单总数</p>
-                    <p><b>有效订单数:</b>订单状态为人工结束和已结束；非运维订单；订单金额>0</p>
-                    <p><b>订单金额（￥）:</b>订单总数的订单金额总和</p>
-                    <p><b>均单价（总数）:</b>订单金额/订单总数</p>
-                    <p><b>均单价（有效）:</b>订单金额/有效订单数</p>
-                    <p><b>实收率:</b>订单金额中的实际支付金额/订单金额</p>
-                    <p><b>优惠订单占比:</b>有效订单数中使用优惠券的订单数/有效订单数</p>
-                    <p><b>平均订单时长（分）:</b>有效订单数的总订单时长/有效订单数</p>
-                    <p><b>平均订单里程（公里）:</b>有效订单数的总订单里程/有效订单数/1000</p>
+                    <p><b>累计用户:</b>累计到查询日期的注册用户数</p>
+                    <p><b>押金用户(累计):</b>累计用户中当前押金大于0的用户</p>
+                    <p><b>日活跃用户:</b>所选日期当日有过一次有效订单的用户数</p>
+                    <p><b>日活跃用户率:</b>日活跃用户/累计用户</p>
+                    <p><b>月活跃用户:</b>包括所选日期在内的近30天中，有过3次以上有效订单的用户数</p>
+                    <p><b>月活跃用户率:</b>月活跃用户/累计用户</p>
+                    <p><b>仅注册用户(累计):</b>累计用户中仅注册，没有成功缴纳过押金的用户</p>
+                    <p><b>已退押金用户(累计):</b>累计用户中，缴纳过押金，且查询时押金为0的用户</p>
                 </div>
             </Poptip>
         </div>
@@ -59,7 +40,7 @@
         <Page :total="totalListNum" show-sizer show-elevator  :styles='page' placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
       </div>
 
-      <div class="orderAllData_chart" v-show="noDataBox">
+      <div class="userAllData_chart" v-show="noDataBox">
             <Spin fix size="large" v-if="spinShow2"  class="spin">
                 <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
@@ -69,7 +50,7 @@
   </div>
 </template>
 <style lang='scss' scoped type="text/css">
-    #orderAllData_body {
+    #userAllData_body {
         background: #ececec;
         .Breadcrumb {
             width: 100%;
@@ -89,7 +70,7 @@
                 color: #fff;
             }
         }
-        #orderAllData_head {
+        #userAllData_head {
             -moz-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
             -webkit-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
             box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
@@ -98,7 +79,7 @@
             padding: 12px 10px 0 10px;
             overflow: hidden;
             position: relative;
-            div.orderAllData_head_time {
+            div.userAllData_head_time {
                 margin-bottom: 10px;
                 span:nth-of-type(1) {
                     margin-right: 9px;
@@ -126,66 +107,8 @@
                 }
 
             }
-            div.timeSelectShow {
-                display: inline;
-                position: absolute;
-                left: 523px;
-                top: 9px;
-                div.search {
-                    display: inline-block;
-                    button {
-                        width: 80px;
-                        height: 32px;
-                        line-height: 32px;
-                        cursor: pointer;
-                        margin-left: 3px;
-                        display: inline-block;
-                        border-radius: 4px;
-                        text-align: center;
-                        outline: none;
-                        margin-right: 10px;
-                        color: #fff;
-                        background: #444;
-                        font-weight: bolder;
-                        border: 1px solid #444;
-                    }
-                    button:hover {
-                        background: #666;
-                        border: 1px solid #666;
-                    }
-                }
-            }
-            div.timeSelectShow2 {
-                display: inline;
-                position: absolute;
-                left: 332px;
-                top: 11px;
-                div.search {
-                    display: inline-block;
-                    button {
-                        width: 80px;
-                        height: 32px;
-                        line-height: 32px;
-                        cursor: pointer;
-                        margin-left: 3px;
-                        display: inline-block;
-                        border-radius: 4px;
-                        text-align: center;
-                        outline: none;
-                        margin-right: 10px;
-                        color: #fff;
-                        background: #444;
-                        font-weight: bolder;
-                        border: 1px solid #444;
-                    }
-                    button:hover {
-                        background: #666;
-                        border: 1px solid #666;
-                    }
-                }
-            }
         }
-        .orderAllData_table {
+        .userAllData_table {
             padding: 10px;
             margin-top: 20px;
             background: #fff;
@@ -234,7 +157,7 @@
                 }
             }
         }
-        .orderAllData_chart {
+        .userAllData_chart {
             position: relative;
             margin-top: 20px;
             padding: 10px;
@@ -265,8 +188,7 @@ export default {
         var that = this;
         return {
             cityType: '',
-            timeSelectShow: false,
-            timeLine: ['',''],
+            time:  Date.now() - 86400000,
             page: {
                 'float': 'right',
                 'margin-top': '20px'
@@ -292,55 +214,49 @@ export default {
                                 },
                                 attrs: {
                                     target: '_blank',
-                                    href: '#/index/orderAllData/detail/' + params.row.cityCode + '&' + params.row.cityName
+                                    href: '#/index/userAllData/detail/' + params.row.cityCode + '&' + params.row.cityName
                                 }
                             }, params.row.cityName)
                         } else {
                             return h('p', {
-                            }, params.row.orderTime)
+                            }, params.row.createDate)
                         }
                     }
                 },
                 {
-                    title: '订单总数',
-                    key: 'orderAllNum',
+                    title: '累计用户',
+                    key: 'totalUser',
                     // sortable: true
                 },
                 {
-                    title: '有效订单数',
-                    key: 'orderNum'
+                    title: '押金用户(累计)',
+                    key: 'depositUser'
                 },
                 {
-                    title: '订单金额(￥)',
-                    key: 'orderAllAmount',
+                    title: '日活跃用户数',
+                    key: 'dayActiveNum',
                     // sortable: true
                 },
                 {
-                    title: '均单价(总数)',
-                    key: 'avgAllAmount'
+                    title: '日活跃用户率',
+                    key: 'dayActiveRate'
                 },
                 {
-                    title: '均单价(有效)',
-                    key: 'avgAmount',
+                    title: '月活跃用户数',
+                    key: 'monthActiveNum',
                     // sortable: true
                 },
                 {
-                    title: '实收率',
-                    key: 'profitRate'
+                    title: '月活跃用户率',
+                    key: 'monthActiveRate'
                 },
                 {
-                    title: '优惠订单占比',
-                    key: 'discountRate'
+                    title: '仅注册用户(累计)',
+                    key: 'registerUser'
                 },
                 {
-                    title: '平均订单时长(min)',
-                    key: 'avgTime',
-                    width: 140
-                },
-                {
-                    title: '平均订单里程(km)',
-                    key: 'avgMileage',
-                    width: 140
+                    title: '已退押金用户',
+                    key: 'unDepositUser'
                 }
             ],
             orderData: [],
@@ -349,26 +265,28 @@ export default {
             spinShow2: false,
             noDataText: '',
             chartDataX: [],
-            chartDataPayAmount: [],
-            chartDisCountAmount: [],
-            chartProfitRate: [],
+            chartDepositUser: [],
+            chartUnDepositUser: [],
+            chartRegisterUser: [],
+            chartDepositUserRate: [],
             loadFlag: false,
             options: {
                 disabledDate(date) {
                     return date&&date.valueOf()> Date.now() - 86400000
                     // return date&&date.valueOf() > now.getDay() - 1
                 }
-            }
+            },
+            clearable: false
         }
     },
     mounted () {
-        document.title = '订单数据 - 整体数据'
-        this.$store.dispatch('menuActiveName', '/index/orderAllData')
+        document.title = '用户数据 - 整体数据'
+        this.$store.dispatch('menuActiveName', '/index/userAllData')
         var type = Number(window.sessionStorage.getItem('cityType'))
         this.cityType = type
         var that = this
         setTimeout( function () {
-            that.loadData($('.orderAllData_head_time button.active').attr('myId'))
+            that.loadData()
         }, 200)
     },
     computed: {
@@ -386,27 +304,34 @@ export default {
         handleSort(column,key,order){
             console.log(column,key,order)
         },
-        loadData (type) {
+        timeChange (newTime) {
+            this.time = newTime
+            if (this.time.length === '') {
+                return
+            } else {
+                this.loadData()
+            }
+        },
+        loadData () {
             this.spinShow = true
             this.spinShow2 = true
             this.noDataText = ''
             // 调取数据前，清空chart数据
-            this.chartDataPayAmount = []
-            this.chartDisCountAmount = []
-            this.chartProfitRate = []
+            this.chartDepositUser = []
+            this.chartUnDepositUser = []
+            this.chartRegisterUser = []
+            this.chartDepositUserRate = []
             this.chartDataX = []
             // 节流防止用户快速点击数据串行
             this.loadFlag = false       
 
-            this.axios.get('/beefly/dateCityOrders/api/v1/wholeDataPage', {
+            this.axios.get('/beefly/wholeUser/api/v1/wholeDataPage', {
                 params: {
                     accessToken: this.$store.state.token,
-                    type: type,
                     cityCode: this.$store.state.cityList.toString(),
                     pageNo: this.currentPage,
                     pageSize: this.pageSize,
-                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
-                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
+                    time: moment(this.time).format('YYYY-MM-DD')
                 }
             })
             .then( res => {
@@ -426,11 +351,11 @@ export default {
                 if (res.data.resultCode === 0) {
                     this.noDataText = '暂无数据'
                     this.orderData = []
-                    this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
+                    this.loadChartData()
                 } else {
                     this.orderData = data
 
-                    this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
+                    this.loadChartData()
                     // 处理分页数据
                     if (res.data.totalPage < 2 && this.pageSize === 10) {
                         this.pageShow = false
@@ -447,14 +372,12 @@ export default {
                 console.log(err)
             })
         },
-        loadChartData (type) {
-            this.axios.get('/beefly/dateCityOrders/api/v1/chartData', {
+        loadChartData () {
+            this.axios.get('/beefly/wholeUser/api/v1/chartData', {
                 params: {
                     accessToken: this.$store.state.token,
-                    type: type,
                     cityCode: this.$store.state.cityList.toString(),
-                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
-                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
+                    time: moment(this.time).format('YYYY-MM-DD')
                 }
             })
             .then( res => {
@@ -469,10 +392,11 @@ export default {
                 } else {
                     this.noDataBox = true
                     chartData.map( item => {
-                        this.chartDataPayAmount.push(Number(this.delcommafy(item.payAmount)))
-                        this.chartDisCountAmount.push(Number(this.delcommafy(item.disCountAmount)))
-                        this.chartProfitRate.push(Number(item.profitRate))
-                        this.chartDataX.push(this.cityType === 1?item.cityName:item.orderTime)
+                        this.chartDepositUser.push(Number(this.delcommafy(item.depositUser)))
+                        this.chartUnDepositUser.push(Number(this.delcommafy(item.unDepositUser)))
+                        this.chartRegisterUser.push(Number(this.delcommafy(item.registerUser)))
+                        this.chartDepositUserRate.push(Number(item.depositUserRate))
+                        this.chartDataX.push(this.cityType === 1?item.cityName:item.createDate)
                     })
                     this.initChart()
                     this.loadFlag = true
@@ -485,56 +409,30 @@ export default {
                 console.log(err)
             })
         },
-        handleClick (e) {
-            this.currentPage = 1
-            this.pageSize = 10
-            var elems = siblings(e.target)
-            for (var i = 0; i < elems.length; i++) {
-                elems[i].setAttribute('class', '')
-            }
-            e.target.setAttribute('class', 'active')
-            if (e.target.innerHTML === '指定时间段') {
-                this.timeSelectShow = true
-            } else {
-                this.timeSelectShow = false
-                this.timeLine = ['','']
-                if (this.loadFlag === true) {
-                    this.loadData(e.target.getAttribute('myId'))
-                } else {
-                    return
-                }
-            }
-        },
-        searchByTimeLine () {
-            if (this.timeLine[0] === '' || this.timeLine[0] === null) {
-                this.$Message.warning('请选择时间段')
-            } else {
-                this.loadData('5')
-            }
-        },
         handleCurrentPage(currentPage) {
             this.currentPage = currentPage
             if (this.loadFlag === true) {
-                this.loadData($('.orderAllData_head_time button.active').attr('myId'))
+                this.loadData()
             }
         },
         handlePageSize(pageSize) {
             this.pageSize = pageSize
             if (this.loadFlag === true) {
-                this.loadData($('.orderAllData_head_time button.active').attr('myId'))
+                this.loadData()
             }
         },
         delcommafy(num){
-        //   if((num+"").Trim()==""){
-        //    return"";
-        //   }
-          num=num.replace(/,/gi,'');
-          return num;
+            if (Number(num) < 1000) {
+                return num;
+            } else {
+                num=num.replace(/,/gi,'');
+                return num;
+            }
         },
         initChart () {
             var options = {
                 title: {
-                    text: this.cityType===1?'分地区 订单金额及实收率统计图':'订单金额及实收率统计图'
+                    text: this.cityType===1?'分地区 累计用户及累计押金用户占比':'累计用户及累计押金用户占比'
                 },
                 subtitle: {
                     text: this.cityType===1?'':'',
@@ -577,9 +475,9 @@ export default {
                 },
                 yAxis: [{
                             labels: {
-                                formatter:function(){
-                                    return Highcharts.numberFormat(this.value, 2, ".",",") + '元'
-                                },
+                                // formatter:function(){
+                                //     return Highcharts.numberFormat(this.value, 2, ".",",") + '元'
+                                // },
                                 style: {
                                     color: Highcharts.getOptions().colors[1]
                                 }
@@ -592,7 +490,7 @@ export default {
                             }
                         }, {
                             opposite: true,
-                            tickPositions: [20, 40, 60, 80, 100],
+                            tickPositions: [0, 20, 40, 60, 80, 100],
                             title: {
                                 text: '实收率',
                                 style: {
@@ -648,21 +546,27 @@ export default {
                     }
                 },
                 series: [{
-                    name: '实际支付金额',
+                    name: '累计押金用户',
                     type: 'column',
-                    data: this.chartDataPayAmount,
+                    data: this.chartDepositUser,
                     yAxis: 0,
                     maxPointWidth: 100
                 }, { 
-                    name: '优惠劵抵扣金额',
+                    name: '已退押金用户',
                     type: 'column',
-                    data: this.chartDisCountAmount,
+                    data: this.chartUnDepositUser,
+                    yAxis: 0,
+                    maxPointWidth: 100
+                }, { 
+                    name: '仅注册用户',
+                    type: 'column',
+                    data: this.chartRegisterUser,
                     yAxis: 0,
                     maxPointWidth: 100
                 }, {
-                    name: '实收率',
+                    name: '累计押金用户占比',
                     type: 'line',
-                    data: this.chartProfitRate,
+                    data: this.chartDepositUserRate,
                     tooltip: {
                         valueSuffix: ''
                     },
@@ -674,7 +578,7 @@ export default {
         },
         cityChange () {
             if (this.loadFlag === true) {
-                this.loadData($('.orderAllData_head_time button.active').attr('myId'))
+                this.loadData()
             }
         },
         checkLogin (res) {
