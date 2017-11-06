@@ -24,7 +24,7 @@
                 <Menu-item name="/index/userDateAndArea">分日期分地区</Menu-item>
                 <Menu-item name="/index/newUser">新用户</Menu-item>
                 <Menu-item name="/index/activeUser">活跃用户</Menu-item>
-                <Menu-item name="/index/userKeep">用户留存_日留存</Menu-item>
+                <!-- <Menu-item name="/index/userKeep">用户留存</Menu-item> -->
             </Submenu>
             <!-- <Submenu name="3">
                 <template slot="title">

@@ -22,7 +22,7 @@
             <div style="color: #ccc; text-indent: 5px;">  loading...</div>
         </Spin>
         <div class="help">
-            <Poptip trigger="hover" style="float: right;"  placement="left" title="数据项说明" content="提示内容">
+            <Poptip trigger="hover" style="float: right;"  placement="left" title="数据项说明" content="提示内容" transfer='true'>
                 <span>?</span>
                 <div class="content" slot="content">
                     <p><b>累计用户:</b>累计到查询日期的注册用户数</p>
@@ -313,6 +313,7 @@ export default {
             }
         },
         loadData () {
+            this.currentPage = 1
             this.spinShow = true
             this.spinShow2 = true
             this.noDataText = ''
@@ -416,6 +417,7 @@ export default {
             }
         },
         handlePageSize(pageSize) {
+            this.currentPage = 1
             this.pageSize = pageSize
             if (this.loadFlag === true) {
                 this.loadData()
@@ -483,7 +485,7 @@ export default {
                                 }
                             },
                             title: {
-                                text: '金额',
+                                text: '用户数',
                                 style: {
                                     color: Highcharts.getOptions().colors[1]
                                 }
@@ -492,7 +494,7 @@ export default {
                             opposite: true,
                             tickPositions: [0, 20, 40, 60, 80, 100],
                             title: {
-                                text: '实收率',
+                                text: '累计押金用户占比',
                                 style: {
                                     color: '#9999ff'
                                 }
@@ -525,8 +527,8 @@ export default {
                     useHTML: true,
                     headerFormat: "<p'>{point.key}</p>",
                     pointFormatter:function () {
-                        if (this.series.name != '实收率') {
-                            return "<span>" + this.series.name + ':  </span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")] + '<br>'
+                        if (this.series.name != '累计押金用户占比') {
+                            return "<span>" + this.series.name + ':  </span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 0, "",",")] + '<br>'
                         } else {
                             return "<span>" + this.series.name + ':  </span>' + Highcharts.numberFormat(this.y, 1) + '%'
                         }

@@ -22,7 +22,7 @@
         </div>
         <div class="table">
             <div class="help">
-                <Poptip trigger="hover" style="float: right;" placement="top-end" :title="poptipTitle">
+                <Poptip trigger="hover" style="float: right;" placement="top-end" :title="poptipTitle" transfer='true'>
                     <span>?</span>
                    <div class="content" slot="content">
                         <p>

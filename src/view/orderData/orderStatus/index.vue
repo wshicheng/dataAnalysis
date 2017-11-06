@@ -25,7 +25,7 @@
             <div style="color: #ccc; text-indent: 5px;">  loading...</div>
         </Spin>
         <div class="help">
-            <Poptip trigger="hover" style="float: right;"  placement="top-end" :title="poptipTitle">
+            <Poptip trigger="hover" style="float: right;"  placement="top-end" :title="poptipTitle" transfer='true'>
                 <span>?</span>
                 <div class="content" slot="content">
                     <p><b>订单数:</b>各订单状态的订单数（非运维订单）</p>
