@@ -30,7 +30,7 @@
                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
             </Spin>
             <div class="help">
-                <Poptip trigger="hover" style="float: right;"  placement="top-end" title="数据字段说明">
+                <Poptip trigger="hover" style="float: right;"  placement="top-end" title="数据字段说明" transfer='true'>
                     <span>?</span>
                     <div class="content" slot="content">
                         <p><b>有效订单数:</b>当前时段有效订单数</p>
@@ -760,6 +760,7 @@ export default {
             this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
         },
         handlePageSize(pageSize) {
+            this.currentPage = 1
             this.pageSize = pageSize
 
             this.loadData($('.dateAndArea_head_time button.active').attr('myId'))

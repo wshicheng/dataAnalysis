@@ -24,7 +24,7 @@ import newUser from '../view/userData/newUser/index.vue'
 import newUserDetail from '../view/userData/newUser/detail.vue'
 import activeUser from '../view/userData/activeUser/index.vue'
 import activeUserDetail from '../view/userData/userAllData/detail.vue'
-import userKeep from '../view/userData/userAllData/index.vue'
+import userKeep from '../view/userData/userKeep/index.vue'
 
 // 城市经营分析
 import cityManagerAnalysis from '../view/cityManagerAnaliysis/allData/index.vue'
