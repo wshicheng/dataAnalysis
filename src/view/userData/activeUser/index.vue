@@ -30,7 +30,7 @@
             <div style="color: #ccc; text-indent: 5px;">  loading...</div>
         </Spin>
         <div class="help">
-            <Poptip trigger="hover" style="float: right;"  placement="left" title="数据项说明" content="提示内容" transfer='true'>
+            <Poptip trigger="hover" style="float: right;"  placement="left" title="数据项说明" content="提示内容" :transfer='transfer'>
                 <span>?</span>
                 <div class="content" slot="content">
                     <p><b>累计用户:</b>累计到查询时间段的注册用户数</p>
@@ -230,7 +230,7 @@ export default {
             },
             totalListNum: 100,
             pageSizeOpts: [10, 20, 30, 40],
-            pageSize: 10,
+            pageSize: 3,
             currentPage: 1,
             pageShow: false,
             columns_activeUserData: [
@@ -259,31 +259,24 @@ export default {
                     }
                 },
                 {
-                    title: '新注册用户',
-                    key: 'userCount',
-                    // sortable: true
+                    title: '累计用户数量',
+                    key: 'userCount'
                 },
                 {
-                    title: '仅注册用户',
-                    key: 'onlyRegister'
+                    title: '活跃用户数',
+                    key: 'active'
                 },
                 {
-                    title: '存量押金用户',
-                    key: 'stock',
-                    // sortable: true
-                },
-                {
-                    title: '已退押金用户',
-                    key: 'refundDeposit'
-                },
-                {
-                    title: '活跃新用户(累计)',
-                    key: 'active',
-                    // sortable: true
-                },
-                {
-                    title: '活跃新用户(累计)占比',
+                    title: '活跃用户比率',
                     key: 'activeRate'
+                },
+                {
+                    title: '活跃新用户',
+                    key: 'newActive'
+                },
+                {
+                    title: '活跃新用户占比',
+                    key: 'newActiveRate'
                 }
             ],
             activeUserData: [],
@@ -292,16 +285,17 @@ export default {
             spinShow2: false,
             noDataText: '',
             chartDataX: [],
-            chartDataOnlyRegister: [],
-            chartStock: [],
-            chartRefundDeposit: [],
+            chartActiveUser: [],
+            chartActiveRate: [],
+            chartNewActiveRate: [],
             loadFlag: false,
             options: {
                 disabledDate(date) {
                     return date&&date.valueOf()> Date.now() - 86400000
                     // return date&&date.valueOf() > now.getDay() - 1
                 }
-            }
+            },
+            transfer: true
         }
     },
     mounted () {
@@ -314,17 +308,6 @@ export default {
             that.loadData($('.activeUser_head_time button.active').attr('myId'))
         }, 200)
     },
-    computed: {
-        city:{
-            get () {
-                return this.city = window.localStorage.getItem('city')
-            },
-            set () {
-                // 当只有一个城市时，用来显示的城市名
-                return 
-            }
-        }
-    },
     methods: {
         handleSort(column,key,order){
             console.log(column,key,order)
@@ -334,9 +317,9 @@ export default {
             this.spinShow2 = true
             this.noDataText = ''
             // 调取数据前，清空chart数据
-            this.chartDataOnlyRegister = []
-            this.chartStock = []
-            this.chartRefundDeposit = []
+            this.chartActiveUser = []
+            this.chartActiveRate = []
+            this.chartNewActiveRate = []
             this.chartDataX = []
             // 节流防止用户快速点击数据串行
             this.loadFlag = false       
@@ -391,7 +374,7 @@ export default {
             })
         },
         loadChartData (type) {
-            this.axios.get('/beefly/activeUser/getData', {
+            this.axios.get('/beefly/activeUser/getChartData', {
                 params: {
                     accessToken: this.$store.state.token,
                     type: type,
@@ -412,19 +395,15 @@ export default {
                 } else {
                     this.noDataBox = true
                     chartData.map( item => {
-                        this.chartDataOnlyRegister.push(Number(this.delcommafy(item.onlyRegister)))
-                        this.chartStock.push(Number(this.delcommafy(item.stock)))
-                        this.chartRefundDeposit.push(Number(this.delcommafy(item.refundDeposit)))
+                        this.chartActiveUser.push(Number(this.delcommafy(item.userCount)))
+                        this.chartActiveRate.push(Number(this.delcommafy(item.activeRate)))
+                        this.chartNewActiveRate.push(Number(this.delcommafy(item.newActiveRate)))
                         this.chartDataX.push(this.cityType === 1?item.cityName:item.time)
-                        // this.chartDataOnlyRegister.push(Number(item.onlyRegister))
-                        // this.chartStock.push(Number(item.stock))
-                        // this.chartRefundDeposit.push(Number(item.refundDeposit))
-                        // this.chartDataX.push(this.cityType === 1?item.cityName:item.time)
                     })
 
-                    console.log('this.chartDataOnlyRegister', this.chartDataOnlyRegister)
-                    console.log('this.chartStock', this.chartStock)
-                    console.log('this.chartRefundDeposit', this.chartRefundDeposit)
+                    console.log('this.chartActiveUser', this.chartActiveUser)
+                    console.log('this.chartActiveRate', this.chartActiveRate)
+                    console.log('this.chartNewActiveRate]', this.chartNewActiveRate)
                     console.log('this.chartDataX', this.chartDataX)
                     this.initChart()
                     this.loadFlag = true
@@ -488,7 +467,7 @@ export default {
         initChart () {
             var options = {
                 title: {
-                    text: '新注册用户统计'
+                    text: '活跃用户统计'
                 },
                 subtitle: {
                     text: this.cityType===1?'':'',
@@ -523,6 +502,28 @@ export default {
                                     color: Highcharts.getOptions().colors[1]
                                 }
                             }
+                        }, {
+                            opposite: true,
+                            tickPositions: [0, 20, 40, 60, 80, 100],
+                            title: {
+                                text: '占比',
+                                style: {
+                                    color: '#9999ff'
+                                }
+                            },
+                            labels: {                        
+                                // formatter:function(){
+                                //     if (Number(this.value) <= 100) {
+                                //         return this.value + '%'
+                                //     } else {
+                                //         return 100 + '%'
+                                //     }
+                                // },
+                                format: '{value}%',
+                                style: {
+                                    color: '#9999ff'
+                                }
+                            }
                         }],
                 legend: {
                     align: 'center',
@@ -538,10 +539,10 @@ export default {
                     useHTML: true,
                     headerFormat: "<p'>{point.key}</p>",
                     pointFormatter:function () {
-                        if (this.series.name != '实收率') {
+                        if (this.series.name === '活跃用户') {
                             return "<span>" + this.series.name + ':  </span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")] + '<br>'
                         } else {
-                            return "<span>" + this.series.name + ':  </span>' + Highcharts.numberFormat(this.y, 1) + '%'
+                            return "<span>" + this.series.name + ':  </span>' + Highcharts.numberFormat(this.y, 1) + '%' + '<br>'
                         }
                     }
                 },
@@ -559,23 +560,27 @@ export default {
                     }
                 },
                 series: [{
-                    name: '仅注册用户数',
+                    name: '活跃用户',
                     type: 'column',
-                    data: this.chartDataOnlyRegister,
+                    data: this.chartActiveUser,
                     yAxis: 0,
                     maxPointWidth: 100
-                }, { 
-                    name: '存量押金用户数',
-                    type: 'column',
-                    data: this.chartStock,
-                    yAxis: 0,
-                    maxPointWidth: 100
-                }, { 
-                    name: '已退押金用户数',
-                    type: 'column',
-                    data: this.chartRefundDeposit,
-                    yAxis: 0,
-                    maxPointWidth: 100
+                }, {
+                    name: '活跃用户占比',
+                    type: 'line',
+                    data: this.chartActiveRate,
+                    tooltip: {
+                        valueSuffix: ''
+                    },
+                    yAxis: 1
+                }, {
+                    name: '活跃新用户占比',
+                    type: 'line',
+                    data: this.chartNewActiveRate,
+                    tooltip: {
+                        valueSuffix: ''
+                    },
+                    yAxis: 1
                 } ]
             }
 

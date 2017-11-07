@@ -7,6 +7,7 @@
         <div class="userAllData_head_time">
             <span>时间:</span>
             <DatePicker v-model="time" :clearable='clearable' @on-change='timeChange' type="date" :options='options' placeholder="选择日期" style="width: 216px;"></DatePicker>
+            <span>*查询数据的截止日期</span>
         </div>
         <div v-if="cityType === 1">
             <city-select></city-select>
@@ -22,7 +23,7 @@
             <div style="color: #ccc; text-indent: 5px;">  loading...</div>
         </Spin>
         <div class="help">
-            <Poptip trigger="hover" style="float: right;"  placement="left" title="数据项说明" content="提示内容" transfer='true'>
+            <Poptip trigger="hover" style="float: right;"  placement="left" title="数据项说明" content="提示内容" :transfer='transfer'>
                 <span>?</span>
                 <div class="content" slot="content">
                     <p><b>累计用户:</b>累计到查询日期的注册用户数</p>
@@ -105,7 +106,11 @@
                     border: 1px solid orange;
                     color: orange;
                 }
-
+                span:nth-of-type(2) {
+                    color: #ccc;
+                    margin-left: 10px;
+                    font-size: 13px;
+                }
             }
         }
         .userAllData_table {
@@ -276,7 +281,8 @@ export default {
                     // return date&&date.valueOf() > now.getDay() - 1
                 }
             },
-            clearable: false
+            clearable: false,
+            transfer: true
         }
     },
     mounted () {

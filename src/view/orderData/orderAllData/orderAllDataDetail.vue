@@ -22,7 +22,7 @@
             <div style="color: #ccc; text-indent: 5px;">  loading...</div>
         </Spin>
         <div class="help">
-            <Poptip trigger="hover" style="float: right;" placement="left-start" title="数据项说明" content="提示内容" transfer='true'>
+            <Poptip trigger="hover" style="float: right;" placement="left-start" title="数据项说明" content="提示内容" :transfer='transfer'>
                 <span>?</span>
                 <div class="content" slot="content">
                     <p><b>订单总数:</b>除运维订单以外所有状态的订单总数</p>
@@ -287,7 +287,8 @@ export default {
                 disabledDate(date) {
                     return date&&date.valueOf()> Date.now() - 86400000
                 }
-            }
+            },
+            transfer: true
         }
     },
     mounted () {

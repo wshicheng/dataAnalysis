@@ -7,6 +7,7 @@
         <div class="userAllDataDetail_head_time">
             <span>时间:</span>
             <DatePicker v-model="time" :clearable='clearable' @on-change='timeChange' type="date" :options='options' placeholder="选择日期" style="width: 216px;"></DatePicker>
+            <span>*查询数据的截止日期</span>        
         </div>
       </div>
 
@@ -98,7 +99,11 @@
                     border: 1px solid orange;
                     color: orange;
                 }
-
+                span:nth-of-type(2) {
+                    color: #ccc;
+                    margin-left: 10px;
+                    font-size: 13px;
+                }
             }
         }
         .userAllDataDetail_table {

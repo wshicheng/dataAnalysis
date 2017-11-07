@@ -22,7 +22,7 @@
         </div>
         <div class="table">
             <div class="help">
-                <Poptip width="" trigger="hover" style="float: right;" placement="top-end" :title="poptipTitle" transfer='true'>
+                <Poptip width="" trigger="hover" style="float: right;" placement="top-end" :title="poptipTitle" :transfer='transfer'>
                     <span>?</span>
                     <div class="content" slot="content">
                         <p>
@@ -364,7 +364,8 @@ export default {
           disabledDate(date) {
               return date&&date.valueOf()> Date.now() - 86400000
           }
-      }
+      },
+      transfer: true
     };
   },
   created: function() {
