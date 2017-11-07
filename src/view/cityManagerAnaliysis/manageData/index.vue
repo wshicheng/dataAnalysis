@@ -60,6 +60,9 @@
                                 </Select>
                             </FormItem>
                         </FormItem>
+                         <FormItem label="型号" class="model" prop="model">
+                            <Input v-model.number="editValidate.model" placeholder="请输入型号"></Input>
+                        </FormItem>
                         <FormItem label="单价" class="price" prop="unitPrice">
                             <Input v-model.number="editValidate.unitPrice" placeholder="请输入单价"></Input>
                         </FormItem>
@@ -326,6 +329,10 @@ div.ivu-modal {
             top: -33px;
         }
         .price {
+           
+            width: 296px;
+        }
+        .model {
             margin-top: -30px;
             width: 296px;
         }
@@ -425,6 +432,7 @@ export default {
                 city: '',
                 bigKind: '',
                 type: '',
+                model:'',
                 smallKind: '',
                 unitPrice: '',
                 number: '',
@@ -470,11 +478,15 @@ export default {
                 },
                 {
                     title: '地区',
-                    key: 'city'
+                    key: 'cityName'
                 },
                 {
-                    title: '大类/小类',
+                    title: '大类/子类',
                     key: 'type'
+                },
+                {
+                    title: '型号',
+                    key: 'model'
                 },
                 {
                     title: '数量',
@@ -778,6 +790,7 @@ export default {
                 this.editValidate.unitPrice = row.unitPrice
                 this.editValidate.number = row.number
                 this.editValidate.id = row.id
+                 this.editValidate.model = row.model
                 // console.log(this.editValidate)
             } else {
                 this.numberShow = false
@@ -790,6 +803,7 @@ export default {
                 this.editValidate.unitPrice = row.unitPrice
                 this.editValidate.number = row.number
                 this.editValidate.id = row.id
+                this.editValidate.model = row.model
                 // console.log(this.editValidate)
             }
         },
@@ -1124,9 +1138,11 @@ export default {
             json = [{
                 "城市": '北京市',
                 "大类": '固定资产',
-                '小类': '车辆',
-                '数量':  29,
-                '单价':  200
+                '子类': '小蜜蜂',
+                '型号':'2.0（铁）',
+                '数量':'2000',
+                '单价':'1,870',
+                '总金额':  29
             }]
             var tmpDown; //导出的二进制对象
             var tmpdata = json[0];

@@ -12,7 +12,15 @@ const extractLESS = new ExtractTextPlugin('stylesheets/[name].[hash].css');
 const extractSASS = new ExtractTextPlugin('stylesheets/[name].[hash].css');
 module.exports = {
     entry: {
-        app:  ["babel-polyfill", "./src/app.js"]
+        app:  ["babel-polyfill", "./src/app.js"],
+       vendor:['jquery','moment','lodash','highcharts'],
+       vue:['vue','vue-router','vuex'],
+       iview:['iview'],
+       lodash:['lodash'],
+       jquery:['jquery','axios'],
+       highcharts:['highcharts'],
+       moment:['moment'],
+       'xlsx':['xlsx']
     },
    
     module: {
