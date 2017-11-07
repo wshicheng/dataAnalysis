@@ -23,7 +23,7 @@ import userDateAndArea from '../view/userData/dateAndArea/index.vue'
 import newUser from '../view/userData/newUser/index.vue'
 import newUserDetail from '../view/userData/newUser/detail.vue'
 import activeUser from '../view/userData/activeUser/index.vue'
-import activeUserDetail from '../view/userData/userAllData/detail.vue'
+import activeUserDetail from '../view/userData/activeUser/detail.vue'
 import userKeep from '../view/userData/userKeep/index.vue'
 
 // 城市经营分析

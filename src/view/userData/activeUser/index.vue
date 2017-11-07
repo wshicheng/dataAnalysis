@@ -230,7 +230,7 @@ export default {
             },
             totalListNum: 100,
             pageSizeOpts: [10, 20, 30, 40],
-            pageSize: 3,
+            pageSize: 10,
             currentPage: 1,
             pageShow: false,
             columns_activeUserData: [
@@ -540,7 +540,7 @@ export default {
                     headerFormat: "<p'>{point.key}</p>",
                     pointFormatter:function () {
                         if (this.series.name === '活跃用户') {
-                            return "<span>" + this.series.name + ':  </span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")] + '<br>'
+                            return "<span>" + this.series.name + ':  </span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 0, "",",")] + '<br>'
                         } else {
                             return "<span>" + this.series.name + ':  </span>' + Highcharts.numberFormat(this.y, 1) + '%' + '<br>'
                         }
