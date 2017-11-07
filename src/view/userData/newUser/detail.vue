@@ -24,7 +24,7 @@
             <div style="color: #ccc; text-indent: 5px;">  loading...</div>
         </Spin>
         <div class="help">
-            <Poptip trigger="hover" style="float: right;" placement="left-start" title="数据项说明" content="提示内容" transfer='true'>
+            <Poptip trigger="hover" style="float: right;" placement="left-start" title="数据项说明" content="提示内容" :transfer='transfer'>
                 <span>?</span>
                 <div class="content" slot="content">
                     <p><b>新注册用户:</b>所选时间段内新注册的用户数</p>
@@ -221,7 +221,7 @@ export default {
             },
             totalListNum: 100,
             pageSizeOpts: [10, 20, 30, 40],
-            pageSize: 2,
+            pageSize: 10,
             currentPage: 1,
             pageShow: false,
             city: '',
@@ -272,11 +272,12 @@ export default {
                 disabledDate(date) {
                     return date&&date.valueOf()> Date.now() - 86400000
                 }
-            }
+            },
+            transfer: true
         }
     },
     mounted () {
-        document.title = '用户数据 - 分地区数据详情'
+        document.title = '用户数据 - 新用户详情'
         this.loadData("3")
     },
     methods: {

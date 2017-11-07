@@ -28,7 +28,7 @@
                         <div style="color: #ccc; text-indent: 5px;">  loading...</div>
                     </Spin>
                     <div class="help">
-                        <Poptip trigger="hover" style="float: right;"  placement="top" title="数据项说明" content="提示内容" transfer='true'>
+                        <Poptip trigger="hover" style="float: right;"  placement="top" title="数据项说明" content="提示内容" :transfer='transfer'>
                             <span>?</span>
                             <div class="content" slot="content">
                                 <p><b>新注册用户:</b>所选时间段内新注册的用户数</p>
@@ -745,7 +745,8 @@ export default {
                     return date&&date.valueOf()> Date.now() - 86400000
                     // return date&&date.valueOf() > now.getDay() - 1
                 }
-            }
+            },
+            transfer: true
         }
     },
     mounted () {
