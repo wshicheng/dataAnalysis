@@ -512,6 +512,7 @@ export default {
             
             this.editModal = true
             this.editValidate = params.row
+            console.log('this.editValidate', this.editValidate)
             this.editValidate.passWord='********'
             this.index = params.index
             this.recodeCityList = params.row.cityList.map((item)=>{return item.name})

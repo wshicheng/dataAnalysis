@@ -268,7 +268,6 @@ export default {
             }
         },
         loadData () {
-            this.currentPage = 1
             this.spinShow = true
             this.spinShow2 = true
             this.noDataText = ''

@@ -332,7 +332,6 @@ export default {
             console.log(column,key,order)
         },
         loadData (type) {
-            this.currentPage = 1
             this.spinShow = true
             this.spinShow2 = true
             this.noDataText = ''

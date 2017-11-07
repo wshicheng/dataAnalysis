@@ -319,7 +319,6 @@ export default {
             }
         },
         loadData () {
-            this.currentPage = 1
             this.spinShow = true
             this.spinShow2 = true
             this.noDataText = ''
@@ -418,6 +417,7 @@ export default {
         },
         handleCurrentPage(currentPage) {
             this.currentPage = currentPage
+            console.log('this.currentPag', this.currentPage)
             if (this.loadFlag === true) {
                 this.loadData()
             }
