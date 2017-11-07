@@ -13,7 +13,7 @@ const extractSASS = new ExtractTextPlugin('stylesheets/[name].[hash].css');
 module.exports = {
     entry: {
         app:  ["babel-polyfill", "./src/app.js"],
-       //  vendor:['jquery','moment','lodash','highcharts']
+       vendor:['jquery','moment','lodash','highcharts'],
        vue:['vue','vue-router','vuex'],
        iview:['iview'],
        lodash:['lodash'],
