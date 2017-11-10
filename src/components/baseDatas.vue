@@ -41,38 +41,52 @@ export default {
                     }
                 },
                 {
-                    "title": "车辆",
+                    "title": "小蜜蜂",
                     "width": 350,
                     renderHeader: (h) => {
                         return h('div', [
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                    background:'#7eb5e0',
+                                    background:'#d6dce4',
                                     lineHeight:'30px',
                                     height:'30px',
-                                    borderBottom: '1px solid #e9eaec'
+                                    // borderBottom: '1px solid #e9eaec'
+                                    borderBottom: '1px solid #d6dce4'
                                 }
-                            }, '车辆'),
+                            }, '小蜜蜂'),
                             h('div', [
+                                 h('span', {
+                                    style: {
+                                       display: 'inline-block', float:'left',height:'30px',
+                                        lineHeight: '30px',
+                                        width: '33.3%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: '1px solid #d6dce4',
+                                        backgroundColor:'#d6dce4'
+                                    }
+                                }, '型号'),
                                 h('span', {
                                     style: {
                                        display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
-                                        width: '50%',
+                                        width: '33.3%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: '1px solid #e9eaec'
+                                        borderRight: '1px solid #d6dce4',
+                                        backgroundColor:'#d6dce4'
                                     }
                                 }, '数量'),
                                 h('span', {
                                     style: {
                                        display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
-                                        width: '50%',
+                                        width: '33.3%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: 'none'
+                                        borderRight: '1px solid none',
+                                        backgroundColor:'#d6dce4'
                                     }
                                 }, '金额')
 
@@ -81,21 +95,31 @@ export default {
                     },
                     render: (h, params) => {
                         return h('div', [
+                             h('span', {
+                                style: {
+                                   display: 'inline-block', float:'left',height:'30px',
+                                    lineHeight: '30px',
+                                     width: '33.3%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #d6dce4'
+                                }
+                            }, params.row.beefly.bikeModel),
                             h('span', {
                                 style: {
                                    display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
-                                    width: '50%',
+                                     width: '33.3%',
                                     textAlign: 'center',
                                     borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
+                                    borderRight: '1px solid #d6dce4'
                                 }
                             }, params.row.beefly.num),
                             h('span', {
                                 style: {
                                    display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
-                                    width: '50%',
+                                    width: '33.3%',
                                     textAlign: 'center',
                                     borderBox: 'box-sizing',
                                     borderRight: 'none'
@@ -112,31 +136,44 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                    background:'#7eb5e0',
+                                    background:'#d6dce4',
                                      lineHeight:'30px',
                                     height:'30px',
-                                    borderBottom: '1px solid #e9eaec'
+                                    borderBottom: '1px solid #d6dce4'
                                 }
                             }, '电池'),
                             h('div', [
+                                 h('span', {
+                                    style: {
+                                       display: 'inline-block', float:'left',height:'30px',
+                                        lineHeight: '30px',
+                                        width: '33.3%',
+                                        textAlign: 'center',
+                                        borderBox: 'box-sizing',
+                                        borderRight: '1px solid #d6dce4',
+                                         backgroundColor:'#d6dce4'
+                                    }
+                                }, '型号'),
                                 h('span', {
                                     style: {
                                        display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
-                                        width: '50%',
+                                          width: '33.3%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: '1px solid #e9eaec'
+                                        borderRight: '1px solid #d6dce4',
+                                         backgroundColor:'#d6dce4'
                                     }
                                 }, '数量'),
                                 h('span', {
                                     style: {
                                        display: 'inline-block', float:'left',height:'30px',
                                         lineHeight: '30px',
-                                        width: '50%',
+                                           width: '33.3%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: 'none'
+                                        borderRight: 'none',
+                                         backgroundColor:'#d6dce4'
                                     }
                                 }, '金额')
 
@@ -145,23 +182,35 @@ export default {
                     },
                     render: (h, params) => {
                         return h('div', [
-                            h('span', {
+                             h('span', {
                                 style: {
                                    display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
-                                    width: '50%',
+                                    width: '33.3%',
                                     float:'left',
                                     height:'30px',
                                     textAlign: 'center',
                                     borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
+                                    borderRight: '1px solid #d6dce4'
+                                }
+                            }, params.row.Battery.battModel),
+                            h('span', {
+                                style: {
+                                   display: 'inline-block', float:'left',height:'30px',
+                                    lineHeight: '30px',
+                                     width: '33.3%',
+                                    float:'left',
+                                    height:'30px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #d6dce4'
                                 }
                             }, params.row.Battery.num),
                             h('span', {
                                 style: {
                                    display: 'inline-block', float:'left',height:'30px',
                                     lineHeight: '30px',
-                                    width: '50%',
+                                     width: '33.3%',
                                      float:'left',
                                     height:'30px',
                                     textAlign: 'center',
@@ -173,19 +222,19 @@ export default {
                     }
                 },
                 {
-                    "title": "充电站",
+                    "title": "电站",
                     "width": 350,
                     renderHeader: (h) => {
                         return h('div', [
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                    background:'#7eb5e0',
+                                    background:'#d6dce4',
                                      lineHeight:'30px',
                                     height:'30px',
-                                    borderBottom: '1px solid #e9eaec'
+                                    borderBottom: '1px solid #d6dce4'
                                 }
-                            }, '充电站'),
+                            }, '电站'),
                             h('div', [
                                 h('span', {
                                     style: {
@@ -194,7 +243,8 @@ export default {
                                         width: '50%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: '1px solid #e9eaec'
+                                        borderRight: '1px solid #d6dce4',
+                                        backgroundColor:'#d6dce4'
                                     }
                                 }, '建设'),
                                 h('span', {
@@ -204,9 +254,10 @@ export default {
                                         width: '50%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: 'none'
+                                        borderRight: 'none',
+                                        backgroundColor:'#d6dce4'
                                     }
-                                }, '电柜')
+                                }, '设备')
 
                             ])
                         ])
@@ -220,7 +271,7 @@ export default {
                                     width: '50%',
                                     textAlign: 'center',
                                     borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
+                                    borderRight: '1px solid #d6dce4'
                                 }
                             }, params.row.ChargingStation.build),
                             h('span', {
@@ -244,10 +295,10 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                    background:'#7eb5e0',
+                                    background:'#d6dce4',
                                      lineHeight:'30px',
                                     height:'30px',
-                                    borderBottom: '1px solid #e9eaec'
+                                    borderBottom: '1px solid #d6dce4'
                                 }
                             }, '机动车'),
                             h('div', [
@@ -258,7 +309,8 @@ export default {
                                         width: '50%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: '1px solid #e9eaec'
+                                        borderRight: '1px solid #d6dce4',
+                                        backgroundColor:'#d6dce4'
                                     }
                                 }, '数量'),
                                 h('span', {
@@ -268,7 +320,8 @@ export default {
                                         width: '50%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: 'none'
+                                        borderRight: 'none',
+                                        backgroundColor:'#d6dce4'
                                     }
                                 }, '金额')
 
@@ -284,7 +337,7 @@ export default {
                                     width: '50%',
                                     textAlign: 'center',
                                     borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
+                                    borderRight: '1px solid #d6dce4'
                                 }
                             }, params.row.Tricycle.num),
                             h('span', {
@@ -308,10 +361,10 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                    background:'#7eb5e0',
+                                    background:'#d6dce4',
                                      lineHeight:'30px',
                                     height:'30px',
-                                    borderBottom: '1px solid #e9eaec'
+                                    borderBottom: '1px solid #d6dce4'
                                 }
                             }, '运维工具车'),
                             h('div', [
@@ -322,7 +375,8 @@ export default {
                                         width: '50%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: 'none'
+                                        borderRight: '1px solid #d6dce4',
+                                        backgroundColor:'#d6dce4'
                                     }
                                 }, '数量'),
                                 h('span', {
@@ -332,7 +386,8 @@ export default {
                                         width: '50%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: 'none'
+                                        borderRight: 'none',
+                                        backgroundColor:'#d6dce4'
                                     }
                                 }, '金额')
 
@@ -365,32 +420,32 @@ export default {
                     }
                 },
                 {
-                    "title": "物流成本",
+                    "title": "物流",
                     "width": 350,
                     renderHeader: (h) => {
                         return h('div', [
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                    background:'#7eb5e0',
-                                     lineHeight:'30px',
-                                    height:'30px',
-                                    borderBottom: '1px solid #e9eaec'
+                                    background:'#d6dce4',
+                                     lineHeight:'60px',
+                                    height:'60px',
+                                    borderBottom: '1px solid #d6dce4'
                                 }
-                            }, '物流成本'),
-                            h('div', [
-                                h('span', {
-                                    style: {
-                                       display: 'inline-block', float:'left',height:'30px',
-                                        lineHeight: '30px',
-                                        width: '100%',
-                                        textAlign: 'center',
-                                        borderBox: 'box-sizing',
-                                        borderRight: 'none'
-                                    }
-                                }, '金额')
+                            }, '物流'),
+                            // h('div', [
+                            //     h('span', {
+                            //         style: {
+                            //            display: 'inline-block', float:'left',height:'30px',
+                            //             lineHeight: '30px',
+                            //             width: '100%',
+                            //             textAlign: 'center',
+                            //             borderBox: 'box-sizing',
+                            //             borderRight: 'none'
+                            //         }
+                            //     }, '金额')
 
-                            ])
+                            // ])
                         ])
                     },
                     render: (h, params) => {
@@ -408,50 +463,50 @@ export default {
                         ])
                     }
                 },
-                {
-                    "title": "办公成本",
-                    "width": 350,
-                    renderHeader: (h) => {
-                        return h('div', [
-                            h('div', {
-                                style: {
-                                    textAlign: 'center',
-                                    background:'#7eb5e0',
-                                     lineHeight:'30px',
-                                    height:'30px',
-                                    borderBottom: '1px solid #e9eaec'
-                                }
-                            }, '办公成本'),
-                            h('div', [
-                                h('span', {
-                                    style: {
-                                       display: 'inline-block', float:'left',height:'30px',
-                                        lineHeight: '30px',
-                                        width: '100%',
-                                        textAlign: 'center',
-                                        borderBox: 'box-sizing',
-                                        borderRight: 'none'
-                                    }
-                                }, '金额')
+                // {
+                //     "title": "办公成本",
+                //     "width": 350,
+                //     renderHeader: (h) => {
+                //         return h('div', [
+                //             h('div', {
+                //                 style: {
+                //                     textAlign: 'center',
+                //                     background:'#7eb5e0',
+                //                      lineHeight:'30px',
+                //                     height:'30px',
+                //                     borderBottom: '1px solid #e9eaec'
+                //                 }
+                //             }, '办公成本'),
+                //             h('div', [
+                //                 h('span', {
+                //                     style: {
+                //                        display: 'inline-block', float:'left',height:'30px',
+                //                         lineHeight: '30px',
+                //                         width: '100%',
+                //                         textAlign: 'center',
+                //                         borderBox: 'box-sizing',
+                //                         borderRight: 'none'
+                //                     }
+                //                 }, '金额')
 
-                            ])
-                        ])
-                    },
-                    render: (h, params) => {
-                        return h('div', [
-                            h('span', {
-                                style: {
-                                   display: 'inline-block', float:'left',height:'30px',
-                                    lineHeight: '30px',
-                                    width: '100%',
-                                    textAlign: 'center',
-                                    borderBox: 'box-sizing',
-                                    borderRight: 'none'
-                                }
-                            }, params.row.officeCost.money)
-                        ])
-                    }
-                },
+                //             ])
+                //         ])
+                //     },
+                //     render: (h, params) => {
+                //         return h('div', [
+                //             h('span', {
+                //                 style: {
+                //                    display: 'inline-block', float:'left',height:'30px',
+                //                     lineHeight: '30px',
+                //                     width: '100%',
+                //                     textAlign: 'center',
+                //                     borderBox: 'box-sizing',
+                //                     borderRight: 'none'
+                //                 }
+                //             }, params.row.officeCost.money)
+                //         ])
+                //     }
+                // },
                 {
                     "title": "其他",
                     "width": 350,
@@ -460,25 +515,25 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                    background:'#7eb5e0',
-                                     lineHeight:'30px',
-                                    height:'30px',
-                                    borderBottom: '1px solid #e9eaec'
+                                    background:'#d6dce4',
+                                     lineHeight:'60px',
+                                    height:'60px',
+                                    borderBottom: '1px solid #d6dce4'
                                 }
                             }, '其他'),
-                            h('div', [
-                                h('span', {
-                                    style: {
-                                       display: 'inline-block', float:'left',height:'30px',
-                                        lineHeight: '30px',
-                                        width: '100%',
-                                        textAlign: 'center',
-                                        borderBox: 'box-sizing',
-                                        borderRight: 'none'
-                                    }
-                                }, '金额')
+                            // h('div', [
+                            //     h('span', {
+                            //         style: {
+                            //            display: 'inline-block', float:'left',height:'30px',
+                            //             lineHeight: '30px',
+                            //             width: '100%',
+                            //             textAlign: 'center',
+                            //             borderBox: 'box-sizing',
+                            //             borderRight: 'none'
+                            //         }
+                            //     }, '金额')
 
-                            ])
+                            // ])
                         ])
                     },
                     render: (h, params) => {
@@ -496,33 +551,121 @@ export default {
                         ])
                     }
                 },
-                {
-                    "title": "人员成本",
+                  {
+                    "title": "小计",
                     "width": 350,
                     renderHeader: (h) => {
                         return h('div', [
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                    background:'#f2b5af',
-                                     lineHeight:'30px',
-                                    height:'30px',
-                                    borderBottom: '1px solid #e9eaec'
+                                    background:'#d6dce4',
+                                     lineHeight:'60px',
+                                    height:'60px',
+                                    borderBottom: '1px solid #d6dce4'
                                 }
-                            }, '人员成本'),
-                            h('div', [
-                                h('span', {
-                                    style: {
-                                       display: 'inline-block', float:'left',height:'30px',
-                                        lineHeight: '30px',
-                                        width: '100%',
-                                        textAlign: 'center',
-                                        borderBox: 'box-sizing',
-                                        borderRight: 'none'
-                                    }
-                                }, '金额')
+                            }, '小计'),
+                            // h('div', [
+                            //     h('span', {
+                            //         style: {
+                            //            display: 'inline-block', float:'left',height:'30px',
+                            //             lineHeight: '30px',
+                            //             width: '100%',
+                            //             textAlign: 'center',
+                            //             borderBox: 'box-sizing',
+                            //             borderRight: 'none'
+                            //         }
+                            //     }, '金额')
 
-                            ])
+                            // ])
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
+                                style: {
+                                   display: 'inline-block', float:'left',height:'30px',
+                                    lineHeight: '30px',
+                                    width: '100%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: 'none'
+                                }
+                            }, params.row.assetsTotal.money)
+                        ])
+                    }
+                },
+                   {
+                    "title": "薪资福利",
+                    "width": 350,
+                    renderHeader: (h) => {
+                        return h('div', [
+                            h('div', {
+                                style: {
+                                    textAlign: 'center',
+                                    background:'#f8cbad',
+                                     lineHeight:'60px',
+                                    height:'60px',
+                                    borderBottom: '1px solid #f8cbad'
+                                }
+                            }, '薪资福利'),
+                            // h('div', [
+                            //     h('span', {
+                            //         style: {
+                            //            display: 'inline-block', float:'left',height:'30px',
+                            //             lineHeight: '30px',
+                            //             width: '100%',
+                            //             textAlign: 'center',
+                            //             borderBox: 'box-sizing',
+                            //             borderRight: 'none'
+                            //         }
+                            //     }, '金额')
+
+                            // ])
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
+                                style: {
+                                   display: 'inline-block', float:'left',height:'30px',
+                                    lineHeight: '30px',
+                                    width: '100%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: 'none'
+                                }
+                            }, params.row.salaryMoney.money)
+                        ])
+                    }
+                },
+                {
+                    "title": "其他人员成本",
+                    "width": 350,
+                    renderHeader: (h) => {
+                        return h('div', [
+                            h('div', {
+                                style: {
+                                    textAlign: 'center',
+                                    background:'#f8cbad',
+                                     lineHeight:'60px',
+                                    height:'60px',
+                                    borderBottom: '1px solid #f8cbad'
+                                }
+                            }, '其他人员成本'),
+                            // h('div', [
+                            //     h('span', {
+                            //         style: {
+                            //            display: 'inline-block', float:'left',height:'30px',
+                            //             lineHeight: '30px',
+                            //             width: '100%',
+                            //             textAlign: 'center',
+                            //             borderBox: 'box-sizing',
+                            //             borderRight: 'none'
+                            //         }
+                            //     }, '金额')
+
+                            // ])
                         ])
                     },
                     render: (h, params) => {
@@ -548,25 +691,25 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                     background:'#f2b5af',
-                                      lineHeight:'30px',
-                                    height:'30px',
-                                    borderBottom: '1px solid #e9eaec'
+                                     background:'#f8cbad',
+                                      lineHeight:'60px',
+                                    height:'60px',
+                                    borderBottom: '1px solid #f8cbad'
                                 }
-                            }, '房租生产'),
-                            h('div', [
-                                h('span', {
-                                    style: {
-                                       display: 'inline-block', float:'left',height:'30px',
-                                        lineHeight: '30px',
-                                        width: '100%',
-                                        textAlign: 'center',
-                                        borderBox: 'box-sizing',
-                                        borderRight: 'none'
-                                    }
-                                }, '金额')
+                            }, '房租（生产）'),
+                            // h('div', [
+                            //     h('span', {
+                            //         style: {
+                            //            display: 'inline-block', float:'left',height:'30px',
+                            //             lineHeight: '30px',
+                            //             width: '100%',
+                            //             textAlign: 'center',
+                            //             borderBox: 'box-sizing',
+                            //             borderRight: 'none'
+                            //         }
+                            //     }, '金额')
 
-                            ])
+                            // ])
                         ])
                     },
                     render: (h, params) => {
@@ -592,25 +735,25 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                     background:'#f2b5af',
-                                      lineHeight:'30px',
-                                    height:'30px',
-                                    borderBottom: '1px solid #e9eaec'
+                                     background:'#f8cbad',
+                                      lineHeight:'60px',
+                                    height:'60px',
+                                    borderBottom: '1px solid #f8cbad'
                                 }
-                            }, '水电生产'),
-                            h('div', [
-                                h('span', {
-                                    style: {
-                                       display: 'inline-block', float:'left',height:'30px',
-                                        lineHeight: '30px',
-                                        width: '100%',
-                                        textAlign: 'center',
-                                        borderBox: 'box-sizing',
-                                        borderRight: 'none'
-                                    }
-                                }, '金额')
+                            }, '水电（生产）'),
+                            // h('div', [
+                            //     h('span', {
+                            //         style: {
+                            //            display: 'inline-block', float:'left',height:'30px',
+                            //             lineHeight: '30px',
+                            //             width: '100%',
+                            //             textAlign: 'center',
+                            //             borderBox: 'box-sizing',
+                            //             borderRight: 'none'
+                            //         }
+                            //     }, '金额')
 
-                            ])
+                            // ])
                         ])
                     },
                     render: (h, params) => {
@@ -628,6 +771,50 @@ export default {
                         ])
                     }
                 },
+                   {
+                    "title": "其他生产成本",
+                    "width": 350,
+                    renderHeader: (h) => {
+                        return h('div', [
+                            h('div', {
+                                style: {
+                                    textAlign: 'center',
+                                    background:'#f8cbad',
+                                     lineHeight:'60px',
+                                    height:'60px',
+                                    borderBottom: '1px solid #f8cbad'
+                                }
+                            }, '其他生产成本'),
+                            // h('div', [
+                            //     h('span', {
+                            //         style: {
+                            //            display: 'inline-block', float:'left',height:'30px',
+                            //             lineHeight: '30px',
+                            //             width: '100%',
+                            //             textAlign: 'center',
+                            //             borderBox: 'box-sizing',
+                            //             borderRight: 'none'
+                            //         }
+                            //     }, '金额')
+
+                            // ])
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
+                                style: {
+                                   display: 'inline-block', float:'left',height:'30px',
+                                    lineHeight: '30px',
+                                    width: '100%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: 'none'
+                                }
+                            }, params.row.operationMoney.money)
+                        ])
+                    }
+                },
                 {
                     "title": "经营费用",
                     "width": 350,
@@ -636,25 +823,25 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                    background:'#f2b5af',
-                                     lineHeight:'30px',
-                                    height:'30px',
-                                    borderBottom: '1px solid #e9eaec'
+                                    background:'#f8cbad',
+                                     lineHeight:'60px',
+                                    height:'60px',
+                                    borderBottom: '1px solid #f8cbad'
                                 }
-                            }, '经营费用'),
-                            h('div', [
-                                h('span', {
-                                    style: {
-                                       display: 'inline-block', float:'left',height:'30px',
-                                        lineHeight: '30px',
-                                        width: '100%',
-                                        textAlign: 'center',
-                                        borderBox: 'box-sizing',
-                                        borderRight: 'none'
-                                    }
-                                }, '金额')
+                            }, '其他经营费用'),
+                            // h('div', [
+                            //     h('span', {
+                            //         style: {
+                            //            display: 'inline-block', float:'left',height:'30px',
+                            //             lineHeight: '30px',
+                            //             width: '100%',
+                            //             textAlign: 'center',
+                            //             borderBox: 'box-sizing',
+                            //             borderRight: 'none'
+                            //         }
+                            //     }, '金额')
 
-                            ])
+                            // ])
                         ])
                     },
                     render: (h, params) => {
@@ -680,25 +867,25 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                    background:'#f2b5af',
-                                     lineHeight:'30px',
-                                    height:'30px',
-                                    borderBottom: '1px solid #e9eaec'
+                                    background:'#f8cbad',
+                                     lineHeight:'60px',
+                                    height:'60px',
+                                    borderBottom: '1px solid #f8cbad'
                                 }
                             }, '开城费用'),
-                            h('div', [
-                                h('span', {
-                                    style: {
-                                       display: 'inline-block', float:'left',height:'30px',
-                                        lineHeight: '30px',
-                                        width: '100%',
-                                        textAlign: 'center',
-                                        borderBox: 'box-sizing',
-                                        borderRight: 'none'
-                                    }
-                                }, '金额')
+                            // h('div', [
+                            //     h('span', {
+                            //         style: {
+                            //            display: 'inline-block', float:'left',height:'30px',
+                            //             lineHeight: '30px',
+                            //             width: '100%',
+                            //             textAlign: 'center',
+                            //             borderBox: 'box-sizing',
+                            //             borderRight: 'none'
+                            //         }
+                            //     }, '金额')
 
-                            ])
+                            // ])
                         ])
                     },
                     render: (h, params) => {
@@ -716,11 +903,55 @@ export default {
                         ])
                     }
                 },
+                  {
+                    "title": "小计",
+                    "width": 350,
+                    renderHeader: (h) => {
+                        return h('div', [
+                            h('div', {
+                                style: {
+                                    textAlign: 'center',
+                                    background:'#f8cbad',
+                                     lineHeight:'60px',
+                                    height:'60px',
+                                    borderBottom: '1px solid #f8cbad'
+                                }
+                            }, '小计'),
+                            // h('div', [
+                            //     h('span', {
+                            //         style: {
+                            //            display: 'inline-block', float:'left',height:'30px',
+                            //             lineHeight: '30px',
+                            //             width: '100%',
+                            //             textAlign: 'center',
+                            //             borderBox: 'box-sizing',
+                            //             borderRight: 'none'
+                            //         }
+                            //     }, '金额')
+
+                            // ])
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
+                                style: {
+                                   display: 'inline-block', float:'left',height:'30px',
+                                    lineHeight: '30px',
+                                    width: '100%',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.operationTotal.money)
+                        ])
+                    }
+                },
                 {
                     title: '合计',
                     key: 'total',
                     width: 100,
-                    fixed: 'right',
+                    fixed: 'left',
                     render: (h, params) => {
                         return h('div',  params.row.total.money)
                     },
@@ -745,11 +976,13 @@ export default {
                     cityName: '',
                     //车辆数量
                     beefly: {
+                        model:'',
                         num: '',
                         money: '',
                     },
                     //电池
                     Battery: {
+                         model:'',
                         num: '',
                         money: '',
                     },
@@ -772,12 +1005,20 @@ export default {
                     transCost: {
                         money: ''
                     },
-                    //办公成本
-                    officeCost: {
-                        money: ''
-                    },
+                    // //办公成本
+                    // officeCost: {
+                    //     money: ''
+                    // },
                     // 其他金额
                     otherCost: {
+                        money: ''
+                    },
+                     // 固定资产小计
+                    assetsTotal: {
+                        money: ''
+                    },
+                     // 薪资福利
+                    salaryMoney: {
                         money: ''
                     },
                     // 人员成本
@@ -792,11 +1033,20 @@ export default {
                     hydropoer: {
                         money: ''
                     },
+                    
+                     // 其他生产成本
+                    operationMoney: {
+                        money: ''
+                    },
                     // 经营费用
                     manageCost: {
                         money: ''
                     },
                     openCost: {
+                        money: ''
+                    },
+                    //运维费用小计
+                    operationTotal: {
                         money: ''
                     },
                     total: {
@@ -839,14 +1089,16 @@ export default {
                             arr.push(
                                     {
                                         // 城市
-                                        cityName: data[i].city,
+                                        cityName: data[i].cityName,
                                         //车辆数量
                                         beefly: {
+                                            bikeModel:data[i].bikeModel,
                                             num: data[i].bikeNum,
                                             money: data[i].bikeMoney,
                                         },
                                         //电池
                                         Battery: {
+                                            battModel:data[i].battModel,
                                             num: data[i].battNum,
                                             money: data[i].battMoney,
                                         },
@@ -869,13 +1121,21 @@ export default {
                                         transCost: {
                                             money: data[i].transMoney
                                         },
-                                        //办公成本
-                                        officeCost: {
-                                            money: data[i].officeMoney
-                                        },
+                                        // //办公成本
+                                        // officeCost: {
+                                        //     money: data[i].officeMoney
+                                        // },
                                         // 其他金额
                                         otherCost: {
                                             money: data[i].otherMoney
+                                        },
+                                        // 固定资产小计
+                                         assetsTotal: {
+                                            money: data[i].assetsTotal
+                                        },
+                                         // 薪资福利
+                                        salaryMoney: {
+                                            money: data[i].personnelMoney
                                         },
                                         // 人员成本
                                         personnelCost: {
@@ -889,12 +1149,19 @@ export default {
                                         hydropoer: {
                                             money: data[i].hydropower
                                         },
+                                         // 其他生产成本
+                                        operationMoney: {
+                                            money: data[i].operationMoney
+                                        },
                                         // 经营费用
                                         manageCost: {
                                             money: data[i].manageMoney
                                         },
                                         openCost: {
                                             money: data[i].openMoney
+                                        },
+                                        operationTotal: {
+                                            money: data[i].operationTotal
                                         },
                                         total: {
                                             money: data[i].total
@@ -907,99 +1174,137 @@ export default {
                             this.countObj = data.pop()
                             var obj = this.countObj
                                     var html = `
-                                        <tr class="ivu-table-row">
-                        <td class="middle">
-                            <div class="ivu-table-cell">
-                                <div>合计</div>
-                            </div>
-                        </td>
-                        <td class="ivu-table-column-center">
-                            <div class="ivu-table-cell">
-                                <div style="height: 30px;">
-                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.bikeNum}</span>
-                                    <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">${obj.bikeMoney}</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="ivu-table-column-center">
-                            <div class="ivu-table-cell">
-                                <div style="height: 30px;">
-                                    <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.battNum}</span>
-                                    <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">${obj.battMoney}</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="ivu-table-column-center">
-                            <div class="ivu-table-cell">
-                                <div style="height: 30px;">
-                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.chargeBuild}</span>
-                                    <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">${obj.chargeCabinet}</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="ivu-table-column-center">
-                            <div class="ivu-table-cell">
-                                <div style="height: 30px;">
-                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.truckNum}</span>
-                                    <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">${obj.truckMoney}</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="ivu-table-column-center">
-                            <div class="ivu-table-cell">
-                                <div style="height: 30px;">
-                                <span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${obj.carNum}</span>
-                                    <span
-                                        style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">${obj.carMoney }</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="ivu-table-column-center">
-                            <div class="ivu-table-cell">
-                                <div>${obj.transMoney}</div>
-                            </div>
-                        </td>
-                        <td class="ivu-table-column-center">
-                            <div class="ivu-table-cell">
-                                <div>${obj.officeMoney }</div>
-                            </div>
-                        </td>
-                        <td class="ivu-table-column-center">
-                            <div class="ivu-table-cell">
-                                <div>${obj.otherMoney}</div>
-                            </div>
-                        </td>
-                        <td class="ivu-table-column-center">
-                            <div class="ivu-table-cell">
-                                <div>${obj.personnelMoney}</div>
-                            </div>
-                        </td>
-                        <td class="ivu-table-column-center">
-                            <div class="ivu-table-cell">
-                                <div>${obj.rentMoney}</div>
-                            </div>
-                        </td>
-                        <td class="ivu-table-column-center">
-                            <div class="ivu-table-cell">
-                                <div>${obj.hydropower}</div>
-                            </div>
-                        </td>
-                        <td class="ivu-table-column-center">
-                            <div class="ivu-table-cell">
-                                <div>${obj.manageMoney}</div>
-                            </div>
-                        </td>
-                        <td class="ivu-table-column-center">
-                            <div class="ivu-table-cell">
-                                <div>${obj.openMoney}</div>
-                            </div>
-                        </td>
-                    
-                    </tr>
+                                       <tr class="ivu-table-row">
+    <td class="">
+        <div class="ivu-table-cell ">
+            <div style="text-align: center; height: 30px; line-height: 30px;">合计</div>
+        </div>
+    </td>
+    <td class="">
+        <div class="ivu-table-cell ">
+            <div>${obj.total}</div>
+        </div>
+    </td>
+    <td class="">
+        <div class="ivu-table-cell">
+            <div>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 33.3%; text-align: center; border-right: 1px solid rgb(214, 220, 228);">${obj.bikeModel}</span>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 33.3%; text-align: center; border-right: 1px solid rgb(214, 220, 228);">${obj.bikeNum}</span>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 33.3%; text-align: center; border-right: none;">${obj.bikeMoney}</span>
+            </div>
+        </div>
+    </td>
+    <td class="">
+        <div class="ivu-table-cell">
+            <div>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 33.3%; text-align: center; border-right: 1px solid rgb(214, 220, 228);">${obj.battModel}</span>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 33.3%; text-align: center; border-right: 1px solid rgb(214, 220, 228);">${obj.battNum}</span>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 33.3%; text-align: center; border-right: none;">${obj.battMoney}</span>
+            </div>
+        </div>
+    </td>
+    <td class="">
+        <div class="ivu-table-cell">
+            <div>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(214, 220, 228);">${obj.chargeBuild}</span>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 50%; text-align: center; border-right: none;">${obj.chargeCabinet}</span>
+            </div>
+        </div>
+    </td>
+    <td class="">
+        <div class="ivu-table-cell">
+            <div>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(214, 220, 228);">${obj.truckNum}</span>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 50%; text-align: center; border-right: none;">${obj.truckMoney}</span>
+            </div>
+        </div>
+    </td>
+    <td class="">
+        <div class="ivu-table-cell">
+            <div>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${obj.carNum}</span>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${obj.carMoney}</span>
+            </div>
+        </div>
+    </td>
+    <td class="">
+        <div class="ivu-table-cell">
+            <div>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: none;">${obj.transMoney}</span>
+            </div>
+        </div>
+    </td>
+    <td class="">
+        <div class="ivu-table-cell">
+            <div>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: none;">${obj.otherMoney}</span>
+            </div>
+        </div>
+    </td>
+    <td class="">
+        <div class="ivu-table-cell">
+            <div>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: none;">${obj.assetsTotal}</span>
+            </div>
+        </div>
+    </td>
+    <td class="">
+        <div class="ivu-table-cell">
+            <div>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: none;">${obj.salaryMoney}</span>
+            </div>
+        </div>
+    </td>
+    <td class="">
+        <div class="ivu-table-cell">
+            <div>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: none;">${obj.personnelMoney}</span>
+            </div>
+        </div>
+    </td>
+    <td class="">
+        <div class="ivu-table-cell">
+            <div>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: none;">${obj.rentMoney}</span>
+            </div>
+        </div>
+    </td>
+    <td class="">
+        <div class="ivu-table-cell">
+            <div>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: none;">${obj.hydropower}</span>
+            </div>
+        </div>
+    </td>
+    <td class="">
+        <div class="ivu-table-cell">
+            <div>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: none;">${obj.operationMoney}</span>
+            </div>
+        </div>
+    </td>
+    <td class="">
+        <div class="ivu-table-cell">
+            <div>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: none;">${obj.manageMoney}</span>
+            </div>
+        </div>
+    </td>
+    <td class="">
+        <div class="ivu-table-cell">
+            <div>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${obj.openMoney}</span>
+            </div>
+        </div>
+    </td>
+    <td class="">
+        <div class="ivu-table-cell">
+            <div>
+                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${obj.operationTotal}</span>
+            </div>
+        </div>
+    </td>
+</tr>
                                         `
                             $('div.ivu-tabs-tabpane').eq(0).find('.ivu-table-header').find('table').width('100%')
                             $('div.ivu-tabs-tabpane').eq(0).find('.ivu-table-body').find('table').width('100%')

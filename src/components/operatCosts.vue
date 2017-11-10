@@ -56,7 +56,7 @@ export default {
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '10%',
+                                        width: 'calc(100% / 9)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
@@ -66,7 +66,7 @@ export default {
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '10%',
+                                        width: 'calc(100% / 9)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
@@ -76,7 +76,7 @@ export default {
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '10%',
+                                         width: 'calc(100% / 9)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
@@ -86,7 +86,7 @@ export default {
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '10%',
+                                        width: 'calc(100% / 9)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
@@ -96,7 +96,7 @@ export default {
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '10%',
+                                        width: 'calc(100% / 9)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
@@ -106,27 +106,27 @@ export default {
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '10%',
+                                       width: 'calc(100% / 9)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
                                         boxSizing: 'border-box',
                                     }
                                 }, params.row.hardwareCost.transMoneyShare),
+                                // h('span', {
+                                //     style: {
+                                //         float: 'left',
+                                //        width: 'calc(100% / 9)',
+                                //         height: '30px',
+                                //         lineHeight: '30px',
+                                //         borderRight: '1px solid rgb(233, 234, 236)',
+                                //         boxSizing: 'border-box',
+                                //     }
+                                // }, params.row.hardwareCost.officeDepreciate),
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '10%',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.hardwareCost.officeDepreciate),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: '10%',
+                                        width: 'calc(100% / 9)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
@@ -136,7 +136,7 @@ export default {
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '10%',
+                                        width: 'calc(100% / 9)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
@@ -146,7 +146,7 @@ export default {
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '10%',
+                                        width: 'calc(100% / 9)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: 'none',
@@ -177,79 +177,79 @@ export default {
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '10%',
+                                           width: 'calc(100% / 9)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '车辆折旧'),
+                                    }, '小蜜蜂'),
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '10%',
+                                            width: 'calc(100% / 9)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '电池折旧'),
+                                    }, '电池'),
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '10%',
+                                           width: 'calc(100% / 9)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '充电站折旧'),
+                                    }, '充电'),
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '10%',
+                                            width: 'calc(100% / 9)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '机动车折旧'),
+                                    }, '机动车'),
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '10%',
+                                          width: 'calc(100% / 9)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '运维工具车折旧'),
+                                    }, '运维工具车'),
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '10%',
+                                            width: 'calc(100% / 9)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '物流成本分摊'),
+                                    }, '物流成本'),
+                                    // h('span', {
+                                    //     style: {
+                                    //         float: 'left',
+                                    //         width: '10%',
+                                    //         borderRight: '1px solid rgb(233, 234, 236)',
+                                    //         boxSizing: 'border-box',
+                                    //     }
+                                    // }, '办公成本'),
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '10%',
+                                           width: 'calc(100% / 9)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '办公成本折旧'),
+                                    }, '其他成本'),
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '10%',
+                                           width: 'calc(100% / 9)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '其他成本折旧'),
+                                    }, '小计'),
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '10%',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '合计'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: '10%',
+                                          width: 'calc(100% / 9)',
                                             borderRight: 'none',
                                             boxSizing: 'border-box',
                                         }
@@ -273,7 +273,7 @@ export default {
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '12.5%',
+                                        width: 'calc(100% / 8)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
@@ -283,7 +283,7 @@ export default {
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '12.5%',
+                                        width: 'calc(100% / 8)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
@@ -293,7 +293,7 @@ export default {
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '12.5%',
+                                        width: 'calc(100% / 8)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
@@ -303,7 +303,7 @@ export default {
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '12.5%',
+                                        width: 'calc(100% / 8)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
@@ -313,7 +313,7 @@ export default {
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '12.5%',
+                                        width: 'calc(100% / 8)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
@@ -323,17 +323,17 @@ export default {
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '12.5%',
+                                        width: 'calc(100% / 8)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
                                         boxSizing: 'border-box',
                                     }
-                                }, params.row.hardwareLoss.officeWaste),
+                                }, params.row.hardwareLoss.otherWaste),
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '12.5%',
+                                        width: 'calc(100% / 8)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
@@ -343,7 +343,7 @@ export default {
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '12.5%',
+                                         width: 'calc(100% / 8)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
@@ -375,63 +375,63 @@ export default {
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '12.5%',
+                                            width: 'calc(100% / 8)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '车辆损耗'),
+                                    }, '小蜜蜂'),
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '12.5%',
+                                             width: 'calc(100% / 8)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '电池损耗'),
+                                    }, '电池'),
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '12.5%',
+                                             width: 'calc(100% / 8)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '充电站损耗'),
+                                    }, '电站'),
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '12.5%',
+                                            width: 'calc(100% / 8)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '机动车损耗'),
+                                    }, '机动车'),
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '12.5%',
+                                            width: 'calc(100% / 8)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '运维工具车损耗'),
+                                    }, '运维工具车'),
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '12.5%',
+                                             width: 'calc(100% / 8)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '办公室成本损耗'),
+                                    }, '其他'),
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '12.5%',
+                                            width: 'calc(100% / 8)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '合计'),
+                                    }, '小计'),
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '12.5%',
+                                           width: 'calc(100% / 8)',
                                             borderRight: 'none',
                                             boxSizing: 'border-box',
                                         }
@@ -452,20 +452,30 @@ export default {
                                 height: '30px'
                             }
                         }, [
-                                h('span', {
+                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '14.28%',
+                                        width: 'calc(100% / 9)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
                                         boxSizing: 'border-box',
                                     }
-                                }, params.row.expenses.personSalary),
+                                }, params.row.expenses.salaryMoney),
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '14.28%',
+                                        width: 'calc(100% / 9)',
+                                        height: '30px',
+                                        lineHeight: '30px',
+                                        borderRight: '1px solid rgb(233, 234, 236)',
+                                        boxSizing: 'border-box',
+                                    }
+                                }, params.row.expenses.personnelMoney),
+                                h('span', {
+                                    style: {
+                                        float: 'left',
+                                        width: 'calc(100% / 9)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
@@ -475,17 +485,27 @@ export default {
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '14.28%',
+                                         width: 'calc(100% / 9)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
                                         boxSizing: 'border-box',
                                     }
                                 }, params.row.expenses.hydropower),
+                                 h('span', {
+                                    style: {
+                                        float: 'left',
+                                        width: 'calc(100% / 9)',
+                                        height: '30px',
+                                        lineHeight: '30px',
+                                        borderRight: '1px solid rgb(233, 234, 236)',
+                                        boxSizing: 'border-box',
+                                    }
+                                }, params.row.expenses.operationMoney),
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '14.28%',
+                                        width: 'calc(100% / 9)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
@@ -495,7 +515,7 @@ export default {
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '14.28%',
+                                         width: 'calc(100% / 9)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
@@ -505,7 +525,7 @@ export default {
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '14.28%',
+                                         width: 'calc(100% / 9)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: '1px solid rgb(233, 234, 236)',
@@ -515,7 +535,7 @@ export default {
                                 h('span', {
                                     style: {
                                         float: 'left',
-                                        width: '14.28%',
+                                        width: 'calc(100% / 9)',
                                         height: '30px',
                                         lineHeight: '30px',
                                         borderRight: 'none',
@@ -544,18 +564,26 @@ export default {
                                     borderBottom: '1px solid #e9eaec '
                                 }
                             }, [
-                                    h('span', {
+                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '14.28%',
+                                            width: 'calc(100% / 9)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '人员工资'),
+                                    }, '薪资福利'),
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '14.28%',
+                                            width: 'calc(100% / 9)',
+                                            borderRight: '1px solid rgb(233, 234, 236)',
+                                            boxSizing: 'border-box',
+                                        }
+                                    }, '其他人员成本'),
+                                    h('span', {
+                                        style: {
+                                            float: 'left',
+                                              width: 'calc(100% / 9)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
@@ -563,23 +591,31 @@ export default {
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '14.28%',
+                                            width: 'calc(100% / 9)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
                                     }, '水电（生产）'),
-                                    h('span', {
+                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '14.28%',
+                                              width: 'calc(100% / 9)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '经营费用'),
+                                    }, '其他生产成本'),
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '14.28%',
+                                            width: 'calc(100% / 9)',
+                                            borderRight: '1px solid rgb(233, 234, 236)',
+                                            boxSizing: 'border-box',
+                                        }
+                                    }, '其他经营费用'),
+                                    h('span', {
+                                        style: {
+                                            float: 'left',
+                                            width: 'calc(100% / 9)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
@@ -587,15 +623,15 @@ export default {
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '14.28%',
+                                            width: 'calc(100% / 9)',
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '合计'),
+                                    }, '小计'),
                                     h('span', {
                                         style: {
                                             float: 'left',
-                                            width: '14.28%',
+                                            width: 'calc(100% / 9)',
                                             boxSizing: 'border-box',
                                         }
                                     }, '成本占比')
@@ -607,7 +643,7 @@ export default {
                     title: '合计',
                     key: 'total',
                     width: 100,
-                    fixed: 'right',
+                    fixed: 'left',
                     className: 'middle',
                     render: (h, params) => {
                         return h('div', params.row.totalCost.total)
@@ -710,7 +746,7 @@ export default {
                         if (i < data.length - 1) {
                             arr.push(
                                  {
-                                    cityName: data[i].city,
+                                    cityName: data[i].cityName,
                                     hardwareCost: {
                                         bikeDepreciate: data[i].bikeDepreciate,//车辆折旧
                                         battDepreciate: data[i].battDepreciate,//电池折旧
@@ -729,14 +765,16 @@ export default {
                                         chargeWaste: data[i].chargeWaste,//充电站损耗
                                         truckWaste: data[i].truckWaste,//机动车损耗
                                         carWaste: data[i].carWaste,//运维工具车损耗
-                                        officeWaste: data[i].officeWaste,//办公成本损耗
+                                        otherWaste: data[i].otherWaste,//其他
                                         totalWaste: data[i].totalWaste,//损耗合计
                                         wasteProporte: data[i].wasteProporte,//损耗成本占比
                                     },
                                     expenses: {
-                                        personSalary: data[i].personSalary,//人员工资
+                                        salaryMoney:data[i].salaryMoney,
+                                        personnelMoney: data[i].personnelMoney,//人员工资
                                         rentMoney: data[i].rentMoney,//房租
                                         hydropower:data[i].hydropower,//水电
+                                        operationMoney:data[i].operationMoney,
                                         manageMoney: data[i].manageMoney,//经营费用
                                         openMoney: data[i].openMoney,//开城费用
                                         operateTotal: data[i].operateTotal,//运维合计
@@ -750,6 +788,7 @@ export default {
                         }
                         if (i === data.length - 1) {
                             this.countObj = data[data.length - 1]||{}
+                            var obj = this.countObj
                         }
 
                     }
@@ -757,73 +796,148 @@ export default {
                     var html = ''
                     for (var i = 0; i < 1; i++) {
                         html += `
-                        <tr class="ivu-table-row">
-                            <td class="middle ">
-                                <div class="ivu-table-cell ">
-                                    <div>城市90</div>
-                                </div>
-                            </td>
-                            <td class="ivu-table-column-center">
-                                <div class="ivu-table-cell">
-                                    <div style="height: 30px;"><span style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.bikeDepreciate}</span>
-                                        <span
-                                            style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.battDepreciate}</span><span style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.chargeDepreciate}</span>
-                                            <span
-                                                style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.truckDepreciate}</span><span style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.carDepreciate}</span>
-                                                <span
-                                                    style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.transMoneyShare}</span><span style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.officeDepreciate}</span>
-                                                    <span
-                                                        style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.otherDepreciate}</span><span style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.totalDepreciate}</span>
-                                                        <span
-                                                            style="float: left; width: 10%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">${countObj.depreProporte}</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="ivu-table-column-center">
-                                <div class="ivu-table-cell">
-                                    <div style="height: 30px;"><span style="float: left; width: 12.5%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.bikeWaste}</span>
-                                        <span
-                                            style="float: left; width: 12.5%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.battWaste}</span><span style="float: left; width: 12.5%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.chargeWaste}</span>
-                                            <span
-                                                style="float: left; width: 12.5%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.truckWaste}</span><span style="float: left; width: 12.5%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.carWaste}</span>
-                                                <span
-                                                    style="float: left; width: 12.5%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.officeWaste}</span><span style="float: left; width: 12.5%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.totalWaste}</span>
-                                                    <span
-                                                        style="float: left; width: 12.5%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.wasteProporte}</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="ivu-table-column-center">
-                                <div class="ivu-table-cell">
-                                    <div style="height: 30px;"><span style="float: left; width: 14.28%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.personSalary}</span>
-                                        <span
-                                            style="float: left; width: 14.28%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.rentMoney}</span><span style="float: left; width: 14.28%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.hydropower}</span>
-                                            <span
-                                                style="float: left; width: 14.28%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.manageMoney}</span><span style="float: left; width: 14.28%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.openMoney}</span>
-                                                <span
-                                                    style="float: left; width: 14.28%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.operateTotal}</span><span style="float: left; width: 14.28%; height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">${countObj.operateProporte}</span></div>
-                                </div>
-                            </td>
-                            <td class="middle ">
-                                <div class="ivu-table-cell ">
-                                    <div>${countObj.total}</div>
-                                </div>
-                            </td>
-                        </tr>
+                       <tr class="ivu-table-row">
+    <td class="middle">
+        <div class="ivu-table-cell">
+            <!---->
+            <!---->
+            <!---->
+            <!---->
+            <div>
+                合计
+            </div>
+        </div>
+    </td>
+    <td class="middle">
+        <div class="ivu-table-cell">
+            <!---->
+            <!---->
+            <!---->
+            <!---->
+            <div>
+                ${obj.total}
+            </div>
+        </div>
+    </td>
+    <td class="ivu-table-column-center ">
+        <div class="ivu-table-cell">
+            <!---->
+            <!---->
+            <!---->
+            <!---->
+            <div style="height: 30px;">
+                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                    ${obj.bikeDepreciate}
+                </span>
+                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                    ${obj.battDepreciate}
+                </span>
+                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                     ${obj.chargeDepreciate}
+                </span>
+                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                     ${obj.truckDepreciate}
+                </span>
+                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                     ${obj.carDepreciate }
+                </span>
+                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                     ${obj.transMoneyShare}
+                </span>
+                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                    ${obj.otherDepreciate}
+                </span>
+                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                     ${obj.totalDepreciate}
+                </span>
+                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">
+                     ${obj.depreProporte}
+                </span>
+            </div>
+        </div>
+    </td>
+    <td class="ivu-table-column-center ">
+        <div class="ivu-table-cell">
+            <!---->
+            <!---->
+            <!---->
+            <!---->
+            <div style="height: 30px;">
+                <span style="float: left; width: calc(12.5%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                     ${obj.bikeWaste}
+                </span>
+                <span style="float: left; width: calc(12.5%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                     ${obj.battWaste}
+                </span>
+                <span style="float: left; width: calc(12.5%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                    ${obj.chargeWaste}
+                </span>
+                <span style="float: left; width: calc(12.5%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                     ${obj.truckWaste}
+                </span>
+                <span style="float: left; width: calc(12.5%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                     ${obj.carWaste}
+                </span>
+                <span style="float: left; width: calc(12.5%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                    ${obj.otherWaste}
+                </span>
+                <span style="float: left; width: calc(12.5%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                    ${obj.totalWaste}
+                </span>
+                <span style="float: left; width: calc(12.5%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                    ${obj.wasteProporte}
+                </span>
+            </div>
+        </div>
+    </td>
+    <td class="ivu-table-column-center ">
+        <div class="ivu-table-cell">
+            <!---->
+            <!---->
+            <!---->
+            <!---->
+            <div style="height: 30px;">
+                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                     ${obj.salaryMoney}
+                </span>
+                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                     ${obj.personnelMoney}
+                </span>
+                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                    ${obj.rentMoney}
+                </span>
+                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                     ${obj.hydropower}
+                </span>
+                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                    ${obj.operationMoney}
+                </span>
+                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                    ${obj.manageMoney}
+                </span>
+                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                    ${obj.openMoney}
+                </span>
+                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
+                    ${obj.operateTotal}
+                </span>
+                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">
+                     ${obj.operateProporte}
+                </span>
+            </div>
+        </div>
+    </td>
+</tr>
                     `
                     }
-                    if(that.data4.length>0){
-                        $('.ivu-table-body').eq(1).find('table').find('tfoot').remove()
-                        $('.ivu-table-body').eq(1).find('table').append("<tfoot><tr>" + html + "</tr></tfoot>")
-                        $('.ivu-tabs-tabpane').eq(1).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                        $('.ivu-tabs-tabpane').eq(1).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').append('<tfoot><td class="middle"><div class="ivu-table-cell"><div>合计</div></div></td></tfoot>')
-                        $('.ivu-tabs-tabpane').eq(1).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                        $('.ivu-tabs-tabpane').eq(1).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append('<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>'+this.countObj.total+'</div></div></td></tr></tfoot>')
-                    }else{
-                        $('.ivu-table-body').eq(1).find('table').find('tfoot').remove()
-                        $('.ivu-tabs-tabpane').eq(1).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                        $('.ivu-tabs-tabpane').eq(1).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                    }
+                    $('div.ivu-tabs-tabpane').eq(1).find('.ivu-table-header').find('table').width('100%')
+                            $('div.ivu-tabs-tabpane').eq(1).find('.ivu-table-body').find('table').width('100%')
+                            $('div.ivu-tabs-tabpane').eq(1).find('.ivu-table-body').find('table').find('tfoot').remove()
+                            $('div.ivu-tabs-tabpane').eq(1).find('.ivu-table-body').find('table').append('<tfoot>' + html + '</tfoot>')
+                            $('div.ivu-tabs-tabpane').eq(1).find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                            $('div.ivu-tabs-tabpane').eq(1).find('.ivu-table-fixed-body').find('table').append('<tfoot>' + html + '</tfoot>')
+                            $('div.ivu-tabs-tabpane').eq(1).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                            $('div.ivu-tabs-tabpane').eq(1).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append('<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>'+obj.total+'</div></div></td></tr></tfoot>')
                 }).catch((error) => {
                     console.log(error)
                       that.spinShow = false

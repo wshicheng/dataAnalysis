@@ -18,6 +18,7 @@
        export default {
            data () {
                return {
+                 countObj:{},
                  spinShow:true,
                    isNoData:true,
                    isNoData2:true,
@@ -254,8 +255,7 @@
                     }
                   }
                 ],
-                   data7:this.mockTableData(),
-                   countObj:{}
+                   data7:[],
                }
            },
            computed:{
@@ -313,13 +313,13 @@
                                 }else{
                                     that.isNoData2 = true
                                     that.isNoData = false
-                                     
+                                    return;
                                 }
                                for (var i = 0; i < data.length; i++) {
                                    if (i < data.length - 1) {
                                        arr.push(
                                             {
-                                               cityName: data[i].city,
+                                               cityName: data[i].cityName,
                                                singleProduce: {
                                                    outPutBilling: data[i].outPutBilling,//单车产出-计费
                                                    outPutReality: data[i].outPutReality,//单车产出-实收
@@ -339,7 +339,8 @@
                                        )
                                    }
                                    if (i === data.length - 1) {
-                                       this.countObj = data[data.length - 1]||{}
+                                       that.countObj = data[data.length - 1]||{}
+                                        var obj = that.countObj
                                    }
    
                                }
@@ -392,7 +393,7 @@
                                    $('.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
                                    $('.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').append('<tfoot><td class="middle"><div class="ivu-table-cell"><div>合计</div></div></td></tfoot>')
                                    $('.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                                   $('.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append('<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>'+this.countObj.total+'</div></div></td></tr></tfoot>')
+                                   $('.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append('<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>'+obj.total+'</div></div></td></tr></tfoot>')
                                }else{
                                    $('.ivu-table-body').eq(3).find('table').find('tfoot').remove()
                                    $('.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()

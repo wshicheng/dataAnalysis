@@ -41,7 +41,7 @@
                   </div>
               </li>
               <li class="cityBind" v-bind:key="index" v-for="(item,index) of allCityTables">
-                  <h3>{{item[0].city}}</h3>
+                  <h3>{{item[0].cityName}}</h3>
                   <div class="total">
                       <table>
                           <thead>

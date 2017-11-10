@@ -1,499 +1,970 @@
 <template>
-    <div class="container fiexedAssets">
-         <Spin v-show="spinShow" fix>
-                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-                <div style="color:rgb(204, 204, 204);">Loading</div>
-            </Spin>
-        <div class="nodata" v-show="isNoData2">
-            <i class="iconfont icon-zanwushuju"></i>
+    <div>
+        <div class="title">蜜蜂出行{{month}}月份经营报告</div>
+        <div class="table">
+            <table>
+                <thead>
+                    <tr>
+                         <th colspan="1">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </th>
+                        <th v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div>{{list.cityName}}</div>
+                                <div>
+                                    <span>当期</span>
+                                    <span>环比</span>
+                                </div>
+                            </div>
+                        </th>
+                    </tr> 
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>归属车辆数</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.bikeNum.nowData}}</span>
+                                    <span>{{list.bikeNum.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="incoming">
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>收入（元）</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.inComing.nowData}}</span>
+                                    <span>{{list.inComing.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>总计费</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.id">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.orderAmountTot.nowData}}</span>
+                                    <span>{{list.orderAmountTot.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>总实收</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.payAmountTot.nowData}}</span>
+                                    <span>{{list.payAmountTot.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>实收率（%）</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.actualYield.nowData}}</span>
+                                    <span>{{list.actualYield.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>单车计费收入</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td  v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.sinBikeBillingIncome.nowData}}</span>
+                                    <span>{{list.sinBikeBillingIncome.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>单车实际收入</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.sinBikeRealityIncome.nowData}}</span>
+                                    <span>{{list.sinBikeRealityIncome.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="cost">
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>成本（元）</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>总成本</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.costTot.nowData}}</span>
+                                    <span>{{list.costTot.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>单车成本：</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td  v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.singleBikeCost.nowData}}</span>
+                                    <span>{{list.singleBikeCost.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div class="bikeOperaMoney">
+                                    <span class="subCategory">单车运维费用</span>
+                                </div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.sinBikeManageMoney.nowData}}</span>
+                                    <span>{{list.sinBikeManageMoney.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div class="bikeCostMoney">
+                                    <span class="subCategory">单车摊销费用</span>
+                                </div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td  v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.sinBikeDepreMoney.nowData}}</span>
+                                    <span>{{list.sinBikeDepreMoney.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="profits">
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>营收（元）</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>税前毛利</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.grossMargin.nowData}}</span>
+                                    <span>{{list.grossMargin.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>单车实际利润（元）</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.sinBikeRealityProfit.nowData}}</span>
+                                    <span>{{list.sinBikeRealityProfit.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>单车投资收益率（%）</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.sinBikeInvestIncomeLv.nowData}}</span>
+                                    <span>{{list.sinBikeInvestIncomeLv.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>单车计费盈利率（%）</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.sinBikeBillingIncomeLv.nowData}}</span>
+                                    <span>{{list.sinBikeBillingIncomeLv.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>单车实际盈利率（%）</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.sinBikeRealityIncomeLv.nowData}}</span>
+                                    <span>{{list.sinBikeRealityIncomeLv.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="car">
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>车辆</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>投产车辆数（日均）</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.avgProducteBikeNum.nowData}}</span>
+                                    <span>{{list.avgProducteBikeNum.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>投产率（日均）</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.avgProductionLv.nowData}}</span>
+                                    <span>{{list.avgProductionLv.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>单车日均订单数</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.avgSinBikeOrderNum.nowData}}</span>
+                                    <span>{{list.avgSinBikeOrderNum.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>单车平均用户数</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                       <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.avgSinBikeUserNum.nowData}}</span>
+                                    <span>{{list.avgSinBikeUserNum.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>单车平均押金用户数（当前）</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.avgSinBikeDepositUserNumDay.nowData}}</span>
+                                    <span>{{list.avgSinBikeDepositUserNumDay.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="user">
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>用户</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>注册用户数（累计）</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.registerUserNum.nowData}}</span>
+                                    <span>{{list.registerUserNum.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>押金用户数（实时）</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                         <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.depositUserNum.nowData}}</span>
+                                    <span>{{list.depositUserNum.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>订单用户数（当期）</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.orderUserNum.nowData}}</span>
+                                    <span>{{list.orderUserNum.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>新增注册：</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.newAddRegister.nowData}}</span>
+                                    <span>{{list.newAddRegister.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div class="bikeOperaMoney">
+                                    <span class="subCategory">当期</span>
+                                </div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.currentNewAddRegister.nowData}}</span>
+                                    <span>{{list.currentNewAddRegister.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div class="bikeOperaMoney">
+                                    <span class="subCategory">日均</span>
+                                </div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.avgNewAddRegister.nowData}}</span>
+                                    <span>{{list.avgNewAddRegister.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div>新增押金：</div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.newAddDeposit.nowData}}</span>
+                                    <span>{{list.newAddDeposit.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div class="bikeOperaMoney">
+                                    <span class="subCategory">当期</span>
+                                </div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.currentNewAddDeposit.nowData}}</span>
+                                    <span>{{list.currentNewAddDeposit.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <div class="cityName leftTitle">
+                                <div class="bikeOperaMoney">
+                                    <span class="subCategory">日均</span>
+                                </div>
+                                <div>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="list of cityList" v-bind:key="list.cityId">
+                            <div class="cityName">
+                                <div></div>
+                                <div>
+                                    <span>{{list.avgNewAddDeposit.nowData}}</span>
+                                    <span>{{list.avgNewAddDeposit.diff}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="hidden">
+                <ul>
+                    <li>归属车辆数</li>
+                    <li class="yellow">收入（元）</li>
+                    <li>总计费</li>
+                    <li>总实收</li>
+                    <li>实收率（%）</li>
+                    <li>单车实际收入</li>
+                    <li class="yellow">成本（元）</li>
+                    <li>总成本</li>
+                    <li>单车成本：</li>
+                    <li class="indent">单车运维费用</li>
+                    <li>单车摊销费用</li>
+                    <li class="yellow">营收（元）</li>
+                    <li>税前毛利</li>
+                </ul>
+            </div>
         </div>
-        <Table v-show="isNoData" id="fiexedAssets6" :columns="columns8" min-width='1200' :data="data7" size="small" border ref="table"></Table>
     </div>
 </template>
 <script>
-import $ from 'jquery'
-import { mapGetters } from 'vuex'
-export default {
-    data() {
-        return {
-            spinShow:true,
-            isNoData2: false,
-            isNoData:false,
-            countObj: {
-                billProfitAndLoss: "",
-                billProfitAndLossLv: "",
-                city: "",
-                dataMonth: "",
-                id: '',
-                mBillingIncome: "",
-                mRealityIncome: "",
-                oBilling: "",
-                oReality: "",
-                realIncomeLv: "",
-                realProfitAndLoss: "",
-                realProfitAndLossLv: "",
-            },
-            columns8: [
-                {
-                    "title": "城市",
-                    "cityName": "name",
-                   
-                    "width": 200,
-                    render: (h,params) => {
-                        return h('div', {
-                            style: {
-                                textAlign: 'center'
-                            }
-                        }, params.row.cityName)
-                    }
-                },
-                {
-                    "title": "月收入",
-                    "width": 350,
-                    renderHeader: (h) => {
-                        return h('div', [
-                            h('div', {
-                                style: {
-                                    textAlign: 'center',
-                                    height:'30px',
-                                    lineHeight:'30px',
-                                    borderBottom: '1px solid #e9eaec'
-                                }
-                            }, '月收入'),
-                            h('div', [
-                                h('span', {
-                                    style: {
-                                        display: 'inline-block',
-                                        lineHeight: '30px',
-                                        width: '33.3%',
-                                        textAlign: 'center',
-                                        borderBox: 'box-sizing',
-                                        borderRight: '1px solid #e9eaec'
-                                    }
-                                }, '计费收入'),
-                                h('span', {
-                                    style: {
-                                        display: 'inline-block',
-                                        lineHeight: '30px',
-                                        width: '33.3%',
-                                        textAlign: 'center',
-                                        borderBox: 'box-sizing',
-                                        borderRight: '1px solid #e9eaec'
-                                    }
-                                }, '实际收入'),
-                                h('span', {
-                                    style: {
-                                        display: 'inline-block',
-                                        lineHeight: '30px',
-                                        width: '33.3%',
-                                        textAlign: 'center',
-                                        borderRight: 'none'
-                                    }
-                                }, '实收率'),
-
-                            ])
-                        ])
-                    },
-                    render: (h, params) => {
-                        return h('div', [
-                            h('span', {
-                                style: {
-                                    display: 'inline-block',
-                                    lineHeight: '30px',
-                                    width: '33.3%',
-                                    textAlign: 'center',
-                                    borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
-                                }
-                            }, params.row.monthIncoming.mBillingIncome),
-                            h('span', {
-                                style: {
-                                    display: 'inline-block',
-                                    lineHeight: '30px',
-                                    width: '33.3%',
-                                    textAlign: 'center',
-                                    borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
-                                }
-                            }, params.row.monthIncoming.mRealityIncome),
-                            h('span', {
-                                style: {
-                                    display: 'inline-block',
-                                    lineHeight: '30px',
-                                    width: '33.3%',
-                                    textAlign: 'center',
-                                    borderBox: 'box-sizing',
-                                    borderRight: 'none'
-                                }
-                            }, params.row.monthIncoming.realIncomeLv),
-                        ])
-                    }
-                },
-                {
-                    "title": "盈亏状态（计费）",
-                    "key": "show",
-                    "width": 350,
-                    renderHeader: (h) => {
-                        return h('div', [
-                            h('div', {
-                                style: {
-                                    textAlign: 'center',
-                                     height:'30px',
-                                    lineHeight:'30px',
-                                    borderBottom: '1px solid #e9eaec'
-                                }
-                            }, '盈亏状态（计费）'),
-                            h('div', [
-                                h('span', {
-                                    style: {
-                                        display: 'inline-block',
-                                        lineHeight: '30px',
-                                        width: '50%',
-                                        textAlign: 'center',
-                                        borderBox: 'box-sizing',
-                                        borderRight: '1px solid #e9eaec'
-                                    }
-                                }, '计费盈亏'),
-                                h('span', {
-                                    style: {
-                                        display: 'inline-block',
-                                        lineHeight: '30px',
-                                        width: '50%',
-                                        textAlign: 'center',
-                                        borderBox: 'box-sizing',
-                                        borderRight: 'none'
-                                    }
-                                }, '计费盈亏率')
-
-                            ])
-                        ])
-                    },
-                    render: (h, params) => {
-                        return h('div', [
-                            h('span', {
-                                style: {
-                                    display: 'inline-block',
-                                    lineHeight: '30px',
-                                    width: '50%',
-                                    textAlign: 'center',
-                                    borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
-                                }
-                            }, params.row.profitStatus. billProfitAndLoss),
-                            h('span', {
-                                style: {
-                                    display: 'inline-block',
-                                    lineHeight: '30px',
-                                    width: '50%',
-                                    textAlign: 'center',
-                                    borderBox: 'box-sizing',
-                                    borderRight: 'none'
-                                }
-                            }, params.row.profitStatus. billProfitAndLossLv)
-                        ])
-                    }
-                },
-                {
-                    "title": "盈亏状态（实收）",
-                    "key": "show",
-                    "width": 350,
-                    renderHeader: (h) => {
-                        return h('div', [
-                            h('div', {
-                                style: {
-                                    textAlign: 'center',
-                                     height:'30px',
-                                    lineHeight:'30px',
-                                    borderBottom: '1px solid #e9eaec'
-                                }
-                            }, '盈亏状态（实收）'),
-                            h('div', [
-                                h('span', {
-                                    style: {
-                                        display: 'inline-block',
-                                        lineHeight: '30px',
-                                        width: '50%',
-                                        textAlign: 'center',
-                                        borderBox: 'box-sizing',
-                                        borderRight: '1px solid #e9eaec'
-                                    }
-                                }, '实收盈亏'),
-                                h('span', {
-                                    style: {
-                                        display: 'inline-block',
-                                        lineHeight: '30px',
-                                        width: '50%',
-                                        textAlign: 'center',
-                                        borderBox: 'box-sizing',
-                                        borderRight: 'none'
-                                    }
-                                }, '实收盈亏率')
-
-                            ])
-                        ])
-                    },
-                    render: (h, params) => {
-                        return h('div', [
-                            h('span', {
-                                style: {
-                                    display: 'inline-block',
-                                    lineHeight: '30px',
-                                    width: '50%',
-                                    textAlign: 'center',
-                                    borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
-                                }
-                            }, params.row.actualProfit.realProfitAndLoss),
-                            h('span', {
-                                style: {
-                                    display: 'inline-block',
-                                    lineHeight: '30px',
-                                    width: '50%',
-                                    textAlign: 'center',
-                                    borderBox: 'box-sizing',
-                                    borderRight: 'none'
-                                }
-                            }, params.row.actualProfit.realProfitAndLossLv)
-                        ])
-                    }
-                },
-                {
-                    "title": "单车产出",
-                    "key": "show",
-                    "width": 350,
-                    renderHeader: (h) => {
-                        return h('div', [
-                            h('div', {
-                                style: {
-                                    textAlign: 'center',
-                                     height:'30px',
-                                    lineHeight:'30px',
-                                    borderBottom: '1px solid #e9eaec'
-                                }
-                            }, '单车产出'),
-                            h('div', [
-                                h('span', {
-                                    style: {
-                                        display: 'inline-block',
-                                        lineHeight: '30px',
-                                        width: '50%',
-                                        textAlign: 'center',
-                                        borderBox: 'box-sizing',
-                                        borderRight: '1px solid #e9eaec'
-                                    }
-                                }, '计费'),
-                                h('span', {
-                                    style: {
-                                        display: 'inline-block',
-                                        lineHeight: '30px',
-                                        width: '50%',
-                                        textAlign: 'center',
-                                        borderBox: 'box-sizing',
-                                        borderRight: 'none'
-                                    }
-                                }, '实收')
-
-                            ])
-                        ])
-                    },
-                    render: (h, params) => {
-                        return h('div', [
-                            h('span', {
-                                style: {
-                                    display: 'inline-block',
-                                    lineHeight: '30px',
-                                    width: '50%',
-                                    textAlign: 'center',
-                                    borderBox: 'box-sizing',
-                                    borderRight: '1px solid #e9eaec'
-                                }
-                            }, params.row.singleCar.oBilling),
-                            h('span', {
-                                style: {
-                                    display: 'inline-block',
-                                    lineHeight: '30px',
-                                    width: '50%',
-                                    textAlign: 'center',
-                                    borderBox: 'box-sizing',
-                                    borderRight: 'none'
-                                }
-                            }, params.row.singleCar.oReality)
-                        ])
-                    }
-                }
-            ],
-            data7: [
-                {
-                    cityName: '',
-                    monthIncoming: {
-                        mBillingIncome: '',//月收入-计费
-                        mRealityIncome: '',//月收入-实收
-                        realIncomeLv: ''//月收入-实收率
-                    },
-                    profitStatus: {
-                        billProfitAndLoss: '',//盈亏状态(计费)-计费盈亏
-                        billProfitAndLossLv: '',//盈亏状态(计费)-计费盈亏率
-                    },
-                    actualProfit: {
-                        realProfitAndLoss: '',//盈亏状态(实收)-实收盈亏
-                        realProfitAndLossLv: '',//盈亏状态(实收)-实收盈亏率
-                    },
-                    singleCar: {
-                        oBilling: '',//单车产出-计费
-                        oReality: '',//单车产出-实收
-                    }
-                }
-            ]
-        }
-    },
-    methods: {
-        changePage() {
-            this.spinShow = true
-            this.isNoData = false
-            // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
-            // var that = this
-            // setTimeout(function() {
-                this.axios('/beefly/monthDataDetail/api/v1/monthDataDetail', {
-                    params: {
-                        dataMonth: this.dataMonth,
-                        accessToken: this.$store.state.token,
-                        type: 3
-                    }
-                }).then((response) => {
-                    this.spinShow = false
-                    var data = response.data.data
-                    var arr = [];
-                  var message = response.data.message
-                    if(message === '用户登录超时'){
-                        this.$router.push({path:'/login'})
-                    }
-                    if (data.length > 0) {
-                        this.isNoData = true
-                        this.isNoData2 = false
-                    } else {
-                         this.isNoData = false
-                        this.isNoData2 = true
-                    }
-                    for (var i = 0; i < data.length; i++) {
-                        if (i < data.length - 1) {
-                            arr.push(
-                                {
-                                    cityName: data[i].city,
-                                    monthIncoming: {
-                                        mBillingIncome: data[i].mBillingIncome,//月收入-计费
-                                        mRealityIncome: data[i].mRealityIncome,//月收入-实收
-                                        realIncomeLv: data[i].realIncomeLv//月收入-实收率
-                                    },
-                                    profitStatus: {
-                                        billProfitAndLoss: data[i].billProfitAndLoss,//盈亏状态(计费)-计费盈亏
-                                        billProfitAndLossLv: data[i].billProfitAndLossLv,//盈亏状态(计费)-计费盈亏率
-                                    },
-                                    actualProfit: {
-                                        realProfitAndLoss: data[i].realProfitAndLoss,//盈亏状态(实收)-实收盈亏
-                                        realProfitAndLossLv: data[i].realProfitAndLossLv,//盈亏状态(实收)-实收盈亏率
-                                    },
-                                    singleCar: {
-                                        oBilling: data[i].oBilling,//单车产出-计费
-                                        oReality: data[i].oReality,//单车产出-实收
-                                    }
-                                }
-                            )
-                        }
-                        if (i === data.length - 1) {
-                            this.countObj = data.pop()
-                            var obj = this.countObj
-                                    var html = `
-                                        <tr class="ivu-table-row">
-                                            <td class="ivu-table-cell">
-                                                <div class="ivu-table-cell ">
-                                                    <span>合计</span>
-                                                </div>
-                                            </td>
-                                            <td class="">
-                                                <div class="ivu-table-cell">
-                                                    <div>
-                                                        <span style="display: inline-block; line-height: 30px; width: 33.3%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${obj.mBillingIncome}</span><span style="display: inline-block; line-height: 30px; width: 33.3%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${obj.mRealityIncome}</span><span style="display: inline-block; line-height: 30px; width: 33.3%; text-align: center; border-right: none;">${obj.realIncomeLv}</span></div>
-                                                </div>
-                                            </td>
-                                            <td class="">
-                                                <div class="ivu-table-cell">
-                                                    <div>
-                                                        <span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${obj.billProfitAndLoss }</span><span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: none;">${obj.billProfitAndLossLv }</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="">
-                                                <div class="ivu-table-cell">
-                                                    <div>
-                                                        <span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${obj.realProfitAndLoss}</span><span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: none;">${obj.realProfitAndLossLv}</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="">
-                                                <div class="ivu-table-cell">
-                                                    <div>
-                                                        <span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${obj.oBilling}</span><span style="display: inline-block; line-height: 30px; width: 50%; text-align: center; border-right: none;">${obj.oReality}</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        `
-                                    // $('div.ivu-tabs-tabpane').eq(2).find('.ivu-table-header').find('table').width('100%')
-                                    // $('div.ivu-tabs-tabpane').eq(2).find('.ivu-table-body').find('table').width('100%')
-                                    $('div.ivu-tabs-tabpane').eq(2).find('.ivu-table-body').find('table').find('tfoot').remove()
-                                    $('div.ivu-tabs-tabpane').eq(2).find('.ivu-table-body').find('table').append('<tfoot>' + html + '</tfoot>')
-                                    $('div.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                                    $('div.ivu-tabs-tabpane').eq(2).find('.ivu-table-fixed-body').find('table').append('<tfoot>' + html + '</tfoot>')
+    export default {
+        data:function(){
+            return {
+                month:'',
+                cityList:[]
+            }
+        },
+        methods:{
+            mockDatas(){
+                for (var i=0;i<10;i++){
+                    this.cityList.push({
+                        cityName:'城市' + Math.floor(Math.random()*255),
+                        cityId:Math.floor(Math.random())*255 + "-" + Math.floor(Math.random())*9,
+                        bikeNum:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        inComing:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        orderAmountTot:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        payAmountTot:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        actualYield:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        sinBikeBillingIncome:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        sinBikeRealityIncome:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        costTot:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        singleBikeCost:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        sinBikeManageMoney:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        sinBikeDepreMoney:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        grossMargin:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        sinBikeRealityProfit:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        sinBikeInvestIncomeLv:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        sinBikeBillingIncomeLv:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        sinBikeRealityIncomeLv:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        avgProducteBikeNum:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        avgProductionLv:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        avgSinBikeOrderNum:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        avgSinBikeUserNum:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        avgSinBikeDepositUserNumDay:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        registerUserNum:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        depositUserNum:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        orderUserNum:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        newAddRegister:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        currentNewAddRegister:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        avgNewAddRegister:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        newAddDeposit:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        }, 
+                        currentNewAddDeposit:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        }, 
+                        avgNewAddDeposit:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        }   
                         
-                        }
-                    }
-                    this.data7 = arr
-                }).catch((error) => {
-                    console.log(error)
-                      that.spinShow = false
-                })
-            // }, 200)
-        }
-    },
-    computed: {
-        ...mapGetters(['dataMonth'])
-    },
-    mounted(){
-         var height = $(window).height()
-         $('div.fiexedAssets').eq(2).height(height/2)
-    },
-    beforeMount(){
-        //this.changePage()
-    },
-    watch: {
-        'dataMonth': {
-            handler: function(val) {
-                this.changePage()
-            },
-            deep: true
+                    })
+                }
+            }
+        },
+        mounted:function(){
+            this.mockDatas()
+            this.month = this.$route.params.month.split('-')[1]
         }
     }
-}
 </script>
 <style lang="scss" scoped>
-div.container {
-    padding: 0 16px 0 16px;
-}
-div.fiexedAssets {
-    padding: 0 16px 16px 16px;
-    box-sizing: border-box;
-    position:relative;
-    .demo-spin-icon-load{
-        color:rgb(204, 204, 204);
-        animation: ani-demo-spin 1s linear infinite;
+    
+    div.title{
+        width:1200px;
+        text-align:center;
+        font-size:20px;
+        font-weight:bold;
     }
-    @keyframes ani-demo-spin {
-        from { transform: rotate(0deg);}
-        50%  { transform: rotate(180deg);}
-        to   { transform: rotate(360deg);}
+    div.table{
+        position:relative;
+        width: calc(100% - 32px);
+        margin: 16px auto;
+        overflow: auto;
+        margin: 0 auto;
+        div.hidden{
+            width: 200px;
+            position: fixed;
+            top: 67px;
+            background: #ed3f14;
+            bottom: 19px;
+            opacity:0.3;
+        }
+        table{
+            width: 100%;
+            box-sizing: border-box;
+            thead{
+                tr{
+                    background:#bdd7ee;
+                    border:1px solid #ddd;
+                    th{
+                         min-width:200px;
+                         &:nth-child(1){width:160px;}
+                        .cityName{
+                            text-align:center;
+                        }
+                        span{
+                            width:50%;float:left;
+                            &:after{
+                                content:'.';
+                                display:block;
+                                clear:both;
+                                height:0;
+                                overflow:hidden;
+                                visibility:hidden;
+                            }
+                        }
+                    }
+                }
+            }
+            tbody{
+                tr.incoming,tr.cost,tr.profits,tr.car,tr.user{background:yellow}
+                tr{
+                    background:#fff;
+                    border:1px solid #ddd;
+                    height:30px;line-height:30px;
+                    td{
+                        .cityName{
+                            text-align:center;
+                        }
+                        .leftTitle{
+                            text-align:left;
+                            .bikeOperaMoney,.bikeCostMoney{height:30px;position:relative;
+                                .subCategory{margin-left:54px;position:absolute;}
+                            }
+                        }
+                        span{
+                            width:50%;float:left;
+                            &:after{
+                                content:'.';
+                                display:block;
+                                clear:both;
+                                height:0;
+                                overflow:hidden;
+                                visibility:hidden;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
     }
-}
-div.nodata{text-align:center;}
-div.nodata i{font-size:400px;color:#dedcdc;}
 </style>
-
