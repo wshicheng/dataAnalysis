@@ -15,15 +15,15 @@
                 <Menu-item name="/index/orderMileage" class="sign" auth='26'>订单里程分布</Menu-item>
                 <Menu-item name="/index/orderRate" class="sign" auth='27'>使用频次分布</Menu-item>
             </Submenu>
-            <Submenu name="userData">
+            <Submenu name="userData" v-show="userShow">
                 <template slot="title">
                     <Icon type="ios-people"></Icon>
                     用户数据
                 </template>
-                <Menu-item name="/index/userAllData">整体数据</Menu-item>
-                <Menu-item name="/index/userDateAndArea">分日期分地区</Menu-item>
-                <Menu-item name="/index/newUser">新用户</Menu-item>
-                <Menu-item name="/index/activeUser">活跃用户</Menu-item>
+                <Menu-item name="/index/userAllData" class="sign" auth='31'>整体数据</Menu-item>
+                <Menu-item name="/index/userDateAndArea" class="sign" auth='32'>分日期分地区</Menu-item>
+                <Menu-item name="/index/newUser" class="sign" auth='33'>新用户</Menu-item>
+                <Menu-item name="/index/activeUser" class="sign" auth='34'>活跃用户</Menu-item>
                 <!-- <Menu-item name="/index/userKeep">用户留存</Menu-item> -->
             </Submenu>
             <!-- <Submenu name="3">
@@ -97,6 +97,7 @@ export default {
             authList: [],
             // 权限展示相关
             orderShow: false,
+            userShow: false,
             cityShow: false,
         }
     },
@@ -147,6 +148,15 @@ export default {
                         this.orderShow = false
                     }
                 }
+
+                for (var i = 0; i < delArr.length; i++) {
+                    if (Number(delArr[i]) < 40 && Number(delArr[i]) > 29) {
+                        this.userShow = true
+                        break
+                    } else {
+                        this.userShow = false
+                    }
+                }               
                 
                 for (var i = 0; i < delArr.length; i++) {
                     if (Number(delArr[i]) < 109 && Number(delArr[i]) > 100) {

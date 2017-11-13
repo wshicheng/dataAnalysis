@@ -370,6 +370,8 @@ export default {
                 this.noDataBox = true
                 if (res.data.resultCode === 0) {
                     this.noDataText = '暂无数据'
+                    this.currentPage = 1
+                    this.pageShow = false
                     this.newUserData = []
                     this.loadChartData($('.newUser_head_time button.active').attr('myId'))
                 } else {

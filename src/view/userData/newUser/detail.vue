@@ -310,6 +310,8 @@ export default {
                 var data = res.data.data
                 this.spinShow = false
                 if (res.data.resultCode === 0) {
+                    this.currentPage = 1
+                    this.pageShow = false
                     this.noDataText = '暂无数据'
                     this.loadChartData($('.newUser_head_time button.active').attr('myId'))
                     this.orderData = []

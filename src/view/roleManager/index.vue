@@ -134,6 +134,28 @@ export default {
                           name: 27,
                           checked: false
                       }]
+                  },{
+                      title: '用户数据',
+                      name: 30,
+                      expand: false,
+                      checked: false,
+                      children: [{
+                          title: '整体数据',
+                          name: 31,
+                          checked: false
+                      }, {
+                          title: '分日期分地区',
+                          name: 32,
+                          checked: false
+                      }, {
+                          title: '新用户',
+                          name: 33,
+                          checked: false
+                      }, {
+                          title: '活跃用户',
+                          name: 34,
+                          checked: false
+                      }]
                   }, {
                       title: '个人中心',
                       name: 70,

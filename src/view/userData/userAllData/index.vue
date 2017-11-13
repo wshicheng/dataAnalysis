@@ -260,8 +260,9 @@ export default {
                     key: 'registerUser'
                 },
                 {
-                    title: '已退押金用户',
-                    key: 'unDepositUser'
+                    title: '已退押金用户(累计)',
+                    key: 'unDepositUser',
+                    width: 160
                 }
             ],
             orderData: [],
@@ -356,6 +357,8 @@ export default {
                 this.noDataBox = true
                 if (res.data.resultCode === 0) {
                     this.noDataText = '暂无数据'
+                    this.currentPage = 1
+                    this.pageShow = false
                     this.orderData = []
                     this.loadChartData()
                 } else {
