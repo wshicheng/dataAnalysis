@@ -50,8 +50,8 @@
     }
 }
 .citySelect_area div {
-   max-width: 90%;
-
+//    max-width: 90%;
+    max-width: 95%;
     display: inline-block;
 }
 </style>

@@ -6,9 +6,9 @@
         <div id="dateAndArea_head">
             <div class="dateAndArea_head_time">
                 <span>时间:</span>
-                <button class="active"@click="handleClick" :myId='1'>近7日</button>
-                <button @click="handleClick" :myId='2'>近30天</button>
-                <button @click="handleClick" :myId='3'>指定时间段</button>
+                <button class="active"@click="handleClick" :myId='3'>近7日</button>
+                <button @click="handleClick" :myId='4'>近30天</button>
+                <button @click="handleClick" :myId='5'>指定时间段</button>
             </div>
             <div class="timeSelectShow" v-show="timeSelectShow">
                 <DatePicker type="daterange" v-model="timeLine" :options='options' placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
@@ -17,10 +17,11 @@
             <city-select></city-select>
             <div class="dateAndArea_type_select">
                 <span>指标:</span>
-                <button @click="handleTypeClick"  class="active" myType='orderNum'>有效订单数</button>
-                <button @click="handleTypeClick"  myType='orderAmount'>订单金额</button>
-                <button @click="handleTypeClick"  myType='avgAmount'>均单价有效</button>
-                <button @click="handleTypeClick"  myType='payAmount'>实收金额</button>
+                <button @click="handleTypeClick"  class="active" myType='totalUser'>累计用户</button>
+                <button @click="handleTypeClick"  myType='depositUser'>累计押金</button>
+                <button @click="handleTypeClick"  myType='dayActiveNum'>活跃用户</button>
+                <button @click="handleTypeClick"  myType='newRegister'>新注册用户</button>
+                <button @click="handleTypeClick"  myType='newActiveNum'>活跃新用户</button>
             </div>
         </div>
 
@@ -33,19 +34,16 @@
                 <Poptip trigger="hover" style="float: right;"  placement="top-end" title="数据字段说明" :transfer='transfer'>
                     <span>?</span>
                     <div class="content" slot="content">
-                        <p><b>有效订单数:</b>当前时段有效订单数</p>
-                        <p><b>有效订单占比:</b>当前时段有效订单数/全时段有效订单数</p>
-                        <p><b>累计有效订单:</b>累计到当前时段的有效订单数</p>
-                        <p><b>累计有效订单占比:</b>累计到当前时段有效订单数/全时段有效订单数</p>
-                        <p><b>订单金额(￥):</b>当前时段订单金额</p>
-                        <p><b>订单金额占比:</b>当前时段订单金额/全时段订单金额</p>
-                        <p><b>累计订单金额(￥):</b>累计到当前时段的订单金额</p>
-                        <p><b>累计订单金额占比:</b>累计到当前时段订单金额/全时段订单金额</p>
+                        <p><b>累计用户:</b>累计到查询日期的注册用户数</p>
+                        <p><b>押金用户(累计):</b>累计用户中当前押金大于0的用户</p>
+                        <p><b>活跃用户:</b>在本查询时间段内有过一次有效订单的用户</p>
+                        <p><b>新注册用户:</b>所选时间段内新注册的用户数</p>
+                        <p><b>活跃新用户:</b>查询时段内注册且在查询时间段内有过一次有效订单的用户</p>
                     </div>
                 </Poptip>
             </div>
             <Table :no-data-text='noDataText' :ellipsis='ellipsis' :loading='loading' border size='small' :columns="columns_orderData" :data="orderData"></Table>
-            <Page :total="totalListNum" show-sizer show-elevator :styles='page' v-show="pageShow" :current='current' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
+            <Page :total="totalListNum" show-sizer show-elevator :styles='page' v-show="pageShow" :current='currentPage' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </div>
 
         <div class="dateAndArea_table_total" v-show="noDataBox">
@@ -345,7 +343,7 @@ export default {
             totalListNum: 100,
             pageSizeOpts: [10, 20, 30, 40],
             pageSize: 10,
-            current: 1,
+            currentPage: 1,
             loading: false,
             spinShow: false,
             spinShow2: false,
@@ -356,7 +354,7 @@ export default {
             noDataText: '',
             noDataText2: '',
             pageShow: false,
-            chartTitleName: '有效订单数',
+            chartTitleName: '累计用户',
             totalTitle: true,
             ellipsis: true,
             noDataBox: false,
@@ -369,11 +367,11 @@ export default {
         }
     },
     mounted () {
-        this.$store.dispatch('menuActiveName', '/index/dateAndArea')
+        this.$store.dispatch('menuActiveName', '/index/userDateAndArea')
         this.$store.state.cityList = []
-        document.title = '订单数据 - 分日期分地区'
-        this.loadData('1')
-        this.loadTotalData('1')
+        document.title = '用户数据 - 分日期分地区'
+        this.loadData('3')
+        this.loadTotalData('3')
     },
     methods: {
         loadData (type) {
@@ -382,23 +380,27 @@ export default {
             this.noDataText = ''
             // 默认加载时去掉无数据图片
 
-            this.axios.get('/beefly/dateCityOrders/api/v1/page', {
+            this.axios.get('/beefly/wholeUser/api/v1/cityDatePage', {
                 params: {
                     accessToken: this.$store.state.token,
                     type: type,
                     beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
                     endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD'),
-                    pageNo: this.current,
+                    pageNo: this.currentPage,
                     pageSize: this.pageSize,
                     cityCode: this.$store.state.cityList.toString()
                 }
             })
             .then( (res) => {
                 this.checkLogin(res)
-                // console.log(res.data.data)
+                console.log(res.data.data)
                     $('#container').html('')
                 if (res.data.data.length === 0) {
                     this.noDataText = '暂无数据'
+                    // 关闭分页，恢复页码
+                    this.currentPage = 1
+                    this.pageShow = false
+
                     this.spinShow = false
                     this.spinShow3 = false
                     this.orderData = []
@@ -433,7 +435,7 @@ export default {
                     // 讲日期插入动态title
                     arr.unshift({
                         title: '日期',
-                        key: 'orderTime',
+                        key: 'createDate',
                         fixed: 'left',
                         width: 100
                     })
@@ -468,7 +470,7 @@ export default {
             this.spinShow2 = true
             this.noDataText2 = ''
             
-            this.axios.get('/beefly/dateCityOrders/api/v1/avgTotal', {
+            this.axios.get('/beefly/wholeUser/api/v1/avgAndTotal', {
                 params: {
                     accessToken: this.$store.state.token,
                     type: type,
@@ -481,6 +483,7 @@ export default {
                 this.checkLogin(res)
                 
                 var data = res.data.data
+                console.log('totalData',data)
                 if (data.length === 0) {
                     this.totalTitle = false
                     this.totalData = []
@@ -520,7 +523,9 @@ export default {
                     })
                     
                     this.columns_total = arr
+                    console.log(this.columns_total)
                     var delData = this.tableTotalDataDel(data)
+                    console.log('delData', delData)
                     this.totalData = delData
 
                     // 关闭loading 
@@ -548,7 +553,7 @@ export default {
                     obj[code] = list[i][type]
                 }
                 newArr.push(obj)
-                obj.orderTime = dataTime.orderTime
+                obj.createDate = dataTime.createDate
                 // 在这里创造chart图表的x轴坐标
                 //this.chartTime.push(dataTime.orderTime)
                 obj[type] = dataTime[type]
@@ -559,7 +564,7 @@ export default {
             return newArr
         },
         getChartData (type) {
-            this.axios.get('/beefly/dateCityOrders/lineNum', {
+            this.axios.get('/beefly/wholeUser/api/v1/cityDateChart', {
                 params: {
                     accessToken: this.$store.state.token,
                     type: type,
@@ -575,20 +580,7 @@ export default {
                     $('#container').html('')
                 } else {
                     this.spinShow3 = false
-                    // var newArr = []
-                    // var type = $('.dateAndArea_type_select button.active').attr("myType")
-                    // chartData.map( item => {
-                    //     var arr = new Array()
-                    //     for (var i = 0; i < item.length; i++) {
-                    //         // debugger
-                    //         var obj = {}
-                    //         arr.push(Number(item[i][type]))
-                    //         obj.data = arr
-                    //         obj.name = item[i].cityName
-                    //     }
-                    //     newArr.push(obj)
-                    //     return newArr
-                    // })
+
                     var type = $('.dateAndArea_type_select button.active').attr("myType")
                     var res = chartData.map((item)=>{
                         var arrType = []
@@ -596,7 +588,7 @@ export default {
                         var obj = {}
                         item.map((list)=>{
                            arrType.push(Number(list[type]))
-                           arrTime.push(list.orderTime)
+                           arrTime.push(list.createDate)
                            obj.name = list.cityName
                         })
                         obj.data = arrType
@@ -651,7 +643,7 @@ export default {
             return newArr
         },
         handleClick (e) {
-            this.current = 1
+            this.currentPage = 1
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
                 elems[i].setAttribute('class', '')
@@ -668,7 +660,7 @@ export default {
         },
         handleTypeClick (e) {
             this.chartTitleName = e.target.innerHTML
-            this.current = 1
+            this.currentPage = 1
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
                 elems[i].setAttribute('class', '')
@@ -713,22 +705,10 @@ export default {
                     valueSuffix: '',
                     formatter: function() { 
                         var type = $('.dateAndArea_type_select button.active').attr("myType")
-                         
-                        if(type==='orderNum'){
-                          
-                            if(new String(this.point.y).length>3){
-                             return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 0,"",",");
-                            }else{
-                                return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + this.point.y;
-                            }
-                        }
-                        if(type=='orderAmount'||type=='avgAmount'||type=='payAmount'){
-                            if(new String(this.point.y).length>5){
-                               
-                             return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 2, ".",",");
-                            }else{
-                                return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + this.point.y;
-                            }
+                        if(new String(this.point.y).length>3){
+                            return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + Highcharts.numberFormat(this.point.y, 0,"",",");
+                        }else{
+                            return '时间:' + this.point.category + '<br>' + this.point.series.name + ':' + this.point.y;
                         }
                         
                     }                 
@@ -754,8 +734,8 @@ export default {
 
             new Highcharts.chart('container', options);
         },
-        handleCurrentPage(current) {
-            this.current = current
+        handleCurrentPage(currentPage) {
+            this.currentPage = currentPage
 
             this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
             this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
@@ -769,7 +749,7 @@ export default {
             
         },
         cityChange () {
-            this.current = 1
+            this.currentPage = 1
             this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
             this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
             // this.getChartData($('.dateAndArea_head_time button.active').attr('myId'))

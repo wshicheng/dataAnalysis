@@ -16,7 +16,7 @@
                         </th>
                         <th v-for="list of cityList" v-bind:key="list.cityId">
                             <div class="cityName">
-                                <div><a target="_blank" :href="'/index/orderAllData/manageReport/' + list.cityName + '&' + list.dataMonth + '&' +  list.cityId">{{list.cityName}}</a></div>
+                                <div><a target="_blank" :href="'#/index/orderAllData/manageReport/' + list.cityName + '&' + list.dataMonth + '&' +  list.cityId">{{list.cityName}}</a></div>
                                 <div>
                                     <span>当期</span>
                                     <span>环比</span>

@@ -260,8 +260,9 @@ export default {
                     key: 'registerUser'
                 },
                 {
-                    title: '已退押金用户',
-                    key: 'unDepositUser'
+                    title: '已退押金用户(累计)',
+                    key: 'unDepositUser',
+                    width: 160
                 }
             ],
             orderData: [],
@@ -319,7 +320,6 @@ export default {
             }
         },
         loadData () {
-            this.currentPage = 1
             this.spinShow = true
             this.spinShow2 = true
             this.noDataText = ''
@@ -357,6 +357,8 @@ export default {
                 this.noDataBox = true
                 if (res.data.resultCode === 0) {
                     this.noDataText = '暂无数据'
+                    this.currentPage = 1
+                    this.pageShow = false
                     this.orderData = []
                     this.loadChartData()
                 } else {
@@ -418,6 +420,7 @@ export default {
         },
         handleCurrentPage(currentPage) {
             this.currentPage = currentPage
+            console.log('this.currentPag', this.currentPage)
             if (this.loadFlag === true) {
                 this.loadData()
             }

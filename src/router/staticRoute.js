@@ -23,12 +23,13 @@ import userDateAndArea from '../view/userData/dateAndArea/index.vue'
 import newUser from '../view/userData/newUser/index.vue'
 import newUserDetail from '../view/userData/newUser/detail.vue'
 import activeUser from '../view/userData/activeUser/index.vue'
-import activeUserDetail from '../view/userData/userAllData/detail.vue'
+import activeUserDetail from '../view/userData/activeUser/detail.vue'
 import userKeep from '../view/userData/userKeep/index.vue'
 
 // 城市经营分析
 import cityManagerAnalysis from '../view/cityManagerAnaliysis/allData/index.vue'
 import cityManagerAnalysisByMonth from '../view/cityManagerAnaliysis/allData/detail.vue'
+import manageReport from '../view/cityManagerAnaliysis/allData/manageReport.vue'
 import managerData from '../view/cityManagerAnaliysis/manageData/index.vue'
 
 let staticRoutes = [
@@ -149,6 +150,11 @@ let staticRoutes = [
         path:'/index/orderAllData/detail/:id',
         component: orderAllDataDetail,
         name:'订单整体数据地区详情'
+    },
+    {
+        path:'/index/orderAllData/manageReport/:id',
+        component: manageReport,
+        name:'城市月经营统计'
     },
     {
         path:'/index/userAlldata/detail/:id',

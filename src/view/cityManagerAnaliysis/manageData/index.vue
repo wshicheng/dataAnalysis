@@ -28,7 +28,7 @@
                         
             <Table :row-class-name="rowClassName" :no-data-text='noDataText' class="cityManage_table" border size='small' :columns="columns4" :data="data1" @on-select="selectGroup" @on-select-all="selectAll" @on-selection-change="selectChange">                
             </Table>
-            <Page :total="totalListNum" show-sizer show-elevator :styles='page' :current='current' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
+            <Page :total="totalListNum" show-sizer show-elevator :styles='page' :current='current' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts' v-show="this.pageShow"></Page>
 
             <!-- 模态框区域 -->
             <Modal v-model="editModal" :mask-closable='close'  width="800px" :styles="{top: '20%'}" class="editModal_form">
@@ -60,7 +60,7 @@
                                 </Select>
                             </FormItem>
                         </FormItem>
-                         <FormItem label="型号" class="model" prop="model">
+                         <FormItem label="型号" class="model" prop="model"v-show="bikeModelShow">
                             <Input v-model.number="editValidate.model" placeholder="请输入型号"></Input>
                         </FormItem>
                         <FormItem label="单价" class="price" prop="unitPrice">
@@ -366,7 +366,7 @@ export default {
             close: false,
             smallList_one: [
                 {
-                    name: '车辆',
+                    name: '小蜜蜂',
                     index: 0
                 }, {
                     name: '电池',
@@ -396,20 +396,26 @@ export default {
             ],
             smallList_two: [
                 {
-                    name: '人员成本',
+                    name: '薪资福利',
                     index: 0
                 }, {
-                    name: '经营费用',
+                    name: '其他人员成本',
                     index: 1
                 }, {
-                    name: '开城费用',
+                    name: '房租(生产)',
                     index: 2
                 }, {
-                    name: '房租(生产)',
+                    name: '水电(生产)',
                     index: 3
                 }, {
-                    name: '水电(生产)',
+                    name: '其他生产成本',
                     index: 4
+                }, {
+                    name: '其他经营费用',
+                    index: 5
+                }, {
+                    name: '开城费',
+                    index: 6
                 }
             ],
             bigList: [
@@ -565,13 +571,20 @@ export default {
             numberShow: true,
             spinShow: true,
             noDataText: '',
-            typeList: ['固定资产','运维费用']
+            typeList: ['固定资产','运维费用'],
+            bikeModelShow: false,
+            pageShow: false
         }
     },
     mounted() {
         this.$store.dispatch('menuActiveName', '/index/managerData')
         document.title = '数据运营平台 - 我管理的数据'
         this.loadData()
+        // var arr = this.$store.state.keepCitys
+        var that = this
+        setTimeout( function () {
+            console.log(that.$store.state.keepCitys)
+        }, 200)
     },
     methods: {
         rowClassName (row, index) {
@@ -607,7 +620,9 @@ export default {
                     var dataDeled = this.tableDataDel(data)
 
                     this.data1 = dataDeled
-                    if (res.data.totalPage > 1) {
+                    if (res.data.totalPage < 2) {
+                        this.pageShow = false
+                    } else {
                         this.pageShow = true
                     }
                     this.totalListNum = res.data.totalItems
@@ -644,7 +659,9 @@ export default {
                     var data = res.data.data
                     var dataDesled = this.tableDataDel(data)
                     this.data1 = dataDesled
-                    if (res.data.totalPage > 1) {
+                    if (res.data.totalPage < 2) {
+                        this.pageShow = false
+                    } else {
                         this.pageShow = true
                     }
                     this.totalListNum = res.data.totalItems
@@ -685,7 +702,9 @@ export default {
                     var dataDeled = this.tableDataDel(data)
 
                     this.data1 = dataDeled
-                    if (res.data.totalPage > 1) {
+                    if (res.data.totalPage < 2) {
+                        this.pageShow = false
+                    } else {
                         this.pageShow = true
                     }
                     this.totalListNum = res.data.totalItems
@@ -725,7 +744,9 @@ export default {
                     var data = res.data.data
                     var dataDeled = this.tableDataDel(data)
                     this.data1 = dataDeled
-                    if (res.data.totalPage > 1) {
+                    if (res.data.totalPage < 2) {
+                        this.pageShow = false
+                    } else {
                         this.pageShow = true
                     }
                     this.totalListNum = res.data.totalItems
@@ -774,19 +795,26 @@ export default {
             var type = row.type.split('/')
             this.editBigType = type[0]
             this.editValidate.bigKind = type[0]
+            console.log(row)
             this.editSmallType = type[1]
             this.editSmallType2 = '请选择小类'
             this.editValidate.smallKind = type[1]
+            this.editValidate.smallKind = row.smallKind
+            if (type[1] === '小蜜蜂' || type[1] === '电池') {
+                this.bikeModelShow = true
+            } else {
+                this.bikeModelShow = false
+            }
             if (row.status === 1) {
                 this.$Message.warning('每月10号后，不可编辑和删除上月数据')
-            } else if (type[1] === '车辆' || type[1] === '电池' || type[1] === '机动车' || type[1] === '运维工具车') {
+            } else if (type[1] === '小蜜蜂' || type[1] === '电池' || type[1] === '机动车' || type[1] === '运维工具车') {
                 this.numberShow = true
                 this.editModal = true
                 this.editMonth = row.dataMonth
                 this.editValidate.dataMonth = row.dataMonth
-                this.editArea = row.city
+                this.editArea = row.cityName
                 // console.log('editArea',this.editArea)
-                this.editValidate.city = row.city
+                this.editValidate.city = row.cityName
                 this.editValidate.unitPrice = row.unitPrice
                 this.editValidate.number = row.number
                 this.editValidate.id = row.id
@@ -797,9 +825,9 @@ export default {
                 this.editModal = true
                 this.editMonth = row.dataMonth
                 this.editValidate.dataMonth = row.dataMonth
-                this.editArea = row.city
+                this.editArea = row.cityName
                 // console.log('editArea',this.editArea)
-                this.editValidate.city = row.city
+                this.editValidate.city = row.cityName
                 this.editValidate.unitPrice = row.unitPrice
                 this.editValidate.number = row.number
                 this.editValidate.id = row.id
@@ -1054,7 +1082,9 @@ export default {
                 var data = res.data.data
                 var dataDeled = this.tableDataDel(data)
                 this.data1 = dataDeled
-                if (res.data.totalPage > 1) {
+                if (res.data.totalPage < 2) {
+                    this.pageShow = false
+                } else {
                     this.pageShow = true
                 }
                 this.totalListNum = res.data.totalItems

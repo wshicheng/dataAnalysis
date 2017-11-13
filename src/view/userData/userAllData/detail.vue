@@ -10,14 +10,13 @@
             <span>*查询数据的截止日期</span>        
         </div>
       </div>
-
       <div class="userAllDataDetail_table">
         <Spin fix size="large" v-if="spinShow"  class="spin">
             <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
             <div style="color: #ccc; text-indent: 5px;">  loading...</div>
         </Spin>
         <div class="help">
-            <Poptip trigger="hover" style="float: right;" placement="left-start" title="数据项说明" content="提示内容" transfer='true'>
+            <Poptip trigger="hover" style="float: right;" placement="left-start" title="数据项说明" content="提示内容" :transfer='transfer'>
                 <span>?</span>
                 <div class="content" slot="content">
                     <p><b>累计用户:</b>累计到查询日期的注册用户数</p>
@@ -111,7 +110,7 @@
             margin-top: 20px;
             background: #fff;
             position: relative;
-            // overflow: hidden;
+            overflow: hidden;
             padding-top: 3px;
             .spin {
                 position: absolute;
@@ -251,7 +250,8 @@ export default {
                     return date&&date.valueOf()> Date.now() - 86400000
                 }
             },
-            clearable: false
+            clearable: false,
+            transfer: true
         }
     },
     mounted () {
@@ -268,7 +268,6 @@ export default {
             }
         },
         loadData () {
-            this.currentPage = 1
             this.spinShow = true
             this.spinShow2 = true
             this.noDataText = ''
@@ -297,6 +296,8 @@ export default {
                 this.spinShow = false
                 if (res.data.resultCode === 0) {
                     this.noDataText = '暂无数据'
+                    this.currentPage = 1
+                    this.pageShow = false
                     this.loadChartData()
                     this.orderData = []
                 } else {
@@ -410,7 +411,7 @@ export default {
                                 }
                             },
                             title: {
-                                text: '金额',
+                                text: '用户数',
                                 style: {
                                     color: Highcharts.getOptions().colors[1]
                                 }
@@ -419,7 +420,7 @@ export default {
                             opposite: true,
                             tickPositions: [0, 20, 40, 60, 80, 100],
                             title: {
-                                text: '实收率',
+                                text: '累计押金用户占比',
                                 style: {
                                     color: '#9999ff'
                                 }
