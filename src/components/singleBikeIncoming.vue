@@ -349,9 +349,9 @@
                                for (var i = 0; i < 1; i++) {
                                    html += `
                                        <tr class="ivu-table-row">
-                                           <td class="middle ivu-table-hidden">
-                                               <div class="ivu-table-cell ivu-table-hidden">
-                                                   <div>北京市</div>
+                                           <td class="middle">
+                                               <div class="ivu-table-cell">
+                                                   <div>合计</div>
                                                </div>
                                            </td>
                                            <td class="ivu-table-column-center">
@@ -411,16 +411,23 @@
                  $('div.fiexedAssets').eq(3).height(height/2)
            },
            watch: {
-              //  'dataMonth': {
-              //      handler: function(val) {
-              //          this.changePage()
-              //      },
-              //      deep: true
-              //  }
+              'dataMonth':{
+                  handler:function(val){
+                    this.isNoData2 = false
+                    this.isNoData = false
+                    this.spinShow = true
+                  },
+                  deep:true
+              },
                'analysisType': {
                     handler: function(n,o) {
                         if(n==1){
                            this.changePage()
+                       }else{
+                         this.data7 = []
+                         this.isNoData = false
+                          this.isNoData2 = true
+                          this.spinShow = false
                        }
                     },
                     deep: true

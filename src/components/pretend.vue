@@ -3,6 +3,9 @@
       <Row class="citySelect">
         <city-select prop="cityShow"></city-select>
       </Row>
+       <div class="nodata2" v-show="isNoData2">
+            <i class="iconfont icon-zanwushuju"></i>
+        </div>
       <Row class="cityBindTable" style="position:relative;">
            <Spin v-show="spinShow" fix>
                 <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
@@ -194,16 +197,25 @@ import citySelect from './citySelect.vue'
                }
         },
         watch: {
-            // 'dataMonth': {
-            //     handler: function(val) {
-            //         this.changePage()
-            //     },
-            //     deep: true
-            // },
+                    'dataMonth':{
+                    handler:function(val){
+                    this.isNoData2 = false
+                    this.isNoData = false
+                    this.spinShow = true
+                    this.allCount2 = false
+                    },
+                    deep:true
+                },
              'analysisType': {
                     handler: function(n,o) {
                         if(n==1){
                            this.changePage()
+                       }else{
+                           this.allCityTables = []
+                            this.isNoData = false
+                          this.isNoData2 = true
+                          this.spinShow = false
+                          this.allCount2 = false
                        }
                     },
                     deep: true
@@ -225,6 +237,8 @@ import citySelect from './citySelect.vue'
     }
 </script>
 <style lang="scss" type="text/css" scoped>
+div.nodata2{text-align:center;}
+div.nodata2 i{font-size:400px;color:#dedcdc;}
     .citySelect{
         padding:16px 16px 0 16px;
         background:#f3f3f5;

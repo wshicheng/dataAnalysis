@@ -951,16 +951,23 @@ export default {
          $('div.fiexedAssets').eq(1).height(height/2)
     },
     watch:{
-        // 'dataMonth':{
-        //     handler:function(val){
-        //         this.changePage()
-        //     },
-        //     deep:true
-        // },
+        'dataMonth':{
+            handler:function(val){
+              this.isNoData2 = false
+              this.isNoData = false
+              this.spinShow = true
+            },
+            deep:true
+        },
         'analysisType': {
                     handler: function(n,o) {
                         if(n==1){
                            this.changePage()
+                       }else{
+                           this.data4 = []
+                           this.isNoData = false
+                           this.isNoData2 = true
+                           this.spinShow = false
                        }
                     },
                     deep: true
