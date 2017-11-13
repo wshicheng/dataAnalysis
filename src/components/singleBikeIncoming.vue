@@ -18,7 +18,6 @@
        export default {
            data () {
                return {
-                 countObj:{},
                  spinShow:true,
                    isNoData:true,
                    isNoData2:true,
@@ -256,10 +255,11 @@
                   }
                 ],
                    data7:[],
+                   countObj:{}
                }
            },
            computed:{
-               ...mapGetters(['dataMonth'])
+               ...mapGetters(['dataMonth','analysisType'])
            },
            methods:{
                mockTableData(){
@@ -313,7 +313,7 @@
                                 }else{
                                     that.isNoData2 = true
                                     that.isNoData = false
-                                    return;
+                                     
                                 }
                                for (var i = 0; i < data.length; i++) {
                                    if (i < data.length - 1) {
@@ -339,8 +339,8 @@
                                        )
                                    }
                                    if (i === data.length - 1) {
-                                       that.countObj = data[data.length - 1]||{}
-                                        var obj = that.countObj
+                                       this.countObj = data.pop()
+                                        var obj = this.countObj
                                    }
    
                                }
@@ -387,18 +387,14 @@
                                    `
                                }
                               
-                           if(that.data7.length>0){
-                                   $('.ivu-table-body').eq(3).find('table').find('tfoot').remove()
-                                   $('.ivu-table-body').eq(3).find('table').append("<tfoot><tr>" + html + "</tr></tfoot>")
-                                   $('.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                                   $('.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').append('<tfoot><td class="middle"><div class="ivu-table-cell"><div>合计</div></div></td></tfoot>')
-                                   $('.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                                   $('.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append('<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>'+obj.total+'</div></div></td></tr></tfoot>')
-                               }else{
-                                   $('.ivu-table-body').eq(3).find('table').find('tfoot').remove()
-                                   $('.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                                   $('.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                               }
+                           $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-header').find('table').width('100%')
+                            $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-body').find('table').width('100%')
+                            $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-body').find('table').find('tfoot').remove()
+                            $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-body').find('table').append('<tfoot>' + html + '</tfoot>')
+                            $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                            $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed-body').find('table').append('<tfoot>' + html + '</tfoot>')
+                            $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
+                            $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append('<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>'+obj.total+'</div></div></td></tr></tfoot>')
                            }).catch((error) => {
                                console.log(error)
                                  that.spinShow = false
@@ -415,12 +411,20 @@
                  $('div.fiexedAssets').eq(3).height(height/2)
            },
            watch: {
-               'dataMonth': {
-                   handler: function(val) {
-                       this.changePage()
-                   },
-                   deep: true
-               }
+              //  'dataMonth': {
+              //      handler: function(val) {
+              //          this.changePage()
+              //      },
+              //      deep: true
+              //  }
+               'analysisType': {
+                    handler: function(n,o) {
+                        if(n==1){
+                           this.changePage()
+                       }
+                    },
+                    deep: true
+                }
            }
        }
    </script>

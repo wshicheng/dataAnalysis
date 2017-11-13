@@ -665,7 +665,7 @@ export default {
         }
     },
     computed:{
-        ...mapGetters(['dataMonth'])
+        ...mapGetters(['dataMonth','analysisType'])
     },
     methods: {
         mockTableData() {
@@ -951,12 +951,20 @@ export default {
          $('div.fiexedAssets').eq(1).height(height/2)
     },
     watch:{
-        'dataMonth':{
-            handler:function(val){
-                this.changePage()
-            },
-            deep:true
-        }
+        // 'dataMonth':{
+        //     handler:function(val){
+        //         this.changePage()
+        //     },
+        //     deep:true
+        // },
+        'analysisType': {
+                    handler: function(n,o) {
+                        if(n==1){
+                           this.changePage()
+                       }
+                    },
+                    deep: true
+                }
     }
 }
 </script>

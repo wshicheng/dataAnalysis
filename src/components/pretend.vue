@@ -103,7 +103,7 @@ import citySelect from './citySelect.vue'
             }
         },
         computed:{
-            ...mapGetters(['dataMonth','cityList'])
+            ...mapGetters(['dataMonth','cityList','analysisType'])
         },
         updated(){
               setTimeout(()=>{
@@ -194,12 +194,20 @@ import citySelect from './citySelect.vue'
                }
         },
         watch: {
-            'dataMonth': {
-                handler: function(val) {
-                    this.changePage()
+            // 'dataMonth': {
+            //     handler: function(val) {
+            //         this.changePage()
+            //     },
+            //     deep: true
+            // },
+             'analysisType': {
+                    handler: function(n,o) {
+                        if(n==1){
+                           this.changePage()
+                       }
+                    },
+                    deep: true
                 },
-                deep: true
-            },
             '$store.state.cityList': {
                 handler: function(){
                     this.changePage()

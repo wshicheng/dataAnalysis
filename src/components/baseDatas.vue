@@ -13,7 +13,7 @@
 </template>
 <script>
 import $ from 'jquery'
-import { mapGetters } from 'vuex'
+import { mapGetters,mapActions } from 'vuex'
 export default {
     data() {
         return {
@@ -1057,7 +1057,9 @@ export default {
         }
     },
     methods: {
+         ...mapActions(['updateType']),
         changePage() {
+            var that = this;
             this.spinShow = true
              this.isNoData = false
             // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
@@ -1073,6 +1075,8 @@ export default {
                    this.spinShow = false
                     var data = response.data.data
                     var message = response.data.message
+                    var code = response.data.resultCode
+                    this.updateType(code)
                     if(message === '用户登录超时'){
                         this.$router.push({path:'/login'})
                     }
@@ -1325,7 +1329,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['dataMonth'])
+        ...mapGetters(['dataMonth','analysisType'])
     },
     mounted() {
          var height = $(window).height()

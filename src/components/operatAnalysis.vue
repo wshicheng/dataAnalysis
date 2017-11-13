@@ -16,7 +16,7 @@
                         </th>
                         <th v-for="list of cityList" v-bind:key="list.cityId">
                             <div class="cityName">
-                                <div>{{list.cityName}}</div>
+                                <div><a target="_blank" :href="'/index/orderAllData/manageReport/' + list.cityName + '&' + list.dataMonth + '&' +  list.cityId">{{list.cityName}}</a></div>
                                 <div>
                                     <span>当期</span>
                                     <span>环比</span>
@@ -60,8 +60,8 @@
                             <div class="cityName">
                                 <div></div>
                                 <div>
-                                    <span>{{list.inComing.nowData}}</span>
-                                    <span>{{list.inComing.diff}}</span>
+                                    <span></span>
+                                    <span></span>
                                 </div>
                             </div>
                         </td>
@@ -720,38 +720,63 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="hidden">
+            <div class="hidden" v-show="cityList.length>5">
                 <ul>
+                    <li class="space"></li>    
                     <li>归属车辆数</li>
                     <li class="yellow">收入（元）</li>
                     <li>总计费</li>
                     <li>总实收</li>
                     <li>实收率（%）</li>
+                     <li>单车计费收入</li>
                     <li>单车实际收入</li>
                     <li class="yellow">成本（元）</li>
                     <li>总成本</li>
                     <li>单车成本：</li>
                     <li class="indent">单车运维费用</li>
-                    <li>单车摊销费用</li>
+                    <li class="indent">单车摊销费用</li>
                     <li class="yellow">营收（元）</li>
                     <li>税前毛利</li>
+                    <li>单车实际利润（元）</li>
+                    <li>单车投资收益率（%）</li>
+                    <li>单车计费盈利率（%）</li>
+                    <li>单车实际盈利率（%）</li>
+                    <li class="yellow">车辆</li>
+                    <li>投产车辆数（日均）</li>
+                    <li>投产率（日均）</li>    
+                    <li>单车日均订单数</li>
+                    <li>单车平均用户数</li>
+                    <li>单车平均押金用户数（当前）</li>
+                    <li class="yellow">用户</li>
+                    <li>注册用户数（累计）</li>
+                    <li>押金用户数（实时）</li>
+                    <li>订单用户数（当期）</li>
+                    <li>新增注册：</li>
+                    <li class="indent">当期</li>
+                    <li class="indent">日均</li>
+                    <li>新增押金：</li>
+                    <li class="indent">当期</li>
+                    <li class="indent">日均</li>                      
                 </ul>
             </div>
         </div>
     </div>
 </template>
 <script>
+import $ from 'jquery'
+import { mapGetters } from 'vuex'
     export default {
         data:function(){
             return {
                 month:'',
-                cityList:[]
+                cityList:[],
+                cityItems:[]
             }
         },
         methods:{
             mockDatas(){
-                for (var i=0;i<10;i++){
-                    this.cityList.push({
+                for (var i=0;i<1;i++){
+                    this.cityItems.push({
                         cityName:'城市' + Math.floor(Math.random()*255),
                         cityId:Math.floor(Math.random())*255 + "-" + Math.floor(Math.random())*9,
                         bikeNum:{
@@ -877,11 +902,311 @@
                         
                     })
                 }
+            },
+            changePage() {
+            // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
+            // var that = this
+            // setTimeout(function() {
+                var that = this
+                this.axios('/beefly/monthDataDetail/api/v1/monthDataDetail', {
+                    params: {
+                        dataMonth: this.dataMonth,
+                        accessToken: this.$store.state.token,
+                        type: 3
+                    }
+                }).then((response) => {
+                    var data = response.data.data
+                   
+                    var dataDel =  data.map((item,_index)=>{
+                         var arr = []
+                    var bikeNum = {}
+                    var orderAmountTot = {}
+                    var payAmountTot = {}
+                    var actualYield = {}
+                    var sinBikeBillingIncome = {}
+                    var sinBikeRealityIncome = {}
+                    var costTot = {}
+                    var singleBikeCost = {}
+                    var sinBikeManageMoney = {}
+                    var sinBikeDepreMoney = {}
+                    var grossMargin = {}
+                    var sinBikeRealityProfit ={}
+                    var sinBikeInvestIncomeLv = {}
+                    var sinBikeBillingIncomeLv ={}
+                    var sinBikeRealityIncomeLv= {}
+                    var avgProducteBikeNum = {}
+                    var avgProductionLv = {}
+                    var avgSinBikeOrderNum = {}
+                    var avgSinBikeUserNum = {}
+                    var avgSinBikeDepositUserNumDay = {}
+                    var registerUserNum = {}
+                    var depositUserNum = {}
+                    var orderUserNum ={}
+                    var newAddRegister = {}
+                    var avgNewAddRegister = {}
+                    var currentNewAddRegister = {}
+                    var newAddDeposit = {}
+                    var currentNewAddDeposit = {}
+                    var avgNewAddDeposit = {}
+                       item.map((list,index)=>{
+                          if(index==0){
+                              bikeNum.nowData = list.bikeNum
+                              orderAmountTot.nowData = list.orderAmountTot
+                              payAmountTot.nowData = list.payAmountTot
+                              actualYield.nowData = list.actualYield
+                              sinBikeBillingIncome.nowData = list.sinBikeBillingIncome
+                              sinBikeRealityIncome.nowData = list.sinBikeRealityIncome
+                              costTot.nowData = list.costTot
+                              singleBikeCost.nowData = list.singleBikeCost
+                              sinBikeManageMoney.nowData = list.sinBikeManageMoney
+                              sinBikeDepreMoney.nowData = list.sinBikeDepreMoney
+                              grossMargin.nowData = list.grossMargin
+                              sinBikeRealityProfit.nowData = list.sinBikeRealityProfit
+                              sinBikeInvestIncomeLv.nowData = list.sinBikeInvestIncomeLv
+                              sinBikeBillingIncomeLv.nowData = list.sinBikeBillingIncomeLv
+                              sinBikeRealityIncomeLv.nowData = list.sinBikeRealityIncomeLv
+                              avgProducteBikeNum.nowData = list.avgProducteBikeNum
+                              avgProductionLv.nowData = list.avgProductionLv
+                              avgSinBikeOrderNum.nowData = list.avgSinBikeOrderNum
+                              avgSinBikeUserNum.nowData = list.avgSinBikeUserNum
+                              avgSinBikeDepositUserNumDay.nowData = list.avgSinBikeDepositUserNumDay
+                              registerUserNum.nowData = list.registerUserNum
+                              depositUserNum.nowData = list.depositUserNum
+                              orderUserNum.nowData = list.orderUserNum
+                              newAddRegister.nowData = list.newAddRegister
+                              currentNewAddRegister.nowData = list.currentNewAddRegister
+                              avgNewAddRegister.nowData = list.avgNewAddRegister
+                              newAddDeposit.nowData = list.newAddDeposit
+                              currentNewAddDeposit.nowData = list.currentNewAddDeposit
+                              avgNewAddDeposit.nowData = list.avgNewAddDeposit
+                          }else{
+                              bikeNum.diff = list.bikeNum
+                              orderAmountTot.diff = list.orderAmountTot
+                              payAmountTot.diff = list.payAmountTot
+                              actualYield.diff = list.actualYield
+                              sinBikeBillingIncome.diff = list.sinBikeBillingIncome
+                              sinBikeRealityIncome.diff = list.sinBikeRealityIncome
+                              costTot.diff = list.costTot
+                              singleBikeCost.diff = list.singleBikeCost
+                              sinBikeManageMoney.diff = list.sinBikeManageMoney
+                              sinBikeDepreMoney.diff = list.sinBikeDepreMoney
+                              grossMargin.diff = list.grossMargin
+                              sinBikeRealityProfit.diff = list.sinBikeRealityProfit
+                              sinBikeInvestIncomeLv.diff = list.sinBikeInvestIncomeLv
+                              sinBikeBillingIncomeLv.diff = list.sinBikeBillingIncomeLv
+                              sinBikeRealityIncomeLv.diff = list.sinBikeRealityIncomeLv
+                              avgProducteBikeNum.diff = list.avgProducteBikeNum
+                              avgProductionLv.diff = list.avgProductionLv
+                              avgSinBikeOrderNum.diff = list.avgSinBikeOrderNum
+                              avgSinBikeUserNum.diff = list.avgSinBikeUserNum
+                              avgSinBikeDepositUserNumDay.diff = list.avgSinBikeDepositUserNumDay
+                              registerUserNum.diff = list.registerUserNum
+                              depositUserNum.diff = list.depositUserNum
+                              orderUserNum.diff = list.orderUserNum
+                              newAddRegister.diff = list.newAddRegister
+                              currentNewAddRegister.diff = list.currentNewAddRegister
+                              avgNewAddRegister.diff = list.avgNewAddRegister
+                              newAddDeposit.diff = list.newAddDeposit
+                              currentNewAddDeposit.diff = list.currentNewAddDeposit
+                              avgNewAddDeposit.diff = list.avgNewAddDeposit
+                          }
+                       })
+                       return Object.assign({},
+                        {dataMonth:item[0].dataMonth},
+                        {cityId:item[0].cityCode},
+                        {cityName:item[0].cityName},
+                        {bikeNum},
+                        {orderAmountTot},
+                        {payAmountTot},
+                        {actualYield},
+                        {sinBikeBillingIncome},
+                        {sinBikeRealityIncome},
+                        {costTot},
+                        {singleBikeCost},
+                        {sinBikeManageMoney},
+                        {sinBikeDepreMoney},
+                        {grossMargin},
+                        {sinBikeRealityProfit},
+                        {sinBikeInvestIncomeLv},
+                        {sinBikeBillingIncomeLv},
+                        {sinBikeRealityIncomeLv},
+                        {avgProducteBikeNum}, 
+                        {avgProductionLv},
+                        {avgSinBikeOrderNum},
+                        {avgSinBikeUserNum},
+                        {avgSinBikeDepositUserNumDay},
+                        {registerUserNum},
+                        {depositUserNum},
+                        {orderUserNum},
+                        {newAddRegister},
+                        {currentNewAddRegister}, 
+                        {newAddDeposit},
+                        {currentNewAddDeposit},
+                        {avgNewAddDeposit},
+                        {avgNewAddRegister}
+
+                       )
+                   })
+                   console.log(dataDel)
+                    that.cityList = dataDel;
+                   var model =  {
+                        cityName:'城市' + Math.floor(Math.random()*255),
+                        cityId:Math.floor(Math.random())*255 + "-" + Math.floor(Math.random())*9,
+                        bikeNum:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        inComing:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        orderAmountTot:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        payAmountTot:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        actualYield:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        sinBikeBillingIncome:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        sinBikeRealityIncome:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        costTot:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        singleBikeCost:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        sinBikeManageMoney:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        sinBikeDepreMoney:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        grossMargin:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        sinBikeRealityProfit:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        sinBikeInvestIncomeLv:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        sinBikeBillingIncomeLv:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        sinBikeRealityIncomeLv:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        avgProducteBikeNum:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        avgProductionLv:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        avgSinBikeOrderNum:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        avgSinBikeUserNum:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        avgSinBikeDepositUserNumDay:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        registerUserNum:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        depositUserNum:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        orderUserNum:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        newAddRegister:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        currentNewAddRegister:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        avgNewAddRegister:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        },
+                        newAddDeposit:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        }, 
+                        currentNewAddDeposit:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        }, 
+                        avgNewAddDeposit:{
+                            nowData:Math.floor(Math.random()*255),
+                            diff:Math.floor(Math.random()*100) + '%'
+                        }   
+                        
+                    }
+                  var message = response.data.message
+                    if(message === '用户登录超时'){
+                        this.$router.push({path:'/login'})
+                    }
+
+                }).catch((error) => {
+                    console.log(error)
+                })
             }
+        },
+         computed: {
+            ...mapGetters(['dataMonth','analysisType'])
         },
         mounted:function(){
             this.mockDatas()
+            console.log("analysisType:" + this.analysisType)
             this.month = this.$route.params.month.split('-')[1]
+        },
+        watch: {
+                // 'dataMonth': {
+                //     handler: function(val) {
+                //         this.changePage()
+                //     },
+                //     deep: true
+                // },
+                'analysisType': {
+                    handler: function(n,o) {
+                       if(n==1){
+                           this.changePage()
+                       }
+                    },
+                    deep: true
+                }
         }
     }
 </script>
@@ -902,10 +1227,20 @@
         div.hidden{
             width: 200px;
             position: fixed;
-            top: 67px;
-            background: #ed3f14;
+            top: 31px;
+            background: #fff;
             bottom: 19px;
-            opacity:0.3;
+            opacity:1;
+            ul{
+                li{
+                   line-height: 31px;
+                   height: 31px;
+                   border-bottom: 1px solid #ddd; 
+                }
+                li.yellow{background:yellow}
+                li.indent{padding-left:55px}
+                li.space{height: 37px;line-height: 37px;background: #bdd7ee;}
+            }
         }
         table{
             width: 100%;
