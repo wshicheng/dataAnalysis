@@ -4,10 +4,22 @@
             <BreadcrumbItem>整体数据</BreadcrumbItem>
         </Breadcrumb>
       <div id="userAllData_head">
-        <div class="userAllData_head_time">
+        <div class="userAllData_head_time" v-if="cityType === 1">
             <span>时间:</span>
             <DatePicker v-model="time" :clearable='clearable' @on-change='timeChange' type="date" :options='options' placeholder="选择日期" style="width: 216px;"></DatePicker>
             <span>*查询数据的截止日期</span>
+        </div>
+        <div class="userAllData_head_time2" v-else>
+            <span>时间:</span>
+            <button @click="handleClick" myId='1'>今日</button>
+            <button @click="handleClick" myId='2'>昨日</button>
+            <button class="active" @click="handleClick" myId='3'>近7日</button>
+            <button @click="handleClick" myId='4'>近30天</button>
+            <button @click="handleClick" myId='5'>指定时间段</button>    
+        </div>
+        <div class="timeSelectShow" v-show="timeSelectShow">
+            <DatePicker type="daterange" v-model="timeLine" :options='options' placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
+            <div class="search"><button @click="searchByTimeLine">搜索</button></div>
         </div>
         <div v-if="cityType === 1">
             <city-select></city-select>
@@ -112,6 +124,67 @@
                     font-size: 13px;
                 }
             }
+            div.userAllData_head_time2 {
+                margin-bottom: 10px;
+                span:nth-of-type(1) {
+                    margin-right: 9px;
+                }
+                button {
+                    width: 80px;
+                    height: 30px;
+                    line-height: 30px;
+                    cursor: pointer;
+                    display: inline-block;
+                    background: #fff;
+                    border: 1px solid #dddee1;
+                    border-radius: 4px;
+                    text-align: center;
+                    color: #565c6b;
+                    outline: none;
+                    margin-right: 10px;
+                }
+                button:nth-last-of-type(1) {
+                    width: 80px;
+                }
+                button.active {
+                    border: 1px solid orange;
+                    color: orange;
+                }
+                span:nth-of-type(2) {
+                    color: #ccc;
+                    margin-left: 10px;
+                    font-size: 13px;
+                }
+            }
+            div.timeSelectShow {
+                display: inline;
+                position: absolute;
+                left: 523px;
+                top: 9px;
+                div.search {
+                    display: inline-block;
+                    button {
+                        width: 80px;
+                        height: 32px;
+                        line-height: 32px;
+                        cursor: pointer;
+                        margin-left: 3px;
+                        display: inline-block;
+                        border-radius: 4px;
+                        text-align: center;
+                        outline: none;
+                        margin-right: 10px;
+                        color: #fff;
+                        background: #444;
+                        font-weight: bolder;
+                        border: 1px solid #444;
+                    }
+                    button:hover {
+                        background: #666;
+                        border: 1px solid #666;
+                    }
+                }
+            }
         }
         .userAllData_table {
             padding: 10px;
@@ -193,7 +266,9 @@ export default {
         var that = this;
         return {
             cityType: '',
+            timeSelectShow: false,
             time:  Date.now() - 86400000,
+            timeLine: ['',''],
             page: {
                 'float': 'right',
                 'margin-top': '20px'
@@ -293,7 +368,7 @@ export default {
         this.cityType = type
         var that = this
         setTimeout( function () {
-            that.loadData()
+            that.loadData($('.userAllData_head_time2 button.active').attr('myId'))
         }, 200)
     },
     computed: {
@@ -311,15 +386,22 @@ export default {
         handleSort(column,key,order){
             console.log(column,key,order)
         },
+        searchByTimeLine () {
+            if (this.timeLine[0] === '' || this.timeLine[0] === null) {
+                this.$Message.warning('请选择时间段')
+            } else {
+                this.loadData('5')
+            }
+        },
         timeChange (newTime) {
             this.time = newTime
             if (this.time.length === '') {
                 return
             } else {
-                this.loadData()
+                this.loadData($('.userAllData_head_time2 button.active').attr('myId'))
             }
         },
-        loadData () {
+        loadData (type) {
             this.spinShow = true
             this.spinShow2 = true
             this.noDataText = ''
@@ -330,15 +412,17 @@ export default {
             this.chartDepositUserRate = []
             this.chartDataX = []
             // 节流防止用户快速点击数据串行
-            this.loadFlag = false       
-
+            this.loadFlag = false
             this.axios.get('/beefly/wholeUser/api/v1/wholeDataPage', {
                 params: {
+                    type: this.cityType === 1?'':type,
                     accessToken: this.$store.state.token,
                     cityCode: this.$store.state.cityList.toString(),
                     pageNo: this.currentPage,
                     pageSize: this.pageSize,
-                    time: moment(this.time).format('YYYY-MM-DD')
+                    time: this.cityType === 1?moment(this.time).format('YYYY-MM-DD'):'',
+                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
                 }
             })
             .then( res => {
@@ -360,11 +444,11 @@ export default {
                     this.currentPage = 1
                     this.pageShow = false
                     this.orderData = []
-                    this.loadChartData()
+                    this.loadChartData($('.userAllData_head_time2 button.active').attr('myId'))
                 } else {
                     this.orderData = data
 
-                    this.loadChartData()
+                    this.loadChartData($('.userAllData_head_time2 button.active').attr('myId'))
                     // 处理分页数据
                     if (res.data.totalPage < 2 && this.pageSize === 10) {
                         this.pageShow = false
@@ -381,12 +465,15 @@ export default {
                 console.log(err)
             })
         },
-        loadChartData () {
+        loadChartData (type) {
             this.axios.get('/beefly/wholeUser/api/v1/chartData', {
                 params: {
                     accessToken: this.$store.state.token,
                     cityCode: this.$store.state.cityList.toString(),
-                    time: moment(this.time).format('YYYY-MM-DD')
+                    time: this.cityType === 1?moment(this.time).format('YYYY-MM-DD'):'',
+                    type: this.cityType === 1?'':type,
+                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
                 }
             })
             .then( res => {
@@ -422,14 +509,34 @@ export default {
             this.currentPage = currentPage
             console.log('this.currentPag', this.currentPage)
             if (this.loadFlag === true) {
-                this.loadData()
+                this.loadData($('.userAllData_head_time2 button.active').attr('myId'))
             }
         },
         handlePageSize(pageSize) {
             this.currentPage = 1
             this.pageSize = pageSize
             if (this.loadFlag === true) {
-                this.loadData()
+                this.loadData($('.userAllData_head_time2 button.active').attr('myId'))
+            }
+        },
+        handleClick (e) {
+            this.currentPage = 1
+            this.pageSize = 10
+            var elems = siblings(e.target)
+            for (var i = 0; i < elems.length; i++) {
+                elems[i].setAttribute('class', '')
+            }
+            e.target.setAttribute('class', 'active')
+            if (e.target.innerHTML === '指定时间段') {
+                this.timeSelectShow = true
+            } else {
+                this.timeSelectShow = false
+                this.timeLine = ['','']
+                if (this.loadFlag === true) {
+                    this.loadData(e.target.getAttribute('myId'))
+                } else {
+                    return
+                }
             }
         },
         delcommafy(num){
@@ -589,7 +696,7 @@ export default {
         },
         cityChange () {
             if (this.loadFlag === true) {
-                this.loadData()
+                this.loadData($('.userAllData_head_time2 button.active').attr('myId'))
             }
         },
         checkLogin (res) {

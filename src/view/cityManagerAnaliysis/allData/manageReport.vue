@@ -18,7 +18,7 @@
             </Row>
             <!-- 车辆模块 -->
             <Row class="other">
-                <Col span="12" class="title_level1"><span>1 车辆</span></Col>
+                <Col span="12" class="title_level1"><span><b>1 车辆</b></span></Col>
                 <Col span="6"><span></span></Col>
                 <Col span="6"><span></span></Col>
             </Row>
@@ -45,7 +45,7 @@
 
             <!-- 用户模块 -->
             <Row class='other'>
-                <Col span="12"  class="title_level1"><span>2 用户</span></Col>
+                <Col span="12"  class="title_level1"><span><b>2 用户</b></span></Col>
                 <Col span="6"><span></span></Col>
                 <Col span="6"><span></span></Col>
             </Row>
@@ -107,7 +107,7 @@
 
             <!-- 收入 -->
             <Row class='other'>
-                <Col span="12"  class="title_level1"><span>3 收入</span></Col>
+                <Col span="12"  class="title_level1"><span><b>3 收入</b></span></Col>
                 <Col span="6"><span></span></Col>
                 <Col span="6"><span></span></Col>
             </Row>
@@ -169,7 +169,7 @@
 
             <!-- 成本 -->
             <Row class='other'>
-                <Col span="12"  class="title_level1"><span>4 成本</span></Col>
+                <Col span="12"  class="title_level1"><span><b>4 成本</b></span></Col>
                 <Col span="6"><span></span></Col>
                 <Col span="6"><span></span></Col>
             </Row>
@@ -303,7 +303,7 @@
 
             <!-- 盈亏分析 -->
             <Row class='other'>
-                <Col span="12"  class="title_level1"><span style="text-indent: -10px;">5 盈亏分析</span></Col>
+                <Col span="12"  class="title_level1"><span style="text-indent: -10px;"><b>5 盈亏分析</b></span></Col>
                 <Col span="6"><span></span></Col>
                 <Col span="6"><span></span></Col>
             </Row>
@@ -403,7 +403,7 @@
                         border-bottom: none;
                     }
                     .title_level1 {
-                        text-indent: -40px;
+                        text-indent: -52px;
                     }
                     .title_level2 {
                         // width: 200px;

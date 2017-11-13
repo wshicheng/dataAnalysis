@@ -6,8 +6,15 @@
       <div id="userAllDataDetail_head">
         <div class="userAllDataDetail_head_time">
             <span>时间:</span>
-            <DatePicker v-model="time" :clearable='clearable' @on-change='timeChange' type="date" :options='options' placeholder="选择日期" style="width: 216px;"></DatePicker>
-            <span>*查询数据的截止日期</span>        
+            <button @click="handleClick" myId='1'>今日</button>
+            <button @click="handleClick" myId='2'>昨日</button>
+            <button class="active" @click="handleClick" myId='3'>近7日</button>
+            <button @click="handleClick" myId='4'>近30天</button>
+            <button @click="handleClick" myId='5'>指定时间段</button>    
+        </div>
+        <div class="timeSelectShow" v-show="timeSelectShow">
+            <DatePicker type="daterange" v-model="timeLine" :options='options' placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
+            <div class="search"><button @click="searchByTimeLine">搜索</button></div>
         </div>
       </div>
       <div class="userAllDataDetail_table">
@@ -104,6 +111,35 @@
                     font-size: 13px;
                 }
             }
+            div.timeSelectShow {
+                display: inline;
+                position: absolute;
+                left: 523px;
+                top: 9px;
+                div.search {
+                    display: inline-block;
+                    button {
+                        width: 80px;
+                        height: 32px;
+                        line-height: 32px;
+                        cursor: pointer;
+                        margin-left: 3px;
+                        display: inline-block;
+                        border-radius: 4px;
+                        text-align: center;
+                        outline: none;
+                        margin-right: 10px;
+                        color: #fff;
+                        background: #444;
+                        font-weight: bolder;
+                        border: 1px solid #444;
+                    }
+                    button:hover {
+                        background: #666;
+                        border: 1px solid #666;
+                    }
+                }
+            }
         }
         .userAllDataDetail_table {
             padding: 10px;
@@ -182,7 +218,8 @@ export default {
     },
     data () {
         return {
-            time:  Date.now() - 86400000,
+            timeSelectShow: false,
+            timeLine: ['',''],
             page: {
                 'float': 'right',
                 'margin-top': '20px'
@@ -256,18 +293,37 @@ export default {
     },
     mounted () {
         document.title = '用户数据 - 分地区数据详情'
-        this.loadData()
+        this.loadData('3')
     },
     methods: {
-        timeChange (newTime) {
-            this.time = newTime
-            if (this.time.length === '') {
-                return
+        searchByTimeLine () {
+            if (this.timeLine[0] === '' || this.timeLine[0] === null) {
+                this.$Message.warning('请选择时间段')
             } else {
-                this.loadData()
+                this.loadData('5')
             }
         },
-        loadData () {
+        handleClick (e) {
+            this.currentPage = 1
+            this.pageSize = 10
+            var elems = siblings(e.target)
+            for (var i = 0; i < elems.length; i++) {
+                elems[i].setAttribute('class', '')
+            }
+            e.target.setAttribute('class', 'active')
+            if (e.target.innerHTML === '指定时间段') {
+                this.timeSelectShow = true
+            } else {
+                this.timeSelectShow = false
+                this.timeLine = ['','']
+                if (this.loadFlag === true) {
+                    this.loadData(e.target.getAttribute('myId'))
+                } else {
+                    return
+                }
+            }
+        },
+        loadData (type) {
             this.spinShow = true
             this.spinShow2 = true
             this.noDataText = ''
@@ -285,10 +341,12 @@ export default {
             this.axios.get('/beefly/wholeUser/api/v1/cityDataPage', {
                 params: {
                     accessToken: this.$store.state.token,
+                    type: type,
                     cityCode: this.$route.params.id.split('&')[0].toString(),
                     pageNo: this.currentPage,
                     pageSize: this.pageSize,
-                    time: moment(this.time).format('YYYY-MM-DD')
+                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
                 }
             })
             .then( res => {
@@ -298,12 +356,12 @@ export default {
                     this.noDataText = '暂无数据'
                     this.currentPage = 1
                     this.pageShow = false
-                    this.loadChartData()
+                    this.loadChartData($('.userAllDataDetail_head_time button.active').attr('myId'))
                     this.orderData = []
                 } else {
                     this.orderData = data
 
-                    this.loadChartData()
+                    this.loadChartData($('.userAllDataDetail_head_time button.active').attr('myId'))
                     // 处理分页数据
                     if (res.data.totalPage < 2 && this.pageSize === 10) {
                         this.pageShow = false
@@ -320,12 +378,14 @@ export default {
                 console.log(err)
             })
         },
-        loadChartData () {
+        loadChartData (type) {
             this.axios.get('/beefly/wholeUser/api/v1/cityDataChart', {
                 params: {
                     accessToken: this.$store.state.token,
                     cityCode: this.$route.params.id.split('&')[0].toString(),
-                    time: moment(this.time).format('YYYY-MM-DD')
+                    type: type,
+                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
                 }
             })
             .then( res => {
@@ -360,14 +420,14 @@ export default {
         handleCurrentPage(currentPage) {
             this.currentPage = currentPage
             if (this.loadFlag === true) {
-                this.loadData()
+                this.loadData($('.userAllDataDetail_head_time button.active').attr('myId'))
             }
         },
         handlePageSize(pageSize) {
             this.currentPage = 1
             this.pageSize = pageSize
             if (this.loadFlag === true) {
-                this.loadData()
+                this.loadData($('.userAllDataDetail_head_time button.active').attr('myId'))
             }
         },
         delcommafy(num){

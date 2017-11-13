@@ -371,7 +371,10 @@ export default {
         this.$store.state.cityList = []
         document.title = '用户数据 - 分日期分地区'
         this.loadData('3')
-        this.loadTotalData('3')
+        var that = this
+        setTimeout( function () {
+            that.loadTotalData('3')
+        }, 200)
     },
     methods: {
         loadData (type) {

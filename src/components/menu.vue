@@ -17,7 +17,7 @@
             </Submenu>
             <Submenu name="userData" v-show="userShow">
                 <template slot="title">
-                    <Icon type="ios-people"></Icon>
+                    <Icon type="ios-people" style="font-size: 18px;"></Icon>
                     用户数据
                 </template>
                 <Menu-item name="/index/userAllData" class="sign" auth='31'>整体数据</Menu-item>
