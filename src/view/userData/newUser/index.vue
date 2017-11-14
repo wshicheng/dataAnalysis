@@ -583,6 +583,7 @@ export default {
         },
         cityChange () {
             if (this.loadFlag === true) {
+                this.currentPage = 1
                 this.loadData($('.newUser_head_time button.active').attr('myId'))
             }
         },

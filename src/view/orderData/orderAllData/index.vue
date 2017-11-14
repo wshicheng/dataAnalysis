@@ -676,6 +676,7 @@ export default {
         },
         cityChange () {
             if (this.loadFlag === true) {
+                this.currentPage = 1
                 this.loadData($('.orderAllData_head_time button.active').attr('myId'))
             }
         },
