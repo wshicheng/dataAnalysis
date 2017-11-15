@@ -14,7 +14,7 @@
         </div>
         <div class="timeSelectShow" v-show="timeSelectShow">
             <DatePicker type="daterange" v-model="timeLine" :options='options' placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
-            <div class="search"><button @click="searchByTimeLine">搜索</button></div>
+            <div class="search"><button @click="searchByTimeLine">查询</button></div>
         </div>
         <div v-if="cityType === 1">
             <city-select></city-select>
@@ -86,8 +86,9 @@
             position: relative;
             div.activeUser_head_time {
                 margin-bottom: 10px;
+                font-size: 13px;
                 span:nth-of-type(1) {
-                    margin-right: 9px;
+                    margin-right: 12px;
                 }
                 button {
                     width: 80px;
@@ -295,7 +296,9 @@ export default {
                     // return date&&date.valueOf() > now.getDay() - 1
                 }
             },
-            transfer: true
+            transfer: true,
+            timer: null,
+            timerChart: null
         }
     },
     mounted () {
@@ -324,101 +327,112 @@ export default {
             // 节流防止用户快速点击数据串行
             this.loadFlag = false       
 
-            this.axios.get('/beefly/activeUser/getData', {
-                params: {
-                    accessToken: this.$store.state.token,
-                    type: type,
-                    cityCode: this.$store.state.cityList.toString(),
-                    pageNo: this.currentPage,
-                    pageSize: this.pageSize,
-                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
-                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
-                }
-            })
-            .then( res => {
-                this.checkLogin(res)
-                var data = res.data.data
-                // 判断message字段是1 or 0 , 1:多个城市，0:一个城市
-                // if (Number(res.data.message) === 0) {
-                //     this.cityType = 0
-                // } else {
-                //     this.cityType = 1
-                // }
-
-
-                this.spinShow = false
-                // 先展示下面的图表加载状 态
-                this.noDataBox = true
-                if (res.data.resultCode === 0) {
-                    this.noDataText = '暂无数据'
-                    this.currentPage = 1
-                    this.pageShow = false
-                    this.activeUserData = []
-                    this.loadChartData($('.activeUser_head_time button.active').attr('myId'))
-                } else {
-                    this.activeUserData = data
-
-                    this.loadChartData($('.activeUser_head_time button.active').attr('myId'))
-                    // 处理分页数据
-                    if (res.data.totalPage < 2 && this.pageSize === 10) {
-                        this.pageShow = false
-                    } else {
-                        this.pageShow = true
+            this.timer = setTimeout( () => {
+                this.axios.get('/beefly/activeUser/getData', {
+                    params: {
+                        accessToken: this.$store.state.token,
+                        type: type,
+                        cityCode: this.$store.state.cityList.toString(),
+                        pageNo: this.currentPage,
+                        pageSize: this.pageSize,
+                        beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                        endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
                     }
-                    this.totalListNum = res.data.totalItems
-                }
+                })
+                .then( res => {
+                    this.checkLogin(res)
+                    var data = res.data.data
+                    // 判断message字段是1 or 0 , 1:多个城市，0:一个城市
+                    // if (Number(res.data.message) === 0) {
+                    //     this.cityType = 0
+                    // } else {
+                    //     this.cityType = 1
+                    // }
 
-            })
-            .catch( err => {
-                this.spinShow = false
-                this.noDataText = '暂无数据'
-                console.log(err)
-            })
+
+                    this.spinShow = false
+                    // 先展示下面的图表加载状 态
+                    this.noDataBox = true
+                    if (res.data.resultCode === 0) {
+                        this.noDataText = '暂无数据'
+                        this.currentPage = 1
+                        this.pageShow = false
+                        this.activeUserData = []
+                        this.loadChartData(type)
+                    } else {
+                        this.activeUserData = data
+
+                        this.loadChartData(type)
+                        // 处理分页数据
+                        if (res.data.totalPage < 2 && this.pageSize === 10) {
+                            this.pageShow = false
+                        } else {
+                            this.pageShow = true
+                        }
+                        this.totalListNum = res.data.totalItems
+                    }
+
+                })
+                .catch( err => {
+                    this.spinShow = false
+                    this.noDataText = '暂无数据'
+                    console.log(err)
+                })
+            }, 200)
         },
         loadChartData (type) {
-            this.axios.get('/beefly/activeUser/getChartData', {
-                params: {
-                    accessToken: this.$store.state.token,
-                    type: type,
-                    cityCode: this.$store.state.cityList.toString(),
-                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
-                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
-                }
-            })
-            .then( res => {
-                this.checkLogin(res)
-                // console.log(res.data.data)
-                this.spinShow2 = false
-                var chartData = res.data.data
-                if (res.data.resultCode === 0) {
-                    $('#container').html('')
-                    this.noDataBox = false
-                    this.loadFlag = true
-                } else {
-                    this.noDataBox = true
-                    chartData.map( item => {
-                        this.chartActiveUser.push(Number(this.delcommafy(item.userCount)))
-                        this.chartActiveRate.push(Number(this.delcommafy(item.activeRate)))
-                        this.chartNewActiveRate.push(Number(this.delcommafy(item.newActiveRate)))
-                        this.chartDataX.push(this.cityType === 1?item.cityName:item.time)
-                    })
+            this.timerChart = setTimeout( () => {
+                this.axios.get('/beefly/activeUser/getChartData', {
+                    params: {
+                        accessToken: this.$store.state.token,
+                        type: type,
+                        cityCode: this.$store.state.cityList.toString(),
+                        beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                        endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
+                    }
+                })
+                .then( res => {
+                    this.checkLogin(res)
+                    // console.log(res.data.data)
+                    this.spinShow2 = false
+                    var chartData = res.data.data
+                    if (res.data.resultCode === 0) {
+                        $('#container').html('')
+                        this.noDataBox = false
+                        setTimeout( () => {
+                            this.loadFlag = true
+                        }, 200)
+                    } else {
+                        this.noDataBox = true
+                        chartData.map( item => {
+                            this.chartActiveUser.push(Number(this.delcommafy(item.active)))
+                            this.chartActiveRate.push(Number(this.delcommafy(item.activeRate)))
+                            this.chartNewActiveRate.push(Number(this.delcommafy(item.newActiveRate)))
+                            this.chartDataX.push(this.cityType === 1?item.cityName:item.time)
+                        })
 
-                    console.log('this.chartActiveUser', this.chartActiveUser)
-                    console.log('this.chartActiveRate', this.chartActiveRate)
-                    console.log('this.chartNewActiveRate]', this.chartNewActiveRate)
-                    console.log('this.chartDataX', this.chartDataX)
-                    this.initChart()
-                    this.loadFlag = true
-                }
+                        console.log('this.chartActiveUser', this.chartActiveUser)
+                        console.log('this.chartActiveRate', this.chartActiveRate)
+                        console.log('this.chartNewActiveRate]', this.chartNewActiveRate)
+                        console.log('this.chartDataX', this.chartDataX)
+                        this.initChart()
+                        setTimeout( () => {
+                            this.loadFlag = true
+                        }, 200)
+                    }
 
-            })
-            .catch( err => {
-                this.spinShow = false
-                this.noDataText = '暂无数据'
-                console.log(err)
+                })
+                .catch( err => {
+                    this.spinShow = false
+                    this.noDataText = '暂无数据'
+                    console.log(err)
+                })
             })
         },
         handleClick (e) {
+            clearTimeout(this.timer)
+            clearTimeout(this.timerChart)
+
             this.currentPage = 1
             this.pageSize = 10
             var elems = siblings(e.target)
@@ -589,7 +603,10 @@ export default {
             new Highcharts.chart('container', options);
         },
         cityChange () {
+            clearTimeout(this.timer)
+            clearTimeout(this.timerChart)
             if (this.loadFlag === true) {
+                this.currentPage = 1
                 this.loadData($('.activeUser_head_time button.active').attr('myId'))
             }
         },
@@ -600,7 +617,15 @@ export default {
         }
     },
     watch: {
-        '$store.state.cityList': 'cityChange'
+        '$store.state.cityList': 'cityChange',
+        'activeUserData': {
+            handler: function () {
+                if (this.loadFlag) {
+                    this.loadData($('.activeUser_head_time button.active').attr('myId'))
+                }
+            },
+            deep: true
+        }
     }
 }
 </script>

@@ -14,7 +14,7 @@
         </div>
         <div class="timeSelectShow" v-show="timeSelectShow">
             <DatePicker type="daterange" v-model="timeLine" :options='options' placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
-            <div class="search"><button @click="searchByTimeLine">搜索</button></div>
+            <div class="search"><button @click="searchByTimeLine">查询</button></div>
         </div>
       </div>
 
@@ -79,8 +79,9 @@
             position: relative;
             div.activeUserDetail_head_time {
                 margin-bottom: 10px;
+                font-size: 13px;
                 span:nth-of-type(1) {
-                    margin-right: 9px;
+                    margin-right: 12px;
                 }
                 button {
                     width: 80px;
@@ -351,7 +352,7 @@ export default {
                 } else {
                     this.noDataBox = true
                     chartData.map( item => {
-                        this.chartActiveUser.push(Number(this.delcommafy(item.userCount)))
+                        this.chartActiveUser.push(Number(this.delcommafy(item.active)))
                         this.chartActiveRate.push(Number(this.delcommafy(item.activeRate)))
                         this.chartNewActiveRate.push(Number(this.delcommafy(item.newActiveRate)))
                         this.chartDataX.push(item.time)

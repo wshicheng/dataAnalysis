@@ -95,9 +95,10 @@
             overflow: hidden;
             position: relative;
             div.dateAndArea_head_time {
+                font-size: 13px;
                 margin-bottom: 10px;
                 span:nth-of-type(1) {
-                    margin-right: 9px;
+                    margin-right: 12px;
                 }
                 button {
                     width: 80px;
@@ -152,9 +153,10 @@
                 }
             }
             div.dateAndArea_type_select {
+                font-size: 13px;
                 margin-bottom: 10px;
                 span:nth-of-type(1) {
-                    margin-right: 9px;
+                    margin-right: 12px;
                 }
                 button {
                     width: 80px;
@@ -435,7 +437,7 @@ export default {
                         title: '日期',
                         key: 'orderTime',
                         fixed: 'left',
-                        width: 100
+                        width: 120
                     })
                     
                     this.columns_orderData = arr
@@ -516,7 +518,7 @@ export default {
                         title: '分类',
                         key: 'title',
                         fixed: 'left',
-                        width: 100
+                        width: 120
                     })
                     
                     this.columns_total = arr

@@ -9,16 +9,16 @@
             <div class="layout-logo">蜜蜂出行数据运营平台
 
             </div>
-            <Tooltip placement="bottom" v-if="cityList.length>3">
+            <Tooltip placement="bottom-start" style="margin-left: 34px;" v-if="cityList.length>3">
                 <div class="cityList">
                     <span class="cityList">{{city}}
                     </span>
                     <!-- <span class="cityList">全部地区</span> -->
                 </div>
                 <div slot="content">
-                    <div style="width: 200px; overflow: hidden;">
+                    <div style="width: 240px; overflow: hidden;">
                         <ul>
-                            <li style="float: left; margin: 5px 8px; width: 30px; " v-bind:key="list.code" v-for="list of cityList">{{list.name}}</li>
+                            <li class="tooltip_span" v-bind:key="list.code" v-for="list of cityList">{{list.name}}</li>
                         </ul>
                     </div>
                 </div>
@@ -164,6 +164,18 @@ img.headImg {
     height: 60px;
 }
 
+.tooltip_span {
+    width: 60px;
+    margin: 5px 8px;
+    float: left;
+    font-size: 13px;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
 i.icon-zhanghao1 {
     color: #fff;
     font-size: 34px;
@@ -172,7 +184,7 @@ i.icon-zhanghao1 {
 
 span.accountUserName {
     color: #fff;
-    font-size: 16px;
+    font-size: 14px;
     float: left;
     margin-top: 0;
 }
@@ -200,7 +212,8 @@ div.cityList {
     display: inline-block;
     position: relative;
     width: 300px;
-    left: 50px;
+    /* left: 50px; */
+    /* float: left; */
     height: 30px;
     line-height: 30px;
     top: 4px;
@@ -208,13 +221,12 @@ div.cityList {
 }
 
 span.cityList {
-    font-size: 15px;
+    font-size: 13px;
     white-space: nowrap;
-    width: 208px;
+    width: 139px;
     cursor: pointer;
     display: inline-block;
     text-overflow: ellipsis;
-
     overflow: hidden;
     position: absolute;
     top: 10px;

@@ -6,7 +6,7 @@
       <div id="userAllDataDetail_head">
         <div class="userAllDataDetail_head_time">
             <span>时间:</span>
-            <button @click="handleClick" myId='1'>今日</button>
+            <!-- <button @click="handleClick" myId='1'>今日</button> -->
             <button @click="handleClick" myId='2'>昨日</button>
             <button class="active" @click="handleClick" myId='3'>近7日</button>
             <button @click="handleClick" myId='4'>近30天</button>
@@ -14,7 +14,7 @@
         </div>
         <div class="timeSelectShow" v-show="timeSelectShow">
             <DatePicker type="daterange" v-model="timeLine" :options='options' placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
-            <div class="search"><button @click="searchByTimeLine">搜索</button></div>
+            <div class="search"><button @click="searchByTimeLine">查询</button></div>
         </div>
       </div>
       <div class="userAllDataDetail_table">
@@ -75,14 +75,14 @@
             -moz-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
             -webkit-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
             box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
-            font-size: 14px;
             background: #fff;
             padding: 12px 10px 10px 10px;
             position: relative;
             div.userAllDataDetail_head_time {
                 margin-bottom: 10px;
+                font-size: 13px;
                 span:nth-of-type(1) {
-                    margin-right: 9px;
+                    margin-right: 12px;
                 }
                 button {
                     width: 80px;
@@ -114,8 +114,10 @@
             div.timeSelectShow {
                 display: inline;
                 position: absolute;
-                left: 523px;
-                top: 9px;
+                // left: 523px;
+                // top: 9px;
+                left: 423px;
+                top: 11px;
                 div.search {
                     display: inline-block;
                     button {
@@ -267,8 +269,9 @@ export default {
                     key: 'registerUser'
                 },
                 {
-                    title: '已退押金用户',
-                    key: 'unDepositUser'
+                    title: '已退押金用户(累计)',
+                    key: 'unDepositUser',
+                    width: 160
                 }
             ],
             orderData: [],

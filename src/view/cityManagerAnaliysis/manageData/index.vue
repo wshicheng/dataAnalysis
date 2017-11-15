@@ -22,8 +22,8 @@
                  <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                  <div style="color: #ccc; text-indent: 5px;">  loading...</div>
             </Spin>
-            <Button type="warning" @click="exportModal = true">导入数据</Button>
-            <Button class="cancel" @click="delTableByGroup">删除</Button>
+            <Button type="warning" @click="exportModal = true" style="font-size: 13px;">导入数据</Button>
+            <Button class="cancel" @click="delTableByGroup" style="font-size: 13px;">删除</Button>
             <span>*每月10号后，不可编辑和删除上月数据</span>
                         
             <Table :row-class-name="rowClassName" :no-data-text='noDataText' class="cityManage_table" border size='small' :columns="columns4" :data="data1" @on-select="selectGroup" @on-select-all="selectAll" @on-selection-change="selectChange">                
@@ -38,14 +38,14 @@
                 <div class="editModal_content">
                     <Form ref="editValidate" :model="editValidate" :rules="editValidateRule" :label-width="80">
                         <FormItem label="月份" prop="dataMonth">
-                            <DatePicker v-model="editValidate.dataMonth" type="month" :options='options' format='yyyy-MM' style=" width:216px;" :placeholder="editMonth"></DatePicker>
+                            <DatePicker v-model="editValidate.dataMonth" type="month" :options='options' :clearable='clearable' format='yyyy-MM' style=" width:216px;" :placeholder="editMonth"></DatePicker>
                         </FormItem>
                         <FormItem label="城市" prop="city">
                             <Select class="city_select" v-model="editValidate.city" :placeholder="editArea">
                                 <Option v-for="item in $store.state.keepCitys" :value="item.name" :key="item.code">{{ item.name }}</Option>
                             </Select>
                         </FormItem>
-                        <FormItem label="类别">
+                        <FormItem label="类别" prop='bigKind'>
                             <FormItem prop='bigKind'>
                                 <Select class="big_select" v-model="editValidate.bigKind" :placeholder="editBigType">
                                     <Option v-for="item in bigList" :value="item.name" :key="item.index">{{ item.name }}</Option>
@@ -60,14 +60,15 @@
                                 </Select>
                             </FormItem>
                         </FormItem>
-                         <FormItem label="型号" class="model" prop="model"v-show="bikeModelShow">
-                            <Input v-model.number="editValidate.model" placeholder="请输入型号"></Input>
+                         <FormItem label="型号" class="model" prop="model" v-if="bikeModelShow">
+                            <Input v-model="editValidate.model" placeholder="请输入型号"></Input>
                         </FormItem>
+                        <div style="margin-bottom: -32px;" v-else></div>
                         <FormItem label="单价" class="price" prop="unitPrice">
-                            <Input v-model.number="editValidate.unitPrice" placeholder="请输入单价"></Input>
+                            <Input v-model="editValidate.unitPrice" placeholder="请输入单价"></Input>
                         </FormItem>
                         <FormItem label="数量" class="number" prop="number" v-show="numberShow">
-                            <Input v-model.number="editValidate.number" placeholder="请输入数量"></Input>
+                            <Input v-model="editValidate.number" placeholder="请输入数量"></Input>
                         </FormItem>
                     </Form>
                 </div>
@@ -84,7 +85,7 @@
                 </p>
                 <div class="managerData_upload_month">
                     <span>月份:</span>
-                    <DatePicker type="month" v-model='exportMonth' :options='options' class="DatePicker" placeholder="选择日期" style="width: 216px;"></DatePicker>
+                    <DatePicker type="month" v-model='exportMonth' :options='options2' class="DatePicker" placeholder="选择日期" style="width: 216px;"></DatePicker>
                 </div>
                 <div class="managerData_upload_uploadFile">
                     <span>选择文件:</span>
@@ -147,8 +148,9 @@
     border: 1px solid #eee;
     padding: 10px 10px 0px 10px;
     .cityManageData_month {
+        font-size: 13px;
         span:nth-of-type(1) {
-            margin-right: 10px;
+            margin-right: 12px;
         }
         margin-bottom: 10px;
     }
@@ -196,6 +198,7 @@
         width: 80px;
         height: 30px;
         line-height: 30px;
+        font-size: 13px;
         outline: none;
         background: #fff;
         display: inline-block;
@@ -213,6 +216,7 @@
     .cityManageData_type span:nth-of-type(1) {
         border: none;
         margin: 0;
+        font-size: 13px;
         float: left;
         text-align: left;
         width: 40px;
@@ -450,26 +454,26 @@ export default {
             editSmallType: '请选择小类',
             editSmallType2: '',
             editValidateRule: {
-                month: [
-                    { required: true, type: 'date', message: '请选择时间', trigger: 'change' }
+                dataMonth: [
+                    { required: false, type:"string" ,message: '请选择时间', trigger: 'change' }
                 ],
-                area: [
-                    { required: true, message: '请选择地区', trigger: 'change' }
+                city: [
+                    { required: false, message: '请选择地区', trigger: 'change' }
                 ],
-                type: [
-                    { required: true, message: '请选择大类', trigger: 'blur' }
+                bigKind: [
+                    { required: false, message: '请选择类别', trigger: 'blur' }
                 ],
-                bigType: [
-                    { required: true, message: '请选择大类', trigger: 'blur' }
+                smallKind: [
+                    { required: false, message: '请选择大类', trigger: 'blur' }
                 ],
-                smallType: [
-                    { required: true, message: '请选择小类', trigger: 'blur' }
+                model: [
+                    { required: false, message: '请输入型号', trigger: 'blur' }
                 ],
-                price: [
-                    { required: true, type: 'number', message: '请输入单价', trigger: 'blur' }
+                unitPrice: [
+                    { required: false, message: '请输入单价', trigger: 'blur' }
                 ],
-                num: [
-                    { required: true, type: 'number', message: '请输入数量', trigger: 'blur' }
+                number: [
+                    { required: false, message: '请输入数量', trigger: 'blur' }
                 ]
             },
             columns4: [
@@ -488,7 +492,8 @@ export default {
                 },
                 {
                     title: '大类/子类',
-                    key: 'type'
+                    key: 'type',
+                    width: 200
                 },
                 {
                     title: '型号',
@@ -564,6 +569,43 @@ export default {
                     return date && date.valueOf() > Date.now()
                 }
             },
+            options2: {
+                disabledDate(date) {
+                    // if (new Date().getDate() > 10) {
+                    //     return [ new Date().getMonth() || date && date.valueOf() > Date.now()]
+                    // } else {
+                    //     return date && date.valueOf() > Date.now()
+                    // }
+                    var now = new Date();
+                    var nowYear = now.getFullYear(); // 年
+                    var nowMonth = now.getMonth() + 1; // 月
+                    var nowDate = now.getDate(); // 日
+                    var year = date.getFullYear();
+                    var month = date.getMonth() + 1;
+                    var days = date.getDate();
+                    // 小于等于当前年份
+                    if (year <= nowYear) {
+                    if (month <= nowMonth) {
+                    if (nowDate > 10) {
+                        // 当前日期大于10号，月份相同为true
+                        if (month === nowMonth) {
+                        return false;
+                        }
+                        return true;
+                    }else {
+                        // 当前日期小于等于10号，月份相同或小于为true
+                        if (month <= nowMonth) {
+                        return false;
+                        }
+                        return true;
+                    }
+                    }
+                    return true;
+                    }
+                    return true;
+
+                }
+            },
             checkList: [],
             selectTime: '',
             exportMonth: '',
@@ -573,7 +615,8 @@ export default {
             noDataText: '',
             typeList: ['固定资产','运维费用'],
             bikeModelShow: false,
-            pageShow: false
+            pageShow: false,
+            clearable: false
         }
     },
     mounted() {
@@ -600,13 +643,13 @@ export default {
             this.spinShow = true
             this.noDataText = ''
             var that = this
-            this.current = 1
             this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
                     accessToken: this.$store.state.token,
                     time: this.selectTime === '' ? '' : moment(this.selectTime).format('YYYY-MM'),
                     type: this.typeList.toString(),
                     pageSize: this.pageSize,
+                    pageNo: this.current,
                     cityCode: this.$store.state.cityList.toString()
                 }
             })
@@ -856,7 +899,6 @@ export default {
                 // console.log(res.data)
                 if (res.data.resultCode === 1) {
                     this.$Message.success('删除成功!');
-                    this.current = 1
                     this.data1.splice(this.delIndex, 1)
                     this.loadData()
                     this.delModal = false;
@@ -879,6 +921,7 @@ export default {
                                 bigKind: this.editValidate.bigKind,
                                 smallKind: this.editValidate.smallKind,
                                 number: this.editValidate.number,
+                                model: this.editValidate.model,
                                 unitPrice: this.editValidate.unitPrice,
                                 id: this.editValidate.id,
                             },
@@ -892,6 +935,7 @@ export default {
                             this.$Message.success('修改成功!');
                             this.editModal = false
                             this.loadData()
+                            this.current = 1
                         } else {
                             this.$Message.error('修改失败!');
                         }
@@ -901,6 +945,7 @@ export default {
                     })
                 } else {
                     // this.$Message.error('表单验证失败!');
+                    return false
                 }
             })
         },
@@ -909,6 +954,7 @@ export default {
             this.editModal = false
         },
         handleClick(e) {
+            this.current = 1
             // this.current = 1
             // var elems = siblings(e.target)
             // for (var i = 0; i < elems.length; i++) {
@@ -1017,6 +1063,7 @@ export default {
                                     // 关闭遮罩层
                                     // _this.cover = false
                                     _this.loadData()
+                                    _this.current = 1
                                     _this.exportModal = false
                                     _this.uploadPercent = 0
                                 }, 1000)
@@ -1221,6 +1268,22 @@ export default {
                 this.smallList_two_show = true
             }
         },
+        smallKindWatch () {
+            if (this.editValidate.smallKind === '电池' || this.editValidate.smallKind === '小蜜蜂') {
+                this.bikeModelShow = true
+            } else {
+                this.bikeModelShow = false
+            }
+
+            if (this.editValidate.smallKind === '电池' 
+                || this.editValidate.smallKind === '小蜜蜂'
+                || this.editValidate.smallKind === '运维工具车'
+                || this.editValidate.smallKind === '机动车') {
+                    this.numberShow = true
+            } else {
+                this.numberShow = false
+            }
+        },
         checkLogin (res) {
            if (res.data.message === '用户登录超时') {
                 this.$router.push('/login')
@@ -1230,7 +1293,8 @@ export default {
     watch: {
         'selectTime': 'dateChange',
         '$store.state.cityList': 'cityChange',
-        'editValidate.bigKind': 'bigListWatch'
+        'editValidate.bigKind': 'bigListWatch',
+        'editValidate.smallKind': 'smallKindWatch'
     }
 }
 </script>

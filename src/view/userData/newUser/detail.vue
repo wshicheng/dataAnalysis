@@ -14,7 +14,7 @@
         </div>
         <div class="timeSelectShow" v-show="timeSelectShow">
             <DatePicker type="daterange" v-model="timeLine" :options='options' placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
-            <div class="search"><button @click="searchByTimeLine">搜索</button></div>
+            <div class="search"><button @click="searchByTimeLine">查询</button></div>
         </div>
       </div>
 
@@ -79,9 +79,10 @@
             padding: 12px 10px 10px 10px;
             position: relative;
             div.newUser_head_time {
+                font-size: 13px;
                 margin-bottom: 10px;
                 span:nth-of-type(1) {
-                    margin-right: 9px;
+                    margin-right: 12px;
                 }
                 button {
                     width: 80px;
@@ -309,6 +310,7 @@ export default {
             .then( res => {
                 var data = res.data.data
                 this.spinShow = false
+                this.noDataBox = true
                 if (res.data.resultCode === 0) {
                     this.currentPage = 1
                     this.pageShow = false

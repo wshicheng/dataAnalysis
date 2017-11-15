@@ -199,8 +199,9 @@ div.loading {
     position: relative;
     div.dateTime_head_time {
       margin-bottom: 10px;
+      font-size: 13px;
       span:nth-of-type(1) {
-        margin-right: 9px;
+        margin-right: 12px;
       }
       button {
         width: 80px;

@@ -68,9 +68,10 @@
             overflow: hidden;
             position: relative;
             div.orderStatus_head_time {
+                font-size: 13px;
                 margin-bottom: 10px;
                 span:nth-of-type(1) {
-                    margin-right: 9px;
+                    margin-right: 12px;
                 }
                 button {
                     width: 80px;

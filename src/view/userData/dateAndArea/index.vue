@@ -18,7 +18,7 @@
             <div class="dateAndArea_type_select">
                 <span>指标:</span>
                 <button @click="handleTypeClick"  class="active" myType='totalUser'>累计用户</button>
-                <button @click="handleTypeClick"  myType='depositUser'>累计押金</button>
+                <button @click="handleTypeClick"  myType='depositUser' title="累计押金用户">累计押金用户</button>
                 <button @click="handleTypeClick"  myType='dayActiveNum'>活跃用户</button>
                 <button @click="handleTypeClick"  myType='newRegister'>新注册用户</button>
                 <button @click="handleTypeClick"  myType='newActiveNum'>活跃新用户</button>
@@ -94,8 +94,9 @@
             position: relative;
             div.dateAndArea_head_time {
                 margin-bottom: 10px;
+                font-size: 13px;
                 span:nth-of-type(1) {
-                    margin-right: 9px;
+                    margin-right: 12px;
                 }
                 button {
                     width: 80px;
@@ -151,8 +152,9 @@
             }
             div.dateAndArea_type_select {
                 margin-bottom: 10px;
+                font-size: 13px;
                 span:nth-of-type(1) {
-                    margin-right: 9px;
+                    margin-right: 12px;
                 }
                 button {
                     width: 80px;
@@ -167,6 +169,16 @@
                     color: #565c6b;
                     outline: none;
                     margin-right: 10px;
+                }
+                button:nth-of-type(2) {
+                    white-space: nowrap;
+                    width: 80px;
+                    cursor: pointer;
+                    display: inline-block;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    // position: absolute;
+                    // top: 10px;
                 }
                 button:nth-last-of-type(1) {
                     width: 80px;
@@ -363,7 +375,9 @@ export default {
                     return date&&date.valueOf()> Date.now() - 86400000
                 }
             },
-            transfer: true
+            transfer: true,
+            timer: null,
+            timerAll: null
         }
     },
     mounted () {
@@ -383,166 +397,170 @@ export default {
             this.noDataText = ''
             // 默认加载时去掉无数据图片
 
-            this.axios.get('/beefly/wholeUser/api/v1/cityDatePage', {
-                params: {
-                    accessToken: this.$store.state.token,
-                    type: type,
-                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
-                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD'),
-                    pageNo: this.currentPage,
-                    pageSize: this.pageSize,
-                    cityCode: this.$store.state.cityList.toString()
-                }
-            })
-            .then( (res) => {
-                this.checkLogin(res)
-                console.log(res.data.data)
-                    $('#container').html('')
-                if (res.data.data.length === 0) {
-                    this.noDataText = '暂无数据'
-                    // 关闭分页，恢复页码
-                    this.currentPage = 1
-                    this.pageShow = false
-
-                    this.spinShow = false
-                    this.spinShow3 = false
-                    this.orderData = []
-                    this.noDataBox = false
-                    this.totalListNum = 1
-                } else {
-                    this.noDataBox = true
-                    this.spinShow = false
-                    var data = res.data.data
-
-                    //随机取出一个数据制作表头
-                    var arr = []
-                    var firstData = data[0]
-                    firstData.map( (item) => {
-                        var obj = {}
-
-                        obj.title = item.cityName
-                        obj.key = $('.dateAndArea_type_select button.active').attr("myType") + item.cityCode
-                        obj.width = firstData.length > 11?100:''
-
-                        arr.push(obj)
-                        return arr
-                    })
-                    // 将最后一条的合计取出
-                    var totalTitle = arr.pop()
-                    totalTitle.title = '合计'
-                    totalTitle.key = $('.dateAndArea_type_select button.active').attr("myType")
-                    totalTitle.fixed = 'right'
-                    totalTitle.width = 120
-                    
-                    arr.push(totalTitle)
-                    // 讲日期插入动态title
-                    arr.unshift({
-                        title: '日期',
-                        key: 'createDate',
-                        fixed: 'left',
-                        width: 100
-                    })
-                    
-                    this.columns_orderData = arr
-                    var delData = this.tableDataDel(data)
-                    this.orderData = delData
-
-                    // 处理分页
-                    if (res.data.totalPage < 2 && this.pageSize === 10) {
-                        this.pageShow = false
-                    } else {
-                        this.pageShow = true
+            this.timer = setTimeout( () => {
+                this.axios.get('/beefly/wholeUser/api/v1/cityDatePage', {
+                    params: {
+                        accessToken: this.$store.state.token,
+                        type: type,
+                        beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                        endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD'),
+                        pageNo: this.currentPage,
+                        pageSize: this.pageSize,
+                        cityCode: this.$store.state.cityList.toString()
                     }
-                    this.totalListNum = res.data.totalItems
-                    
-                    this.getChartData($('.dateAndArea_head_time button.active').attr('myId'))
-                    // 关闭loading 
-                    this.spinShow = false
-                    this.noDataText = ''
+                })
+                .then( (res) => {
+                    this.checkLogin(res)
+                    console.log(res.data.data)
+                        $('#container').html('')
+                    if (res.data.data.length === 0) {
+                        this.noDataText = '暂无数据'
+                        // 关闭分页，恢复页码
+                        this.currentPage = 1
+                        this.pageShow = false
 
-                }
-                
-            })
-            .catch( (err) => {
-                console.log(err)
-                this.spinShow = false
-                this.noDataText = '暂无数据'
-            })
+                        this.spinShow = false
+                        this.spinShow3 = false
+                        this.orderData = []
+                        this.noDataBox = false
+                        this.totalListNum = 1
+                    } else {
+                        this.noDataBox = true
+                        this.spinShow = false
+                        var data = res.data.data
+
+                        //随机取出一个数据制作表头
+                        var arr = []
+                        var firstData = data[0]
+                        firstData.map( (item) => {
+                            var obj = {}
+
+                            obj.title = item.cityName
+                            obj.key = $('.dateAndArea_type_select button.active').attr("myType") + item.cityCode
+                            obj.width = firstData.length > 11?100:''
+
+                            arr.push(obj)
+                            return arr
+                        })
+                        // 将最后一条的合计取出
+                        var totalTitle = arr.pop()
+                        totalTitle.title = '合计'
+                        totalTitle.key = $('.dateAndArea_type_select button.active').attr("myType")
+                        totalTitle.fixed = 'right'
+                        totalTitle.width = 120
+                        
+                        arr.push(totalTitle)
+                        // 讲日期插入动态title
+                        arr.unshift({
+                            title: '日期',
+                            key: 'createDate',
+                            fixed: 'left',
+                            width: 120
+                        })
+                        
+                        this.columns_orderData = arr
+                        var delData = this.tableDataDel(data)
+                        this.orderData = delData
+
+                        // 处理分页
+                        if (res.data.totalPage < 2 && this.pageSize === 10) {
+                            this.pageShow = false
+                        } else {
+                            this.pageShow = true
+                        }
+                        this.totalListNum = res.data.totalItems
+                        
+                        this.getChartData($('.dateAndArea_head_time button.active').attr('myId'))
+                        // 关闭loading 
+                        this.spinShow = false
+                        this.noDataText = ''
+
+                    }
+                    
+                })
+                .catch( (err) => {
+                    console.log(err)
+                    this.spinShow = false
+                    this.noDataText = '暂无数据'
+                })                
+            }, 200)
         },
         loadTotalData (type) {
             this.spinShow2 = true
             this.noDataText2 = ''
             
-            this.axios.get('/beefly/wholeUser/api/v1/avgAndTotal', {
-                params: {
-                    accessToken: this.$store.state.token,
-                    type: type,
-                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
-                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD'),
-                    cityCode: this.$store.state.cityList.toString()
-                }
-            })
-            .then( (res) => {
-                this.checkLogin(res)
-                
-                var data = res.data.data
-                console.log('totalData',data)
-                if (data.length === 0) {
-                    this.totalTitle = false
-                    this.totalData = []
-                   
-                    // 关闭loading 
-                    this.spinShow2 = false
-                    this.noDataText2 = ''
-                } else {
-                    this.totalTitle = true
-                    //随机取出一个数据制作表头  
-                    var arr = []
-                    var firstData = data[0]
-                    firstData.map( (item) => {
-                        var obj = {}
-
-                        obj.title = item.cityName
-                        obj.key = $('.dateAndArea_type_select button.active').attr("myType") + item.cityCode
-                        obj.width = firstData.length > 11?100:''
-
-                        arr.push(obj)
-                        return arr
-                    })
-                    // 将最后一条的合计取出
-                    var totalTitle = arr.pop()
-                    totalTitle.title = '合计'
-                    totalTitle.key = $('.dateAndArea_type_select button.active').attr("myType")
-                    totalTitle.width = 120
-                    totalTitle.fixed = 'right'
+            this.timerAll = setTimeout( () => {
+                this.axios.get('/beefly/wholeUser/api/v1/avgAndTotal', {
+                    params: {
+                        accessToken: this.$store.state.token,
+                        type: type,
+                        beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                        endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD'),
+                        cityCode: this.$store.state.cityList.toString()
+                    }
+                })
+                .then( (res) => {
+                    this.checkLogin(res)
                     
-                    arr.push(totalTitle)
-                    // 将平均字段插入动态title
-                    arr.unshift({
-                        title: '分类',
-                        key: 'title',
-                        fixed: 'left',
-                        width: 100
-                    })
+                    var data = res.data.data
+                    console.log('totalData',data)
+                    if (data.length === 0) {
+                        this.totalTitle = false
+                        this.totalData = []
                     
-                    this.columns_total = arr
-                    console.log(this.columns_total)
-                    var delData = this.tableTotalDataDel(data)
-                    console.log('delData', delData)
-                    this.totalData = delData
+                        // 关闭loading 
+                        this.spinShow2 = false
+                        this.noDataText2 = ''
+                    } else {
+                        this.totalTitle = true
+                        //随机取出一个数据制作表头  
+                        var arr = []
+                        var firstData = data[0]
+                        firstData.map( (item) => {
+                            var obj = {}
 
-                    // 关闭loading 
+                            obj.title = item.cityName
+                            obj.key = $('.dateAndArea_type_select button.active').attr("myType") + item.cityCode
+                            obj.width = firstData.length > 11?100:''
+
+                            arr.push(obj)
+                            return arr
+                        })
+                        // 将最后一条的合计取出
+                        var totalTitle = arr.pop()
+                        totalTitle.title = '合计'
+                        totalTitle.key = $('.dateAndArea_type_select button.active').attr("myType")
+                        totalTitle.width = 120
+                        totalTitle.fixed = 'right'
+                        
+                        arr.push(totalTitle)
+                        // 将平均字段插入动态title
+                        arr.unshift({
+                            title: '分类',
+                            key: 'title',
+                            fixed: 'left',
+                            width: 120
+                        })
+                        
+                        this.columns_total = arr
+                        console.log(this.columns_total)
+                        var delData = this.tableTotalDataDel(data)
+                        console.log('delData', delData)
+                        this.totalData = delData
+
+                        // 关闭loading 
+                        this.spinShow2 = false
+                        this.noDataText2 = ''
+                    }
+                    
+
+                })
+                .catch( (err) => {
+                    console.log(err)
                     this.spinShow2 = false
-                    this.noDataText2 = ''
-                }
-                
-
-            })
-            .catch( (err) => {
-                console.log(err)
-                this.spinShow2 = false
-                this.noDataText2 = '暂无数据'
-            })
+                    this.noDataText2 = '暂无数据'
+                })               
+            }, 200)
         },
         tableDataDel (arr) {
             var type = $('.dateAndArea_type_select button.active').attr("myType")
@@ -646,6 +664,8 @@ export default {
             return newArr
         },
         handleClick (e) {
+            clearTimeout(this.timer)
+            clearTimeout(this.timerAll)
             this.currentPage = 1
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
@@ -662,6 +682,8 @@ export default {
             }
         },
         handleTypeClick (e) {
+            clearTimeout(this.timer)
+            clearTimeout(this.timerAll)
             this.chartTitleName = e.target.innerHTML
             this.currentPage = 1
             var elems = siblings(e.target)
@@ -752,6 +774,8 @@ export default {
             
         },
         cityChange () {
+            clearTimeout(this.timer)
+            clearTimeout(this.timerAll)
             this.currentPage = 1
             this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
             this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))

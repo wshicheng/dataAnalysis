@@ -11,7 +11,7 @@
         </div>
         <div class="userAllData_head_time2" v-else>
             <span>时间:</span>
-            <button @click="handleClick" myId='1'>今日</button>
+            <!-- <button @click="handleClick" myId='1'>今日</button> -->
             <button @click="handleClick" myId='2'>昨日</button>
             <button class="active" @click="handleClick" myId='3'>近7日</button>
             <button @click="handleClick" myId='4'>近30天</button>
@@ -19,7 +19,7 @@
         </div>
         <div class="timeSelectShow" v-show="timeSelectShow">
             <DatePicker type="daterange" v-model="timeLine" :options='options' placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
-            <div class="search"><button @click="searchByTimeLine">搜索</button></div>
+            <div class="search"><button @click="searchByTimeLine">查询</button></div>
         </div>
         <div v-if="cityType === 1">
             <city-select></city-select>
@@ -94,8 +94,9 @@
             position: relative;
             div.userAllData_head_time {
                 margin-bottom: 10px;
+                font-size: 13px;
                 span:nth-of-type(1) {
-                    margin-right: 9px;
+                    margin-right: 12px;
                 }
                 button {
                     width: 80px;
@@ -126,8 +127,9 @@
             }
             div.userAllData_head_time2 {
                 margin-bottom: 10px;
+                font-size: 13px;
                 span:nth-of-type(1) {
-                    margin-right: 9px;
+                    margin-right: 12px;
                 }
                 button {
                     width: 80px;
@@ -159,8 +161,10 @@
             div.timeSelectShow {
                 display: inline;
                 position: absolute;
-                left: 523px;
-                top: 9px;
+                // left: 523px;
+                // top: 9px;
+                left: 423px;
+                top: 11px;
                 div.search {
                     display: inline-block;
                     button {
@@ -358,7 +362,8 @@ export default {
                 }
             },
             clearable: false,
-            transfer: true
+            transfer: true,
+            timer: null
         }
     },
     mounted () {
@@ -413,57 +418,59 @@ export default {
             this.chartDataX = []
             // 节流防止用户快速点击数据串行
             this.loadFlag = false
-            this.axios.get('/beefly/wholeUser/api/v1/wholeDataPage', {
-                params: {
-                    type: this.cityType === 1?'':type,
-                    accessToken: this.$store.state.token,
-                    cityCode: this.$store.state.cityList.toString(),
-                    pageNo: this.currentPage,
-                    pageSize: this.pageSize,
-                    time: this.cityType === 1?moment(this.time).format('YYYY-MM-DD'):'',
-                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
-                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
-                }
-            })
-            .then( res => {
-                this.checkLogin(res)
-                var data = res.data.data
-                // 判断message字段是1 or 0 , 1:多个城市，0:一个城市
-                // if (Number(res.data.message) === 0) {
-                //     this.cityType = 0
-                // } else {
-                //     this.cityType = 1
-                // }
-
-
-                this.spinShow = false
-                // 先展示下面的图表加载状 态
-                this.noDataBox = true
-                if (res.data.resultCode === 0) {
-                    this.noDataText = '暂无数据'
-                    this.currentPage = 1
-                    this.pageShow = false
-                    this.orderData = []
-                    this.loadChartData($('.userAllData_head_time2 button.active').attr('myId'))
-                } else {
-                    this.orderData = data
-
-                    this.loadChartData($('.userAllData_head_time2 button.active').attr('myId'))
-                    // 处理分页数据
-                    if (res.data.totalPage < 2 && this.pageSize === 10) {
-                        this.pageShow = false
-                    } else {
-                        this.pageShow = true
+            this.timer = setTimeout( () => {
+                this.axios.get('/beefly/wholeUser/api/v1/wholeDataPage', {
+                    params: {
+                        type: this.cityType === 1?'':type,
+                        accessToken: this.$store.state.token,
+                        cityCode: this.$store.state.cityList.toString(),
+                        pageNo: this.currentPage,
+                        pageSize: this.pageSize,
+                        time: this.cityType === 1?moment(this.time).format('YYYY-MM-DD'):'',
+                        beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                        endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
                     }
-                    this.totalListNum = res.data.totalItems
-                }
+                })
+                .then( res => {
+                    this.checkLogin(res)
+                    var data = res.data.data
+                    // 判断message字段是1 or 0 , 1:多个城市，0:一个城市
+                    // if (Number(res.data.message) === 0) {
+                    //     this.cityType = 0
+                    // } else {
+                    //     this.cityType = 1
+                    // }
 
-            })
-            .catch( err => {
-                this.spinShow = false
-                this.noDataText = '暂无数据'
-                console.log(err)
-            })
+
+                    this.spinShow = false
+                    // 先展示下面的图表加载状 态
+                    this.noDataBox = true
+                    if (res.data.resultCode === 0) {
+                        this.noDataText = '暂无数据'
+                        this.currentPage = 1
+                        this.pageShow = false
+                        this.orderData = []
+                        this.loadChartData($('.userAllData_head_time2 button.active').attr('myId'))
+                    } else {
+                        this.orderData = data
+
+                        this.loadChartData($('.userAllData_head_time2 button.active').attr('myId'))
+                        // 处理分页数据
+                        if (res.data.totalPage < 2 && this.pageSize === 10) {
+                            this.pageShow = false
+                        } else {
+                            this.pageShow = true
+                        }
+                        this.totalListNum = res.data.totalItems
+                    }
+
+                })
+                .catch( err => {
+                    this.spinShow = false
+                    this.noDataText = '暂无数据'
+                    console.log(err)
+                })
+            }, 200)      
         },
         loadChartData (type) {
             this.axios.get('/beefly/wholeUser/api/v1/chartData', {
@@ -487,6 +494,7 @@ export default {
                     this.loadFlag = true
                 } else {
                     this.noDataBox = true
+                    
                     chartData.map( item => {
                         this.chartDepositUser.push(Number(this.delcommafy(item.depositUser)))
                         this.chartUnDepositUser.push(Number(this.delcommafy(item.unDepositUser)))
@@ -520,6 +528,7 @@ export default {
             }
         },
         handleClick (e) {
+            clearTimeout(this.timer)
             this.currentPage = 1
             this.pageSize = 10
             var elems = siblings(e.target)
@@ -532,11 +541,12 @@ export default {
             } else {
                 this.timeSelectShow = false
                 this.timeLine = ['','']
-                if (this.loadFlag === true) {
-                    this.loadData(e.target.getAttribute('myId'))
-                } else {
-                    return
-                }
+                // if (this.loadFlag === true) {
+                //     this.loadData(e.target.getAttribute('myId'))
+                // } else {
+                //     return
+                // }
+                this.loadData(e.target.getAttribute('myId'))
             }
         },
         delcommafy(num){
@@ -695,9 +705,13 @@ export default {
             new Highcharts.chart('container', options);
         },
         cityChange () {
-            if (this.loadFlag === true) {
-                this.loadData($('.userAllData_head_time2 button.active').attr('myId'))
-            }
+            clearTimeout(this.timer)
+            // if (this.loadFlag === true) {
+            //     this.currentPage = 1
+            //     this.loadData($('.userAllData_head_time2 button.active').attr('myId'))
+            // }
+            this.currentPage = 1
+            this.loadData($('.userAllData_head_time2 button.active').attr('myId'))
         },
         checkLogin (res) {
            if (res.data.message === '用户登录超时') {

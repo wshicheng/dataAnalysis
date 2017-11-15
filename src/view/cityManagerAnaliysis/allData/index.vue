@@ -12,7 +12,7 @@
                  <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                  <div style="color: #ccc; text-indent: 5px;">  loading...</div>
             </Spin>
-            <Table :columns="columns" :data="data"></Table>
+            <Table :columns="columns" :no-data-text='noDataText' :data="data"></Table>
             <Page :total="totalListNum" v-show="pageShow" class="tableGrid_page" placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </Row>
     </Row>
@@ -55,6 +55,7 @@ export default {
             pageSize: 10,
             currentPage: 1,
             pageShow: false,
+            noDataText: '',
             time:'',
             options:{
                 disabledDate (date) {
@@ -72,6 +73,13 @@ export default {
         var _this = this
         this.axios.get('/beefly/record/api/v1/page',{params:{accessToken:this.$store.state.token}})
         .then(function (res) {
+            console.log(res.data.resultCode === 1)
+            if (res.data.resultCode === 1) {  
+                _this.noDataText = ''
+            } else {
+                _this.noDataText = '暂无数据'
+            }
+            
             _this.data = res.data.data.length>0?res.data.data:[]
             var message = res.data.message;
             if(message === '用户登录超时'){
@@ -82,14 +90,18 @@ export default {
             }
             
             _this.spinShow = false
+            _this.noDataText = ''
             _this.totalListNum = res.data.totalItems
         })
         .catch(function (err) {
+            _this.spinShow = false
+            _this.noDataText = '暂无数据'
             console.log('err', err)
         });
     },
     methods: {
         queryMonth(value){
+            this.noDataText = ''
             this.spinShow = true
             var _this = this
             this.axios.get('/beefly/record/api/v1/page', {
@@ -102,12 +114,22 @@ export default {
                 }
             })
             .then(function (res) {
+                _this.spinShow = false
+                if (res.data.resultCode === 1) {  
+                    _this.noDataText = ''
+                } else {
+                    _this.noDataText = '暂无数据'
+                }   
+                
                 _this.data = res.data.data
+                _this.totalListNum = res.data.totalItems
+
                 if (res.data.totalPage > 1) {
                     _this.pageShow = true
+                } else {
+                    _this.pageShow = false
                 }
-                _this.totalListNum = res.data.totalItems
-                _this.spinShow = false
+
             })
             .catch(function (err) {
                 _this.spinShow = false
@@ -126,12 +148,21 @@ export default {
                 }
             })
             .then(function (res) {
+                _this.spinShow = false
+                if (res.data.resultCode === 1) {  
+                    _this.noDataText = ''
+                } else {
+                    _this.noDataText = '暂无数据'
+                }   
+                
                 _this.data = res.data.data
+                _this.totalListNum = res.data.totalItems
+
                 if (res.data.totalPage > 1) {
                     _this.pageShow = true
+                } else {
+                    _this.pageShow = false
                 }
-                _this.spinShow = false
-                _this.totalListNum = res.data.totalItems
             })
             .catch(function (err) {
                 _this.spinShow = false
@@ -150,12 +181,21 @@ export default {
                 }
             })
             .then(function (res) {
+                _this.spinShow = false
+                if (res.data.resultCode === 1) {  
+                    _this.noDataText = ''
+                } else {
+                    _this.noDataText = '暂无数据'
+                }   
+                
                 _this.data = res.data.data
+                _this.totalListNum = res.data.totalItems
+
                 if (res.data.totalPage > 1) {
                     _this.pageShow = true
+                } else {
+                    _this.pageShow = false
                 }
-                _this.spinShow = false
-                _this.totalListNum = res.data.totalItems
             })
             .catch(function (err) {
                 _this.spinShow = false
