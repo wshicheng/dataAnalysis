@@ -75,14 +75,14 @@
             -moz-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
             -webkit-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
             box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
-            font-size: 14px;
             background: #fff;
             padding: 12px 10px 10px 10px;
             position: relative;
             div.userAllDataDetail_head_time {
                 margin-bottom: 10px;
+                font-size: 13px;
                 span:nth-of-type(1) {
-                    margin-right: 9px;
+                    margin-right: 12px;
                 }
                 button {
                     width: 80px;
@@ -267,8 +267,9 @@ export default {
                     key: 'registerUser'
                 },
                 {
-                    title: '已退押金用户',
-                    key: 'unDepositUser'
+                    title: '已退押金用户(累计)',
+                    key: 'unDepositUser',
+                    width: 160
                 }
             ],
             orderData: [],

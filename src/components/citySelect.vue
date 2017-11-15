@@ -15,7 +15,7 @@
     height: 30px;
     line-height: 30px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
     display: inline-block;
     border: 1px solid #dddee1;
     border-radius: 4px;

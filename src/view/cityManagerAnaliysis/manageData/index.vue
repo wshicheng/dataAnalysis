@@ -22,8 +22,8 @@
                  <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                  <div style="color: #ccc; text-indent: 5px;">  loading...</div>
             </Spin>
-            <Button type="warning" @click="exportModal = true">导入数据</Button>
-            <Button class="cancel" @click="delTableByGroup">删除</Button>
+            <Button type="warning" @click="exportModal = true" style="font-size: 13px;">导入数据</Button>
+            <Button class="cancel" @click="delTableByGroup" style="font-size: 13px;">删除</Button>
             <span>*每月10号后，不可编辑和删除上月数据</span>
                         
             <Table :row-class-name="rowClassName" :no-data-text='noDataText' class="cityManage_table" border size='small' :columns="columns4" :data="data1" @on-select="selectGroup" @on-select-all="selectAll" @on-selection-change="selectChange">                
@@ -84,7 +84,7 @@
                 </p>
                 <div class="managerData_upload_month">
                     <span>月份:</span>
-                    <DatePicker type="month" v-model='exportMonth' :options='options' class="DatePicker" placeholder="选择日期" style="width: 216px;"></DatePicker>
+                    <DatePicker type="month" v-model='exportMonth' :options='options2' class="DatePicker" placeholder="选择日期" style="width: 216px;"></DatePicker>
                 </div>
                 <div class="managerData_upload_uploadFile">
                     <span>选择文件:</span>
@@ -147,8 +147,9 @@
     border: 1px solid #eee;
     padding: 10px 10px 0px 10px;
     .cityManageData_month {
+        font-size: 13px;
         span:nth-of-type(1) {
-            margin-right: 10px;
+            margin-right: 12px;
         }
         margin-bottom: 10px;
     }
@@ -196,6 +197,7 @@
         width: 80px;
         height: 30px;
         line-height: 30px;
+        font-size: 13px;
         outline: none;
         background: #fff;
         display: inline-block;
@@ -213,6 +215,7 @@
     .cityManageData_type span:nth-of-type(1) {
         border: none;
         margin: 0;
+        font-size: 13px;
         float: left;
         text-align: left;
         width: 40px;
@@ -488,7 +491,8 @@ export default {
                 },
                 {
                     title: '大类/子类',
-                    key: 'type'
+                    key: 'type',
+                    width: 200
                 },
                 {
                     title: '型号',
@@ -564,6 +568,44 @@ export default {
                     return date && date.valueOf() > Date.now()
                 }
             },
+            options2: {
+                disabledDate(date) {
+                    // if (new Date().getDate() > 10) {
+                    //     return [ new Date().getMonth() || date && date.valueOf() > Date.now()]
+                    // } else {
+                    //     return date && date.valueOf() > Date.now()
+                    // }
+                    var now = new Date('2017-10-9');
+                    var nowYear = now.getFullYear(); // 年
+                    var nowMonth = now.getMonth() + 1; // 月
+                    var nowDate = now.getDate(); // 日
+                    var year = date.getFullYear();
+                    var month = date.getMonth() + 1;
+                    var days = date.getDate();
+                    console.log('当前日期为' + now, year, month, days);
+                    // 小于等于当前年份
+                    if (year <= nowYear) {
+                    if (month <= nowMonth) {
+                    if (nowDate > 10) {
+                        // 当前日期大于10号，月份相同为true
+                        if (month === nowMonth) {
+                        return false;
+                        }
+                        return true;
+                    }else {
+                        // 当前日期小于等于10号，月份相同或小于为true
+                        if (month <= nowMonth) {
+                        return false;
+                        }
+                        return true;
+                    }
+                    }
+                    return true;
+                    }
+                    return true;
+
+                }
+            },
             checkList: [],
             selectTime: '',
             exportMonth: '',
@@ -600,13 +642,13 @@ export default {
             this.spinShow = true
             this.noDataText = ''
             var that = this
-            this.current = 1
             this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
                     accessToken: this.$store.state.token,
                     time: this.selectTime === '' ? '' : moment(this.selectTime).format('YYYY-MM'),
                     type: this.typeList.toString(),
                     pageSize: this.pageSize,
+                    pageNo: this.current,
                     cityCode: this.$store.state.cityList.toString()
                 }
             })
@@ -856,7 +898,6 @@ export default {
                 // console.log(res.data)
                 if (res.data.resultCode === 1) {
                     this.$Message.success('删除成功!');
-                    this.current = 1
                     this.data1.splice(this.delIndex, 1)
                     this.loadData()
                     this.delModal = false;
@@ -892,6 +933,7 @@ export default {
                             this.$Message.success('修改成功!');
                             this.editModal = false
                             this.loadData()
+                            this.current = 1
                         } else {
                             this.$Message.error('修改失败!');
                         }
@@ -909,6 +951,7 @@ export default {
             this.editModal = false
         },
         handleClick(e) {
+            this.current = 1
             // this.current = 1
             // var elems = siblings(e.target)
             // for (var i = 0; i < elems.length; i++) {
@@ -1017,6 +1060,7 @@ export default {
                                     // 关闭遮罩层
                                     // _this.cover = false
                                     _this.loadData()
+                                    _this.current = 1
                                     _this.exportModal = false
                                     _this.uploadPercent = 0
                                 }, 1000)

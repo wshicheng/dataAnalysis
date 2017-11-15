@@ -172,7 +172,7 @@ i.icon-zhanghao1 {
 
 span.accountUserName {
     color: #fff;
-    font-size: 16px;
+    font-size: 14px;
     float: left;
     margin-top: 0;
 }
@@ -208,13 +208,12 @@ div.cityList {
 }
 
 span.cityList {
-    font-size: 15px;
+    font-size: 13px;
     white-space: nowrap;
-    width: 208px;
+    width: 139px;
     cursor: pointer;
     display: inline-block;
     text-overflow: ellipsis;
-
     overflow: hidden;
     position: absolute;
     top: 10px;

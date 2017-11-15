@@ -8,6 +8,7 @@
                 <h1>
                     <Upload
                         ref="upload"
+                        title="点击更换头像，使用jpg,png,jpeg格式"
                         :show-upload-list="false"
                         :format="['jpg','jpeg','png']"
                         :max-size="2048" 
@@ -32,21 +33,21 @@
             <ul>
                 <li>
                     <span>
-                        <i v-if="telBinded" class="iconfont right">&#xe616;</i>
-                        <i v-else class="iconfont err">&#xe600;</i>
+                        <i v-if="telBinded" class="iconfont right" style="font-size: 18px;">&#xe616;</i>
+                        <i v-else class="iconfont err" style="font-size: 18px;">&#xe600;</i>
                     </span>
-                    <span style="font-size: 16px;">手机验证</span>
-                    <span style="font-size: 14px;">{{this.phoneNoBand === 0?'未绑定':'已绑定'}}</span>
+                    <span style="font-size: 13px;">手机验证</span>
+                    <span style="font-size: 13px;">{{this.phoneNoBand === 0?'未绑定':'已绑定'}}</span>
                     <span v-if="this.phoneNoBand === 0">{{this.phoneNo === ''?'您尚未绑定手机号码，请尽快绑定手机号':'手机号码' + this.phoneNo + '未验证, 验证后可以使用手机号码进行登录'}}</span>
                     <span v-else>{{this.phoneNo === ''?'您尚未绑定手机号码，请尽快绑定手机号':'你验证的手机号码:' + this.phoneNo + ',若已丢失或停用，请立即更换'}}</span>
 
                     <span v-show="bindShow">
                         <!-- <button disabled='isBinded' @click='$router.push({path:"/index/memberCenter/bindTel"})'>绑定手机号</button> -->
-                        <button :class="{disabled:isBinded}" :disabled="isBinded" @click='openBindModel'>绑定手机号</button>
+                        <button :class="{disabled:isBinded}" :disabled="isBinded" @click='openBindModel' style="font-size: 13px;">绑定手机号</button>
                     </span>
 
                     <span v-show="editShow">
-                        <button @click='openEditModal'>修改手机号</button>
+                        <button @click='openEditModal' style="font-size: 13px;">修改手机号</button>
                     </span>
                 </li>
                 <!-- <li>
@@ -66,11 +67,11 @@
 
                 <li>
                     <span>
-                        <i class="iconfont right">&#xe616;</i>
+                        <i class="iconfont right" style="font-size: 18px;">&#xe616;</i>
                     </span>
-                    <span style="font-size: 16px;">登录密码</span>
-                    <span style="color: #ccc; font-size: 14px;">建议使用6-20个字符，包含字母、数字、下划线</span>
-                    <button @click="passWordModal = true">修改密码</button>
+                    <span style="font-size: 13px;">登录密码</span>
+                    <span style="color: #ccc; font-size: 13px;">建议使用6-20个字符，包含字母、数字、下划线</span>
+                    <button @click="passWordModal = true"  style="font-size: 13px;">修改密码</button>
                 </li>
             </ul>
         </div>

@@ -197,7 +197,7 @@ export default {
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '充电'),
+                                    }, '电站'),
                                     h('span', {
                                         style: {
                                             float: 'left',
@@ -221,7 +221,7 @@ export default {
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '物流成本'),
+                                    }, '物流'),
                                     // h('span', {
                                     //     style: {
                                     //         float: 'left',
@@ -237,7 +237,7 @@ export default {
                                             borderRight: '1px solid rgb(233, 234, 236)',
                                             boxSizing: 'border-box',
                                         }
-                                    }, '其他成本'),
+                                    }, '其他'),
                                     h('span', {
                                         style: {
                                             float: 'left',

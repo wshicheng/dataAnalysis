@@ -12,15 +12,7 @@ const extractLESS = new ExtractTextPlugin('stylesheets/[name].[hash].css');
 const extractSASS = new ExtractTextPlugin('stylesheets/[name].[hash].css');
 module.exports = {
     entry: {
-        app:  ["babel-polyfill", "./src/app.js"],
-       //  vendor:['jquery','moment','lodash','highcharts']
-       vue:['vue','vue-router','vuex'],
-       iview:['iview'],
-       lodash:['lodash'],
-       jquery:['jquery','axios'],
-       highcharts:['highcharts'],
-       moment:['moment'],
-       'xlsx':['xlsx']
+        app:  ["babel-polyfill", "./src/app.js"]
     },
    
     module: {
@@ -67,7 +59,7 @@ module.exports = {
             {
                 test: /\.(png|svg|jpg|gif)$/,
                 use: {
-                   loader: 'file-loader',
+                   loader: 'url-loader',
                    options: {
                      name: 'img/[name].[hash:8].[ext]',
                      publicPath:'/'
@@ -104,14 +96,13 @@ module.exports = {
             template: './src/template/index.html'
         }),
         new webpack.optimize.CommonsChunkPlugin({
-           //  name: ['vendor','manifest'] // Specify the common bundle's name.
-           name:['vue','iview','jquery','highcharts','moment','xlsx','manifest']
+            name: 'common' // Specify the common bundle's name.
         }),
-       //  new webpack.HashedModuleIdsPlugin({
-       //      hashFunction: 'sha256',
-       //      hashDigest: 'hex',
-       //      hashDigestLength: 20
-       //  }),
+        new webpack.HashedModuleIdsPlugin({
+            hashFunction: 'sha256',
+            hashDigest: 'hex',
+            hashDigestLength: 20
+        }),
         extractCSS,
         extractLESS,
         extractSASS

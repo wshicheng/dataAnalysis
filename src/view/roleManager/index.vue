@@ -12,7 +12,7 @@
         </Row>
         <Row class="tableGrid">
             <Col class="opeartor">
-                <Button type="warning" @click="handleAdd">添加角色</Button>
+                <Button type="warning" @click="handleAdd" style="font-size: 13px;">添加角色</Button>
             </Col>
             <Table :columns="columns"  :no-data-text='noDataText'  :data="data"></Table>
             <Spin fix size="large" v-if="spinShow"  class="spin">
@@ -661,7 +661,7 @@ div.tableGrid {
     margin-top: -10px;
     border: 1px solid #eee;
     padding: 20px 10px 20px 10px;
-    font-size: 14px;
+    font-size: 13px;
     -moz-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
     -webkit-box-shadow:3px 4px 6px rgba(51, 51, 51, 0.43); 
     box-shadow: 3px 4px 6px rgba(51, 51, 51, 0.43);
