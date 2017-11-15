@@ -302,6 +302,10 @@
                            }).then((response) => {
                                 that.spinShow = false
                                var data = response.data.data||[]
+                                var initData = [...data]
+                                var lastObj = data.pop()
+                                var obj = Object.assign({},lastObj,{cityName:'合计'})
+                                data.push(obj)
                                var message = response.data.message
                                 if(message === '用户登录超时'){
                                     this.$router.push({path:'/login'})
@@ -316,8 +320,7 @@
                                      
                                 }
                                for (var i = 0; i < data.length; i++) {
-                                   if (i < data.length - 1) {
-                                       arr.push(
+                                    arr.push(
                                             {
                                                cityName: data[i].cityName,
                                                singleProduce: {
@@ -337,64 +340,11 @@
                                                }
                                            }
                                        )
-                                   }
-                                   if (i === data.length - 1) {
-                                       this.countObj = data.pop()
-                                        var obj = this.countObj
-                                   }
    
                                }
                                that.data7 = arr
-                               var html = ''
-                               for (var i = 0; i < 1; i++) {
-                                   html += `
-                                       <tr class="ivu-table-row">
-                                           <td class="middle">
-                                               <div class="ivu-table-cell">
-                                                   <div>合计</div>
-                                               </div>
-                                           </td>
-                                           <td class="ivu-table-column-center">
-                                               <div class="ivu-table-cell">
-                                                   <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.outPutBilling}</span>
-                                                       <span
-                                                           style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.outPutReality}</span>
-                                                   </div>
-                                               </div>
-                                           </td>
-                                           <td class="ivu-table-column-center">
-                                               <div class="ivu-table-cell">
-                                                   <div style="height: 30px;"><span style="float: left; width: 100%; height: 30px; line-height: 30px; box-sizing: border-box; border-right: 1px solid rgb(233, 234, 236);">${countObj.oBikeCost}</span></div>
-                                               </div>
-                                           </td>
-                                           <td class="ivu-table-column-center">
-                                               <div class="ivu-table-cell">
-                                                   <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.inPutBilling}</span>
-                                                       <span
-                                                           style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.inPutReality}</span>
-                                                   </div>
-                                               </div>
-                                           </td>
-                                           <td class="ivu-table-column-center">
-                                               <div class="ivu-table-cell">
-                                                   <div style="height: 30px;"><span style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.inPutBillingLv}</span>
-                                                       <span
-                                                           style="float: left; width: 50%; height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">${countObj.inPutRealityLv}</span>
-                                                   </div>
-                                               </div>
-                                           </td>
-                                       </tr>
-                                   `
-                               }
                               
-                           $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-header').find('table').width('100%')
-                            $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-body').find('table').width('100%')
-                            $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-body').find('table').find('tfoot').remove()
-                            $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-body').find('table').append('<tfoot>' + html + '</tfoot>')
-                            $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                            $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed-body').find('table').append('<tfoot>' + html + '</tfoot>')
-                            $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                            $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append('<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>'+obj.total+'</div></div></td></tr></tfoot>')
+                          
                            }).catch((error) => {
                                console.log(error)
                                  that.spinShow = false

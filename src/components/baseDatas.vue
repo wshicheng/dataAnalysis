@@ -8,7 +8,7 @@
         <div class="nodata" v-show="isNoData2">
             <i class="iconfont icon-zanwushuju"></i>
         </div>
-        <Table  v-show="isNoData" id="fiexedAssets5" :columns="columns8" min-width='1200' :data="data7" size="small" border ref="table"></Table>
+        <Table   v-show="isNoData" id="fiexedAssets5" :columns="columns8" min-width='1200' :data="data7" size="small" border ref="table"></Table>
     </div>
 </template>
 <script>
@@ -1074,6 +1074,11 @@ export default {
                 }).then((response) => {
                    this.spinShow = false
                     var data = response.data.data
+                    var initData = [...data]
+                    var lastObj = data.pop()
+                    var obj = Object.assign({},lastObj,{cityName:'合计'})
+                    data.push(obj)
+                    
                     var message = response.data.message
                     var code = response.data.resultCode
                     this.updateType(code)
@@ -1089,8 +1094,7 @@ export default {
                         this.isNoData2 = true
                     }
                     for (var i = 0; i < data.length; i++) {
-                        if (i < data.length - 1) {
-                            arr.push(
+                        arr.push(
                                     {
                                         // 城市
                                         cityName: data[i].cityName,
@@ -1172,154 +1176,10 @@ export default {
                                         }
 
                                     }
-                                )
-                        }
-                        if (i === data.length - 1) {
-                            this.countObj = data.pop()
-                            var obj = this.countObj
-                                    var html = `
-                                       <tr class="ivu-table-row">
-    <td class="">
-        <div class="ivu-table-cell ">
-            <div style="text-align: center; height: 30px; line-height: 30px;">合计</div>
-        </div>
-    </td>
-    <td class="">
-        <div class="ivu-table-cell ">
-            <div>${obj.total}</div>
-        </div>
-    </td>
-    <td class="">
-        <div class="ivu-table-cell">
-            <div>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 33.3%; text-align: center; border-right: 1px solid rgb(214, 220, 228);">${obj.bikeModel}</span>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 33.3%; text-align: center; border-right: 1px solid rgb(214, 220, 228);">${obj.bikeNum}</span>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 33.3%; text-align: center; border-right: none;">${obj.bikeMoney}</span>
-            </div>
-        </div>
-    </td>
-    <td class="">
-        <div class="ivu-table-cell">
-            <div>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 33.3%; text-align: center; border-right: 1px solid rgb(214, 220, 228);">${obj.battModel}</span>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 33.3%; text-align: center; border-right: 1px solid rgb(214, 220, 228);">${obj.battNum}</span>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 33.3%; text-align: center; border-right: none;">${obj.battMoney}</span>
-            </div>
-        </div>
-    </td>
-    <td class="">
-        <div class="ivu-table-cell">
-            <div>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(214, 220, 228);">${obj.chargeBuild}</span>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 50%; text-align: center; border-right: none;">${obj.chargeCabinet}</span>
-            </div>
-        </div>
-    </td>
-    <td class="">
-        <div class="ivu-table-cell">
-            <div>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(214, 220, 228);">${obj.truckNum}</span>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 50%; text-align: center; border-right: none;">${obj.truckMoney}</span>
-            </div>
-        </div>
-    </td>
-    <td class="">
-        <div class="ivu-table-cell">
-            <div>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${obj.carNum}</span>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 50%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${obj.carMoney}</span>
-            </div>
-        </div>
-    </td>
-    <td class="">
-        <div class="ivu-table-cell">
-            <div>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: none;">${obj.transMoney}</span>
-            </div>
-        </div>
-    </td>
-    <td class="">
-        <div class="ivu-table-cell">
-            <div>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: none;">${obj.otherMoney}</span>
-            </div>
-        </div>
-    </td>
-    <td class="">
-        <div class="ivu-table-cell">
-            <div>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: none;">${obj.assetsTotal}</span>
-            </div>
-        </div>
-    </td>
-    <td class="">
-        <div class="ivu-table-cell">
-            <div>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: none;">${obj.salaryMoney}</span>
-            </div>
-        </div>
-    </td>
-    <td class="">
-        <div class="ivu-table-cell">
-            <div>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: none;">${obj.personnelMoney}</span>
-            </div>
-        </div>
-    </td>
-    <td class="">
-        <div class="ivu-table-cell">
-            <div>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: none;">${obj.rentMoney}</span>
-            </div>
-        </div>
-    </td>
-    <td class="">
-        <div class="ivu-table-cell">
-            <div>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: none;">${obj.hydropower}</span>
-            </div>
-        </div>
-    </td>
-    <td class="">
-        <div class="ivu-table-cell">
-            <div>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: none;">${obj.operationMoney}</span>
-            </div>
-        </div>
-    </td>
-    <td class="">
-        <div class="ivu-table-cell">
-            <div>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: none;">${obj.manageMoney}</span>
-            </div>
-        </div>
-    </td>
-    <td class="">
-        <div class="ivu-table-cell">
-            <div>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${obj.openMoney}</span>
-            </div>
-        </div>
-    </td>
-    <td class="">
-        <div class="ivu-table-cell">
-            <div>
-                <span style="display: inline-block; float: left; height: 30px; line-height: 30px; width: 100%; text-align: center; border-right: 1px solid rgb(233, 234, 236);">${obj.operationTotal}</span>
-            </div>
-        </div>
-    </td>
-</tr>
-                                        `
-                            $('div.ivu-tabs-tabpane').eq(0).find('.ivu-table-header').find('table').width('100%')
-                            $('div.ivu-tabs-tabpane').eq(0).find('.ivu-table-body').find('table').width('100%')
-                            $('div.ivu-tabs-tabpane').eq(0).find('.ivu-table-body').find('table').find('tfoot').remove()
-                            $('div.ivu-tabs-tabpane').eq(0).find('.ivu-table-body').find('table').append('<tfoot>' + html + '</tfoot>')
-                            $('div.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                            $('div.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed-body').find('table').append('<tfoot>' + html + '</tfoot>')
-                            $('div.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                            $('div.ivu-tabs-tabpane').eq(0).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append('<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>'+obj.total+'</div></div></td></tr></tfoot>')
-                        }
+                            )
+                       
                     }
+                    console.log(arr)
                     this.data7 = arr
                 }).catch((error) => {
                     console.log(error)

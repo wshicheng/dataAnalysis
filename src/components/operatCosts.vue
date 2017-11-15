@@ -729,6 +729,10 @@ export default {
                 }).then((response) => {
                     that.spinShow = false
                     var data = response.data.data||[]
+                    var initData = [...data]
+                    var lastObj = data.pop()
+                    var obj = Object.assign({},lastObj,{cityName:'合计'})
+                    data.push(obj)
                     var arr = [];
                     var message = response.data.message
                     if(message === '用户登录超时'){
@@ -743,8 +747,7 @@ export default {
                          return
                     }
                     for (var i = 0; i < data.length; i++) {
-                        if (i < data.length - 1) {
-                            arr.push(
+                         arr.push(
                                  {
                                     cityName: data[i].cityName,
                                     hardwareCost: {
@@ -785,159 +788,10 @@ export default {
                                     }
                                 }
                             )
-                        }
-                        if (i === data.length - 1) {
-                            this.countObj = data[data.length - 1]||{}
-                            var obj = this.countObj
-                        }
 
                     }
                     that.data4 = arr
-                    var html = ''
-                    for (var i = 0; i < 1; i++) {
-                        html += `
-                       <tr class="ivu-table-row">
-    <td class="middle">
-        <div class="ivu-table-cell">
-            <!---->
-            <!---->
-            <!---->
-            <!---->
-            <div>
-                合计
-            </div>
-        </div>
-    </td>
-    <td class="middle">
-        <div class="ivu-table-cell">
-            <!---->
-            <!---->
-            <!---->
-            <!---->
-            <div>
-                ${obj.total}
-            </div>
-        </div>
-    </td>
-    <td class="ivu-table-column-center ">
-        <div class="ivu-table-cell">
-            <!---->
-            <!---->
-            <!---->
-            <!---->
-            <div style="height: 30px;">
-                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                    ${obj.bikeDepreciate}
-                </span>
-                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                    ${obj.battDepreciate}
-                </span>
-                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                     ${obj.chargeDepreciate}
-                </span>
-                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                     ${obj.truckDepreciate}
-                </span>
-                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                     ${obj.carDepreciate }
-                </span>
-                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                     ${obj.transMoneyShare}
-                </span>
-                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                    ${obj.otherDepreciate}
-                </span>
-                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                     ${obj.totalDepreciate}
-                </span>
-                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">
-                     ${obj.depreProporte}
-                </span>
-            </div>
-        </div>
-    </td>
-    <td class="ivu-table-column-center ">
-        <div class="ivu-table-cell">
-            <!---->
-            <!---->
-            <!---->
-            <!---->
-            <div style="height: 30px;">
-                <span style="float: left; width: calc(12.5%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                     ${obj.bikeWaste}
-                </span>
-                <span style="float: left; width: calc(12.5%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                     ${obj.battWaste}
-                </span>
-                <span style="float: left; width: calc(12.5%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                    ${obj.chargeWaste}
-                </span>
-                <span style="float: left; width: calc(12.5%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                     ${obj.truckWaste}
-                </span>
-                <span style="float: left; width: calc(12.5%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                     ${obj.carWaste}
-                </span>
-                <span style="float: left; width: calc(12.5%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                    ${obj.otherWaste}
-                </span>
-                <span style="float: left; width: calc(12.5%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                    ${obj.totalWaste}
-                </span>
-                <span style="float: left; width: calc(12.5%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                    ${obj.wasteProporte}
-                </span>
-            </div>
-        </div>
-    </td>
-    <td class="ivu-table-column-center ">
-        <div class="ivu-table-cell">
-            <!---->
-            <!---->
-            <!---->
-            <!---->
-            <div style="height: 30px;">
-                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                     ${obj.salaryMoney}
-                </span>
-                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                     ${obj.personnelMoney}
-                </span>
-                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                    ${obj.rentMoney}
-                </span>
-                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                     ${obj.hydropower}
-                </span>
-                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                    ${obj.operationMoney}
-                </span>
-                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                    ${obj.manageMoney}
-                </span>
-                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                    ${obj.openMoney}
-                </span>
-                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: 1px solid rgb(233, 234, 236); box-sizing: border-box;">
-                    ${obj.operateTotal}
-                </span>
-                <span style="float: left; width: calc(11.1111%); height: 30px; line-height: 30px; border-right: none; box-sizing: border-box;">
-                     ${obj.operateProporte}
-                </span>
-            </div>
-        </div>
-    </td>
-</tr>
-                    `
-                    }
-                    $('div.ivu-tabs-tabpane').eq(1).find('.ivu-table-header').find('table').width('100%')
-                            $('div.ivu-tabs-tabpane').eq(1).find('.ivu-table-body').find('table').width('100%')
-                            $('div.ivu-tabs-tabpane').eq(1).find('.ivu-table-body').find('table').find('tfoot').remove()
-                            $('div.ivu-tabs-tabpane').eq(1).find('.ivu-table-body').find('table').append('<tfoot>' + html + '</tfoot>')
-                            $('div.ivu-tabs-tabpane').eq(1).find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                            $('div.ivu-tabs-tabpane').eq(1).find('.ivu-table-fixed-body').find('table').append('<tfoot>' + html + '</tfoot>')
-                            $('div.ivu-tabs-tabpane').eq(1).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').find('tfoot').remove()
-                            $('div.ivu-tabs-tabpane').eq(1).find('.ivu-table-fixed-right').find('.ivu-table-fixed-body').find('table').append('<tfoot><tr class="ivu-table-row"><td class="middle"><div class="ivu-table-cell"><div>'+obj.total+'</div></div></td></tr></tfoot>')
+                   
                 }).catch((error) => {
                     console.log(error)
                       that.spinShow = false

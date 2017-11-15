@@ -39,7 +39,7 @@
                 </div>
             </Poptip>
         </div>
-        <Table border size='small' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
+        <Table height='500' border size='small' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
       </div>
 
       <div class="orderAllDayMap_chart" v-show="noDataBox">
