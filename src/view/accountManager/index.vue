@@ -512,7 +512,6 @@ export default {
             
             this.editModal = true
             this.editValidate = params.row
-            console.log('this.editValidate', this.editValidate)
             this.editValidate.passWord='********'
             this.index = params.index
             this.recodeCityList = params.row.cityList.map((item)=>{return item.name})
@@ -657,7 +656,7 @@ export default {
                       this.editModal = false
                       this.data.splice(this.index, 1,Object.assign({},this.editValidate,{status:this.initStatu}))
                       this.query(this.currentPage)
-                      this.currentPage = 1
+                      //this.currentPage = 1
                 } else if (res.data.resultCode === 0) {
                     this.$router.push('/login')
                 }

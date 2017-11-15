@@ -1,5 +1,6 @@
  const merge = require('webpack-merge');
  const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+ var ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin');
  const BabiliPlugin = require("babili-webpack-plugin");
  const common = require('./webpack.common.js');
  const path = require('path')
@@ -14,5 +15,16 @@
      },
      plugins: [
          new BabiliPlugin(),
+         new ParallelUglifyPlugin({
+            cacheDir: '.cache/',
+            uglifyJS:{
+              output: {
+                comments: false
+              },
+              compress: {
+                warnings: false
+              }
+            }
+          })
      ]
  });

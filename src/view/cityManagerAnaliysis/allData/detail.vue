@@ -78,7 +78,7 @@ import {mapActions,mapGetters} from 'vuex'
                                     style:'vertical-align:middle;margin-right:10px;'
                                 })
                             ]),
-                        h('span','运营成本')
+                        h('span','城市月度成本')
                     ])
                 },
                 label3:(h)=>{
@@ -91,7 +91,7 @@ import {mapActions,mapGetters} from 'vuex'
                                     style:'vertical-align:middle;margin-right:10px;'
                                 })
                             ]),
-                        h('span','运营经营分析')
+                        h('span','公司经营报表')
                     ])
                 },
                 label4:(h)=>{
@@ -127,16 +127,18 @@ import {mapActions,mapGetters} from 'vuex'
             ...mapGetters(['dataMonth'])
         },
         methods:{
-            ...mapActions(['updateMonth']),
+            ...mapActions(['updateMonth','updateType']),
             handleMinusMonth(){
                var time =  moment(this.currentMonth).subtract(1,'M')
                this.currentMonth = moment(time).format('YYYY-MM')
                var now = moment()
                var diff = now.diff(this.currentMonth,'month')
                this.updateMonth(this.currentMonth)
+               this.updateType(0)
                 this.$refs.next.setAttribute('class','iconfont right icon-right-arrow')
             },
             handleAplusMonth(){
+                 this.updateType(0)
                 var now = moment()
                 var currentMonth = moment(this.currentMonth);
                 var nextMonth = moment(currentMonth).add(1,'M')

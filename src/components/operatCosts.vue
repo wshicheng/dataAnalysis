@@ -948,7 +948,7 @@ export default {
     mounted(){
        // this.changePage()
         var height = $(window).height()
-         $('div.fiexedAssets').eq(1).height(height/2)
+         //$('div.fiexedAssets').eq(1).height(height/2)
     },
     watch:{
         'dataMonth':{

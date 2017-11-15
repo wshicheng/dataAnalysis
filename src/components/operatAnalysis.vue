@@ -1142,9 +1142,9 @@ import { mapGetters } from 'vuex'
         div.hidden{
             width: 200px;
             position: fixed;
-            top: 31px;
+            top: 49px;
             background: #fff;
-            bottom: 19px;
+            bottom: 49px;
             opacity:1;
             ul{
                 li{
@@ -1152,9 +1152,9 @@ import { mapGetters } from 'vuex'
                    height: 31px;
                    border-bottom: 1px solid #ddd; 
                 }
-                li.yellow{background:yellow}
+                li.yellow{background:rgba(126, 181, 224, 0.55)}
                 li.indent{padding-left:55px}
-                li.space{height: 37px;line-height: 37px;background: #bdd7ee;}
+                li.space{height: 37px;line-height: 37px;background: #7eb5e0;}
             }
         }
         table{
@@ -1162,14 +1162,14 @@ import { mapGetters } from 'vuex'
             box-sizing: border-box;
             thead{
                 tr{
-                    background:#bdd7ee;
+                    background:rgb(126, 181, 224);
                     border:1px solid #ddd;
                     th{
                          min-width:200px;
                          &:nth-child(1){width:160px;}
                         .cityName{
                             text-align:center;
-                            a{line-height:20px;height:20px;}
+                            a{line-height:20px;height:20px;color:#fff;}
                         }
                         span{
                             width:50%;float:left;
@@ -1186,7 +1186,7 @@ import { mapGetters } from 'vuex'
                 }
             }
             tbody{
-                tr.incoming,tr.cost,tr.profits,tr.car,tr.user{background:yellow}
+                tr.incoming,tr.cost,tr.profits,tr.car,tr.user{background:rgba(126, 181, 224, 0.55)}
                 tr{
                     background:#fff;
                     border:1px solid #ddd;

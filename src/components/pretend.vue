@@ -229,7 +229,7 @@ import citySelect from './citySelect.vue'
         },
         mounted(){
              var height = $(window).height()
-              $('div.fiexedAssets').eq(4).height(height/2)
+              //$('div.fiexedAssets').eq(4).height(height/2)
            setTimeout(()=>{
                 $('span.city').remove()
            },200)

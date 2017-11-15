@@ -8,7 +8,7 @@
         <div class="nodata" v-show="isNoData2">
             <i class="iconfont icon-zanwushuju"></i>
         </div>
-        <Table v-show="isNoData" id="fiexedAssets5" :columns="columns8" min-width='1200' :data="data7" size="small" border ref="table"></Table>
+        <Table  v-show="isNoData" id="fiexedAssets5" :columns="columns8" min-width='1200' :data="data7" size="small" border ref="table"></Table>
     </div>
 </template>
 <script>
@@ -48,11 +48,11 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                    background:'#d6dce4',
+                                    background:'rgb(126, 181, 224)',
                                     lineHeight:'30px',
                                     height:'30px',
                                     // borderBottom: '1px solid #e9eaec'
-                                    borderBottom: '1px solid #d6dce4'
+                                    borderBottom: '1px solid rgb(126, 181, 224)'
                                 }
                             }, '小蜜蜂'),
                             h('div', [
@@ -63,8 +63,8 @@ export default {
                                         width: '33.3%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: '1px solid #d6dce4',
-                                        backgroundColor:'#d6dce4'
+                                        borderRight: '1px solid rgb(126, 181, 224)',
+                                        backgroundColor:'rgb(126, 181, 224)'
                                     }
                                 }, '型号'),
                                 h('span', {
@@ -74,8 +74,8 @@ export default {
                                         width: '33.3%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: '1px solid #d6dce4',
-                                        backgroundColor:'#d6dce4'
+                                        borderRight: '1px solid rgb(126, 181, 224)',
+                                        backgroundColor:'rgb(126, 181, 224)'
                                     }
                                 }, '数量'),
                                 h('span', {
@@ -86,7 +86,7 @@ export default {
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
                                         borderRight: '1px solid none',
-                                        backgroundColor:'#d6dce4'
+                                        backgroundColor:'rgb(126, 181, 224)'
                                     }
                                 }, '金额')
 
@@ -136,10 +136,10 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                    background:'#d6dce4',
+                                    background:'rgb(126, 181, 224)',
                                      lineHeight:'30px',
                                     height:'30px',
-                                    borderBottom: '1px solid #d6dce4'
+                                    borderBottom: '1px solid rgb(126, 181, 224)'
                                 }
                             }, '电池'),
                             h('div', [
@@ -150,8 +150,8 @@ export default {
                                         width: '33.3%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: '1px solid #d6dce4',
-                                         backgroundColor:'#d6dce4'
+                                        borderRight: '1px solid rgb(126, 181, 224)',
+                                         backgroundColor:'rgb(126, 181, 224)'
                                     }
                                 }, '型号'),
                                 h('span', {
@@ -161,8 +161,8 @@ export default {
                                           width: '33.3%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: '1px solid #d6dce4',
-                                         backgroundColor:'#d6dce4'
+                                        borderRight: '1px solid rgb(126, 181, 224)',
+                                         backgroundColor:'rgb(126, 181, 224)'
                                     }
                                 }, '数量'),
                                 h('span', {
@@ -173,7 +173,7 @@ export default {
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
                                         borderRight: 'none',
-                                         backgroundColor:'#d6dce4'
+                                         backgroundColor:'rgb(126, 181, 224)'
                                     }
                                 }, '金额')
 
@@ -229,10 +229,10 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                    background:'#d6dce4',
+                                    background:'rgb(126, 181, 224)',
                                      lineHeight:'30px',
                                     height:'30px',
-                                    borderBottom: '1px solid #d6dce4'
+                                    borderBottom: '1px solid rgb(126, 181, 224)'
                                 }
                             }, '电站'),
                             h('div', [
@@ -243,8 +243,8 @@ export default {
                                         width: '50%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: '1px solid #d6dce4',
-                                        backgroundColor:'#d6dce4'
+                                        borderRight: '1px solid rgb(126, 181, 224)',
+                                        backgroundColor:'rgb(126, 181, 224)'
                                     }
                                 }, '建设'),
                                 h('span', {
@@ -255,7 +255,7 @@ export default {
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
                                         borderRight: 'none',
-                                        backgroundColor:'#d6dce4'
+                                        backgroundColor:'rgb(126, 181, 224)'
                                     }
                                 }, '设备')
 
@@ -295,10 +295,10 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                    background:'#d6dce4',
+                                    background:'rgb(126, 181, 224)',
                                      lineHeight:'30px',
                                     height:'30px',
-                                    borderBottom: '1px solid #d6dce4'
+                                    borderBottom: '1px solid rgb(126, 181, 224)'
                                 }
                             }, '机动车'),
                             h('div', [
@@ -309,8 +309,8 @@ export default {
                                         width: '50%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: '1px solid #d6dce4',
-                                        backgroundColor:'#d6dce4'
+                                        borderRight: '1px solid rgb(126, 181, 224)',
+                                        backgroundColor:'rgb(126, 181, 224)'
                                     }
                                 }, '数量'),
                                 h('span', {
@@ -321,7 +321,7 @@ export default {
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
                                         borderRight: 'none',
-                                        backgroundColor:'#d6dce4'
+                                        backgroundColor:'rgb(126, 181, 224)'
                                     }
                                 }, '金额')
 
@@ -361,10 +361,10 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                    background:'#d6dce4',
+                                    background:'rgb(126, 181, 224)',
                                      lineHeight:'30px',
                                     height:'30px',
-                                    borderBottom: '1px solid #d6dce4'
+                                    borderBottom: '1px solid rgb(126, 181, 224)'
                                 }
                             }, '运维工具车'),
                             h('div', [
@@ -375,8 +375,8 @@ export default {
                                         width: '50%',
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
-                                        borderRight: '1px solid #d6dce4',
-                                        backgroundColor:'#d6dce4'
+                                        borderRight: '1px solid rgb(126, 181, 224)',
+                                        backgroundColor:'rgb(126, 181, 224)'
                                     }
                                 }, '数量'),
                                 h('span', {
@@ -387,7 +387,7 @@ export default {
                                         textAlign: 'center',
                                         borderBox: 'box-sizing',
                                         borderRight: 'none',
-                                        backgroundColor:'#d6dce4'
+                                        backgroundColor:'rgb(126, 181, 224)'
                                     }
                                 }, '金额')
 
@@ -427,10 +427,10 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                    background:'#d6dce4',
+                                    background:'rgb(126, 181, 224)',
                                      lineHeight:'60px',
                                     height:'60px',
-                                    borderBottom: '1px solid #d6dce4'
+                                    borderBottom: '1px solid rgb(126, 181, 224)'
                                 }
                             }, '物流'),
                             // h('div', [
@@ -515,10 +515,10 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                    background:'#d6dce4',
+                                    background:'rgb(126, 181, 224)',
                                      lineHeight:'60px',
                                     height:'60px',
-                                    borderBottom: '1px solid #d6dce4'
+                                    borderBottom: '1px solid rgb(126, 181, 224)'
                                 }
                             }, '其他'),
                             // h('div', [
@@ -559,10 +559,10 @@ export default {
                             h('div', {
                                 style: {
                                     textAlign: 'center',
-                                    background:'#d6dce4',
+                                    background:'rgb(126, 181, 224)',
                                      lineHeight:'60px',
                                     height:'60px',
-                                    borderBottom: '1px solid #d6dce4'
+                                    borderBottom: '1px solid rgb(126, 181, 224)'
                                 }
                             }, '小计'),
                             // h('div', [
@@ -1333,7 +1333,7 @@ export default {
     },
     mounted() {
          var height = $(window).height()
-         $('div.fiexedAssets').eq(0).height(height/2)
+         //$('div.fiexedAssets').eq(0).height(height/2)
 
     },
     beforeMount(){

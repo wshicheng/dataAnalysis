@@ -408,7 +408,7 @@
                     //  $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-body').find('table').width('100%')
                 },200)
                  var height = $(window).height()
-                 $('div.fiexedAssets').eq(3).height(height/2)
+                 //$('div.fiexedAssets').eq(3).height(height/2)
            },
            watch: {
               'dataMonth':{
