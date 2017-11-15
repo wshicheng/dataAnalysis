@@ -731,6 +731,11 @@ export default {
                     var data = response.data.data||[]
                     var initData = [...data]
                     var lastObj = data.pop()
+                     if(lastObj==undefined){
+                        that.isNoData = false
+                        that.isNoData2 = true
+                        return;
+                    }
                     var obj = Object.assign({},lastObj,{cityName:'合计'})
                     data.push(obj)
                     var arr = [];
@@ -820,8 +825,8 @@ export default {
                        }else{
                            this.data4 = []
                            this.isNoData = false
-                           this.isNoData2 = true
-                           this.spinShow = false
+                           this.isNoData2 = false
+                           this.spinShow = true
                        }
                     },
                     deep: true

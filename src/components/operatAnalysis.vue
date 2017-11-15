@@ -1102,8 +1102,8 @@ import { mapGetters } from 'vuex'
                        }else{
                            this.cityList = []
                            this.isNoData = false
-                           this.isNoData2 = true
-                           this.spinShow = false
+                           this.isNoData2 = false
+                           this.spinShow = true
                        }
                     },
                     deep: true
@@ -1144,7 +1144,7 @@ import { mapGetters } from 'vuex'
             position: fixed;
             top: 49px;
             background: #fff;
-            bottom: 49px;
+            bottom: 0px;
             opacity:1;
             ul{
                 li{

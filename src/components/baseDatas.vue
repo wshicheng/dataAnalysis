@@ -1076,12 +1076,18 @@ export default {
                     var data = response.data.data
                     var initData = [...data]
                     var lastObj = data.pop()
+                    if(lastObj==undefined){
+                        this.isNoData = false
+                        this.isNoData2 = true
+                        this.updateType(1)
+                        return;
+                    }
                     var obj = Object.assign({},lastObj,{cityName:'合计'})
                     data.push(obj)
                     
                     var message = response.data.message
                     var code = response.data.resultCode
-                    this.updateType(code)
+                    this.updateType(1)
                     if(message === '用户登录超时'){
                         this.$router.push({path:'/login'})
                     }
@@ -1090,7 +1096,7 @@ export default {
                         this.isNoData = true
                         this.isNoData2 = false
                     } else {
-                         this.isNoData = false
+                        this.isNoData = false
                         this.isNoData2 = true
                     }
                     for (var i = 0; i < data.length; i++) {
