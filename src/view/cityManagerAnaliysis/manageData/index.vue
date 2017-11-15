@@ -38,7 +38,7 @@
                 <div class="editModal_content">
                     <Form ref="editValidate" :model="editValidate" :rules="editValidateRule" :label-width="80">
                         <FormItem label="月份" prop="dataMonth">
-                            <DatePicker v-model="editValidate.dataMonth" type="month" :options='options' format='yyyy-MM' style=" width:216px;" :placeholder="editMonth"></DatePicker>
+                            <DatePicker v-model="editValidate.dataMonth" type="month" :options='options' :clearable='clearable' format='yyyy-MM' style=" width:216px;" :placeholder="editMonth"></DatePicker>
                         </FormItem>
                         <FormItem label="城市" prop="city">
                             <Select class="city_select" v-model="editValidate.city" :placeholder="editArea">
@@ -60,9 +60,10 @@
                                 </Select>
                             </FormItem>
                         </FormItem>
-                         <FormItem label="型号" class="model" prop="model"v-show="bikeModelShow">
+                         <FormItem label="型号" class="model" prop="model" v-if="bikeModelShow">
                             <Input v-model.number="editValidate.model" placeholder="请输入型号"></Input>
                         </FormItem>
+                        <div style="margin-bottom: -32px;" v-else></div>
                         <FormItem label="单价" class="price" prop="unitPrice">
                             <Input v-model.number="editValidate.unitPrice" placeholder="请输入单价"></Input>
                         </FormItem>
@@ -462,13 +463,16 @@ export default {
                 type: [
                     { required: true, message: '请选择大类', trigger: 'blur' }
                 ],
+                model: [
+                    { required: true, message: '请输入型号', trigger: 'blur' }
+                ],
                 bigType: [
                     { required: true, message: '请选择大类', trigger: 'blur' }
                 ],
                 smallType: [
                     { required: true, message: '请选择小类', trigger: 'blur' }
                 ],
-                price: [
+                unitPrice: [
                     { required: true, type: 'number', message: '请输入单价', trigger: 'blur' }
                 ],
                 num: [
@@ -575,7 +579,7 @@ export default {
                     // } else {
                     //     return date && date.valueOf() > Date.now()
                     // }
-                    var now = new Date('2017-10-9');
+                    var now = new Date();
                     var nowYear = now.getFullYear(); // 年
                     var nowMonth = now.getMonth() + 1; // 月
                     var nowDate = now.getDate(); // 日
@@ -615,7 +619,8 @@ export default {
             noDataText: '',
             typeList: ['固定资产','运维费用'],
             bikeModelShow: false,
-            pageShow: false
+            pageShow: false,
+            clearable: false
         }
     },
     mounted() {
@@ -943,6 +948,7 @@ export default {
                     })
                 } else {
                     // this.$Message.error('表单验证失败!');
+                    return false
                 }
             })
         },
@@ -1265,6 +1271,22 @@ export default {
                 this.smallList_two_show = true
             }
         },
+        smallKindWatch () {
+            if (this.editValidate.smallKind === '电池' || this.editValidate.smallKind === '小蜜蜂') {
+                this.bikeModelShow = true
+            } else {
+                this.bikeModelShow = false
+            }
+
+            if (this.editValidate.smallKind === '电池' 
+                || this.editValidate.smallKind === '小蜜蜂'
+                || this.editValidate.smallKind === '运维工具车'
+                || this.editValidate.smallKind === '机动车') {
+                    this.numberShow = true
+            } else {
+                this.numberShow = false
+            }
+        },
         checkLogin (res) {
            if (res.data.message === '用户登录超时') {
                 this.$router.push('/login')
@@ -1274,7 +1296,8 @@ export default {
     watch: {
         'selectTime': 'dateChange',
         '$store.state.cityList': 'cityChange',
-        'editValidate.bigKind': 'bigListWatch'
+        'editValidate.bigKind': 'bigListWatch',
+        'editValidate.smallKind': 'smallKindWatch'
     }
 }
 </script>

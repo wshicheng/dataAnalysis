@@ -264,7 +264,7 @@
                     <Col span="6" class="content"><span>{{data[1].hydropower}}</span></Col>
                 </Row>
                 <Row class='other'>
-                    <Col span="12"  class="title_level3"><span><b title="、">4.2.5 其他生产成本</b></span></Col>
+                    <Col span="12"  class="title_level3"><span><b title="其他生产成本">4.2.5 其他生产成本</b></span></Col>
                     <Col span="6" class="content"><span>{{data[0].operationMoney}}</span></Col>
                     <Col span="6" class="content"><span>{{data[1].operationMoney}}</span></Col>
                 </Row>
@@ -303,7 +303,7 @@
 
             <!-- 盈亏分析 -->
             <Row class='other'>
-                <Col span="12"  class="title_level1"><span style="text-indent: -10px;"><b title="Nihao">5 盈亏分析</b></span></Col>
+                <Col span="12"  class="title_level1"><span style="text-indent: -10px;"><b>5 盈亏分析</b></span></Col>
                 <Col span="6"><span></span></Col>
                 <Col span="6"><span></span></Col>
             </Row>
@@ -386,9 +386,9 @@
                 span {
                     display: inline-block;
                     color: #444;
-                    font-weight: bolder;
                     text-align: center;
                     height: 40px;
+                    font-weight: 400;
                     line-height: 40px;
                     width: 100%;
                     font-size: 16px;
@@ -400,37 +400,55 @@
                         border-radius: 3px;
                         border: 1px solid #fff;
                         border-right: none;
+                        font-weight: 400;
                         border-bottom: none;
-                        cursor: pointer;
+                        span {
+                            font-weight: 400;
+                        }
                     }
                     .title_level1 {
                         text-indent: -52px;
+                        font-weight: 400;
                         cursor: pointer;
+                        span {
+                            font-weight: 400;
+                            b {
+                                font-weight: 400;
+                            }
+                        }
                     }
                     .title_level2 {
+                        cursor: pointer;
                         // width: 200px;
                         // background: #f60;
                         overflow: hidden;
                         b {
                             text-align: left;
                             width: 100%;
+                            font-weight: 400;
                             float: left;
                             text-indent: 249px;
                             cursor: pointer;
                         }
                     }
                     .title_level3 {
+                        cursor: pointer;
                         overflow: hidden;
                         b {
                             text-align: left;
                             float: left;
+                            font-weight: 400;
+                            cursor: pointer;
                             text-indent: 278px;
                         }
                     }
                     .title_level4 {
                         overflow: hidden;
+                        cursor: pointer;
                         b {
                             text-align: left;
+                            cursor: pointer;
+                            font-weight: 400;
                             float: left;
                             text-indent: 319px;
                         }                   
