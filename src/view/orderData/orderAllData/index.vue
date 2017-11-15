@@ -20,11 +20,11 @@
         </div>
         <div class="timeSelectShow" v-show="timeSelectShow" v-if="cityType === 1">
             <DatePicker type="daterange" v-model="timeLine" :options='options' placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
-            <div class="search"><button @click="searchByTimeLine">搜索</button></div>
+            <div class="search"><button @click="searchByTimeLine">查询</button></div>
         </div>
         <div class="timeSelectShow2" v-show="timeSelectShow" v-else>
             <DatePicker type="daterange" v-model="timeLine" :options='options'  placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
-            <div class="search"><button @click="searchByTimeLine">搜索</button></div>
+            <div class="search"><button @click="searchByTimeLine">查询</button></div>
         </div>
         <div v-if="cityType === 1">
             <city-select></city-select>

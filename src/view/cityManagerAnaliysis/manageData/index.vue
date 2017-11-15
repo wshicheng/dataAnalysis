@@ -45,7 +45,7 @@
                                 <Option v-for="item in $store.state.keepCitys" :value="item.name" :key="item.code">{{ item.name }}</Option>
                             </Select>
                         </FormItem>
-                        <FormItem label="类别">
+                        <FormItem label="类别" prop='bigKind'>
                             <FormItem prop='bigKind'>
                                 <Select class="big_select" v-model="editValidate.bigKind" :placeholder="editBigType">
                                     <Option v-for="item in bigList" :value="item.name" :key="item.index">{{ item.name }}</Option>
@@ -61,14 +61,14 @@
                             </FormItem>
                         </FormItem>
                          <FormItem label="型号" class="model" prop="model" v-if="bikeModelShow">
-                            <Input v-model.number="editValidate.model" placeholder="请输入型号"></Input>
+                            <Input v-model="editValidate.model" placeholder="请输入型号"></Input>
                         </FormItem>
                         <div style="margin-bottom: -32px;" v-else></div>
                         <FormItem label="单价" class="price" prop="unitPrice">
-                            <Input v-model.number="editValidate.unitPrice" placeholder="请输入单价"></Input>
+                            <Input v-model="editValidate.unitPrice" placeholder="请输入单价"></Input>
                         </FormItem>
                         <FormItem label="数量" class="number" prop="number" v-show="numberShow">
-                            <Input v-model.number="editValidate.number" placeholder="请输入数量"></Input>
+                            <Input v-model="editValidate.number" placeholder="请输入数量"></Input>
                         </FormItem>
                     </Form>
                 </div>
@@ -454,29 +454,26 @@ export default {
             editSmallType: '请选择小类',
             editSmallType2: '',
             editValidateRule: {
-                month: [
-                    { required: true, type: 'date', message: '请选择时间', trigger: 'change' }
+                dataMonth: [
+                    { required: false, type:"string" ,message: '请选择时间', trigger: 'change' }
                 ],
-                area: [
-                    { required: true, message: '请选择地区', trigger: 'change' }
+                city: [
+                    { required: false, message: '请选择地区', trigger: 'change' }
                 ],
-                type: [
-                    { required: true, message: '请选择大类', trigger: 'blur' }
+                bigKind: [
+                    { required: false, message: '请选择类别', trigger: 'blur' }
+                ],
+                smallKind: [
+                    { required: false, message: '请选择大类', trigger: 'blur' }
                 ],
                 model: [
-                    { required: true, message: '请输入型号', trigger: 'blur' }
-                ],
-                bigType: [
-                    { required: true, message: '请选择大类', trigger: 'blur' }
-                ],
-                smallType: [
-                    { required: true, message: '请选择小类', trigger: 'blur' }
+                    { required: false, message: '请输入型号', trigger: 'blur' }
                 ],
                 unitPrice: [
-                    { required: true, type: 'number', message: '请输入单价', trigger: 'blur' }
+                    { required: false, message: '请输入单价', trigger: 'blur' }
                 ],
-                num: [
-                    { required: true, type: 'number', message: '请输入数量', trigger: 'blur' }
+                number: [
+                    { required: false, message: '请输入数量', trigger: 'blur' }
                 ]
             },
             columns4: [
@@ -586,7 +583,6 @@ export default {
                     var year = date.getFullYear();
                     var month = date.getMonth() + 1;
                     var days = date.getDate();
-                    console.log('当前日期为' + now, year, month, days);
                     // 小于等于当前年份
                     if (year <= nowYear) {
                     if (month <= nowMonth) {
@@ -925,6 +921,7 @@ export default {
                                 bigKind: this.editValidate.bigKind,
                                 smallKind: this.editValidate.smallKind,
                                 number: this.editValidate.number,
+                                model: this.editValidate.model,
                                 unitPrice: this.editValidate.unitPrice,
                                 id: this.editValidate.id,
                             },
