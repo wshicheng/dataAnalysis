@@ -45,7 +45,7 @@
                 <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
             </Spin>
-            <div id="container" style="min-width:400px; height: 400px;"></div>
+            <div id="newUserDetail" style="min-width:400px; height: 400px;"></div>
       </div>
   </div>
 </template>
@@ -353,7 +353,7 @@ export default {
                 var chartData = res.data.data
                 console.log(chartData)
                 if (res.data.resultCode === 0) {
-                    $('#container').html('')
+                    $('#newUserDetail').html('')
                     this.noDataBox = false
                     this.loadFlag = true
                 } else {
@@ -520,7 +520,7 @@ export default {
             //         var colors = ['#4472c4', '#ed7d31', '#9999ff']
             //         return colors;
             // }());
-            new Highcharts.chart('container', options);
+            new Highcharts.chart('newUserDetail', options);
             
         }
     }

@@ -18,7 +18,7 @@
             <div class="dateAndArea_type_select">
                 <span>指标:</span>
                 <button @click="handleTypeClick"  class="active" myType='totalUser'>累计用户</button>
-                <button @click="handleTypeClick"  myType='depositUser' title="累计押金用户">累计押金用户</button>
+                <button @click="handleTypeClick"  myType='depositUser'>累计押金用户</button>
                 <button @click="handleTypeClick"  myType='dayActiveNum'>活跃用户</button>
                 <button @click="handleTypeClick"  myType='newRegister'>新注册用户</button>
                 <button @click="handleTypeClick"  myType='newActiveNum'>活跃新用户</button>
@@ -31,7 +31,7 @@
                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
             </Spin>
             <div class="help">
-                <Poptip trigger="hover" style="float: right;"  placement="top-end" title="数据字段说明" :transfer='transfer'>
+                <Poptip trigger="hover" style="float: right;"  placement="top-end" title="数据项说明" :transfer='transfer'>
                     <span>?</span>
                     <div class="content" slot="content">
                         <p><b>累计用户:</b>累计到查询日期的注册用户数</p>
@@ -70,7 +70,7 @@
             <!-- <div class="nodata" v-show="noData" style="text-align:center;">
                 <i class="iconfont icon-zanwushuju" style="font-size:400px;color:#dedcdc;"></i>
             </div> -->
-            <div id="container" style="min-width:400px; height: 400px;"></div>
+            <div id="userDateAndAreaChart" style="min-width:400px; height: 400px;"></div>
         </div>
     </div>
 </template>
@@ -412,7 +412,7 @@ export default {
                 .then( (res) => {
                     this.checkLogin(res)
                     console.log(res.data.data)
-                        $('#container').html('')
+                        $('#userDateAndAreaChart').html('')
                     if (res.data.data.length === 0) {
                         this.noDataText = '暂无数据'
                         // 关闭分页，恢复页码
@@ -598,7 +598,7 @@ export default {
                 var chartData = res.data.data
                 if (chartData.length === 0) {
                     this.spinShow3 = false
-                    $('#container').html('')
+                    $('#userDateAndAreaChart').html('')
                 } else {
                     this.spinShow3 = false
 
@@ -757,7 +757,7 @@ export default {
                 series: this.chartData
             }
 
-            new Highcharts.chart('container', options);
+            new Highcharts.chart('userDateAndAreaChart', options);
         },
         handleCurrentPage(currentPage) {
             this.currentPage = currentPage

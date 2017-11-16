@@ -12,9 +12,9 @@
             <!-- <Table :columns="tableColumn" :data="reportData"></Table> -->
         <div class="tabler-border" v-if="dataReturn">
             <Row class="one">
-                <Col span="12"><span style='text-indent: -111px;'>分类</span></Col>
-                <Col span="6"><span>{{month}}月</span></Col>
-                <Col span="6"><span>环比</span></Col>
+                <Col span="12"><span style='text-align: left;text-indent: 47px;'>分类</span></Col>
+                <Col span="6"><span style="text-align: right;padding-right: 10px;">{{month}}月</span></Col>
+                <Col span="6"><span style="text-align: right;padding-right: 10px;">环比</span></Col>
             </Row>
             <!-- 车辆模块 -->
             <Row class="other">
@@ -244,7 +244,7 @@
             </Row>
                 <!-- 成本三级列表 4.2  -->
                 <Row class='other'>
-                    <Col span="12"  class="title_level3"><span><b title="当期员工工资+福利，是否包括住宿相关">4.2.1 薪资福利</b></span></Col>
+                    <Col span="12"  class="title_level3"><span><b title="当期员工工资+福利">4.2.1 薪资福利</b></span></Col>
                     <Col span="6" class="content"><span>{{data[0].salaryMoney}}</span></Col>
                     <Col span="6" class="content"><span>{{data[1].salaryMoney}}</span></Col>
                 </Row>
@@ -356,8 +356,10 @@
 </template>
 <style lang='scss' scoped type="text/css">
     #report_body {
+            width: 1200px;
+            margin: 0 auto;
         h3 {
-            width: 80%;
+            width: 100%;
             height: 60px;
             line-height: 60px;
             background: #797979;
@@ -378,7 +380,7 @@
             .tabler-border {
                 border: 1px solid #ddd;
                 overflow: hidden;
-                width: 80%;
+                width: 100%;
                 margin: 0 auto;
                 .one {
                     background: #ccc;
@@ -404,10 +406,12 @@
                         border-bottom: none;
                         span {
                             font-weight: 400;
+                            text-align: right;
+                            padding-right: 10px;
                         }
                     }
                     .title_level1 {
-                        text-indent: -52px;
+                        text-indent: -162px;
                         font-weight: 400;
                         cursor: pointer;
                         span {
@@ -427,7 +431,7 @@
                             width: 100%;
                             font-weight: 400;
                             float: left;
-                            text-indent: 249px;
+                            text-indent: 51px;
                             cursor: pointer;
                         }
                     }
@@ -439,7 +443,7 @@
                             float: left;
                             font-weight: 400;
                             cursor: pointer;
-                            text-indent: 278px;
+                            text-indent: 78px;
                         }
                     }
                     .title_level4 {
@@ -450,7 +454,7 @@
                             cursor: pointer;
                             font-weight: 400;
                             float: left;
-                            text-indent: 319px;
+                            text-indent: 119px;
                         }                   
                     }
                 }

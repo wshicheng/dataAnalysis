@@ -95,12 +95,16 @@ export default {
         city: {
             get: function () {
                 this.cityList = this.userInfo.cityList
-                window.sessionStorage.setItem('city', this.cityList[0].name)
-                if (window.sessionStorage.getItem('cityStr') != '全部地区' && window.sessionStorage.getItem('cityStr').length > 3) {
-                    return this.userInfo.cityList.map((item) => { return item.name }).join('、')
+                if (this.cityList.length != 0) {
+                    window.sessionStorage.setItem('city', this.cityList[0].name)
+                    if (window.sessionStorage.getItem('cityStr') != '全部地区' && window.sessionStorage.getItem('cityStr').length > 3) {
+                        return this.userInfo.cityList.map((item) => { return item.name }).join('、')
+                    } else {
+                        return this.city = window.sessionStorage.getItem('cityStr')
+                    } 
                 } else {
-                    return this.city = window.sessionStorage.getItem('cityStr')
-                } 
+                    this.city = '当前没有城市权限，请联系管理员'
+                }
             },
             set: function () {
                 return

@@ -51,7 +51,7 @@
                 <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
             </Spin>
-            <div id="container" style="min-width:400px; height: 400px;"></div>
+            <div id="newUserChart" style="min-width:400px; height: 400px;"></div>
       </div>
   </div>
 </template>
@@ -416,7 +416,7 @@ export default {
                     this.spinShow2 = false
                     var chartData = res.data.data
                     if (res.data.resultCode === 0) {
-                        $('#container').html('')
+                        $('#newUserChart').html('')
                         this.noDataBox = false
                         this.loadFlag = true
                     } else {
@@ -588,7 +588,7 @@ export default {
                 } ]
             }
 
-            new Highcharts.chart('container', options);
+            new Highcharts.chart('newUserChart', options);
         },
         cityChange () {
             clearTimeout(this.timer)
@@ -597,6 +597,10 @@ export default {
                 this.currentPage = 1
                 this.loadData($('.newUser_head_time button.active').attr('myId'))
             }
+        },
+        beforeDestroy () {
+            $('#newUserChart').html('')
+            $('#newUserChart').hide()
         },
         checkLogin (res) {
            if (res.data.message === '用户登录超时') {

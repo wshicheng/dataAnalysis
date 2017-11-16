@@ -30,7 +30,7 @@
                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
             </Spin>
             <div class="help">
-                <Poptip trigger="hover" style="float: right;"  placement="top-end" title="数据字段说明" :transfer='transfer'>
+                <Poptip trigger="hover" style="float: right;"  placement="top-end" title="数据项说明" :transfer='transfer'>
                     <span>?</span>
                     <div class="content" slot="content">
                         <p><b>有效订单数:</b>当前时段有效订单数</p>

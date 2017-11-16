@@ -1,16 +1,18 @@
 <template>
     <!--单车日营收-->
-     <div class="fiexedAssets">
-        <Spin v-show="spinShow" fix>
-                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-                <div style="color:rgb(204, 204, 204);">Loading</div>
-            </Spin>
-          <div class="nodata" v-show="isNoData2">
-            <i class="iconfont icon-zanwushuju"></i>
-        </div>
-         <Table v-show="isNoData" id="fiexedAssets6" :columns="columns8" :data="data7" size="small" ref="table"></Table>
-       
-     </div>
+    <div id="singleBikeIncoming"> 
+      <div class="fiexedAssets">
+          <Spin v-show="spinShow" fix>
+                  <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                  <div style="color:rgb(204, 204, 204);">Loading</div>
+              </Spin>
+            <div class="nodata" v-show="isNoData2">
+              <i class="iconfont icon-zanwushuju"></i>
+          </div>
+          <Table v-show="isNoData" id="fiexedAssets6" :columns="columns8" :data="data7" size="small" ref="table"></Table>
+        
+      </div>
+    </div>
    </template>
    <script>
    import { mapGetters } from 'vuex'

@@ -368,6 +368,7 @@ export default {
         return {
             listChose: [],
             close: false,
+            // 固定资产
             smallList_one: [
                 {
                     name: '小蜜蜂',
@@ -376,28 +377,26 @@ export default {
                     name: '电池',
                     index: 1
                 }, {
-                    name: '充电站建设',
+                    name: '电站建设',
                     index: 2
                 }, {
-                    name: '充电站电柜',
+                    name: '电站设备',
                     index: 3
                 }, {
                     name: '机动车',
                     index: 4
                 }, {
-                    name: '物流成本',
+                    name: '物流',
                     index: 5
-                }, {
-                    name: '办公成本',
+                },  {
+                    name: '运维工具车',
                     index: 6
                 }, {
-                    name: '运维工具车',
-                    index: 7
-                }, {
                     name: '其他',
-                    index: 8
+                    index: 7
                 }
             ],
+            // 运维费用
             smallList_two: [
                 {
                     name: '薪资福利',
@@ -406,10 +405,10 @@ export default {
                     name: '其他人员成本',
                     index: 1
                 }, {
-                    name: '房租(生产)',
+                    name: '房租（生产）',
                     index: 2
                 }, {
-                    name: '水电(生产)',
+                    name: '水电（生产）',
                     index: 3
                 }, {
                     name: '其他生产成本',
@@ -935,7 +934,6 @@ export default {
                             this.$Message.success('修改成功!');
                             this.editModal = false
                             this.loadData()
-                            this.current = 1
                         } else {
                             this.$Message.error('修改失败!');
                         }

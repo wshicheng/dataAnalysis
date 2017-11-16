@@ -58,7 +58,7 @@
                 <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
             </Spin>
-            <div id="container" style="min-width:400px; height: 400px;"></div>
+            <div id="userAllDataChart" style="min-width:400px; height: 400px;"></div>
       </div>
   </div>
 </template>
@@ -489,7 +489,7 @@ export default {
                 this.spinShow2 = false
                 var chartData = res.data.data
                 if (res.data.resultCode === 0) {
-                    $('#container').html('')
+                    $('#userAllDataChart').html('')
                     this.noDataBox = false
                     this.loadFlag = true
                 } else {
@@ -702,7 +702,7 @@ export default {
                 }]
             }
 
-            new Highcharts.chart('container', options);
+            new Highcharts.chart('userAllDataChart', options);
         },
         cityChange () {
             clearTimeout(this.timer)

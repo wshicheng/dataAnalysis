@@ -1,6 +1,6 @@
 <template>
     <div class="container fiexedAssets">
-         <Spin v-show="spinShow" fix>
+        <Spin v-show="spinShow" fix>
                 <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
                 <div style="color:rgb(204, 204, 204);">Loading</div>
             </Spin>

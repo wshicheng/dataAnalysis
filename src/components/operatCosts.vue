@@ -1,14 +1,16 @@
 <template>
  <!--运营成本-->
-    <div class="fiexedAssets">
-         <Spin v-show="spinShow" fix>
-                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-                <div style="color:rgb(204, 204, 204);">Loading</div>
-            </Spin>
-        <div class="nodata" v-show="isNoData2">
-            <i class="iconfont icon-zanwushuju"></i>
+    <div id="operatCosts">
+        <div class="fiexedAssets">
+            <Spin v-show="spinShow" fix>
+                    <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                    <div style="color:rgb(204, 204, 204);">Loading</div>
+                </Spin>
+            <div class="nodata" v-show="isNoData2">
+                <i class="iconfont icon-zanwushuju"></i>
+            </div>
+            <Table v-show="isNoData" id="fiexedAssets2" min-width="1180" border :columns="columns2" :data="data4"></Table>
         </div>
-        <Table v-show="isNoData" id="fiexedAssets2" min-width="1180" border :columns="columns2" :data="data4"></Table>
     </div>
 </template>
 <script>

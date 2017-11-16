@@ -1,14 +1,16 @@
 <template>
     <!--基础数据demo-->
-    <div class="container fiexedAssets">
-         <Spin v-show="spinShow" fix>
-                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-                <div style="color:rgb(204, 204, 204);">Loading</div>
-            </Spin>
-        <div class="nodata" v-show="isNoData2">
-            <i class="iconfont icon-zanwushuju"></i>
+    <div id="baseDatas">
+        <div class="container fiexedAssets">
+            <Spin v-show="spinShow" fix>
+                    <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                    <div style="color:rgb(204, 204, 204);">Loading</div>
+                </Spin>
+            <div class="nodata" v-show="isNoData2">
+                <i class="iconfont icon-zanwushuju"></i>
+            </div>
+            <Table   v-show="isNoData" id="fiexedAssets5" :columns="columns8" min-width='1200' :data="data7" size="small" border ref="table"></Table>
         </div>
-        <Table   v-show="isNoData" id="fiexedAssets5" :columns="columns8" min-width='1200' :data="data7" size="small" border ref="table"></Table>
     </div>
 </template>
 <script>
@@ -951,6 +953,7 @@ export default {
                     title: '合计',
                     key: 'total',
                     width: 100,
+                    height: 30,
                     fixed: 'left',
                     render: (h, params) => {
                         return h('div',  params.row.total.money)

@@ -279,12 +279,13 @@ export default {
     },
     methods: {
         loadData () {
-            this.currentPage = 1
             this.spinShow = true
             this.noDataText = ''
             this.axios.get('/beefly/role/api/v1/page', {
                 params: {
-                    accessToken: this.$store.state.token
+                    accessToken: this.$store.state.token,
+                    pageNo: this.currentPage,
+                    pageSize: this.pageSize
                 }
             })
             .then((res) => {
@@ -427,7 +428,6 @@ export default {
                 this.checkLogin(res)
                 if (res.data.resultCode === 1) {
                     this.$Message.success('删除成功!');
-                    this.currentPage = 1
                     this.data.splice(this.index,1)
                     this.loadData()
                     this.delModal = false;

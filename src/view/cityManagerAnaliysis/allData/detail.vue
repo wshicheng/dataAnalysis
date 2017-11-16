@@ -160,7 +160,8 @@ import {mapActions,mapGetters} from 'vuex'
             this.currentMonth = moment(this.$route.params.month).format('YYYY-MM')
             var now = moment()
             var currentMonth = moment(this.currentMonth);
-            document.title = '城市经营分析表 -' + moment(this.$route.params.month).format('YYYY-MM')
+            // document.title = '城市经营分析表 -' + moment(this.$route.params.month).format('YYYY-MM')
+            document.title = '城市经营分析表'
             var diff = now.diff(currentMonth,'month')
             if(diff===0){
                 this.$refs.next.setAttribute('class','iconfont right icon-right-arrow disabled')

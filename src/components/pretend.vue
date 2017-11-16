@@ -1,85 +1,87 @@
 <template>
-  <div class="pretend fiexedAssets">
-      <Row class="citySelect">
-        <city-select prop="cityShow"></city-select>
-      </Row>
-       <div class="nodata2" v-show="isNoData2">
-            <i class="iconfont icon-zanwushuju"></i>
-        </div>
-      <Row class="cityBindTable" style="position:relative;">
-           <Spin v-show="spinShow" fix>
-                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-                <div style="color:rgb(204, 204, 204);">Loading</div>
-            </Spin>
-          <ul v-show="allCount2">
-              <li class="total" v-show="allCount">
-                  <h3>合计</h3>
-                  <div class="total">
-                      <table>
-                          <thead>
-                            <tr>
-                                <th>假设实收率</th>
-                                <th>盈亏状态</th>
-                                <th>盈亏率</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                              <tr :key="item.actualYield" v-for="item of items">
-                                  <td>{{item.actualYield}}</td>
-                                  <td>{{item.profitLossStatus}}</td>
-                                  <td>
-                                      <div class="progress">
-                                        <div class="progress-outer">
-                                            <span class="progress-text">{{item.profitAndLossLv}}</span>  
-                                            <div class="progress-inner">
-                                                <div :class="{'progress-bg':diff(item.profitAndLossLv),'sign':sign }" :percent="item.profitAndLossLv">
-                                                </div>
-                                            </div>
-                                        </div> 
-                                      </div> 
-                                  </td>
-                              </tr>
-                          </tbody>
-                      </table>
-                  </div>
-              </li>
-              <li class="cityBind" v-bind:key="index" v-for="(item,index) of allCityTables">
-                  <h3>{{item[0].cityName}}</h3>
-                  <div class="total">
-                      <table>
-                          <thead>
-                            <tr>
-                                <th>假设实收率</th>
-                                <th>盈亏状态</th>
-                                <th>盈亏率</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                              <tr v-show="item[0].actualYield.length!==0"  :key="list.id" v-for="list of item">
-                                  <td>{{list.actualYield}}</td>
-                                  <td>{{list.profitLossStatus}}</td>
-                                  <td>
-                                      <div class="progress">
-                                        <div class="progress-outer">
-                                            <span class="progress-text">{{list.profitAndLossLv}}</span>  
-                                            <div class="progress-inner">
-                                                <div  :class="{'progress-bg':diff(list.profitAndLossLv),'sign':sign}" :percent="list.profitAndLossLv">
-                                                </div>
-                                            </div>
-                                        </div> 
-                                      </div> 
-                                  </td>
-                              </tr>
-                          </tbody>
-                      </table>
-                       <div v-show="item[0].actualYield.length===0" class="nodata" >
-                           暂无数据
+    <div id="pretend">
+        <div class="pretend fiexedAssets">
+            <Row class="citySelect">
+                <city-select prop="cityShow"></city-select>
+            </Row>
+            <div class="nodata2" v-show="isNoData2">
+                    <i class="iconfont icon-zanwushuju"></i>
+                </div>
+            <Row class="cityBindTable" style="position:relative;">
+                <Spin v-show="spinShow" fix>
+                        <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                        <div style="color:rgb(204, 204, 204);">Loading</div>
+                    </Spin>
+                <ul v-show="allCount2">
+                    <li class="total" v-show="allCount">
+                        <h3>合计</h3>
+                        <div class="total">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>假设实收率</th>
+                                        <th>盈亏状态</th>
+                                        <th>盈亏率</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr :key="item.actualYield" v-for="item of items">
+                                        <td>{{item.actualYield}}</td>
+                                        <td>{{item.profitLossStatus}}</td>
+                                        <td>
+                                            <div class="progress">
+                                                <div class="progress-outer">
+                                                    <span class="progress-text">{{item.profitAndLossLv}}</span>  
+                                                    <div class="progress-inner">
+                                                        <div :class="{'progress-bg':diff(item.profitAndLossLv),'sign':sign }" :percent="item.profitAndLossLv">
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                            </div> 
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                  </div>
-              </li>
-          </ul>
-      </Row>
-  </div>
+                    </li>
+                    <li class="cityBind" v-bind:key="index" v-for="(item,index) of allCityTables">
+                        <h3>{{item[0].cityName}}</h3>
+                        <div class="total">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>假设实收率</th>
+                                        <th>盈亏状态</th>
+                                        <th>盈亏率</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-show="item[0].actualYield.length!==0"  :key="list.id" v-for="list of item">
+                                        <td>{{list.actualYield}}</td>
+                                        <td>{{list.profitLossStatus}}</td>
+                                        <td>
+                                            <div class="progress">
+                                                <div class="progress-outer">
+                                                    <span class="progress-text">{{list.profitAndLossLv}}</span>  
+                                                    <div class="progress-inner">
+                                                        <div  :class="{'progress-bg':diff(list.profitAndLossLv),'sign':sign}" :percent="list.profitAndLossLv">
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                            </div> 
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div v-show="item[0].actualYield.length===0" class="nodata" >
+                                暂无数据
+                                </div>
+                        </div>
+                    </li>
+                </ul>
+            </Row>
+        </div>
+    </div>
 </template>
 <script>
 import $ from 'jquery'
