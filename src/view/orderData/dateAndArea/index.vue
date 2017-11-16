@@ -399,7 +399,7 @@ export default {
                 this.checkLogin(res)
                 // console.log(res.data.data)
                     $('#container').html('')
-                if (res.data.data.length === 0) {
+                if (res.data.resultCode != 1) {
                     this.noDataText = '暂无数据'
                     this.spinShow = false
                     this.spinShow3 = false

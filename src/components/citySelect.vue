@@ -4,7 +4,7 @@
         <div class="citySelect_area_span" >
             <span class="active" @click="areaClick" v-show="allCityHide">全部地区</span>
             <span @click="areaClick" v-bind:key="item.name" v-for="item in cityList" :myId='item.code'>{{item.name}}</span>
-            <i type="error" v-show="cityAuth" style="font-style:normal;">没有城市访问权限，请联系管理员</i>
+            <i type="error" v-show="cityAuth" style="font-style:normal; margin-left: 6px;">对不起，没有城市访问权限，请联系管理员</i>
         </div>
     </div>
 </template>
@@ -65,7 +65,7 @@ export default {
             cityList: [],
             citySelect: [],
             allCityHide: false,
-            singleCityShow: false
+            singleCityShow: true
         }
     },
     mounted () {
@@ -78,7 +78,6 @@ export default {
         .then(function (res) {
             _this.cityList = res.data.data||[]
             _this.$store.dispatch('keepCitys', res.data.data)
-            console.log()
             if(res.data.data.length===0){
                 _this.cityAuth = true
             }else{
@@ -86,10 +85,10 @@ export default {
             }
             if (res.data.data.length >1) {
                 _this.allCityHide = true
-                _this.singleCityShow = true
+                // _this.singleCityShow = true
             } else {
                 _this.allCityHide = false
-                _this.singleCityShow = false
+                // _this.singleCityShow = false
                 // setTimeout( function () {
                 //     $('.citySelect_area_span span')[0].setAttribute('active')
                 // }, 10)        

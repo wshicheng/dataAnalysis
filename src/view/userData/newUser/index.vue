@@ -372,7 +372,7 @@ export default {
                     this.spinShow = false
                     // 先展示下面的图表加载状 态
                     this.noDataBox = true
-                    if (res.data.resultCode === 0) {
+                    if (res.data.resultCode != 1) {
                         this.noDataText = '暂无数据'
                         this.currentPage = 1
                         this.pageShow = false

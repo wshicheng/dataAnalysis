@@ -27,9 +27,9 @@
             <Poptip trigger="hover" style="float: right;" placement="left-start" title="数据项说明" content="提示内容" :transfer='transfer'>
                 <span>?</span>
                 <div class="content" slot="content">
-                    <p><b>累计用户:</b>累计到查询时间段的注册用户数</p>
-                    <p><b>活跃用户:</b>在本查询时间段内有过一次有效订单的用户</p>
-                    <p><b>活跃用户占比:</b>活跃用户/累计用户</p>
+                    <p><b>累计用户数量:</b>累计到查询时间段的注册用户数</p>
+                    <p><b>活跃用户数:</b>在本查询时间段内有过一次有效订单的用户</p>
+                    <p><b>活跃用户比率:</b>活跃用户/累计用户</p>
                     <p><b>活跃新用户:</b>查询时段内注册且在查询时间段内有过一次有效订单的用户</p>
                     <p><b>活跃新用户占比:</b>活跃新用户/活跃用户</p>
                 </div>
@@ -302,7 +302,7 @@ export default {
             .then( res => {
                 var data = res.data.data
                 this.spinShow = false
-                if (res.data.resultCode === 0) {
+                if (res.data.resultCode != 1) {
                     this.currentPage = 1
                     this.pageShow = false
                     this.noDataText = '暂无数据'

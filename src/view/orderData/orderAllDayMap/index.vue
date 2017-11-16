@@ -39,7 +39,7 @@
                 </div>
             </Poptip>
         </div>
-        <Table height='500' border size='small' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
+        <Table  border size='small' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
       </div>
 
       <div class="orderAllDayMap_chart" v-show="noDataBox">
@@ -199,6 +199,7 @@
                     height: 30px;
                     line-height: 30px;
                     text-align: center;
+                    border-radius: inherit;
                     border: none;
                     font-size: 14px;
                     margin-right: 10px;
@@ -325,7 +326,7 @@ export default {
                 var data = res.data.data
                 this.spinShow = false
                 
-                if (data.length === 0) {
+                if (res.data.resultCode != 1) {
                     this.noDataText = '暂无数据'
                     this.noDataBox = false
                     this.orderData = []

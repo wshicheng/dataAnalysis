@@ -24,7 +24,7 @@
                 </div>
             </Tooltip>
             <div class="cityList" v-else>
-                <span class="cityList">{{city}}
+                <span style="margin-left: 30px;" class="cityList">{{city}}
                 </span>
                 <!-- <span class="cityList">全部地区</span> -->
             </div>
@@ -227,7 +227,7 @@ div.cityList {
 span.cityList {
     font-size: 13px;
     white-space: nowrap;
-    width: 139px;
+    width: 149px;
     cursor: pointer;
     display: inline-block;
     text-overflow: ellipsis;

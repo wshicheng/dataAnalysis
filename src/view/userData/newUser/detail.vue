@@ -311,7 +311,7 @@ export default {
                 var data = res.data.data
                 this.spinShow = false
                 this.noDataBox = true
-                if (res.data.resultCode === 0) {
+                if (res.data.resultCode != 1) {
                     this.currentPage = 1
                     this.pageShow = false
                     this.noDataText = '暂无数据'

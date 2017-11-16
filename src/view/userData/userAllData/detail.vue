@@ -247,22 +247,8 @@ export default {
                     key: 'depositUser'
                 },
                 {
-                    title: '日活跃用户数',
-                    key: 'dayActiveNum',
-                    // sortable: true
-                },
-                {
-                    title: '日活跃用户率',
-                    key: 'dayActiveRate'
-                },
-                {
-                    title: '月活跃用户数',
-                    key: 'monthActiveNum',
-                    // sortable: true
-                },
-                {
-                    title: '月活跃用户率',
-                    key: 'monthActiveRate'
+                    title: '活跃用户',
+                    key: 'dayActiveNum'
                 },
                 {
                     title: '仅注册用户(累计)',
@@ -270,8 +256,7 @@ export default {
                 },
                 {
                     title: '已退押金用户(累计)',
-                    key: 'unDepositUser',
-                    width: 160
+                    key: 'unDepositUser'
                 }
             ],
             orderData: [],
@@ -355,7 +340,7 @@ export default {
             .then( res => {
                 var data = res.data.data
                 this.spinShow = false
-                if (res.data.resultCode === 0) {
+                if (res.data.resultCode != 1) {
                     this.noDataText = '暂无数据'
                     this.currentPage = 1
                     this.pageShow = false

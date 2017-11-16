@@ -285,7 +285,7 @@
                 </Row>
 
             <Row class='other'>
-                <Col span="12"  class="title_level2"><span><b title="固定资产成本摊销+运维费用">4.3 总成本</b></span></Col>
+                <Col span="12"  class="title_level2"><span><b title="固定资产摊销（和硬件损耗 ）和城市运营费用">4.3 总成本</b></span></Col>
                 <Col span="6" class="content"><span>{{data[0].totalCost}}</span></Col>
                 <Col span="6" class="content"><span>{{data[1].totalCost}}</span></Col>
             </Row>
@@ -303,7 +303,7 @@
 
             <!-- 盈亏分析 -->
             <Row class='other'>
-                <Col span="12"  class="title_level1"><span style="text-indent: -10px;"><b>5 盈亏分析</b></span></Col>
+                <Col span="12"  class="title_level1"><span style="text-indent: -134px;"><b>5 盈亏分析</b></span></Col>
                 <Col span="6"><span></span></Col>
                 <Col span="6"><span></span></Col>
             </Row>
@@ -389,11 +389,11 @@
                     display: inline-block;
                     color: #444;
                     text-align: center;
-                    height: 40px;
+                    height: 30px;
                     font-weight: 400;
-                    line-height: 40px;
+                    line-height: 30px;
                     width: 100%;
-                    font-size: 16px;
+                    font-size: 13px;
                 }
                 .other {
                     .content {

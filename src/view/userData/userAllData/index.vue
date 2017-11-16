@@ -25,7 +25,6 @@
             <city-select></city-select>
         </div>
         <div v-else>
-            
         </div>
       </div>
 
@@ -49,7 +48,7 @@
                 </div>
             </Poptip>
         </div>
-        <Table  border size='small' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
+        <Table  border size='small' :no-data-text='noDataText' :columns="cityType === 1?columns_orderData:columns_orderData2" :data="orderData"></Table>
         <Page :total="totalListNum" show-sizer show-elevator  :styles='page' placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
       </div>
 
@@ -340,8 +339,54 @@ export default {
                 },
                 {
                     title: '已退押金用户(累计)',
-                    key: 'unDepositUser',
-                    width: 160
+                    key: 'unDepositUser'
+                }
+            ],
+            columns_orderData2: [
+                {
+                    renderHeader: (h) => {
+                        // title: that.cityType === undefined?'地区':'日期2',
+                        // key: that.cityType === '1'?'cityName':'orderTime',
+                        return h('span', that.cityType === 1?'地区':'日期')
+                    },
+                    render: (h, params) => {
+                        if (that.cityType === 1) {
+                            return h('a', {
+                                style: {
+                                    color: '#2d8cf0',
+                                    cursor: 'pointer'
+                                },
+                                attrs: {
+                                    target: '_blank',
+                                    href: '#/index/userAllData/detail/' + params.row.cityCode + '&' + params.row.cityName
+                                }
+                            }, params.row.cityName)
+                        } else {
+                            return h('p', {
+                            }, params.row.createDate)
+                        }
+                    }
+                },
+                {
+                    title: '累计用户',
+                    key: 'totalUser',
+                    // sortable: true
+                },
+                {
+                    title: '押金用户(累计)',
+                    key: 'depositUser'
+                },
+                {
+                    title: '活跃用户数',
+                    key: 'dayActiveNum'
+                },
+                {
+                    title: '仅注册用户(累计)',
+                    key: 'registerUser'
+                },
+                {
+                    title: '已退押金用户(累计)',
+                    key: 'unDepositUser'
                 }
             ],
             orderData: [],
@@ -445,7 +490,7 @@ export default {
                     this.spinShow = false
                     // 先展示下面的图表加载状 态
                     this.noDataBox = true
-                    if (res.data.resultCode === 0) {
+                    if (res.data.resultCode != 1) {
                         this.noDataText = '暂无数据'
                         this.currentPage = 1
                         this.pageShow = false

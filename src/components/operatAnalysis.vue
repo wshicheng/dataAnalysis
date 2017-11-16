@@ -1131,10 +1131,10 @@ import { mapGetters } from 'vuex'
     div.nodata{text-align:center;}
     div.nodata i{font-size:400px;color:#dedcdc;}
     div.title{
-        width:1200px;
-        text-align:center;
-        font-size:20px;
-        font-weight:bold;
+        width: 100%;
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
     }
     div.table{
         position:relative;

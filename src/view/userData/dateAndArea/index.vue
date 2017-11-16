@@ -413,7 +413,7 @@ export default {
                     this.checkLogin(res)
                     console.log(res.data.data)
                         $('#userDateAndAreaChart').html('')
-                    if (res.data.data.length === 0) {
+                    if (res.data.resultCode != 1) {
                         this.noDataText = '暂无数据'
                         // 关闭分页，恢复页码
                         this.currentPage = 1
