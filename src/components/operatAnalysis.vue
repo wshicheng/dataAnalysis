@@ -9,7 +9,7 @@
                 <i class="iconfont icon-zanwushuju"></i>
             </div>
             <div v-show="isNoData">
-                <div class="title">蜜蜂出行{{month}}月份经营报告</div>
+                <div class="title">蜜蜂出行{{monthTitle}}月份经营报告</div>
                 <div class="table" >
                     <table>
                         <thead>
@@ -781,6 +781,7 @@ import { mapGetters } from 'vuex'
         data:function(){
             return {
                 month:'',
+                monthTitle:'',
                 cityList:[],
                 cityItems:[],
                  spinShow:true,
@@ -1091,6 +1092,8 @@ import { mapGetters } from 'vuex'
         watch: {
                 'dataMonth':{
                     handler:function(val){
+                        var test = $('.currentMonth').text()
+                        this.monthTitle = test
                         this.isNoData2 = false
                         this.isNoData = false
                         this.spinShow = true

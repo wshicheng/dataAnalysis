@@ -319,9 +319,9 @@ export default {
             ],
             orderData: [
                 {
-                    orderTime: '1111',
-                    city: '111',
-                    total:1
+                    orderTime: '',
+                    city: '',
+                    total: ''
                 }
             ],
             columns_total: [

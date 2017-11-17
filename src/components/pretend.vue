@@ -8,10 +8,10 @@
                     <i class="iconfont icon-zanwushuju"></i>
                 </div>
             <Row class="cityBindTable" style="position:relative;">
-                <Spin v-show="spinShow" fix>
-                        <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-                        <div style="color:rgb(204, 204, 204);">Loading</div>
-                    </Spin>
+                <Spin fix size="large" v-if="spinShow"  class="spin">
+                    <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+                    <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+                </Spin>
                 <ul v-show="allCount2">
                     <li class="total" v-show="allCount">
                         <h3>合计</h3>
@@ -96,7 +96,7 @@ import citySelect from './citySelect.vue'
                 allCount2:false,
                 spinShow:true,
                 isNoData:false,
-                isNoData2:true,
+                isNoData2:false,
                 allCount:false,
                 cityLists:this.cityList,
                 allCityTables:[],
@@ -165,6 +165,9 @@ import citySelect from './citySelect.vue'
                            }).then((response) => {
                                that.spinShow = false
                                var data = response.data.data
+                               if(data.length===0){
+                                   that.isNoData = false
+                               }
                                var message  = data.message
                                if(message==='用户登录超时'){
                                    that.$store.push({path:'/login'})
@@ -215,7 +218,7 @@ import citySelect from './citySelect.vue'
                        }else{
                            this.allCityTables = []
                             this.isNoData = false
-                          this.isNoData2 = true
+                          this.isNoData2 = false
                           this.spinShow = false
                           this.allCount2 = false
                        }
@@ -258,6 +261,12 @@ div.nodata2 i{font-size:400px;color:#dedcdc;}
          .demo-spin-icon-load{
         color:rgb(204, 204, 204);
         animation: ani-demo-spin 1s linear infinite;
+        .spin {
+            position: absolute;
+            display: inline-block;
+            // background-color: rgba(253, 248, 248,0.0); 
+            background-color: rgba(255, 255, 255, 0.8); 
+        }
     }
     @keyframes ani-demo-spin {
         from { transform: rotate(0deg);}

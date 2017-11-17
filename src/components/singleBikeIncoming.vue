@@ -9,7 +9,7 @@
             <div class="nodata" v-show="isNoData2">
               <i class="iconfont icon-zanwushuju"></i>
           </div>
-          <Table v-show="isNoData" id="fiexedAssets6" :columns="columns8" :data="data7" size="small" ref="table"></Table>
+          <Table v-show="isNoData"  style="overflow-y: hidden;" id="fiexedAssets6" :columns="columns8" :data="data7" size="small" ref="table"></Table>
         
       </div>
     </div>
@@ -21,7 +21,7 @@
            data () {
                return {
                  spinShow:true,
-                   isNoData:true,
+                   isNoData:false,
                    isNoData2:true,
                    columns8:[
                   {

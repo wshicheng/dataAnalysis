@@ -12,8 +12,8 @@
                 <h3>城市经营分析</h3>
             </div> 
         </Row>
-        <Row class="tab">
-             <Tabs>
+        <Row class="tab" >
+             <Tabs @on-click='tabChange'>
                 <TabPane :label="label" >
                     <base-datas></base-datas>
                 </TabPane>
@@ -37,6 +37,7 @@
 </template>
 <script>
 import moment from 'moment'
+import $ from 'jquery'
 import baseDatas from '../../../components/baseDatas.vue'
 import operatingCost  from '../../../components/operatCosts.vue'
 import operatingAnalysis from '../../../components/operatAnalysis.vue'
@@ -128,6 +129,85 @@ import {mapActions,mapGetters} from 'vuex'
         },
         methods:{
             ...mapActions(['updateMonth','updateType']),
+            tabChange (name) {
+                console.log(name)
+                console.log(name === 3)
+                // #baseDatas div.ivu-tabs{ overflow-y: hidden;}
+                // #baseDatas div.ivu-table-body{height:235px;}
+                // #baseDatas div.ivu-table-fixed-body{height:216px;}
+                // #baseDatas div#fiexedAssets5{height:297px;}
+
+                // #operatCosts div.ivu-tabs{overflow-y: hidden;}
+                // #operatCosts div.ivu-table-body{max-height:600px;}
+                // #operatCosts div.ivu-table-fixed-body{max-height:600px;}
+                // #operatCosts div#fiexedAssets5{height:600px;}
+                var winHeight =  document.documentElement.clientHeight || document.body.clientHeight;
+                console.log('winHeight', winHeight)
+                if (name === 0) {
+                    // window.scrollTo(0,document.body.scrollHeight)
+                    // document.getElementsByClassName('.ivu-table-body').scrollTop = document.getElementsByClassName('.ivu-table-body').scrollHeight
+                    $('body').css({
+                        'overflow-y': "hidden"
+                    })
+                    // $('#baseDatas div.ivu-tabs').css({
+                    //     'overflow-y': "hidden"
+                    // }) 
+                    $('#baseDatas div.ivu-table-body').css({
+                        'height': winHeight*0.6 + 'px'
+                        // 'height': 'auto',
+                        // 'overflow-y':'auto'
+                    }) 
+                    $('#baseDatas div.ivu-table-fixed-body').css({
+                        'height': winHeight*0.6 + 'px'
+                    }) 
+                    $('#baseDatas div#fiexedAssets5').css({
+                        // 'overflow-x': 'scroll'
+                        // 'height': winHeight*0.7 + 'px'
+                        // 'height': (winHeight*0.7 + '20') + 'px'
+                    }) 
+                }
+                if (name === 1) {
+                    $('body').css('overflow-y','hidden')
+
+                    $('#operatCosts div.ivu-tabs').css({
+                        'overflow-y': "hidden"
+                    }) 
+                    $('#operatCosts div.ivu-table-body').css({
+                        // 'height': winHeight*0.7
+                        'height': 'auto'
+                    }) 
+                    $('#operatCosts div.ivu-table-fixed-body').css({
+                        'height': winHeight*0.7
+                    }) 
+                    $('#operatCosts div#fiexedAssets5').css({
+                        // 'height': winHeight*0.7
+                    }) 
+                }
+                if (name === 2) {
+                    $('body').css('overflow','auto')
+                }
+                if (name === 3) {
+                    $('body').css('overflow-y','hidden')
+
+                    $('#singleBikeIncoming div.ivu-tabs').css({
+                        'overflow-y': "hidden"
+                    }) 
+                    $('#singleBikeIncoming div.ivu-table-body').css({
+                        // 'height': winHeight*0.7
+                        'height': 'auto'
+                    }) 
+                    $('#singleBikeIncoming div.ivu-table-fixed-body').css({
+                        'height': winHeight*0.7
+                    }) 
+                    $('#singleBikeIncoming div#fiexedAssets5').css({
+                        // 'height': winHeight*0.7
+                    }) 
+                }
+                if (name === 4) {
+                    $('body').css('overflow','auto')
+                }
+                
+            },
             handleMinusMonth(){
                var time =  moment(this.currentMonth).subtract(1,'M')
                this.currentMonth = moment(time).format('YYYY-MM')
@@ -157,6 +237,7 @@ import {mapActions,mapGetters} from 'vuex'
             }
         },
         mounted(){
+            this.tabChange(0)
             this.currentMonth = moment(this.$route.params.month).format('YYYY-MM')
             var now = moment()
             var currentMonth = moment(this.currentMonth);

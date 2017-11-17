@@ -1,5 +1,9 @@
 <template>
   <div id="newUser_body">
+        <Spin fix size="large" v-if="spinShowForSlow"  class="spin">
+            <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+            <div style="color: #ccc; text-indent: 5px;">  查询数据较大，请稍候...</div>
+        </Spin>
         <Breadcrumb class="Breadcrumb">
             <BreadcrumbItem>新用户</BreadcrumbItem>
         </Breadcrumb>
@@ -25,10 +29,10 @@
       </div>
 
       <div class="newUser_table">
-        <Spin fix size="large" v-if="spinShow"  class="spin">
+        <!-- <Spin fix size="large" v-if="spinShow"  class="spin">
             <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
             <div style="color: #ccc; text-indent: 5px;">  loading...</div>
-        </Spin>
+        </Spin> -->
         <div class="help">
             <Poptip trigger="hover" style="float: right;"  placement="left" title="数据项说明" content="提示内容" :transfer='transfer'>
                 <span>?</span>
@@ -57,6 +61,13 @@
 </template>
 <style lang='scss' scoped type="text/css">
     #newUser_body {
+        position: relative;
+        .spin {
+            position: absolute;
+            display: inline-block;
+            // background-color: rgba(253, 248, 248,0.0); 
+            background-color: rgba(255, 255, 255, 0.8); 
+        }
         background: #ececec;
         .Breadcrumb {
             width: 100%;
@@ -292,6 +303,7 @@ export default {
             noDataBox: false,
             spinShow: false,
             spinShow2: false,
+            spinShowForSlow: false,
             noDataText: '',
             chartDataX: [],
             chartDataOnlyRegister: [],
@@ -335,8 +347,9 @@ export default {
             console.log(column,key,order)
         },
         loadData (type) {
-            this.spinShow = true
-            this.spinShow2 = true
+            // this.spinShow = true
+            // this.spinShow2 = true
+            this.spinShowForSlow = true
             this.noDataText = ''
             // 调取数据前，清空chart数据
             this.chartDataOnlyRegister = []
@@ -369,7 +382,7 @@ export default {
                     // }
 
 
-                    this.spinShow = false
+                    // this.spinShow = false
                     // 先展示下面的图表加载状 态
                     this.noDataBox = true
                     if (res.data.resultCode != 1) {
@@ -393,7 +406,7 @@ export default {
 
                 })
                 .catch( err => {
-                    this.spinShow = false
+                    // this.spinShow = false
                     this.noDataText = '暂无数据'
                     console.log(err)
                 })
@@ -413,7 +426,9 @@ export default {
                 .then( res => {
                     this.checkLogin(res)
                     // console.log(res.data.data)
-                    this.spinShow2 = false
+                    // this.spinShow2 = false
+                    // 后期处理性能后，关掉spinShowForSlow的特殊处理
+                    this.spinShowForSlow = false
                     var chartData = res.data.data
                     if (res.data.resultCode === 0) {
                         $('#newUserChart').html('')
@@ -431,18 +446,14 @@ export default {
                             // this.chartRefundDeposit.push(Number(item.refundDeposit))
                             // this.chartDataX.push(this.cityType === 1?item.cityName:item.time)
                         })
-
-                        console.log('this.chartDataOnlyRegister', this.chartDataOnlyRegister)
-                        console.log('this.chartStock', this.chartStock)
-                        console.log('this.chartRefundDeposit', this.chartRefundDeposit)
-                        console.log('this.chartDataX', this.chartDataX)
                         this.initChart()
                         this.loadFlag = true
                     }
 
                 })
                 .catch( err => {
-                    this.spinShow = false
+                    // this.spinShow = false
+                    this.spinShowForSlow = false
                     this.noDataText = '暂无数据'
                     console.log(err)
                 })

@@ -9,7 +9,7 @@
             <div class="nodata" v-show="isNoData2">
                 <i class="iconfont icon-zanwushuju"></i>
             </div>
-            <Table  height='600'  v-show="isNoData" id="fiexedAssets5" :columns="columns8" min-width='1200' style='overflow: hidden;' :data="data7" size="small" border ref="table"></Table>
+            <Table  style="overflow-y: hidden;"  v-show="isNoData" id="fiexedAssets5" :columns="columns8" min-width='1200' :data="data7" size="small" border ref="table"></Table>
         </div>
     </div>
 </template>

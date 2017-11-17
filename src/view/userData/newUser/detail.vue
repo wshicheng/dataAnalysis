@@ -1,5 +1,9 @@
 <template>
   <div id="newUser_body">
+        <Spin fix size="large" v-if="spinShowForSlow"  class="spin">
+            <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+            <div style="color: #ccc; text-indent: 5px;">  查询数据较大，请稍候...</div>
+        </Spin>
         <Breadcrumb class="Breadcrumb2">
             <BreadcrumbItem>{{city}}订单整体数据</BreadcrumbItem>
         </Breadcrumb>
@@ -51,6 +55,13 @@
 </template>
 <style lang='scss' scoped type="text/css">
     #newUser_body {
+        position: relative;
+        .spin {
+            position: absolute;
+            display: inline-block;
+            // background-color: rgba(253, 248, 248,0.0); 
+            background-color: rgba(255, 255, 255, 0.8); 
+        }
         background: #ececec;
         .Breadcrumb {
             width: 100%;
@@ -263,6 +274,7 @@ export default {
             noDataBox: false,
             spinShow: false,
             spinShow2: false,
+            spinShowForSlow: false,
             noDataText: '',
             chartDataX: [],
             chartDataOnlyRegister: [],
@@ -283,8 +295,9 @@ export default {
     },
     methods: {
         loadData (type) {
-            this.spinShow = true
-            this.spinShow2 = true
+            // this.spinShow = true
+            // this.spinShow2 = true
+            this.spinShowForSlow = true
             this.noDataText = ''
 
             // 调取数据前，清空chart数据
@@ -309,7 +322,7 @@ export default {
             })
             .then( res => {
                 var data = res.data.data
-                this.spinShow = false
+                // this.spinShow = false
                 this.noDataBox = true
                 if (res.data.resultCode != 1) {
                     this.currentPage = 1
@@ -332,7 +345,7 @@ export default {
 
             })
             .catch( err => {
-                this.spinShow = false
+                // this.spinShow = false
                 this.noDataText = '暂无数据'
                 console.log(err)
             })
@@ -349,7 +362,8 @@ export default {
             })
             .then( res => {
                 // console.log(res.data.data)
-                this.spinShow2 = false
+                // this.spinShow2 = false
+                this.spinShowForSlow = false
                 var chartData = res.data.data
                 console.log(chartData)
                 if (res.data.resultCode === 0) {
