@@ -146,15 +146,15 @@ import {mapActions,mapGetters} from 'vuex'
                        'overflow-y':'hidden'
                    })
 
-                   $('#baseDatas div.ivu-table-body').css({
-                       'height': winHeight * 0.65 + 'px'
-                   })
-                   $('#baseDatas div.ivu-table-fixed-body').css({
-                       'height': winHeight * 0.65 + 'px'
-                   })
-                   $('#baseDatas div#fiexedAssets5').css({
-                       'height': (winHeight * 0.65 + 61.95) + 'px' 
-                   })
+                //    $('#baseDatas div.ivu-table-body').css({
+                //        'height': winHeight * 0.65 + 'px'
+                //    })
+                //    $('#baseDatas div.ivu-table-fixed-body').css({
+                //        'height': winHeight * 0.65 + 'px'
+                //    })
+                //    $('#baseDatas div#fiexedAssets5').css({
+                //        'height': (winHeight * 0.65 + 61.95) + 'px' 
+                //    })
                 }
                 if (name === 1) {
                    $('body').css({

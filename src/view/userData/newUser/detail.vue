@@ -5,7 +5,7 @@
             <div style="color: #ccc; text-indent: 5px;">  查询数据较大，请稍候...</div>
         </Spin>
         <Breadcrumb class="Breadcrumb2">
-            <BreadcrumbItem>{{city}}订单整体数据</BreadcrumbItem>
+            <BreadcrumbItem>{{city}}用户整体数据</BreadcrumbItem>
         </Breadcrumb>
       <div id="newUser_head">
         <div class="newUser_head_time">

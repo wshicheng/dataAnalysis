@@ -10,7 +10,7 @@
             </div>
             <div v-show="isNoData">
                 <div class="title">蜜蜂出行{{monthTitle}}月份经营报告</div>
-                <div class="scrollableTable">
+                <div class="scrollableTable" style="display:none;">
                     <div class="corner-frame">
                         <table cellpadding="0" cellspacing="0" class="data corner-table">
                             <thead>
@@ -26,7 +26,12 @@
                                 <tr>
                                     <th v-for="list of cityList" v-bind:key="list.cityId">
                                         <div class="cityName">
-                                            <div><a target="_blank" :href="'#/index/orderAllData/manageReport/' + list.cityName + '&' + list.dataMonth + '&' +  list.cityId">{{list.cityName}}</a></div>
+                                           
+                                            <div>
+                                                <a v-if="list.cityName=='全国'">{{list.cityName}}</a>
+                                                <a v-else target="_blank" :href="'#/index/orderAllData/manageReport/' + list.cityName + '&' + list.dataMonth + '&' +  list.cityId">{{list.cityName}}</a>
+                                                 
+                                            </div>
                                             <div>
                                                 <span>当期</span>
                                                 <span>环比</span>
@@ -889,7 +894,7 @@
                                 </th>
                                 <th v-for="list of cityList" v-bind:key="list.cityId">
                                     <div class="cityName">
-                                        <div><a target="_blank" :href="'#/index/orderAllData/manageReport/' + list.cityName + '&' + list.dataMonth + '&' +  list.cityId">{{list.cityName}}</a></div>
+                                        <div><a target="_blank" :href="'#/index/orderAllData/manageReport/' + list.cityName + '&' + list.dataMonth + '&' +  list.cityId">{{list.cityName}}</ar></div>
                                         <div>
                                             <span>当期</span>
                                             <span>环比</span>
@@ -900,11 +905,11 @@
                         </thead>  
                     </table>
                 </div> -->
-                <div class="table"  style="display:none;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th colspan="1">
+                <div class="table" v-scroll="onScroll" >
+                     <div class="dataScroll">
+                        <div class="fixedHeader">
+                            <dl>
+                                <dt class="fixedCorner" colspan="1">
                                     <div class="cityName">
                                         <div></div>
                                         <div>
@@ -912,21 +917,28 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </th>
-                                <th v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div><a target="_blank" :href="'#/index/orderAllData/manageReport/' + list.cityName + '&' + list.dataMonth + '&' +  list.cityId">{{list.cityName}}</a></div>
-                                        <div>
-                                            <span>当期</span>
-                                            <span>环比</span>
-                                        </div>
-                                    </div>
-                                </th>
-                            </tr> 
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd>
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div>
+                                                     <a v-if="list.cityName=='全国'">{{list.cityName}}</a>
+                                                     <a v-else target="_blank" :href="'#/index/orderAllData/manageReport/' + list.cityName + '&' + list.dataMonth + '&' +  list.cityId">{{list.cityName}}</a>
+                                                </div>
+                                                <div>
+                                                    <span>当期</span>
+                                                    <span>环比</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl> 
+                        </div>
+                        <div class="fixedBody">
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>归属车辆数</div>
                                         <div>
@@ -934,19 +946,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.bikeNum.nowData}}</span>
-                                            <span>{{list.bikeNum.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="incoming">
-                                <td>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.bikeNum.nowData}}</span>
+                                                    <span>{{list.bikeNum.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl class="incoming">
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>收入（元）</div>
                                         <div>
@@ -954,19 +970,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span></span>
-                                            <span></span>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                            <div></div>
+                                            <div>
+                                                <span></span>
+                                                <span></span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>总计费</div>
                                         <div>
@@ -974,19 +994,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.id">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.orderAmountTot.nowData}}</span>
-                                            <span>{{list.orderAmountTot.diff}}</span>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.id">
+                                            <div class="cityName">
+                                            <div></div>
+                                            <div>
+                                                <span>{{list.orderAmountTot.nowData}}</span>
+                                                <span>{{list.orderAmountTot.diff}}</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>总实收</div>
                                         <div>
@@ -994,19 +1018,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.payAmountTot.nowData}}</span>
-                                            <span>{{list.payAmountTot.diff}}</span>
-                                        </div>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                            <div></div>
+                                            <div>
+                                                <span>{{list.payAmountTot.nowData}}</span>
+                                                <span>{{list.payAmountTot.diff}}</span>
+                                            </div>
                                     </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>实收率（%）</div>
                                         <div>
@@ -1014,19 +1042,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.actualYield.nowData}}</span>
-                                            <span>{{list.actualYield.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.actualYield.nowData}}</span>
+                                                    <span>{{list.actualYield.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>单车计费收入</div>
                                         <div>
@@ -1034,19 +1066,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td  v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.sinBikeBillingIncome.nowData}}</span>
-                                            <span>{{list.sinBikeBillingIncome.diff}}</span>
-                                        </div>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                            <div></div>
+                                            <div>
+                                                <span>{{list.sinBikeBillingIncome.nowData}}</span>
+                                                <span>{{list.sinBikeBillingIncome.diff}}</span>
+                                            </div>
                                     </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>单车实际收入</div>
                                         <div>
@@ -1054,19 +1090,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.sinBikeRealityIncome.nowData}}</span>
-                                            <span>{{list.sinBikeRealityIncome.diff}}</span>
-                                        </div>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                            <div></div>
+                                            <div>
+                                                <span>{{list.sinBikeRealityIncome.nowData}}</span>
+                                                <span>{{list.sinBikeRealityIncome.diff}}</span>
+                                            </div>
                                     </div>
-                                </td>
-                            </tr>
-                            <tr class="cost">
-                                <td>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl class="cost">
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>成本（元）</div>
                                         <div>
@@ -1074,19 +1114,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span></span>
+                                                    <span></span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>总成本</div>
                                         <div>
@@ -1094,19 +1138,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.costTot.nowData}}</span>
-                                            <span>{{list.costTot.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.costTot.nowData}}</span>
+                                                    <span>{{list.costTot.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>单车成本：</div>
                                         <div>
@@ -1114,19 +1162,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td  v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.singleBikeCost.nowData}}</span>
-                                            <span>{{list.singleBikeCost.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd>
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.singleBikeCost.nowData}}</span>
+                                                    <span>{{list.singleBikeCost.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div class="bikeOperaMoney">
                                             <span class="subCategory">单车运维费用</span>
@@ -1136,19 +1188,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.sinBikeManageMoney.nowData}}</span>
-                                            <span>{{list.sinBikeManageMoney.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd>
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.sinBikeManageMoney.nowData}}</span>
+                                                    <span>{{list.sinBikeManageMoney.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div class="bikeCostMoney">
                                             <span class="subCategory">单车摊销费用</span>
@@ -1158,19 +1214,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td  v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.sinBikeDepreMoney.nowData}}</span>
-                                            <span>{{list.sinBikeDepreMoney.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="profits">
-                                <td>
+                                </dt>
+                                <dd>
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.sinBikeDepreMoney.nowData}}</span>
+                                                    <span>{{list.sinBikeDepreMoney.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl class="profits">
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>营收（元）</div>
                                         <div>
@@ -1178,19 +1238,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd>
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span></span>
+                                                    <span></span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>税前毛利</div>
                                         <div>
@@ -1198,19 +1262,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.grossMargin.nowData}}</span>
-                                            <span>{{list.grossMargin.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.grossMargin.nowData}}</span>
+                                                    <span>{{list.grossMargin.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>单车实际利润（元）</div>
                                         <div>
@@ -1218,19 +1286,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.sinBikeRealityProfit.nowData}}</span>
-                                            <span>{{list.sinBikeRealityProfit.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd>
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.sinBikeRealityProfit.nowData}}</span>
+                                                    <span>{{list.sinBikeRealityProfit.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>单车投资收益率（%）</div>
                                         <div>
@@ -1238,19 +1310,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.sinBikeInvestIncomeLv.nowData}}</span>
-                                            <span>{{list.sinBikeInvestIncomeLv.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd>
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.sinBikeInvestIncomeLv.nowData}}</span>
+                                                    <span>{{list.sinBikeInvestIncomeLv.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>单车计费盈利率（%）</div>
                                         <div>
@@ -1258,19 +1334,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.sinBikeBillingIncomeLv.nowData}}</span>
-                                            <span>{{list.sinBikeBillingIncomeLv.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd>
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.sinBikeBillingIncomeLv.nowData}}</span>
+                                                    <span>{{list.sinBikeBillingIncomeLv.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>单车实际盈利率（%）</div>
                                         <div>
@@ -1278,19 +1358,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.sinBikeRealityIncomeLv.nowData}}</span>
-                                            <span>{{list.sinBikeRealityIncomeLv.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="car">
-                                <td>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.sinBikeRealityIncomeLv.nowData}}</span>
+                                                    <span>{{list.sinBikeRealityIncomeLv.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl class="car">
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>车辆</div>
                                         <div>
@@ -1298,10 +1382,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                    <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span></span>
+                                                    <span></span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>投产车辆数（日均）</div>
                                         <div>
@@ -1309,19 +1406,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.avgProducteBikeNum.nowData}}</span>
-                                            <span>{{list.avgProducteBikeNum.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.avgProducteBikeNum.nowData}}</span>
+                                                    <span>{{list.avgProducteBikeNum.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>投产率（日均）</div>
                                         <div>
@@ -1329,19 +1430,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.avgProductionLv.nowData}}</span>
-                                            <span>{{list.avgProductionLv.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.avgProductionLv.nowData}}</span>
+                                                    <span>{{list.avgProductionLv.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>单车日均订单数</div>
                                         <div>
@@ -1349,19 +1454,24 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.avgSinBikeOrderNum.nowData}}</span>
-                                            <span>{{list.avgSinBikeOrderNum.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.avgSinBikeOrderNum.nowData}}</span>
+                                                    <span>{{list.avgSinBikeOrderNum.diff}}</span>
+                                                </div>
+                                            </div>  
+                                        </li>
+                                    </ul>
+                                    
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>单车平均用户数</div>
                                         <div>
@@ -1369,19 +1479,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                            <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.avgSinBikeUserNum.nowData}}</span>
-                                            <span>{{list.avgSinBikeUserNum.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.avgSinBikeUserNum.nowData}}</span>
+                                                    <span>{{list.avgSinBikeUserNum.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>单车平均押金用户数（当前）</div>
                                         <div>
@@ -1389,19 +1503,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.avgSinBikeDepositUserNumDay.nowData}}</span>
-                                            <span>{{list.avgSinBikeDepositUserNumDay.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="user">
-                                <td>
+                                </dt>
+                                <dd>
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.avgSinBikeDepositUserNumDay.nowData}}</span>
+                                                    <span>{{list.avgSinBikeDepositUserNumDay.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl class="user">
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>用户</div>
                                         <div>
@@ -1409,19 +1527,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd>
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span></span>
+                                                    <span></span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>注册用户数（累计）</div>
                                         <div>
@@ -1429,19 +1551,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.registerUserNum.nowData}}</span>
-                                            <span>{{list.registerUserNum.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.registerUserNum.nowData}}</span>
+                                                    <span>{{list.registerUserNum.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>押金用户数（实时）</div>
                                         <div>
@@ -1449,19 +1575,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.depositUserNum.nowData}}</span>
-                                            <span>{{list.depositUserNum.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.depositUserNum.nowData}}</span>
+                                                    <span>{{list.depositUserNum.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>订单用户数（当期）</div>
                                         <div>
@@ -1469,19 +1599,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.orderUserNum.nowData}}</span>
-                                            <span>{{list.orderUserNum.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.orderUserNum.nowData}}</span>
+                                                    <span>{{list.orderUserNum.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>新增注册：</div>
                                         <div>
@@ -1489,19 +1623,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.newAddRegister.nowData}}</span>
-                                            <span>{{list.newAddRegister.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.newAddRegister.nowData}}</span>
+                                                    <span>{{list.newAddRegister.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div class="bikeOperaMoney">
                                             <span class="subCategory">当期</span>
@@ -1511,19 +1649,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.currentNewAddRegister.nowData}}</span>
-                                            <span>{{list.currentNewAddRegister.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.currentNewAddRegister.nowData}}</span>
+                                                    <span>{{list.currentNewAddRegister.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div class="bikeOperaMoney">
                                             <span class="subCategory">日均</span>
@@ -1533,19 +1675,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.avgNewAddRegister.nowData}}</span>
-                                            <span>{{list.avgNewAddRegister.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.avgNewAddRegister.nowData}}</span>
+                                                    <span>{{list.avgNewAddRegister.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div>新增押金：</div>
                                         <div>
@@ -1553,19 +1699,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.newAddDeposit.nowData}}</span>
-                                            <span>{{list.newAddDeposit.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.newAddDeposit.nowData}}</span>
+                                                    <span>{{list.newAddDeposit.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div class="bikeOperaMoney">
                                             <span class="subCategory">当期</span>
@@ -1575,19 +1725,23 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.currentNewAddDeposit.nowData}}</span>
-                                            <span>{{list.currentNewAddDeposit.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                </dt>
+                                <dd>
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                            <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.currentNewAddDeposit.nowData}}</span>
+                                                    <span>{{list.currentNewAddDeposit.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
                                     <div class="cityName leftTitle">
                                         <div class="bikeOperaMoney">
                                             <span class="subCategory">日均</span>
@@ -1597,19 +1751,25 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                </td>
-                                <td v-for="list of cityList" v-bind:key="list.cityId">
-                                    <div class="cityName">
-                                        <div></div>
-                                        <div>
-                                            <span>{{list.avgNewAddDeposit.nowData}}</span>
-                                            <span>{{list.avgNewAddDeposit.diff}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                </dt>
+                                <dd >
+                                    <ul>
+                                        <li v-for="list of cityList" v-bind:key="list.cityId">
+                                                <div class="cityName">
+                                                <div></div>
+                                                <div>
+                                                    <span>{{list.avgNewAddDeposit.nowData}}</span>
+                                                    <span>{{list.avgNewAddDeposit.diff}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                 
                     <div style="display:none;" class="hidden" v-show="cityList.length>5">
                         <ul>
                             <li class="space"></li>    
@@ -1672,11 +1832,35 @@ import { mapGetters } from 'vuex'
             }    
         },
         methods:{
+            fx(){
+                 var liW = $('div.fixedHeader ul li').outerWidth()
+                 var len = $('div.fixedHeader dd ul li').length
+                 var bodyliW = $('div.fixedHeader ul li').outerWidth()
+                 var bodylen = $('div.fixedHeader dd ul li').length
+                 var dtW = $('div.fixedBody dl dt').outerWidth()
+                 var availHeight = $(window).height();
+                 var h1 = $('.ivu-tabs-bar').outerHeight()
+                 var h2 = $('.monthSelect').outerHeight()
+                 var h3 = $('.title').outerHeight()
+                 //$('.table').height(availHeight - h1 - h2 -h3)
+                $('div.fixedHeader dd ul').width(len*liW)
+                $('div.fixedBody dd ul').width(bodylen*bodyliW)
+                $('div.fixedBody').width(bodylen*bodyliW + dtW )
+            },
             onScroll(e,position){
                // $('.scrollable-rows-table').stop(true).animate({marginTop:-position.scrollTop - 3},30)
-                $('.scrollable-rows-table').css({marginTop:-position.scrollTop  + 'px'})
-                 $('.scrollable-columns-table').css({marginLeft:-position.scrollLeft  + 'px'})
+                //$('.scrollable-rows-table').css({marginTop:-position.scrollTop  + 'px'})
+                 //$('.scrollable-columns-table').css({marginLeft:-position.scrollLeft  + 'px'})
                 //$('.scrollable-columns-table').stop(true).animate({marginLeft:-position.scrollLeft - 3},30)
+                $('div.fixedHeader dl dt').css({
+                    left : position.scrollLeft + 'px'
+                })
+                 $('div.fixedBody dl dt').css({
+                    left : position.scrollLeft + 'px'
+                })
+                $('div.fixedHeader').css({
+                    top: position.scrollTop + 'px'
+                })
             },
             mockDatas(){
                 for (var i=0;i<1;i++){
@@ -1960,6 +2144,10 @@ import { mapGetters } from 'vuex'
                        )
                    })
                     that.cityList = dataDel;
+                    setTimeout(()=>{
+                        this.fx()
+                         //$('div.dataScroll').width(bodylen*bodyliW + dtW)
+                    },30)
                   var message = response.data.message
                     if(message === '用户登录超时'){
                         this.$router.push({path:'/login'})
@@ -1976,6 +2164,7 @@ import { mapGetters } from 'vuex'
         mounted:function(){
             //this.mockDatas()
             this.month = this.$route.params.month.split('-')[1]
+            window.addEventListener('resize',this.fx())
         },
         watch: {
                 'dataMonth':{
@@ -2005,8 +2194,61 @@ import { mapGetters } from 'vuex'
     }
 </script>
 <style lang="scss" scoped>
+div.fixedHeader{
+    position: absolute;
+    top:0;
+    background:#fff;
+    dl{
+        padding-left:160px;
+        dt{z-index:33;width:160px;height:38px;position:absolute;left:0;border:1px solid#ddd;background:#fff;}
+        dd{
+            ul{
+                overflow:hidden;
+                li{text-align:center;float:left;min-width:200px;border:1px solid #ddd;margin-left:-1px;
+                    span{
+                        width:50%;
+                        display: inline-block;
+                        text-align: center;
+                        float: left;
+                    }
+                }
+            }
+        }
+    }
+}
+div.fixedBody{
+    overflow:hidden;
+    dl.incoming{background:#def3f3;}
+    dl.incoming dt {background:#def3f3;}
+    dl.cost{background:#def3f3;}
+    dl.cost dt {background:#def3f3;}
+    dl.profits{background:#def3f3;}
+    dl.profits dt {background:#def3f3;}
+    dl.car{background:#def3f3;}
+    dl.car dt {background:#def3f3;}
+    dl.user{background:#def3f3;}
+    dl.user dt {background:#def3f3;}
+    
+    
+    dl{
+        padding-left:160px;
+        dt{width:160px;height:38px;line-height:38px;position:absolute;left:0;border:1px solid #ddd;border-top:none;background:#fff;text-indent: 5px;}
+        dd{
+            ul{
+                overflow:hidden;
+                li{ height:38px;line-height:38px;text-align:center;float:left;min-width:200px;border:1px solid #ddd;margin-left:-1px;border-top:none; 
+                    span{
+                        width:50%;
+                        display: inline-block;
+                        text-align: center;
+                        float: left;
+                    }
+                }
+            }
+        }
+    }
+}
 div.scrollableTable{
-   
     overflow: auto;
     margin: 0 auto;}
 div.corner-frame{
@@ -2091,7 +2333,8 @@ div.scrollable-data-frame{
         width: calc(100% - 32px);
         margin: 16px auto;
         overflow: auto;
-        height:400px;
+        height:380px;
+        padding-top:38px;
         div.hidden{
             display:none;
             width: 200px;
