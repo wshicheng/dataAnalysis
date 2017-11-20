@@ -317,7 +317,7 @@ export default {
                     key: 'orderTime'
                 },
                 {
-                    title: '北京',
+                    title: ' ',
                     key: 'city'
                 },
                 {
