@@ -1,6 +1,8 @@
-import index from '../view/index/index.vue'
-import Login from '../view/login/index.vue'
-import NotFoundPage from '../view/nofound/index.vue'
+//import index from '../view/index/index.vue'
+
+//import Login from '../view/login/index.vue'
+const Login = resolve => require.ensure([], () => resolve(require('../view/login/index.vue')), 'Login')
+//import NotFoundPage from '../view/nofound/index.vue'
 import MenuModule from '../store/modules/menuModule.js'
 let routes = [
     {

@@ -622,11 +622,7 @@ export default {
         this.$store.dispatch('menuActiveName', '/index/managerData')
         document.title = '数据运营平台 - 我管理的数据'
         this.loadData()
-        // var arr = this.$store.state.keepCitys
-        var that = this
-        setTimeout( function () {
-            console.log(that.$store.state.keepCitys)
-        }, 200)
+       
     },
     methods: {
         rowClassName (row, index) {
@@ -638,7 +634,6 @@ export default {
             return '';
         },
         loadData() {
-            // loading显示，同时让无数据的文本为空
             this.spinShow = true
             this.noDataText = ''
             var that = this

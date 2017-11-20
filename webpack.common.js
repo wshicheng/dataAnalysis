@@ -19,8 +19,7 @@ module.exports = {
        lodash:['lodash'],
        jquery:['jquery','axios'],
        highcharts:['highcharts'],
-       moment:['moment'],
-       'xlsx':['xlsx']
+       moment:['moment']
     },
    
     module: {
@@ -105,7 +104,7 @@ module.exports = {
         }),
         new webpack.optimize.CommonsChunkPlugin({
            // name: 'common' // Specify the common bundle's name.
-            name:['vue','iview','jquery','highcharts','moment','xlsx','manifest']
+            name:['vue','iview','jquery','highcharts','moment','manifest']
         }),
         new webpack.HashedModuleIdsPlugin({
             hashFunction: 'sha256',

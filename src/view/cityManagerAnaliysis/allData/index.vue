@@ -73,7 +73,6 @@ export default {
         var _this = this
         this.axios.get('/beefly/record/api/v1/page',{params:{accessToken:this.$store.state.token}})
         .then(function (res) {
-            console.log(res.data.resultCode === 1)
             if (res.data.resultCode === 1) {  
                 _this.noDataText = ''
             } else {

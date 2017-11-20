@@ -218,9 +218,9 @@ import citySelect from './citySelect.vue'
                        }else{
                            this.allCityTables = []
                             this.isNoData = false
-                          this.isNoData2 = false
-                          this.spinShow = false
-                          this.allCount2 = false
+                            this.isNoData2 = false
+                            this.spinShow = true
+                            this.allCount2 = false
                        }
                     },
                     deep: true

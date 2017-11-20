@@ -16,13 +16,14 @@ import app from './app.vue'
 import axios from  './api/axios_api.js'
 import store from './store/store.js'
 import iView from 'iview';
+import vuescroll from 'vue-scroll'
 import 'minireset.css'
 import 'iview/dist/styles/iview.css';
 import router from './router/index.js'
 import './my-theme/index.less';
 import * as types from './store/types'
 Vue.use(iView)
-
+Vue.use(vuescroll)
 Vue.prototype.axios = axios
 let token = window.sessionStorage.getItem('token')
 let userInfo = window.sessionStorage.getItem('userInfo')

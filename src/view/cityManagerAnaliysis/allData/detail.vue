@@ -130,8 +130,7 @@ import {mapActions,mapGetters} from 'vuex'
         methods:{
             ...mapActions(['updateMonth','updateType']),
             tabChange (name) {
-                console.log(name)
-                console.log(name === 3)
+               
                 // #baseDatas div.ivu-tabs{ overflow-y: hidden;}
                 // #baseDatas div.ivu-table-body{height:235px;}
                 // #baseDatas div.ivu-table-fixed-body{height:216px;}
@@ -142,69 +141,30 @@ import {mapActions,mapGetters} from 'vuex'
                 // #operatCosts div.ivu-table-fixed-body{max-height:600px;}
                 // #operatCosts div#fiexedAssets5{height:600px;}
                 var winHeight =  document.documentElement.clientHeight || document.body.clientHeight;
-                console.log('winHeight', winHeight)
                 if (name === 0) {
-                    // window.scrollTo(0,document.body.scrollHeight)
-                    // document.getElementsByClassName('.ivu-table-body').scrollTop = document.getElementsByClassName('.ivu-table-body').scrollHeight
-                    $('body').css({
-                        'overflow-y': "hidden"
-                    })
-                    // $('#baseDatas div.ivu-tabs').css({
-                    //     'overflow-y': "hidden"
-                    // }) 
-                    $('#baseDatas div.ivu-table-body').css({
-                        'height': winHeight*0.6 + 'px'
-                        // 'height': 'auto',
-                        // 'overflow-y':'auto'
-                    }) 
-                    $('#baseDatas div.ivu-table-fixed-body').css({
-                        'height': winHeight*0.6 + 'px'
-                    }) 
-                    $('#baseDatas div#fiexedAssets5').css({
-                        // 'overflow-x': 'scroll'
-                        // 'height': winHeight*0.7 + 'px'
-                        // 'height': (winHeight*0.7 + '20') + 'px'
-                    }) 
+                   $('body').css({
+                       'overflow-y':'hidden'
+                   })
                 }
                 if (name === 1) {
-                    $('body').css('overflow-y','hidden')
-
-                    $('#operatCosts div.ivu-tabs').css({
-                        'overflow-y': "hidden"
-                    }) 
-                    $('#operatCosts div.ivu-table-body').css({
-                        // 'height': winHeight*0.7
-                        'height': 'auto'
-                    }) 
-                    $('#operatCosts div.ivu-table-fixed-body').css({
-                        'height': winHeight*0.7
-                    }) 
-                    $('#operatCosts div#fiexedAssets5').css({
-                        // 'height': winHeight*0.7
-                    }) 
+                   $('body').css({
+                       'overflow-y':'hidden'
+                   })
                 }
                 if (name === 2) {
-                    $('body').css('overflow','auto')
+                   $('body').css({
+                       'overflow-y':'hidden'
+                   })
                 }
                 if (name === 3) {
-                    $('body').css('overflow-y','hidden')
-
-                    $('#singleBikeIncoming div.ivu-tabs').css({
-                        'overflow-y': "hidden"
-                    }) 
-                    $('#singleBikeIncoming div.ivu-table-body').css({
-                        // 'height': winHeight*0.7
-                        'height': 'auto'
-                    }) 
-                    $('#singleBikeIncoming div.ivu-table-fixed-body').css({
-                        'height': winHeight*0.7
-                    }) 
-                    $('#singleBikeIncoming div#fiexedAssets5').css({
-                        // 'height': winHeight*0.7
-                    }) 
+                   $('body').css({
+                       'overflow-y':'hidden'
+                   })
                 }
                 if (name === 4) {
-                    $('body').css('overflow','auto')
+                   $('body').css({
+                       'overflow-y':'auto'
+                   })
                 }
                 
             },
