@@ -1,7 +1,7 @@
 <template>
   <div id="activeUserDetail_body">
         <Breadcrumb class="Breadcrumb2">
-            <BreadcrumbItem>{{city}}订单整体数据</BreadcrumbItem>
+            <BreadcrumbItem>{{city}}活跃用户数据</BreadcrumbItem>
         </Breadcrumb>
       <div id="activeUserDetail_head">
         <div class="activeUserDetail_head_time">

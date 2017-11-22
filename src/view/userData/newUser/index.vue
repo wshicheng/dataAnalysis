@@ -42,6 +42,7 @@
                 </div>
             </Poptip>
         </div>
+        <p style="margin-top: -19px;margin-bottom: 5px;color: #bbbec4;">*时间查询条件不等于“今日”时，仅注册用户、存量押金用户、已退押金用户、活跃新用户(累计)的数据统计到今日0：00 ；等于“今日”时，统计的是实时数据。</p>
         <Table  border size='small' :no-data-text='noDataText' :columns="columns_newUserData" :data="newUserData"></Table>
         <Page :total="totalListNum" show-sizer show-elevator  :styles='page' placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
       </div>
