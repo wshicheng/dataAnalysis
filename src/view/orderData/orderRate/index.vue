@@ -339,7 +339,7 @@ export default {
   },
   created: function() {
     // 发起ajax请求 默认 是全部地区（cityCode= 0） 近 7天的数据
-    var cityList = JSON.parse(window.sessionStorage.getItem("cityList"));
+    var cityList = JSON.parse(window.localStorage.getItem("cityList"));
     var cityCode;
     if (cityList.length == 1) {
       cityCode = cityList
@@ -576,7 +576,7 @@ export default {
         this.timeLine = ["", ""];
       }
       if (this.citySelectNum.length < 2) {
-        var cityList = JSON.parse(window.sessionStorage.getItem("cityList"));
+        var cityList = JSON.parse(window.localStorage.getItem("cityList"));
         var cityCode;
         if (cityList.length == 1) {
           cityCode = cityList
@@ -596,7 +596,7 @@ export default {
           : "";
         this.loadData(type, cityCode, beginDate, endDate);
       } else {
-        var cityList = JSON.parse(window.sessionStorage.getItem("cityList"));
+        var cityList = JSON.parse(window.localStorage.getItem("cityList"));
         var cityCode;
         if (cityList.length == 1) {
           cityCode = cityList
@@ -623,7 +623,7 @@ export default {
         this.$Message.warning("请选择时间段");
       } else {
         if (this.citySelectNum.length < 2) {
-          var cityList = JSON.parse(window.sessionStorage.getItem("cityList"));
+          var cityList = JSON.parse(window.localStorage.getItem("cityList"));
           var cityCode;
           if (cityList.length == 1) {
             cityCode = cityList
@@ -644,7 +644,7 @@ export default {
             : "";
           this.loadData(type, cityCode, beginDate, endDate);
         } else {
-          var cityList = JSON.parse(window.sessionStorage.getItem("cityList"));
+          var cityList = JSON.parse(window.localStorage.getItem("cityList"));
           var cityCode;
           if (cityList.length == 1) {
             cityCode = cityList

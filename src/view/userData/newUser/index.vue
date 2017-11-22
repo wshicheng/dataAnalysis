@@ -314,7 +314,7 @@ export default {
     mounted () {
         document.title = '用户数据 - 新用户'
         this.$store.dispatch('menuActiveName', '/index/newUser')
-        var type = Number(window.sessionStorage.getItem('cityType'))
+        var type = Number(window.localStorage.getItem('cityType'))
         this.cityType = type
         var that = this
         setTimeout( function () {

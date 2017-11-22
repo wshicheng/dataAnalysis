@@ -304,7 +304,7 @@ export default {
     mounted () {
         document.title = '用户数据 - 活跃用户'
         this.$store.dispatch('menuActiveName', '/index/activeUser')
-        var type = Number(window.sessionStorage.getItem('cityType'))
+        var type = Number(window.localStorage.getItem('cityType'))
         this.cityType = type
         var that = this
         setTimeout( function () {

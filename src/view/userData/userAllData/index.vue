@@ -414,7 +414,7 @@ export default {
     mounted () {
         document.title = '用户数据 - 整体数据'
         this.$store.dispatch('menuActiveName', '/index/userAllData')
-        var type = Number(window.sessionStorage.getItem('cityType'))
+        var type = Number(window.localStorage.getItem('cityType'))
         this.cityType = type
         var that = this
         setTimeout( function () {
