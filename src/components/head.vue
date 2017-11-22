@@ -62,22 +62,22 @@ export default {
         }
     },
     mounted() {
-        this.headImg = window.sessionStorage.getItem('headImg')
+        this.headImg = window.localStorage.getItem('headImg')
     },
     methods: {
         handleLoginOut() {
             this.$router.push('/login')
             this.removeToken()
-            window.sessionStorage.removeItem('token')
-            window.sessionStorage.removeItem('userInfo')
-            window.sessionStorage.removeItem('openNames')
-            window.sessionStorage.removeItem('authList')
-            window.sessionStorage.removeItem('cityStr')
-            window.sessionStorage.removeItem('cityType')
+            window.localStorage.removeItem('token')
+            window.localStorage.removeItem('userInfo')
+            window.localStorage.removeItem('openNames')
+            window.localStorage.removeItem('authList')
+            window.localStorage.removeItem('cityStr')
+            window.localStorage.removeItem('cityType')
         },
         getImage() {
             if (this.$store.state.imageUrl === '') {
-                this.headImg = window.sessionStorage.getItem('headImg')
+                this.headImg = window.localStorage.getItem('headImg')
             } else {
                 this.headImg = this.$store.state.imageUrl
             }
@@ -96,11 +96,11 @@ export default {
             get: function () {
                 this.cityList = this.userInfo.cityList
                 if (this.cityList.length != 0) {
-                    window.sessionStorage.setItem('city', this.cityList[0].name)
-                    if (window.sessionStorage.getItem('cityStr') != '全部地区' && window.sessionStorage.getItem('cityStr').length > 3) {
+                    window.localStorage.setItem('city', this.cityList[0].name)
+                    if (window.localStorage.getItem('cityStr') != '全部地区' && window.localStorage.getItem('cityStr').length > 3) {
                         return this.userInfo.cityList.map((item) => { return item.name }).join('、')
                     } else {
-                        return this.city = window.sessionStorage.getItem('cityStr')
+                        return this.city = window.localStorage.getItem('cityStr')
                     } 
                 } else {
                     this.city = '当前没有城市权限，请联系管理员'

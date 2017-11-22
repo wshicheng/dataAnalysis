@@ -862,7 +862,7 @@ export default {
                         that.$Message.success('头像保存成功！')
                         that.imageUrl = res.data.data.adminUserIconUrl
                         that.$store.dispatch('setHeadImg', that.imageUrl)
-                        window.sessionStorage.setItem('headImg', that.imageUrl)
+                        window.localStorage.setItem('headImg', that.imageUrl)
                         that.loadData()
                     } else {
                         that.$Message.success(res.data.message)

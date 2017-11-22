@@ -106,11 +106,11 @@ export default {
         // this.openNames.push('orderData')
     },
     beforeMount () {
-        //  window.sessionStorage.setItem('openNames', '')
-        if (window.sessionStorage.getItem('openNames') === 'null') {
+        //  window.localStorage.setItem('openNames', '')
+        if (window.localStorage.getItem('openNames') === 'null') {
             return
         } else {
-            var openId = window.sessionStorage.getItem('openNames')
+            var openId = window.localStorage.getItem('openNames')
             this.openNames.push(openId)
         }
     },
@@ -123,10 +123,10 @@ export default {
         },
         openChange (name) {
             this.openNames = name
-            window.sessionStorage.setItem('openNames', name)
+            window.localStorage.setItem('openNames', name)
         },
         generateMenu () {
-            this.authList = window.sessionStorage.getItem('authList')
+            this.authList = window.localStorage.getItem('authList')
                 var all  = $('.sign')
                 if( this.authList.length === 0) {
                         $('.siderBar').hide()

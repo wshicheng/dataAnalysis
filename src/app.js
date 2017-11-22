@@ -25,9 +25,9 @@ import * as types from './store/types'
 Vue.use(iView)
 Vue.use(vuescroll)
 Vue.prototype.axios = axios
-let token = window.sessionStorage.getItem('token')
-let userInfo = window.sessionStorage.getItem('userInfo')
-let authList = window.sessionStorage.getItem('authList')
+let token = window.localStorage.getItem('token')
+let userInfo = window.localStorage.getItem('userInfo')
+let authList = window.localStorage.getItem('authList')
 //页面刷新时，重新赋值token
 if (token) {
     store.commit(types.LOGIN, token)
@@ -38,13 +38,13 @@ if (token) {
 
 router.beforeEach((route,redirect,next) => {
     if(route.path === '/login'){
-        window.sessionStorage.removeItem('token')
-        window.sessionStorage.removeItem('userInfo')
+        window.localStorage.removeItem('token')
+        window.localStorage.removeItem('userInfo')
         store.commit(types.GET_USER,{})
         store.commit(types.LOGIN,'')
         store.commit(types.ADD_MENU, null)
     }
-    let accessToken = window.sessionStorage.getItem('token')
+    let accessToken = window.localStorage.getItem('token')
     if(!accessToken&&route.path!=='/login'){
         next({path:'/login'})
     }else{
@@ -52,7 +52,7 @@ router.beforeEach((route,redirect,next) => {
             next()
         }else{
             next({
-                path:'/nofound'
+                path:'/index/orderAllData'
             })
         }
     }
@@ -61,5 +61,14 @@ var vm = new Vue({
     el:"#app",
     store,
     router,
-    render: h => h(app)
+    render: h => h(app),
+    methods:{
+        closeWin(){
+            console.log(1)
+        }
+    },
+    mounted:function(){
+      //  window.addEventlistener('beforeunload',this.closeWin())
+      this.closeWin()
+    }
 })
