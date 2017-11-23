@@ -9,7 +9,162 @@
             <div class="nodata" v-show="isNoData2">
                 <i class="iconfont icon-zanwushuju"></i>
             </div>
-            <Table  v-show="isNoData"  style="overflow-y: hidden;" id="fiexedAssets2" min-width="1180" border :columns="columns2" :data="data4"></Table>
+             <div v-show="isNoData" class="table" id="operaterCosts" v-scroll="onScroll" >
+                <div class="dataScroll">
+                    <div class="fixedHeader">
+                        <dl>
+                            <dt class="fixedCorner" colspan="1">
+                                <div class="cityName">
+                                    <div>城市</div>
+                                    <div>
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </dt>
+                             <dt class="fixedCorner fixedTotal" colspan="1">
+                                <div class="cityName">
+                                    <div>合计</div>
+                                    <div>
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </dt>
+                            <dd>
+                                <ul>
+                                    <li class="bee">
+                                        <div class="cityName">
+                                            <div>
+                                                   硬件摊销（按照3年折旧） 
+                                            </div>
+                                            <div>
+                                                <span>小蜜蜂</span>
+                                                <span>电池</span>
+                                                <span>电站</span>
+                                                <span>机动车</span>
+                                                <span>运维工具车</span>
+                                                <span>物流</span>
+                                                <span>其他</span>
+                                                <span>小计</span>
+                                                <span>成本占比</span> 
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="battery">
+                                        <div class="cityName">
+                                            <div>
+                                                   硬件损耗(按照0.5%/月)
+                                            </div>
+                                            <div>
+                                               <span>小蜜蜂</span>
+                                                <span>电池</span>
+                                                <span>电站</span>
+                                                <span>机动车</span>
+                                                <span>运维工具车</span>
+                                                <span>其他</span>
+                                                <span>小计</span>
+                                                <span>成本占比</span> 
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="ChargingStation">
+                                        <div class="cityName">
+                                            <div>
+                                                   运维费用
+                                            </div>
+                                            <div>
+                                                <span>薪资福利</span>
+                                                <span>其他人员成本</span>
+                                                <span>房租（生产）</span>
+                                                <span>水电（生产）</span>
+                                                <span>其他生产成本</span>
+                                                <span>其他经营费用</span>
+                                                <span>开城费用</span>
+                                                <span>小计</span>
+                                                <span>成本占比</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </dd>
+                        </dl> 
+                    </div>
+                    <div class="fixedBody">
+                        <dl @mouseenter="enter" @mouseleave="leave" v-for="(item,index) of data4" v-bind:key="index">
+                            <dt>
+                                <div class="cityName leftTitle">
+                                    <div>{{item.cityName}}</div>
+                                    <div>
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </dt>
+                            <dt class="fixedTotal">
+                                <div class="cityName leftTitle">
+                                    <div>{{item.totalCost.total}}</div>
+                                    <div>
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </dt>
+                            <dd >
+                                <ul>
+                                    <li class="bee">
+                                        <div class="cityName">
+                                            <div>
+                                                <span>{{item.hardwareCost.bikeDepreciate}}</span>
+                                                <span>{{item.hardwareCost.battDepreciate}}</span>
+                                                <span>{{item.hardwareCost.chargeDepreciate}}</span>
+                                                <span>{{item.hardwareCost.truckDepreciate}}</span>
+                                                <span>{{item.hardwareCost.carDepreciate}}</span>
+                                                <span>{{item.hardwareCost.transMoneyShare}}</span>
+                                                <span>{{item.hardwareCost.otherDepreciate}}</span>
+                                                <span>{{item.hardwareCost.totalDepreciate}}</span>
+                                                <span>{{item.hardwareCost.depreProporte}}</span> 
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="battery">
+                                        <div class="cityName">
+                                           
+                                            <div>
+                                               <span>{{item.hardwareLoss.bikeWaste}}</span>
+                                               <span>{{item.hardwareLoss.battWaste}}</span>
+                                               <span>{{item.hardwareLoss.chargeWaste}}</span>
+                                                <span>{{item.hardwareLoss.truckWaste}}</span>
+                                                <span>{{item.hardwareLoss.carWaste}}</span>
+                                                <span>{{item.hardwareLoss.otherWaste}}</span>
+                                                <span>{{item.hardwareLoss.totalWaste}}</span>
+                                                <span>{{item.hardwareLoss.wasteProporte}}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="ChargingStation">
+                                        <div class="cityName">
+                                            
+                                            <div>
+                                                <span>{{item.expenses.salaryMoney}}</span>
+                                                <span>{{item.expenses.personnelMoney}}</span>
+                                                <span>{{item.expenses.rentMoney}}</span>
+                                                <span>{{item.expenses.hydropower}}</span>
+                                                <span>{{item.expenses.operationMoney}}</span>
+                                                <span>{{item.expenses.manageMoney}}</span>
+                                                <span>{{item.expenses.openMoney}}</span>
+                                                <span>{{item.expenses.operateTotal}}</span>
+                                                <span>{{item.expenses.operateProporte}}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            
         </div>
     </div>
 </template>
@@ -22,647 +177,6 @@ export default {
             spinShow:false,
             isNoData:false,
             isNoData2:true,
-            countObj:{},
-            columns2: [
-                {
-                    title: '城市',
-                    key: 'name',
-                    width: 100,
-                    fixed: 'left',
-                    className: 'middle',
-                    render: (h, params) => {
-                        return h('div', params.row.cityName)
-                    },
-                    renderHeader: (h, params) => {
-                        return h('div', [
-                            h('div', {
-                                style: {
-                                    width: '100%',
-                                }
-                            }, '城市'),
-
-                        ])
-                    }
-                },
-                {
-                    title: '硬件摊销（按照3年折旧）',
-                    key: 'age',
-                    width: 920,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', {
-                            style: {
-                                height: '30px',
-                            }
-                        }, [
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 9)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.hardwareCost.bikeDepreciate),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 9)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.hardwareCost.battDepreciate),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                         width: 'calc(100% / 9)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.hardwareCost.chargeDepreciate),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 9)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.hardwareCost.truckDepreciate),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 9)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.hardwareCost.carDepreciate),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                       width: 'calc(100% / 9)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.hardwareCost.transMoneyShare),
-                                // h('span', {
-                                //     style: {
-                                //         float: 'left',
-                                //        width: 'calc(100% / 9)',
-                                //         height: '30px',
-                                //         lineHeight: '30px',
-                                //         borderRight: '1px solid rgb(233, 234, 236)',
-                                //         boxSizing: 'border-box',
-                                //     }
-                                // }, params.row.hardwareCost.officeDepreciate),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 9)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.hardwareCost.otherDepreciate),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 9)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.hardwareCost.totalDepreciate),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 9)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: 'none',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.hardwareCost.depreProporte)
-
-                            ])
-                    },
-                    renderHeader: (h, params) => {
-                        return h('div', [
-                            h('div', {
-                                style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec ',
-                                    background: '#7eb5e0',
-                                   
-                                }
-                            }, '硬件摊销（按照3年折旧）'),
-                            h('div', {
-                                style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
-                                }
-                            }, [
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                           width: 'calc(100% / 9)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '小蜜蜂'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: 'calc(100% / 9)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '电池'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                           width: 'calc(100% / 9)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '电站'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: 'calc(100% / 9)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '机动车'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                          width: 'calc(100% / 9)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '运维工具车'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: 'calc(100% / 9)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '物流'),
-                                    // h('span', {
-                                    //     style: {
-                                    //         float: 'left',
-                                    //         width: '10%',
-                                    //         borderRight: '1px solid rgb(233, 234, 236)',
-                                    //         boxSizing: 'border-box',
-                                    //     }
-                                    // }, '办公成本'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                           width: 'calc(100% / 9)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '其他'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                           width: 'calc(100% / 9)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '小计'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                          width: 'calc(100% / 9)',
-                                            borderRight: 'none',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '成本占比'),
-
-                                ])
-                        ])
-                    }
-                },
-                {
-                    title: '硬件损耗(按照0.5%/月)',
-                    key: 'age',
-                    width: 920,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', {
-                            style: {
-                                height: '30px'
-                            }
-                        }, [
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 8)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.hardwareLoss.bikeWaste),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 8)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.hardwareLoss.battWaste),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 8)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.hardwareLoss.chargeWaste),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 8)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.hardwareLoss.truckWaste),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 8)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.hardwareLoss.carWaste),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 8)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.hardwareLoss.otherWaste),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 8)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.hardwareLoss.totalWaste),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                         width: 'calc(100% / 8)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.hardwareLoss.wasteProporte),
-
-
-                            ])
-                    },
-                    renderHeader: (h, params) => {
-                        return h('div', [
-                            h('div', {
-                                style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec ',
-                                    background: '#ace1e7',
-                                    
-                                }
-                            }, '硬件损耗(按照0.5%/月)'),
-                            h('div', {
-                                style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
-                                }
-                            }, [
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: 'calc(100% / 8)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '小蜜蜂'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                             width: 'calc(100% / 8)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '电池'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                             width: 'calc(100% / 8)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '电站'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: 'calc(100% / 8)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '机动车'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: 'calc(100% / 8)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '运维工具车'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                             width: 'calc(100% / 8)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '其他'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: 'calc(100% / 8)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '小计'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                           width: 'calc(100% / 8)',
-                                            borderRight: 'none',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '成本占比'),
-
-                                ])
-                        ])
-                    }
-                },
-                {
-                    title: '运维费用',
-                    key: 'age',
-                    width: 920,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', {
-                            style: {
-                                height: '30px'
-                            }
-                        }, [
-                                 h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 9)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.expenses.salaryMoney),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 9)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.expenses.personnelMoney),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 9)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.expenses.rentMoney),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                         width: 'calc(100% / 9)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.expenses.hydropower),
-                                 h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 9)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.expenses.operationMoney),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 9)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.expenses.manageMoney),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                         width: 'calc(100% / 9)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.expenses.openMoney),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                         width: 'calc(100% / 9)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: '1px solid rgb(233, 234, 236)',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.expenses.operateTotal),
-                                h('span', {
-                                    style: {
-                                        float: 'left',
-                                        width: 'calc(100% / 9)',
-                                        height: '30px',
-                                        lineHeight: '30px',
-                                        borderRight: 'none',
-                                        boxSizing: 'border-box',
-                                    }
-                                }, params.row.expenses.operateProporte),
-
-
-                            ])
-                    },
-                    renderHeader: (h, params) => {
-                        return h('div', [
-                            h('div', {
-                                style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec ',
-                                    background: '#f2b5af',
-                                   
-                                }
-                            }, '运维费用'),
-                            h('div', {
-                                style: {
-                                    width: '100%',
-                                    lineHeight: '30px',
-                                    borderBottom: '1px solid #e9eaec '
-                                }
-                            }, [
-                                     h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: 'calc(100% / 9)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '薪资福利'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: 'calc(100% / 9)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '其他人员成本'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                              width: 'calc(100% / 9)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '房租（生产）'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: 'calc(100% / 9)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '水电（生产）'),
-                                     h('span', {
-                                        style: {
-                                            float: 'left',
-                                              width: 'calc(100% / 9)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '其他生产成本'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: 'calc(100% / 9)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '其他经营费用'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: 'calc(100% / 9)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '开城费用'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: 'calc(100% / 9)',
-                                            borderRight: '1px solid rgb(233, 234, 236)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '小计'),
-                                    h('span', {
-                                        style: {
-                                            float: 'left',
-                                            width: 'calc(100% / 9)',
-                                            boxSizing: 'border-box',
-                                        }
-                                    }, '成本占比')
-                                ])
-                        ])
-                    }
-                },
-                {
-                    title: '合计',
-                    key: 'total',
-                    width: 100,
-                    fixed: 'left',
-                    className: 'middle',
-                    render: (h, params) => {
-                        return h('div', params.row.totalCost.total)
-                    },
-                    renderHeader: (h, params) => {
-                        return h('div', [
-                            h('div', {
-                                style: {
-                                    width: '100%',
-
-                                }
-                            }, '合计')
-
-                        ])
-                    }
-                }
-            ],
             data4: []
         }
     },
@@ -670,6 +184,62 @@ export default {
         ...mapGetters(['dataMonth','analysisType'])
     },
     methods: {
+         enter(e){
+           e.target.style.backgroundColor = "#ebf7ff"
+           e.target.children[0].style.backgroundColor = "#ebf7ff"
+           e.target.children[1].style.backgroundColor = "#ebf7ff"
+           e.target.children[2].style.backgroundColor = "#ebf7ff"
+        //    e.target.style.color = "#fff"
+        //    e.target.children[0].style.color="#fff";
+        //    e.target.children[1].style.color="#fff";
+        //    e.target.children[2].style.color="#fff";
+        },
+        leave(e){
+            e.target.style.backgroundColor = "#fff"
+            e.target.children[0].style.backgroundColor = "#fff"
+            e.target.children[1].style.backgroundColor = "#fff"
+             e.target.children[2].style.backgroundColor = "#fff"
+            e.target.style.color = "#495060"
+            e.target.children[0].style.color="#495060";
+            e.target.children[1].style.color="#495060";
+            e.target.children[2].style.color="#495060";
+        },
+        fx(){
+                var liW = $('#operaterCosts div.fixedHeader ul li').outerWidth()
+                var len = $('#operaterCosts div.fixedHeader dd ul li').length
+                var bodyliW = $('#operaterCosts div.fixedHeader ul li').outerWidth()
+                var bodylen = $('#operaterCosts div.fixedHeader dd ul li').length
+                var dtW = $('#operaterCosts div.fixedBody dl dt').outerWidth()*2
+                var availHeight = document.documentElement.clientHeight||document.body.clientHeight ;
+                var h1 = $('.ivu-tabs-bar').outerHeight()
+                var h2 = $('.monthSelect').outerHeight()
+                var h3 = $('.title').outerHeight()
+                $('#operaterCosts').height(availHeight - h1 - h2 -h3 - 50)
+            $('#operaterCosts div.fixedHeader dd ul').width(len*liW)
+            $('#operaterCosts div.fixedBody dd ul').width(bodylen*bodyliW)
+            $('#operaterCosts div.fixedBody').width(bodylen*bodyliW + dtW )
+        },
+        onScroll(e,position){
+            // $('.scrollable-rows-table').stop(true).animate({marginTop:-position.scrollTop - 3},30)
+            //$('.scrollable-rows-table').css({marginTop:-position.scrollTop  + 'px'})
+                //$('.scrollable-columns-table').css({marginLeft:-position.scrollLeft  + 'px'})
+            //$('.scrollable-columns-table').stop(true).animate({marginLeft:-position.scrollLeft - 3},30)
+            $('#operaterCosts div.fixedHeader dl dt').css({
+                left : position.scrollLeft + 'px'
+            })
+                $('#operaterCosts div.fixedHeader dl dt.fixedTotal').css({
+                left : (159 +  position.scrollLeft) + 'px'
+            })
+                $('#operaterCosts div.fixedBody dl dt').css({
+                left : position.scrollLeft + 'px'
+            })
+                $('#operaterCosts div.fixedBody dl dt.fixedTotal').css({
+                left : (159 +  position.scrollLeft) + 'px'
+            })
+            $('#operaterCosts div.fixedHeader').css({
+                top: position.scrollTop + 'px'
+            })
+        },
         mockTableData() {
             let data = [];
             for (let i = 0; i < 10; i++) {
@@ -798,7 +368,9 @@ export default {
 
                     }
                     that.data4 = arr
-                   
+                   setTimeout(()=>{
+                       that.fx()
+                   },30)
                 }).catch((error) => {
                     console.log(error)
                       that.spinShow = false
@@ -809,6 +381,7 @@ export default {
     mounted(){
        // this.changePage()
         var height = $(window).height()
+        this.fx()
          //$('div.fiexedAssets').eq(1).height(height/2)
     },
     watch:{
@@ -837,6 +410,119 @@ export default {
 }
 </script>
 <style lang="scss" scoped type="text/css">
+div.table{
+    position: relative;
+    width: calc(100% - 32px);
+    margin: 16px auto;
+    overflow: auto;
+    height: 380px;
+    padding-top: 38px;
+}
+div.fixedHeader{
+    position: absolute;
+    top:0;
+    background:#fff;
+    dl{
+        padding-left:319px;
+        dt{text-indent:5px;line-height:38px;z-index:33;width:160px;height:38px;position:absolute;left:0;border:1px solid#ddd;background:#fff;
+            &:nth-child(2){
+                left:159px;
+            }
+        }
+        dd{
+            ul{
+                overflow:hidden;
+                li{color:#495060;text-align:center;float:left;min-width:850px;border:1px solid #ddd;margin-left:-1px;
+                    span{
+                        display: inline-block;
+                        text-align: center;
+                        float: left;
+                    }
+                }
+                 li.bee{
+                     background:rgb(126, 181, 224);
+                     span{
+                         width:calc(100% / 9);
+                         min-width:65px;
+                     }
+                 }
+                 li.battery{
+                     background:rgb(172, 225, 231);
+                     span{
+                         width:calc(100% / 8);
+                          min-width:65px; 
+                     }
+                 }
+                 li.ChargingStation{
+                     background: rgb(242, 181, 175);
+                     span{
+                          width:calc(100% / 9);
+                           min-width:65px; 
+                     }
+                 }
+            }
+        }
+    }
+}
+div.fixedBody{
+    overflow:hidden;
+    dl.incoming{background:#def3f3;}
+    dl.incoming dt {background:#def3f3;}
+    dl.cost{background:#def3f3;}
+    dl.cost dt {background:#def3f3;}
+    dl.profits{background:#def3f3;}
+    dl.profits dt {background:#def3f3;}
+    dl.car{background:#def3f3;}
+    dl.car dt {background:#def3f3;}
+    dl.user{background:#def3f3;}
+    dl.user dt {background:#def3f3;}
+    dl{
+        transition:background-color linear .2s;
+        transition:color linear .2s;
+        padding-left:319px;
+        dt{transition:background-color linear .2s;transition:color linear .2s;width:160px;line-height:38px;height:38px;line-height:38px;position:absolute;left:0;border:1px solid #ddd;border-top:none;background:#fff;text-indent: 5px;
+            &:nth-child(2){
+                left:159px;
+            }
+        }
+        dd{
+            ul{
+                overflow:hidden;
+                li{color:#495060; height:38px;line-height:38px;text-align:center;float:left;min-width:850px;border:1px solid #ddd;margin-left:-1px;border-top:none; 
+                    span{
+                        width:50%;
+                        display: inline-block;
+                        text-align: center;
+                        float: left;
+                        border-right: 1px solid #ddd;
+                        box-sizing: border-box;
+                        height: 38px;
+                        &:nth-last-child(1){border-right:none;}
+                    }
+                   
+                }
+               li.bee{
+                     span{
+                         width:calc(100% / 9);
+                         min-width:65px;
+                     }
+                 }
+                 li.battery{
+                     span{
+                         width:calc(100% / 8);
+                          min-width:65px; 
+                     }
+                 }
+                 li.ChargingStation{
+                     span{
+                          width:calc(100% / 9);
+                           min-width:65px; 
+                     }
+                 }
+            }
+        }
+    }
+}
 div.ivu-table-wrapper {
     margin: 0 auto;
 }

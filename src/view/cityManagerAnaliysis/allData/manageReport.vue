@@ -11,6 +11,7 @@
             </Spin>
             <!-- <Table :columns="tableColumn" :data="reportData"></Table> -->
         <div class="tabler-border" v-if="dataReturn">
+            <p style="color: rgb(187, 190, 196);margin: 10px 7px;">*本表中标记为“当前“、”实时”的数据，均是统计到今日 0:00的数据。</p>
             <Row class="one">
                 <Col span="12"><span style='text-align: left;text-indent: 47px;'>分类</span></Col>
                 <Col span="6"><span style="text-align: right;padding-right: 10px;">{{month}}月</span></Col>

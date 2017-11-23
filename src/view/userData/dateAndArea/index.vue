@@ -46,7 +46,7 @@
             <Page :total="totalListNum" show-sizer show-elevator :styles='page' v-show="pageShow" :current='currentPage' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </div>
 
-        <div class="dateAndArea_table_total" v-show="noDataBox">
+        <div class="dateAndArea_table_total" v-show="noDataBox2">
             <Spin fix size="large" v-if="spinShow2"  class="spin">
                 <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                 <div style="color: #ccc; text-indent: 5px;">  loading...</div>
@@ -305,6 +305,7 @@ export default {
     },
     data () {
         return {
+            noDataBox2:false,
             timeSelectShow: false,
             timeLine: ['',''],
             page: {
@@ -411,7 +412,6 @@ export default {
                 })
                 .then( (res) => {
                     this.checkLogin(res)
-                    console.log(res.data.data)
                         $('#userDateAndAreaChart').html('')
                     if (res.data.resultCode != 1) {
                         this.noDataText = '暂无数据'
@@ -503,7 +503,6 @@ export default {
                     this.checkLogin(res)
                     
                     var data = res.data.data
-                    console.log('totalData',data)
                     if (data.length === 0) {
                         this.totalTitle = false
                         this.totalData = []
@@ -512,6 +511,8 @@ export default {
                         this.spinShow2 = false
                         this.noDataText2 = ''
                     } else {
+                         // 关闭loading 
+                        this.spinShow2 = false
                         this.totalTitle = true
                         //随机取出一个数据制作表头  
                         var arr = []
@@ -543,13 +544,10 @@ export default {
                         })
                         
                         this.columns_total = arr
-                        console.log(this.columns_total)
                         var delData = this.tableTotalDataDel(data)
-                        console.log('delData', delData)
                         this.totalData = delData
 
-                        // 关闭loading 
-                        this.spinShow2 = false
+                       
                         this.noDataText2 = ''
                     }
                     
@@ -692,7 +690,13 @@ export default {
             }
             e.target.setAttribute('class', 'active')
             this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
-            this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
+            if(e.target.innerText=='累计用户'|| e.target.innerText=='累计押金用户'){
+                this.noDataBox2 = false
+            }else{
+                this.noDataBox2 = true
+                this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
+            }
+            
         },
         searchByTimeLine () {
             if (this.timeLine[0] === '' || this.timeLine[0] === null) {

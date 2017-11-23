@@ -9,8 +9,119 @@
             <div class="nodata" v-show="isNoData2">
               <i class="iconfont icon-zanwushuju"></i>
           </div>
-          <Table v-show="isNoData"  style="overflow-y: hidden;" id="fiexedAssets6" :columns="columns8" :data="data7" size="small" ref="table"></Table>
-        
+           <div v-show="isNoData" class="table" id="singleBike" v-scroll="onScroll" >
+                <div class="dataScroll">
+                    <div class="fixedHeader">
+                        <dl>
+                            <dt class="fixedCorner" colspan="1">
+                                <div class="cityName">
+                                    <div>城市</div>
+                                    <div>
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </dt>
+                            <dd>
+                                <ul>
+                                    <li class="bee">
+                                        <div class="cityName">
+                                            <div>
+                                                   单车产出
+                                            </div>
+                                            <div>
+                                                <span>计费</span>
+                                                <span>实收</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="battery">
+                                        <div class="cityName">
+                                            <div>
+                                                   单车成本
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="ChargingStation">
+                                        <div class="cityName">
+                                            <div>
+                                                   单车营收
+                                            </div>
+                                            <div>
+                                                <span>计费</span>
+                                                <span>实收</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="Tricycle">
+                                        <div class="cityName">
+                                            <div>
+                                                   单车营收率
+                                            </div>
+                                            <div>
+                                                 <span>计费</span>
+                                                <span>实收</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </dd>
+                        </dl> 
+                    </div>
+                    <div class="fixedBody">
+                        <dl @mouseenter="enter" @mouseleave="leave" v-for="(item,index) of data7" v-bind:key="index">
+                            <dt>
+                                <div class="cityName leftTitle">
+                                    <div>{{item.cityName}}</div>
+                                    <div>
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </dt>
+  
+                            <dd >
+                                 <ul>
+                                    <li class="bee">
+                                        <div class="cityName">
+                                           
+                                            <div>
+                                                <span>{{item.singleProduce.outPutBilling}}</span>
+                                                <span>{{item.singleProduce.outPutReality}}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="battery">
+                                        <div class="cityName">
+                                            <div>
+                                                   {{item.singleCost.oBikeCost}}
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="ChargingStation">
+                                        <div class="cityName">
+                                           
+                                            <div>
+                                                <span>{{item.singleProfit.inPutBilling}}</span>
+                                                <span>{{item.singleProfit.inPutReality}}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="Tricycle">
+                                        <div class="cityName">
+                                           
+                                            <div>
+                                                 <span>{{item.singleProfitRate.inPutBillingLv}}</span>
+                                                <span>{{item.singleProfitRate.inPutRealityLv}}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>        
       </div>
     </div>
    </template>
@@ -23,247 +134,65 @@
                  spinShow:true,
                    isNoData:false,
                    isNoData2:true,
-                   columns8:[
-                  {
-                    "title": "城市",
-                    "key": "name",
-                    "fixed": "left",
-                    "width": 300,
-                    render: (h, params) => {
-                      return h('div',params.row.cityName)
-                    },
-                    renderHeader: (h) => {
-                      return h('div', [
-                        h('div', {
-                          style: {
-                            width: '100%',
-                          }
-                        }, '城市'),
-
-                      ])
-                    }
-                  },
-                  {
-                    "title": "单车产出",
-                    "width": 450,
-                    renderHeader: (h) => {
-                      return h('div', [
-                        h('div', {
-                          style: {
-                            textAlign: 'center',
-                            lineHeight: '30px',
-                            borderBottom: '1px solid #e9eaec',
-                            borderRight: '1px solid #e9eaec'
-                          }
-                        }, '单车产出'),
-                        h('div', [
-                          h('span', {
-                            style: {
-                              display: 'inline-block',
-                              lineHeight: '30px',
-                              width: '50%',
-                              textAlign: 'center',
-                              borderBox: 'box-sizing',
-                              borderRight: '1px solid #e9eaec'
-                            }
-                          }, '计费'),
-                          h('span', {
-                            style: {
-                              display: 'inline-block',
-                              lineHeight: '30px',
-                              width: '50%',
-                              textAlign: 'center',
-                              borderBox: 'box-sizing',
-                              borderRight: '1px solid #e9eaec'
-                            }
-                          }, '实收')
-                        ])
-                      ])
-                    },
-                    render: (h, params) => {
-                      return h('div', [
-                        h('span', {
-                          style: {
-                            display: 'inline-block',
-                            lineHeight: '30px',
-                            width: '50%',
-                            textAlign: 'center',
-                            borderBox: 'box-sizing',
-                            borderRight: '1px solid #e9eaec'
-                          }
-                        }, params.row.singleProduce.outPutBilling),
-                        h('span', {
-                          style: {
-                            display: 'inline-block',
-                            lineHeight: '30px',
-                            width: '50%',
-                            textAlign: 'center',
-                            borderBox: 'box-sizing',
-                            borderRight: '1px solid #e9eaec'
-                          }
-                        }, params.row.singleProduce.outPutReality)
-                      ])
-                    }
-                  },
-                  {
-                    "title": "单车成本",
-                    "width": 450,
-                    renderHeader: (h) => {
-                      return h('div', [
-                        h('div', {
-                          style: {
-                            textAlign: 'center',
-                            lineHeight: '60px',
-                            borderBottom: 'none',
-                            borderRight: '1px solid #e9eaec'
-                          }
-                        }, '单车成本'),
-
-                      ])
-                    },
-                    render: (h, params) => {
-                      return h('div',{
-                          style:{
-                               borderRight: '1px solid #e9eaec',
-                               height:'30px',
-                               lineHeight:'30px'
-                          }
-                      },params.row.singleCost.oBikeCost)
-                    }
-                  },
-                  {
-                    "title": "单车盈收",
-                    "width": 450,
-                    renderHeader: (h) => {
-                      return h('div', [
-                        h('div', {
-                          style: {
-                            textAlign: 'center',
-                            lineHeight: '30px',
-                            borderBottom: '1px solid #e9eaec',
-                            borderRight: '1px solid #e9eaec'
-                          }
-                        }, '单车盈收'),
-                        h('div', [
-                          h('span', {
-                            style: {
-                              display: 'inline-block',
-                              lineHeight: '30px',
-                              width: '50%',
-                              textAlign: 'center',
-                              borderBox: 'box-sizing',
-                              borderRight: '1px solid #e9eaec'
-                            }
-                          }, '计费'),
-                          h('span', {
-                            style: {
-                              display: 'inline-block',
-                              lineHeight: '30px',
-                              width: '50%',
-                              textAlign: 'center',
-                              borderBox: 'box-sizing',
-                              borderRight: '1px solid #e9eaec'
-                            }
-                          }, '实收')
-                        ])
-                      ])
-                    },
-                    render: (h, params) => {
-                      return h('div', [
-                        h('span', {
-                          style: {
-                            display: 'inline-block',
-                            lineHeight: '30px',
-                            width: '50%',
-                            textAlign: 'center',
-                            borderBox: 'box-sizing',
-                            borderRight: '1px solid #e9eaec'
-                          }
-                        }, params.row.singleProfit.inPutBilling),
-                        h('span', {
-                          style: {
-                            display: 'inline-block',
-                            lineHeight: '30px',
-                            width: '50%',
-                            textAlign: 'center',
-                            borderBox: 'box-sizing',
-                            borderRight: '1px solid #e9eaec'
-                          }
-                        }, params.row.singleProfit.inPutReality)
-                      ])
-                    }
-                  },
-                  {
-                    "title": "单车盈收率",
-                    "width": 450,
-                    renderHeader: (h) => {
-                      return h('div', [
-                        h('div', {
-                          style: {
-                            textAlign: 'center',
-                            lineHeight: '30px',
-                            borderBottom: '1px solid #e9eaec',
-                            borderRight: '1px solid #e9eaec'
-                          }
-                        }, '单车盈收率'),
-                        h('div', [
-                          h('span', {
-                            style: {
-                              display: 'inline-block',
-                              lineHeight: '30px',
-                              width: '50%',
-                              textAlign: 'center',
-                              borderBox: 'box-sizing',
-                              borderRight: '1px solid #e9eaec'
-                            }
-                          }, '计费'),
-                          h('span', {
-                            style: {
-                              display: 'inline-block',
-                              lineHeight: '30px',
-                              width: '50%',
-                              textAlign: 'center',
-                              borderBox: 'box-sizing',
-                              borderRight: '1px solid #e9eaec'
-                            }
-                          }, '实收')
-                        ])
-                      ])
-                    },
-                    render: (h, params) => {
-                      return h('div', [
-                        h('span', {
-                          style: {
-                            display: 'inline-block',
-                            lineHeight: '30px',
-                            width: '50%',
-                            textAlign: 'center',
-                            borderBox: 'box-sizing',
-                            borderRight: '1px solid #e9eaec'
-                          }
-                        }, params.row.singleProfitRate.inPutBillingLv),
-                        h('span', {
-                          style: {
-                            display: 'inline-block',
-                            lineHeight: '30px',
-                            width: '50%',
-                            textAlign: 'center',
-                            borderBox: 'box-sizing',
-                            borderRight: '1px solid #e9eaec'
-                          }
-                        }, params.row.singleProfitRate.inPutRealityLv)
-                      ])
-                    }
-                  }
-                ],
-                   data7:[],
-                   countObj:{}
+                   data7:[]
                }
            },
            computed:{
                ...mapGetters(['dataMonth','analysisType'])
            },
            methods:{
+              enter(e){
+           e.target.style.backgroundColor = "#ebf7ff"
+           e.target.children[0].style.backgroundColor = "#ebf7ff"
+           e.target.children[1].style.backgroundColor = "#ebf7ff"
+        //    e.target.style.color = "#fff"
+        //    e.target.children[0].style.color="#fff";
+        //    e.target.children[1].style.color="#fff";
+        },
+        leave(e){
+            e.target.style.backgroundColor = "#fff"
+            e.target.children[0].style.backgroundColor = "#fff"
+            e.target.children[1].style.backgroundColor = "#fff"
+            e.target.style.color = "#495060"
+            e.target.children[0].style.color="#495060";
+            e.target.children[1].style.color="#495060";
+        },
+        fx(){
+                var liW = $('#singleBike div.fixedHeader ul li').outerWidth()
+                var len = $('#singleBike div.fixedHeader dd ul li').length
+                var bodyliW = $('#singleBike div.fixedHeader ul li').outerWidth()
+                var bodylen = $('#singleBike div.fixedHeader dd ul li').length
+                var dtW = $('#singleBike div.fixedBody dl dt').outerWidth()
+                var availHeight = document.documentElement.clientHeight||document.body.clientHeight ;
+                var h1 = $('.ivu-tabs-bar').outerHeight()
+                var h2 = $('.monthSelect').outerHeight()
+                var h3 = $('.title').outerHeight()
+                $('#singleBike').height(availHeight - h1 - h2 -h3 - 50)
+            $('#singleBike div.fixedHeader dd ul').width(len*liW - 4)
+            $('#singleBike div.fixedBody dd ul').width(bodylen*bodyliW)
+            $('#singleBike div.fixedBody').width(bodylen*bodyliW + dtW )
+        },
+        onScroll(e,position){
+            // $('.scrollable-rows-table').stop(true).animate({marginTop:-position.scrollTop - 3},30)
+            //$('.scrollable-rows-table').css({marginTop:-position.scrollTop  + 'px'})
+                //$('.scrollable-columns-table').css({marginLeft:-position.scrollLeft  + 'px'})
+            //$('.scrollable-columns-table').stop(true).animate({marginLeft:-position.scrollLeft - 3},30)
+            $('#singleBike div.fixedHeader dl dt').css({
+                left : position.scrollLeft + 'px'
+            })
+                $('#singleBike div.fixedHeader dl dt.fixedTotal').css({
+                left : (159 +  position.scrollLeft) + 'px'
+            })
+                $('#singleBike div.fixedBody dl dt').css({
+                left : position.scrollLeft + 'px'
+            })
+                $('#singleBike div.fixedBody dl dt.fixedTotal').css({
+                left : (159 +  position.scrollLeft) + 'px'
+            })
+            $('#singleBike div.fixedHeader').css({
+                top: position.scrollTop + 'px'
+            })
+        },
                mockTableData(){
                    let data = [];
                    for(let i=0;i<11;i++){
@@ -351,7 +280,9 @@
    
                                }
                                that.data7 = arr
-                              
+                                setTimeout(()=>{
+                                  that.fx()
+                                },30)
                           
                            }).catch((error) => {
                                console.log(error)
@@ -361,10 +292,7 @@
                }
            },
            mounted(){
-                setTimeout(function(){
-                    //   $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-header').find('table').width('100%')
-                    //  $('div.ivu-tabs-tabpane').eq(3).find('.ivu-table-body').find('table').width('100%')
-                },200)
+               this.fx()
                  var height = $(window).height()
                  //$('div.fiexedAssets').eq(3).height(height/2)
            },
@@ -394,6 +322,129 @@
        }
    </script>
    <style lang="scss" scoped type="text/css">
+   div.table{
+    position: relative;
+    width: calc(100% - 32px);
+    margin: 16px auto;
+    overflow: auto;
+    height: 380px;
+    padding-top: 38px;
+}
+div.fixedHeader{
+    position: absolute;
+    top:0;
+    background:#fff;
+    dl{
+        background:#7eb5e0;
+        padding-left:160px;
+        dt{color:#495060;text-indent:5px;line-height:38px;z-index:33;width:160px;height:38px;position:absolute;left:0;border:1px solid#ddd;background:#fff;
+            &:nth-child(2){
+                left:159px;
+            }
+        }
+        dd{color:#495060;
+            ul{
+                overflow:hidden;
+                li{text-align:center;float:left;min-width:300px;border:1px solid #ddd;margin-left:-1px;
+                    span{
+                        display: inline-block;
+                        text-align: center;
+                        float: left;
+                    }
+                }
+                 li.bee{
+                     span{
+                         width:calc(100% / 2)
+                     }
+                 }
+                 li.battery{
+                      height: 38px;
+                      line-height:38px;
+                     span{
+                         width:calc(100% / 3) 
+                     }
+                 }
+                 li.ChargingStation{
+                     span{
+                          width:calc(100% / 2) 
+                     }
+                 }
+                 li.Tricycle{
+                     span{
+                          width:calc(100% / 2) 
+                     }
+                 }
+                
+                
+            }
+        }
+    }
+}
+div.fixedBody{
+    overflow:hidden;
+    dl.incoming{background:#def3f3;}
+    dl.incoming dt {background:#def3f3;}
+    dl.cost{background:#def3f3;}
+    dl.cost dt {background:#def3f3;}
+    dl.profits{background:#def3f3;}
+    dl.profits dt {background:#def3f3;}
+    dl.car{background:#def3f3;}
+    dl.car dt {background:#def3f3;}
+    dl.user{background:#def3f3;}
+    dl.user dt {background:#def3f3;}
+    dl{
+        transition:background-color linear .2s;
+        transition:color linear .2s;
+        padding-left:160px;
+        dt{color:#495060;transition:background-color linear .2s;transition:color linear .2s;width:160px;line-height:38px;height:38px;line-height:38px;position:absolute;left:0;border:1px solid #ddd;border-top:none;background:#fff;text-indent: 5px;
+            &:nth-child(2){
+                left:159px;
+            }
+        }
+        dd{color:#495060;
+            ul{
+                overflow:hidden;
+                li{height:38px;line-height:38px;text-align:center;float:left;min-width:300px;border:1px solid #ddd;margin-left:-1px;border-top:none; 
+                    span{
+                        width:50%;
+                        display: inline-block;
+                        text-align: center;
+                        float: left;
+                        border-right: 1px solid #ddd;
+                        box-sizing: border-box;
+                        height: 38px;
+                        &:nth-last-child(1){border-right:none;}
+                    }
+                   
+                }
+                li.bee{
+                     span{
+                         width:calc(100% / 2)
+                     }
+                 }
+                 li.battery{
+                      height: 38px;
+                      line-height:38px;
+                     span{
+                         width:calc(100% / 3) 
+                     }
+                 }
+                 li.ChargingStation{
+                     span{
+                          width:calc(100% / 2) 
+                     }
+                 }
+                 li.Tricycle{
+                     span{
+                          width:calc(100% / 2) 
+                     }
+                 }
+                
+            }
+        }
+    }
+}
+
    div.ivu-table-wrapper{margin:0 auto;}
    div.fiexedAssets {
     padding: 0 16px 16px 16px;

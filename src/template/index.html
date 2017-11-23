@@ -7,7 +7,19 @@
         <link rel="stylesheet" href="http://at.alicdn.com/t/font_397862_a14oc3v140wwmi.css">
         <script src="https://cdn.bootcss.com/xlsx/0.11.3/xlsx.full.min.js"></script>
     </head>
-    <body>
+    <body onbeforeunload="return myFunction()">
         <div id="app"></div>
     </body>
+    <script>
+        function myFunction(){
+            if (event.clientX > document.body.clientWidth && event.clientY < 0 || event.altKey) {
+                window.localStorage.clear()
+            } else {
+               //
+            }
+          
+        }
+       
+
+    </script>
 </html>
