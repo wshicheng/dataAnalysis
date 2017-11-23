@@ -358,6 +358,7 @@
     #report_body {
             width: 1200px;
             margin: 0 auto;
+            margin-bottom: 20px;
         h3 {
             width: 100%;
             height: 60px;
