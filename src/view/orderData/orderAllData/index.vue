@@ -3,36 +3,36 @@
         <Breadcrumb class="Breadcrumb">
             <BreadcrumbItem>整体数据</BreadcrumbItem>
         </Breadcrumb>
-      <div id="orderAllData_head">
-        <div class="orderAllData_head_time" v-if="cityType === 1">
-            <span>时间:</span>
-            <button @click="handleClick" myId='1'>今日</button>
-            <button @click="handleClick" myId='2'>昨日</button>
-            <button class="active" @click="handleClick" myId='3'>近7日</button>
-            <button @click="handleClick" myId='4'>近30天</button>
-            <button @click="handleClick" myId='5'>指定时间段</button>
+        <div id="orderAllData_head">
+            <div class="orderAllData_head_time" v-if="cityType === 1">
+                <span>时间:</span>
+                <button @click="handleClick" myId='1'>今日</button>
+                <button @click="handleClick" myId='2'>昨日</button>
+                <button class="active" @click="handleClick" myId='3'>近7日</button>
+                <button @click="handleClick" myId='4'>近30天</button>
+                <button @click="handleClick" myId='5'>指定时间段</button>
+            </div>
+            <div class="orderAllData_head_time" v-else>
+                <span>时间:</span>
+                <button @click="handleClick" class="active" myId='1'>近7日</button>
+                <button @click="handleClick" myId='2'>近30天</button>
+                <button @click="handleClick" myId='3'>指定时间段</button>
+            </div>
+            <div class="timeSelectShow" v-show="timeSelectShow" v-if="cityType === 1">
+                <DatePicker type="daterange" v-model="timeLine" :options='options' placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
+                <div class="search"><button @click="searchByTimeLine">查询</button></div>
+            </div>
+            <div class="timeSelectShow2" v-show="timeSelectShow" v-else>
+                <DatePicker type="daterange" v-model="timeLine" :options='options'  placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
+                <div class="search"><button @click="searchByTimeLine">查询</button></div>
+            </div>
+            <div v-if="cityType === 1">
+                <city-select></city-select>
+            </div>
+            <div v-else>
+                
+            </div>
         </div>
-        <div class="orderAllData_head_time" v-else>
-            <span>时间:</span>
-            <button @click="handleClick" class="active" myId='1'>近7日</button>
-            <button @click="handleClick" myId='2'>近30天</button>
-            <button @click="handleClick" myId='3'>指定时间段</button>
-        </div>
-        <div class="timeSelectShow" v-show="timeSelectShow" v-if="cityType === 1">
-            <DatePicker type="daterange" v-model="timeLine" :options='options' placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
-            <div class="search"><button @click="searchByTimeLine">查询</button></div>
-        </div>
-        <div class="timeSelectShow2" v-show="timeSelectShow" v-else>
-            <DatePicker type="daterange" v-model="timeLine" :options='options'  placement="bottom-end" placeholder="选择日期" style="width: 216px; vertical-align: top;"></DatePicker>
-            <div class="search"><button @click="searchByTimeLine">查询</button></div>
-        </div>
-        <div v-if="cityType === 1">
-            <city-select></city-select>
-        </div>
-        <div v-else>
-            
-        </div>
-      </div>
 
       <div class="orderAllData_table">
         <Spin fix size="large" v-if="spinShow"  class="spin">
