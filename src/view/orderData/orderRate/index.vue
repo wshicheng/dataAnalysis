@@ -446,27 +446,27 @@ export default {
           }
           this.data2 = [
             {
-              time: "0-1",
+              time: "1",
               userCont: parseFloat(data[0].userCont),
               percentage: data[0].percentage
             },
             {
-              time: "1-2",
+              time: "2",
               userCont: parseFloat(data[1].userCont),
               percentage: data[1].percentage
             },
             {
-              time: "2-3",
+              time: "3",
               userCont: parseFloat(data[2].userCont),
               percentage: data[2].percentage
             },
             {
-              time: "3-4",
+              time: "4",
               userCont: parseFloat(data[3].userCont),
               percentage: data[3].percentage
             },
             {
-              time: "4-5",
+              time: "5",
               userCont: parseFloat(data[4].userCont),
               percentage: data[4].percentage
             },
@@ -531,23 +531,23 @@ export default {
           // this.citySelectNum = recodeCity;
           this.data3 = [
             {
-              name: "0-1",
+              name: "1",
               data: zeroStart
             },
             {
-              name: "1-2",
+              name: "2",
               data: oneStart
             },
             {
-              name: "2-3",
+              name: "3",
               data: twoStart
             },
             {
-              name: "3-4",
+              name: "4",
               data: threeStart
             },
             {
-              name: "4-5",
+              name: "5",
               data: fiveStart
             },
             {

@@ -317,6 +317,12 @@ export default {
           key: "validOrderRate"
         },
         {
+          title: "累计有效订单占比",
+          render: (h, params) => {
+            return h("span", '等待后台数据');
+          }
+        },
+        {
           title: "订单金额（￥）",
           key: "orderMoney",
           renderHeader: function(h) {
@@ -326,6 +332,18 @@ export default {
         {
           title: "订单金额占比",
           key: "orderMoneyRate"
+        },
+        {
+          title: "累计订单金额占比",
+          render: (h, params) => {
+            return h("span", '等待后台数据');
+          }
+        },
+        {
+          title: "均单价",
+          render: (h, params) => {
+            return h("span", '等待后台数据');
+          }
         }
       ],
       data2: [],
