@@ -3,7 +3,6 @@
         <Breadcrumb class="Breadcrumb">
             <BreadcrumbItem>整体数据</BreadcrumbItem>
         </Breadcrumb>
-       <Affix :offset-top="60">
         <div id="orderAllData_head">
             <div class="orderAllData_head_time" v-if="cityType === 1">
                 <span>时间:</span>
@@ -34,7 +33,6 @@
                 
             </div>
         </div>
-       </Affix>
 
       <div class="orderAllData_table">
         <Spin fix size="large" v-if="spinShow"  class="spin">
