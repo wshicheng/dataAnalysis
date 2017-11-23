@@ -3,7 +3,6 @@
         <Breadcrumb class="Breadcrumb">
             <BreadcrumbItem>整体数据</BreadcrumbItem>
         </Breadcrumb>
-       <Affix :offset-top="60">
         <div id="orderAllData_head">
             <div class="orderAllData_head_time" v-if="cityType === 1">
                 <span>时间:</span>
@@ -34,7 +33,6 @@
                 
             </div>
         </div>
-       </Affix>
 
       <div class="orderAllData_table">
         <Spin fix size="large" v-if="spinShow"  class="spin">
@@ -57,8 +55,12 @@
                 </div>
             </Poptip>
         </div>
-        <Table  border size='small' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
+        <Table  border size='small' height='300' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
         <Page :total="totalListNum" show-sizer show-elevator  :styles='page' placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
+      </div>
+
+      <div class="orderTotalAllData_table">
+        <Table  border size='small' :no-data-text='noDataText2' :show-header='showHeader' :columns="columns_orderTotalData" :data="orderTotalData"></Table>
       </div>
 
       <div class="orderAllData_chart" v-show="noDataBox">
@@ -236,6 +238,14 @@
                 }
             }
         }
+        .orderTotalAllData_table {
+            padding: 10px;
+            margin-top: 20px;
+            background: #fff;
+            position: relative;
+            overflow: hidden;
+            padding-top: 10px;
+        }
         .orderAllData_chart {
             position: relative;
             margin-top: 20px;
@@ -278,6 +288,8 @@ export default {
             pageSize: 10,
             currentPage: 1,
             pageShow: false,
+            // 订单数从小到大字段， 0 代表从小到大， 1 代表从大到小
+            sortNum: 0,
             columns_orderData: [
                 {
                     renderHeader: (h) => {
@@ -306,7 +318,15 @@ export default {
                 {
                     title: '订单总数',
                     key: 'orderAllNum',
-                    // sortable: true
+                    sortable: true,
+                    sortMethod (a, b, type) {
+                        // 升序是0，降序是1
+                        if (type === 'asc') {
+                            that.sortMethod(0)
+                        } else {
+                            that.sortMethod(1)
+                        }
+                    }
                 },
                 {
                     title: '有效订单数',
@@ -346,10 +366,69 @@ export default {
                 }
             ],
             orderData: [],
+            columns_orderTotalData: [
+                {
+                    title: ' ',
+                    key: 'titleName'
+                },
+                {
+                    title: '订单总数',
+                    key: 'orderAllNum'
+                },
+                {
+                    title: '有效订单数',
+                    key: 'orderNum'
+                },
+                {
+                    title: '订单金额(￥)',
+                    key: 'orderAllAmount',
+                    // sortable: true
+                },
+                {
+                    title: '均单价(总数)',
+                    key: 'avgAllAmount'
+                },
+                {
+                    title: '均单价(有效)',
+                    key: 'avgAmount',
+                    // sortable: true
+                },
+                {
+                    title: '实收率',
+                    key: 'profitRate'
+                },
+                {
+                    title: '优惠订单占比',
+                    key: 'discountRate'
+                },
+                {
+                    title: '平均订单时长(min)',
+                    key: 'avgTime',
+                    width: 140
+                },
+                {
+                    title: '平均订单里程(km)',
+                    key: 'avgMileage',
+                    width: 140
+                }
+            ],
+            orderTotalData: [{
+                titleName: '合计',
+                orderAllNum: '100',
+                orderNum: '2131',
+                avgAllAmount: '1231',
+                orderAllAmount: '231',
+                avgAmount: '123123',
+                profitRate: '232',
+                discountRate: '4324',
+                avgTime: '324',
+                avgMileage: '342',
+            }],
             noDataBox: false,
             spinShow: false,
             spinShow2: false,
             noDataText: '',
+            noDataText2: '',
             chartDataX: [],
             chartDataPayAmount: [],
             chartDisCountAmount: [],
@@ -361,7 +440,8 @@ export default {
                     // return date&&date.valueOf() > now.getDay() - 1
                 }
             },
-            transfer: true
+            transfer: true,
+            showHeader: false
         }
     },
     mounted () {
@@ -388,6 +468,9 @@ export default {
     methods: {
         handleSort(column,key,order){
             console.log(column,key,order)
+        },
+        sortMethod (type) {
+            this.sortNum = type
         },
         loadData (type) {
             this.spinShow = true
@@ -689,7 +772,8 @@ export default {
         }
     },
     watch: {
-        '$store.state.cityList': 'cityChange'
+        '$store.state.cityList': 'cityChange',
+        'sortNum': 'cityChange'
     }
 }
 </script>
