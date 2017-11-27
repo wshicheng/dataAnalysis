@@ -41,6 +41,14 @@
         <Page :total="totalListNum" show-sizer show-elevator  placement="top" :styles='page' :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
       </div>
 
+      <div class="orderTotalAllData_table" v-show="noDataBox2">
+        <Spin fix size="large" v-if="spinShow3"  class="spin">
+            <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+            <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+        </Spin>
+        <Table  border size='small' :no-data-text='noDataText2' :show-header='showHeader' :columns="columns_orderTotalData" :data="orderTotalData"></Table>
+      </div>
+
       <div class="orderAllData_chart" v-show="noDataBox">
             <Spin fix size="large" v-if="spinShow2"  class="spin">
                 <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
@@ -186,6 +194,21 @@
                 }
             }
         }
+        .orderTotalAllData_table {
+            position: relative;
+            .spin {
+                position: absolute;
+                display: inline-block;
+                top: -9px;
+                background-color: rgba(255, 255, 255, 0.8);
+            }
+            padding: 10px;
+            margin-top: 20px;
+            background: #fff;
+            position: relative;
+            overflow: hidden;
+            padding-top: 10px;
+        }
         .orderAllData_chart {
             position: relative;
             margin-top: 20px;
@@ -213,6 +236,7 @@ export default {
         "city-select": citySelect
     },
     data () {
+        var that = this
         return {
             timeSelectShow: false,
             timeLine: ['',''],
@@ -225,7 +249,10 @@ export default {
             pageSize: 10,
             currentPage: 1,
             pageShow: false,
+            pageShow3: false,
             city: '',
+            // 订单数从小到大字段， 0 代表从小到大， 1 代表从大到小
+            sortNum: 1,
             columns_orderData: [
                 {
                     title: '日期',
@@ -234,7 +261,15 @@ export default {
                 {
                     title: '订单总数',
                     key: 'orderAllNum',
-                    // sortable: true
+                    // sortable: true,
+                    sortMethod (a, b, type) {
+                        // 升序是0，降序是1
+                        if (type === 'asc') {
+                            that.sortMethod(0)
+                        } else {
+                            that.sortMethod(1)
+                        }
+                    }
                 },
                 {
                     title: '有效订单数',
@@ -274,10 +309,61 @@ export default {
                 }
             ],
             orderData: [],
+            columns_orderTotalData: [
+                {
+                    title: ' ',
+                    key: 'titleName'
+                },
+                {
+                    title: '订单总数',
+                    key: 'orderNum'
+                },
+                {
+                    title: '有效订单数',
+                    key: 'avgAmount'
+                },
+                {
+                    title: '订单金额(￥)',
+                    key: 'orderAllAmount',
+                    // sortable: true
+                },
+                {
+                    title: '均单价(总数)',
+                    key: 'avgAllAmount'
+                },
+                {
+                    title: '均单价(有效)',
+                    key: 'avgAmount',
+                    // sortable: true
+                },
+                {
+                    title: '实收率',
+                    key: 'profitRate'
+                },
+                {
+                    title: '优惠订单占比',
+                    key: 'discountRate'
+                },
+                {
+                    title: '平均订单时长(min)',
+                    key: 'avgTime',
+                    width: 140
+                },
+                {
+                    title: '平均订单里程(km)',
+                    key: 'avgMileage',
+                    width: 140
+                }
+            ],
+            orderTotalData: [],
             noDataBox: false,
+            noDataBox2: false,
             spinShow: false,
             spinShow2: false,
+            spinShow3: false,
             noDataText: '',
+            noDataText2: '',
+            showHeader: false,
             chartDataX: [],
             chartDataPayAmount: [],
             chartDisCountAmount: [],
@@ -296,9 +382,13 @@ export default {
         this.loadData("1")
     },
     methods: {
+        sortMethod (type) {
+            this.sortNum = type
+        },
         loadData (type) {
             this.spinShow = true
             this.spinShow2 = true
+            this.spinShow3 = true
             this.noDataText = ''
 
             // 调取数据前，清空chart数据
@@ -318,7 +408,8 @@ export default {
                     pageNo: this.currentPage,
                     pageSize: this.pageSize,
                     beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
-                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
+                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD'),
+                    sort_orderNum: this.sortNum
                 }
             })
             .then( res => {
@@ -327,11 +418,13 @@ export default {
                 if (res.data.resultCode === 0) {
                     this.noDataText = '暂无数据'
                     this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
+                    this.loadTotalData($('.orderAllData_head_time button.active').attr('myId'))
                     this.orderData = []
                 } else {
                     this.orderData = data
 
                     this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
+                    this.loadTotalData($('.orderAllData_head_time button.active').attr('myId'))
                     // 处理分页数据
                     if (res.data.totalPage < 2 && this.pageSize === 10) {
                         this.pageShow = false
@@ -355,14 +448,14 @@ export default {
                     type: type,
                     cityCode: this.$route.params.id.split('&')[0].toString(),
                     beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
-                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
+                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD'),
+                    sort_orderNum: this.sortNum
                 }
             })
             .then( res => {
                 // console.log(res.data.data)
                 this.spinShow2 = false
                 var chartData = res.data.data
-                console.log(chartData)
                 if (res.data.resultCode === 0) {
                     $('#container').html('')
                     this.noDataBox = false
@@ -383,6 +476,60 @@ export default {
             .catch( err => {
                 this.spinShow = false
                 this.noDataText = '暂无数据'
+                console.log(err)
+            })
+        },
+        loadTotalData (type) {
+            this.axios.get('/beefly/dateCityOrders/api/v1/cityAvgTotal', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    type: type,
+                    cityCode: this.$route.params.id.split('&')[0].toString(),
+                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD'),
+                    sort_orderNum: this.sortNum
+                }
+            })
+            .then( res => {
+                // console.log(res.data.data)
+                this.spinShow3 = false
+                console.log('掐玩吧大大')
+                var result = res.data.data
+
+                if (res.data.resultCode === 0) {
+                    this.orderTotalData = []
+                    this.noDataBox2 = false
+                    this.noDataText2 = '暂无数据'
+                } else {
+                    this.noDataBox2 = true
+                    var newArr = result.slice(0)
+                    newArr[0].titleName = '平均'
+                    newArr[0].cellClassName = {
+                        titleName: 'demo-table-info-cell-name'
+                    }
+                    newArr[1].titleName = '合计'
+                    newArr[1].cellClassName = {
+                        titleName: 'demo-table-info-cell-name'
+                    }
+
+                    this.orderTotalData = newArr
+                    // var arr = new Array()
+                    // var obj = {}
+                    // for ( var i in result) {
+                    //     obj[i] = result[i]
+                    // }
+                    // obj.titleName = '合计'
+                    // arr.push(obj)
+                    // arr[0].cellClassName = {
+                    //     titleName: 'demo-table-info-cell-name'
+                    // }
+                    // this.orderTotalData = arr
+                }
+
+            })
+            .catch( err => {
+                this.spinShow = false
+                this.noDataText2 = '暂无数据'
                 console.log(err)
             })
         },
@@ -556,7 +703,13 @@ export default {
             // }());
             new Highcharts.chart('container', options);
             
+        },
+        sortData () {
+            this.loadData($('.orderAllData_head_time button.active').attr('myId'))
         }
+    },
+    watch: {
+        'sortNum': 'sortData'
     }
 }
 </script>

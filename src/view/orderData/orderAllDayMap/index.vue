@@ -50,6 +50,7 @@
         <div class="select">
             <button class="active" @click="chartType" myType='orderNum'>订单数</button>
             <button @click="chartType" myType='orderAmount'>订单金额</button>
+            <button @click="chartType" myType='aa'>投产车辆数</button>
         </div>
         <div id="container" style="min-width:400px; height: 400px;"></div>
       </div>
@@ -274,7 +275,20 @@ export default {
                 {
                     title: '累计订单金额占比',
                     key: 'orderAmountAccuProp'
-                }
+                },
+                // v0,5新增需求
+                {
+                    title: '投产车辆数',
+                    key: 'orderAmountAccuProp'
+                },
+                {
+                    title: '累计投产车辆数',
+                    key: 'orderAmountAccuProp'
+                },
+                {
+                    title: '车辆使用率',
+                    key: 'orderAmountAccuProp'
+                },
             ],
             orderData: [],
             spinShow: false,
