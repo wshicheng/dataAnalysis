@@ -6,7 +6,7 @@
       <div id="orderStatus_head">
         <div class="orderStatus_head_time">
             <span>时间:</span>
-            <button@click="handleClick"  :myId='1'>今日</button>
+            <button @click="handleClick"  :myId='1'>今日</button>
             <button @click="handleClick" :myId='2'>昨日</button>
             <button class="active" @click="handleClick" :myId='3'>近7日</button>
             <button @click="handleClick" :myId='4'>近30天</button>
@@ -19,34 +19,78 @@
         <city-select></city-select>
       </div>
 
-      <div class="orderStatus_table">
-        <Spin fix size="large" v-if="spinShow"  class="spin">
-            <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
-            <div style="color: #ccc; text-indent: 5px;">  loading...</div>
-        </Spin>
-        <div class="help">
-            <Poptip trigger="hover" style="float: right;"  placement="top-end" :title="poptipTitle" :transfer='transfer'>
-                <span>?</span>
-                <div class="content" slot="content">
-                    <p><b>订单数:</b>各订单状态的订单数（非运维订单）</p>
-                    <p><b>数量占比:</b>各订单状态的订单数（非运维订单）/订单总数</p>
+    <Tabs :value="currentTab" style="background: rgba(255,255,255,0.3); margin-top: 20px; margin-bottom: -10px;" type='line' @on-click='tabChange'> 
+        <TabPane label="汇总" name="gather" >
+            <div class="orderStatus_table">
+                <Spin fix size="large" v-if="spinShow"  class="spin">
+                    <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+                    <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+                </Spin>
+                <div class="help">
+                    <Poptip trigger="hover" style="float: right;"  placement="top-end" :title="poptipTitle" :transfer='transfer'>
+                        <span>?</span>
+                        <div class="content" slot="content">
+                            <p><b>订单数:</b>各订单状态的订单数（非运维订单）</p>
+                            <p><b>数量占比:</b>各订单状态的订单数（非运维订单）/订单总数</p>
+                        </div>
+                    </Poptip> 
                 </div>
-            </Poptip> 
-        </div>
-        <Table :no-data-text='noDataText'  border size='small' :columns="columns_orderStatusData" :data="orderStatusData"></Table>
-        <!-- <Page :total="100" show-sizer show-elevator :styles='page' placement="bottom"></Page> -->
-      </div>
-
-      <div v-show="noData" class="orderStatus_chart">
-            <Spin fix size="large" v-if="spinShow"  class="spin">
-                <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
-                <div style="color: #ccc; text-indent: 5px;">  loading...</div>
-            </Spin>
-            <div class="nodata" v-show="!noData" style="text-align:center;">
-                <i class="iconfont icon-zanwushuju" style="font-size:400px;color:#dedcdc;"></i>
+                <Table :no-data-text='noDataText'  border size='small' :columns="columns_orderStatusData" :data="orderStatusData"></Table>
+                <!-- <Page :total="100" show-sizer show-elevator :styles='page' placement="bottom"></Page> -->
             </div>
-          <div id="container" style="min-width:400px; height: 400px;"></div>
-      </div>
+
+            <div v-show="noData" class="orderStatus_chart">
+                    <Spin fix size="large" v-if="spinShow"  class="spin">
+                        <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+                        <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+                    </Spin>
+                <div id="container" style="min-width:400px; height: 400px;"></div>
+            </div>
+        </TabPane>
+        <TabPane label="对比" name="comparison" id="orderStatus_comparison_table">
+            <div class="orderStatus_table">
+                <Spin fix size="large" v-if="spinShow"  class="spin">
+                    <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+                    <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+                </Spin>
+                <div class="help">
+                    <Poptip trigger="hover" style="float: right;"  placement="top-end" :title="poptipTitle" :transfer='transfer'>
+                        <span>?</span>
+                        <div class="content" slot="content">
+                            <p><b>订单数:</b>各订单状态的订单数（非运维订单）</p>
+                            <p><b>数量占比:</b>各订单状态的订单数（非运维订单）/订单总数</p>
+                        </div>
+                    </Poptip> 
+                </div>
+                <Table :no-data-text='noDataText2'  border size='small' :columns="columnsComparison" :data="comparisonData"></Table>
+                <Page :total="100" show-sizer show-elevator :styles='page' placement="bottom"></Page>
+            </div>
+
+            <div v-show="noData" class="orderStatus_chart">
+                    <Spin fix size="large" v-if="spinShow"  class="spin">
+                        <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+                        <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+                    </Spin>
+                <div id="container" style="min-width:400px; height: 400px;"></div>
+            </div>
+        </TabPane>
+        <TabPane label="趋势" name="tendency" class="orderStatus_tendency">
+            <div class="btn">
+                <button @click="handleTendencyClick" class="active" >人工关闭</button>
+                <button @click="handleTendencyClick">开锁失败</button>
+                <button @click="handleTendencyClick">已取消</button>
+                <button @click="handleTendencyClick">已结束</button>
+            </div>
+
+            <div v-show="noData" class="orderStatus_chart">
+                    <Spin fix size="large" v-if="spinShow"  class="spin">
+                        <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+                        <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+                    </Spin>
+                <div id="container" style="min-width:400px; height: 400px;"></div>
+            </div>
+        </TabPane>
+    </Tabs>
   </div>
 </template>
 <style lang='scss' scoped type="text/css">
@@ -129,9 +173,9 @@
         .orderStatus_table {
             position: relative;
             padding: 10px;
-            margin-top: 20px;
+            /* margin-top: 20px; */
             background: #fff;
-            padding-top: 3px;
+            padding-top: 0px;
             overflow: hidden;
             .spin {
                 position: absolute;
@@ -187,6 +231,31 @@
                 background-color: rgba(255, 255, 255, 0.8); 
             }
         }
+        .orderStatus_tendency {
+            margin-top: 0px;
+            .btn {
+                background: #fff;
+                width: 100%;
+                margin-bottom: -24px;
+                button {
+                    padding: 5px 10px;
+                    color: #444;
+                    border: none;
+                    outline: none;
+                    font-size: 13px;
+                    cursor: pointer;
+                }
+                button:nth-of-type(1) {
+                    margin-left: 4px;
+                }
+                button:hover {
+                    color:#f90;
+                }
+                button.active {
+                    color:#f60;
+                }
+            }
+        }
     }
 </style>
 <script>
@@ -203,6 +272,7 @@ export default {
     },
     data () {
         return {
+            currentTab: 'comparison',
             timeSelectShow: false,
             timeLine: ['',''],
             spinShow: false,
@@ -225,7 +295,309 @@ export default {
                 }
             ],
             orderStatusData: [],
+            columnsComparison: [
+                {
+                    title: '城市',
+                    key: 'cityName',
+                    align: 'center'
+                },
+                {
+                    title: '合计',
+                    key: 'money',
+                    align: 'center'
+                },
+                {
+                    align: 'center',
+                    renderHeader: (h) => {
+                        return h('div', [
+                            h('div', {
+                                style: {
+                                    width: '100%',
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderBottom: '1px solid #e9eaec',
+                                }
+                            }, '人工关闭'),
+                            h('div', {
+                                style: {
+                                    width: 'calc(100%/2)',
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, '订单数'),
+                            h('div', {
+                                style: {
+                                    width: 'calc(100%/2)',
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing'
+                                }
+                            }, '占比')
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('div', {
+                                style: {
+                                    width: 'calc(100%/2)',
+                                    display: 'inline-block',
+                                    lineHeight: '40px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.one),
+                            h('div', {
+                                style: {
+                                    width: 'calc(100%/2)',
+                                    display: 'inline-block',
+                                    lineHeight: '40px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing'
+                                }
+                            }, params.row.two)
+                        ])
+                    }
+                },
+                {
+                    align: 'center',
+                    renderHeader: (h) => {
+                        return h('div', [
+                            h('div', {
+                                style: {
+                                    width: '100%',
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderBottom: '1px solid #e9eaec',
+                                }
+                            }, '开锁失败'),
+                            h('div', {
+                                style: {
+                                    width: 'calc(100%/2)',
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, '订单数'),
+                            h('div', {
+                                style: {
+                                    width: 'calc(100%/2)',
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing'
+                                }
+                            }, '占比')
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('div', {
+                                style: {
+                                    width: 'calc(100%/2)',
+                                    display: 'inline-block',
+                                    lineHeight: '40px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.one),
+                            h('div', {
+                                style: {
+                                    width: 'calc(100%/2)',
+                                    display: 'inline-block',
+                                    lineHeight: '40px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing'
+                                }
+                            }, params.row.two)
+                        ])
+                    }
+                },
+                {
+                    align: 'center',
+                    renderHeader: (h) => {
+                        return h('div', [
+                            h('div', {
+                                style: {
+                                    width: '100%',
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderBottom: '1px solid #e9eaec',
+                                }
+                            }, '已取消'),
+                            h('div', {
+                                style: {
+                                    width: 'calc(100%/2)',
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, '订单数'),
+                            h('div', {
+                                style: {
+                                    width: 'calc(100%/2)',
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing'
+                                }
+                            }, '占比')
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('div', {
+                                style: {
+                                    width: 'calc(100%/2)',
+                                    display: 'inline-block',
+                                    lineHeight: '40px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.one),
+                            h('div', {
+                                style: {
+                                    width: 'calc(100%/2)',
+                                    display: 'inline-block',
+                                    lineHeight: '40px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing'
+                                }
+                            }, params.row.two)
+                        ])
+                    }
+                },
+                {
+                    align: 'center',
+                    renderHeader: (h) => {
+                        return h('div', [
+                            h('div', {
+                                style: {
+                                    width: '100%',
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderBottom: '1px solid #e9eaec'
+                                }
+                            }, '已结束'),
+                            h('div', {
+                                style: {
+                                    width: 'calc(100%/2)',
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, '订单数'),
+                            h('div', {
+                                style: {
+                                    width: 'calc(100%/2)',
+                                    display: 'inline-block',
+                                    lineHeight: '30px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing'
+                                }
+                            }, '占比')
+                        ])
+                    },
+                    render: (h, params) => {
+                        return h('div', [
+                            h('div', {
+                                style: {
+                                    width: 'calc(100%/2)',
+                                    display: 'inline-block',
+                                    lineHeight: '40px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing',
+                                    borderRight: '1px solid #e9eaec'
+                                }
+                            }, params.row.one),
+                            h('div', {
+                                style: {
+                                    width: 'calc(100%/2)',
+                                    display: 'inline-block',
+                                    lineHeight: '40px',
+                                    textAlign: 'center',
+                                    borderBox: 'box-sizing'
+                                }
+                            }, params.row.two)
+                        ])
+                    }
+                }
+            ],
+            comparisonData: [
+                    {
+                    cityName: '你好',
+                    money: '11',
+                    one: 'ooo',
+                    two: '2222'
+                }, {
+                    cityName: '你好',
+                    money: '11',
+                    one: 'ooo',
+                    two: '2222'
+                }, {
+                    cityName: '你好',
+                    money: '11',
+                    one: 'ooo',
+                    two: '2222'
+                }, {
+                    cityName: '你好',
+                    money: '11',
+                    one: 'ooo',
+                    two: '2222'
+                }, {
+                    cityName: '你好',
+                    money: '11',
+                    one: 'ooo',
+                    two: '2222'
+                }, {
+                    cityName: '你好',
+                    money: '11',
+                    one: 'ooo',
+                    two: '2222'
+                }, {
+                    cityName: '你好',
+                    money: '11',
+                    one: 'ooo',
+                    two: '2222'
+                }, {
+                    cityName: '你好',
+                    money: '11',
+                    one: 'ooo',
+                    two: '2222'
+                }, {
+                    cityName: '你好',
+                    money: '11',
+                    one: 'ooo',
+                    two: '2222'
+                }, {
+                    cityName: '你好',
+                    money: '11',
+                    one: 'ooo',
+                    two: '2222'
+                }
+            ],
             noDataText: '',
+            noDataText2: '',
             chartArr: '',
             noData: false,
             poptipTitle: '数据项说明',
@@ -321,6 +693,16 @@ export default {
                 this.timeLine = ['','']
                 this.loadData(e.target.getAttribute('myId'))
             }
+        },
+        handleTendencyClick (e) {
+            var elems = siblings(e.target)
+            for (var i = 0; i < elems.length; i++) {
+                elems[i].setAttribute('class', '')
+            }
+            e.target.setAttribute('class', 'active')
+        },
+        tabChange (name) {
+            console.log(name)
         },
         checkLogin (res) {
            if (res.data.message === '用户登录超时') {
