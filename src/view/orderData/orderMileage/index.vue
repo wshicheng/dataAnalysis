@@ -319,7 +319,7 @@ export default {
         {
           title: "累计有效订单占比",
           render: (h, params) => {
-            return h("span", '等待后台数据');
+             return h("span", params.row.sumCountRate);
           }
         },
         {
@@ -336,13 +336,14 @@ export default {
         {
           title: "累计订单金额占比",
           render: (h, params) => {
-            return h("span", '等待后台数据');
+          
+            return h("span", params.row.sumAmountRate);
           }
         },
         {
           title: "均单价",
           render: (h, params) => {
-            return h("span", '等待后台数据');
+            return h("span", params.row.averagePrice);
           }
         }
       ],
@@ -379,7 +380,7 @@ export default {
     } else {
       cityCode = this.$store.state.cityList.join();
     }
-    this.loadData(7, cityCode);
+    //this.loadData(7, cityCode);
   },
   computed: {
     xAxis: function() {
@@ -451,49 +452,71 @@ export default {
               orderNum: parseFloat(data[0].validCount),
               validOrderRate: data[0].validCountRate,
               orderMoney: parseFloat(data[0].validAmount).thousandFormat(),
-              orderMoneyRate: data[0].validAmountRate
+              orderMoneyRate: data[0].validAmountRate,
+              sumCountRate:data[0].sumCountRate,
+              sumAmountRate:data[0].sumAmountRate,
+              averagePrice:data[0].averagePrice
+              
             },
             {
               time: "1-2",
               orderNum: parseFloat(data[1].validCount),
               validOrderRate: data[1].validCountRate,
               orderMoney: parseFloat(data[1].validAmount).thousandFormat(),
-              orderMoneyRate: data[1].validAmountRate
+              orderMoneyRate: data[1].validAmountRate,
+              sumCountRate:data[1].sumCountRate,
+              sumAmountRate:data[1].sumAmountRate,
+              averagePrice:data[1].averagePrice
             },
             {
               time: "2-3",
               orderNum: parseFloat(data[2].validCount),
               validOrderRate: data[2].validCountRate,
               orderMoney: parseFloat(data[2].validAmount).thousandFormat(),
-              orderMoneyRate: data[2].validAmountRate
+              orderMoneyRate: data[2].validAmountRate,
+                sumCountRate:data[2].sumCountRate,
+              sumAmountRate:data[2].sumAmountRate,
+              averagePrice:data[2].averagePrice
             },
             {
               time: "3-5",
               orderNum: parseFloat(data[3].validCount),
               validOrderRate: data[3].validCountRate,
               orderMoney: parseFloat(data[3].validAmount).thousandFormat(),
-              orderMoneyRate: data[3].validAmountRate
+              orderMoneyRate: data[3].validAmountRate,
+                sumCountRate:data[3].sumCountRate,
+              sumAmountRate:data[3].sumAmountRate,
+              averagePrice:data[3].averagePrice
             },
             {
               time: "5-10",
               orderNum: parseFloat(data[4].validCount),
               validOrderRate: data[4].validCountRate,
               orderMoney: parseFloat(data[4].validAmount).thousandFormat(),
-              orderMoneyRate: data[4].validAmountRate
+              orderMoneyRate: data[4].validAmountRate,
+                sumCountRate:data[4].sumCountRate,
+              sumAmountRate:data[4].sumAmountRate,
+              averagePrice:data[4].averagePrice
             },
             {
               time: "10以上",
               orderNum: parseFloat(data[5].validCount),
               validOrderRate: data[5].validCountRate,
               orderMoney: parseFloat(data[5].validAmount).thousandFormat(),
-              orderMoneyRate: data[5].validAmountRate
+              orderMoneyRate: data[5].validAmountRate,
+                sumCountRate:data[5].sumCountRate,
+              sumAmountRate:data[5].sumAmountRate,
+              averagePrice:data[5].averagePrice
             },
             {
               time: "合计",
               orderNum: parseFloat(data[6].validCount),
               validOrderRate: data[6].validCountRate,
               orderMoney: parseFloat(data[6].validAmount).thousandFormat(),
-              orderMoneyRate: data[6].validAmountRate
+              orderMoneyRate: data[6].validAmountRate,
+                sumCountRate:data[6].sumCountRate,
+              sumAmountRate:data[6].sumAmountRate,
+              averagePrice:data[6].averagePrice
             }
           ];
         })
@@ -591,6 +614,14 @@ export default {
         this.timeLine = ["", ""];
       }
       if (this.citySelectNum.length < 2) {
+        if(this.citySelectNum==0){
+        
+          this.data2 = [];
+          this.data3 = [];
+          this.noDataText = '请至少选择一个城市'
+          return;
+          
+        }
         var cityList = JSON.parse(window.localStorage.getItem("cityList"));
         var cityCode;
         if (cityList.length == 1) {
@@ -702,6 +733,12 @@ export default {
         return item !== undefined;
       });
       if (this.citySelectNum.length < 2) {
+        if(this.citySelectNum.length==0){
+          this.data2 = []
+          this.data3 = []
+          this.noDataText = "请至少选择一个城市";
+          return;
+        }
         //发送请求
         var cityCode = this.$store.state.cityList.join();
         var type = "";
