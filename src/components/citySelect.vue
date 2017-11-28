@@ -2,8 +2,8 @@
     <div  class="citySelect_area" style="margin-bottom: 5px;" v-show="singleCityShow">
         <span class="city">城市:</span>
         <div class="citySelect_area_span" >
-            <span class="active" @click="areaClick" v-show="allCityHide">全部地区</span>
-            <span @click="areaClick" v-bind:key="item.name" v-for="item in cityList" :myId='item.code'>{{item.name}}</span>
+            <span ref="allCity" class="active allCity" @click="areaClick" v-show="allCityHide">全部地区</span>
+            <span class="active" @click="areaClick" v-bind:key="item.name" v-for="item in cityList" :myId='item.code'>{{item.name}}</span>
             <i type="error" v-show="cityAuth" style="font-style:normal; margin-left: 6px;">对不起，没有城市访问权限，请联系管理员</i>
         </div>
     </div>
@@ -78,6 +78,8 @@ export default {
         .then(function (res) {
             _this.cityList = res.data.data||[]
             _this.$store.dispatch('keepCitys', res.data.data)
+            //_this.$store.dispatch('setCityList',  res.data.data.map((item)=>{return item.code}))
+            _this.citySelect = res.data.data.map((item)=>{return item.code})
             if(res.data.data.length===0){
                 _this.cityAuth = true
             }else{
@@ -100,37 +102,68 @@ export default {
     },
     methods: {
         areaClick (e) {
+            // if(this.$store.state.cityList.length==this.$store.state.keepCitys.length){
+            //    console.log( this.$refs.allCity)
+            // }
             var that = this
             var id = e.target.getAttribute('myid')
             var res = siblings(e.target)
             if(e.target.innerText==='全部地区'){
-                e.target.setAttribute('class','active')
-                // 点击全部地区，讲选择数组清空，监听到citySelect改变，从而启动vuex的setCityList方法
-                this.citySelect = []
-                for(var i=0;i<res.length;i++){
-                    res[i].setAttribute('class','')
+                if(e.target.getAttribute('class') == 'active'){
+                    e.target.setAttribute('class','');
+                     for(var i=0;i<siblings(e.target).length-1;i++){
+                        siblings(e.target)[i].setAttribute('class','')
+                        this.citySelect = []
+                        //this.citySelect.push( siblings(e.target)[i].getAttribute('myid'))
+                    }
+                }else{
+                     e.target.setAttribute('class','active')
+                    // 点击全部地区，讲选择数组清空，监听到citySelect改变，从而启动vuex的setCityList方法
+                     // this.citySelect = []
+                    this.citySelect = []
+                    for(var i=0;i<siblings(e.target).length-1;i++){
+                        siblings(e.target)[i].setAttribute('class','active')
+                         this.citySelect.push( siblings(e.target)[i].getAttribute('myid'))
+                    }
                 }
+               
             }else{
-                var id = e.target.getAttribute('myid')
-                if(this.citySelect.indexOf(id)===-1){
-                    this.citySelect.push(id)
+                if(e.target.getAttribute('class')=='active'){
+                     console.log(this.citySelect)
+                     e.target.setAttribute('class','');
+                     var index= this.citySelect.indexOf(e.target.getAttribute('myid'))
+                     this.citySelect.splice(index,1)
+                     console.log(this.$refs.allCity)
+                     console.log(this.citySelect)
+                     this.$refs.allCity.setAttribute('class','')
                 }else{
-                    var index = this.citySelect.indexOf(id)
-                    this.citySelect.splice(index,1)
+                     console.log(this.$refs.allCity)
+                     e.target.setAttribute('class','active');
+                     this.citySelect.push(e.target.getAttribute('myid'))
                 }
+                // var id = e.target.getAttribute('myid')
+                // if(this.citySelect.indexOf(id)===-1){
+                //     this.citySelect.push(id)
+                // }else{
+                //     var index = this.citySelect.indexOf(id)
+                //     this.citySelect.splice(index,1)
+                // }
                 
-                if(e.target.getAttribute('class')){
-                    e.target.setAttribute('class','')
-                }else{
-                    e.target.setAttribute('class','active')
-                }
-                // e.target.setAttribute('class','active') 
-                for(var i=0;i<siblings(e.target).length;i++){
-                    siblings(e.target)[0].setAttribute('class','')
-                }
+                // if(e.target.getAttribute('class')){
+                //     e.target.setAttribute('class','')
+                // }else{
+                //     e.target.setAttribute('class','active')
+                // }
+                // // e.target.setAttribute('class','active') 
+                // for(var i=0;i<siblings(e.target).length;i++){
+                //     siblings(e.target)[0].setAttribute('class','')
+                // }
             }
         },  
         citySelectChange () {
+            if(this.citySelect.length==this.cityList.length){
+                this.$refs.allCity.setAttribute('class','active')
+            }
             this.$store.dispatch('setCityList', this.citySelect)
         }
     },
