@@ -316,11 +316,11 @@ export default {
                 },
                 {
                     title: '订单总数',
-                    key: 'orderNum'
+                    key: 'orderAllNum'
                 },
                 {
                     title: '有效订单数',
-                    key: 'avgAmount'
+                    key: 'orderNum'
                 },
                 {
                     title: '订单金额(￥)',
