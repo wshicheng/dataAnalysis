@@ -325,6 +325,16 @@ export default {
             );
           }
         },
+         {
+          title: "累计有效订单占比",
+          key: "orderNumProportion",
+          render: function(h, params) {
+            return h(
+              "div",
+             '等后台数据'
+            );
+          }
+        },
         {
           title: "订单金额（￥）",
           key: "orderAmount",
@@ -345,6 +355,26 @@ export default {
             return h(
               "div",
               parseFloat(params.row.orderAmountProportion).toFixed(1) + "%"
+            );
+          }
+        },
+        {
+          title: "累计订单金额占比",
+          key: "orderAmountProportion",
+          render: function(h, params) {
+            return h(
+              "div",
+             '等后台数据'
+            );
+          }
+        },
+         {
+          title: "均单价",
+          key: "orderAmountProportion",
+          render: function(h, params) {
+            return h(
+              "div",
+             '等后台数据'
             );
           }
         }
@@ -494,6 +524,7 @@ export default {
           var tenStart = [];
           var genThirty = [];
           var recodeCity = [];
+          var genSixty = [];
           data.map(list => {
             zeroStart.push(parseFloat(list.zeroToFiveCount));
             oneStart.push(parseFloat(list.fiveToTenCount));
@@ -502,6 +533,7 @@ export default {
             fiveStart.push(parseFloat(list.tweToTweFiveCount));
             tenStart.push(parseFloat(list.tweFiveToThiCount));
             genThirty.push(parseFloat(list.gtThirtyCount));
+            genSixty.push(parseFloat(list.gtThirtyCount));
             recodeCity.push(list.cityName);
           });
           this.citySelectNum = recodeCity;
@@ -531,7 +563,11 @@ export default {
               data: tenStart
             },
             {
-              name: "30以上",
+              name: "30-60",
+              data: genThirty
+            },
+            {
+              name: "60以上",
               data: genThirty
             }
           ];

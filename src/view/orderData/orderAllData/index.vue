@@ -328,7 +328,11 @@ export default {
                 },
                 {
                     title: '订单总数',
-                    key: 'orderAllNum',
+                    key: 'orderAllNum'
+                },
+                {
+                    title: '有效订单数',
+                    key: 'orderNum',
                     sortable: true,
                     sortMethod (a, b, type) {
                         // 升序是0，降序是1
@@ -338,10 +342,6 @@ export default {
                             that.sortMethod(1)
                         }
                     }
-                },
-                {
-                    title: '有效订单数',
-                    key: 'orderNum'
                 },
                 {
                     title: '订单金额(￥)',
@@ -384,11 +384,11 @@ export default {
                 },
                 {
                     title: '订单总数',
-                    key: 'orderNum'
+                    key: 'orderAllNum'
                 },
                 {
                     title: '有效订单数',
-                    key: 'avgAmount'
+                    key: 'orderNum'
                 },
                 {
                     title: '订单金额(￥)',

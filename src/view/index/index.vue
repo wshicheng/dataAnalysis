@@ -104,6 +104,7 @@ import HeadComponent from '../../components/head.vue'
 
 .ivu-col-span-19 {
     height: 100%;
+    width:calc(100% - 280px);
     overflow-y: auto;
 }
 
@@ -111,6 +112,7 @@ import HeadComponent from '../../components/head.vue'
     height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
+    width: 280px;
     /* background: #495060; */
     background: #404040;
     /* border-right: 1px solid #ccc; */
