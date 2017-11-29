@@ -38,7 +38,8 @@
     "webpack-dev-server": "^2.7.1",
     "webpack-merge": "^4.1.0",
     "webpack-parallel-uglify-plugin": "^1.0.0",
-    "xlsx": "^0.11.10"
+    "xlsx": "^0.11.10",
+    "xlsx-style": "^0.8.13"
   },
   "devDependencies": {
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
