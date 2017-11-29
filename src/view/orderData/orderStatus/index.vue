@@ -71,7 +71,7 @@
                         <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                         <div style="color: #ccc; text-indent: 5px;">  loading...</div>
                     </Spin>
-                <div id="container" style="min-width:400px; height: 400px;"></div>
+                <div id="container2" style="min-width:400px; height: 400px;"></div>
             </div>
         </TabPane>
         <TabPane label="趋势" name="tendency" class="orderStatus_tendency">
@@ -87,7 +87,7 @@
                         <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                         <div style="color: #ccc; text-indent: 5px;">  loading...</div>
                     </Spin>
-                <div id="container" style="min-width:400px; height: 400px;"></div>
+                <div id="container3" style="min-width:400px; height: 400px;"></div>
             </div>
         </TabPane>
     </Tabs>
@@ -272,7 +272,7 @@ export default {
     },
     data () {
         return {
-            currentTab: 'comparison',
+            currentTab: 'gather',
             timeSelectShow: false,
             timeLine: ['',''],
             spinShow: false,
@@ -703,6 +703,11 @@ export default {
         },
         tabChange (name) {
             console.log(name)
+            if (name === 'comparison') {
+                this.initChart2()
+            } else if (name === 'tendency') {
+                this.initChart3()
+            }
         },
         checkLogin (res) {
            if (res.data.message === '用户登录超时') {
@@ -828,6 +833,123 @@ export default {
             }
 
             new Highcharts.chart('container', options);
+        },
+        initChart2 () {
+            var options = {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: '月平均降雨量'
+                },
+                subtitle: {
+                    text: '数据来源: WorldClimate.com'
+                },
+                xAxis: {
+                    categories: [
+                        '人工关闭',
+                        '开锁失败',
+                        '已取消',
+                        '已结束'
+                    ],
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: '降雨量 (mm)'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: [{
+                    name: '东京',
+                    data: [49.9, 71.5, 106.4, 129.2]
+                }, {
+                    name: '纽约',
+                    data: [83.6, 78.8, 98.5, 93.4]
+                }, {
+                    name: '伦敦',
+                    data: [48.9, 38.8, 39.3, 41.4]
+                }, {
+                    name: '柏林',
+                    data: [42.4, 33.2, 34.5, 39.7]
+                }]
+            }
+
+            new Highcharts.chart('container2', options);
+        },
+        initChart3 () {
+            var options = {    
+                title: {
+                    text: '2010 ~ 2016 年太阳能行业就业人员发展情况'
+                },
+                subtitle: {
+                    text: '数据来源：thesolarfoundation.com'
+                },
+                yAxis: {
+                    title: {
+                        text: '就业人数'
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle'
+                },
+                plotOptions: {
+                    series: {
+                        label: {
+                            connectorAllowed: false
+                        },
+                        pointStart: 2010
+                    }
+                },
+                series: [{
+                    name: '安装，实施人员',
+                    data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
+                }, {
+                    name: '工人',
+                    data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
+                }, {
+                    name: '销售',
+                    data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
+                }, {
+                    name: '项目开发',
+                    data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
+                }, {
+                    name: '其他',
+                    data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
+                }],
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                layout: 'horizontal',
+                                align: 'center',
+                                verticalAlign: 'bottom'
+                            }
+                        }
+                    }]
+                }
+            }
+
+            new Highcharts.chart('container3', options);
         },
         cityChange () {
             var type = $('.orderStatus_head_time button.active').attr('myId')

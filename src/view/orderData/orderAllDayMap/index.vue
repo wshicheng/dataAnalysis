@@ -524,7 +524,9 @@ export default {
             new Highcharts.chart('container', options);
         },
         cityChange () {
-            this.loadData($(".orderAllDayMap_head_time button.active").attr('myId'))
+            if (this.loadFlag === true) {
+                this.loadData($(".orderAllDayMap_head_time button.active").attr('myId'))
+            }
         },
         checkLogin (res) {
            if (res.data.message === '用户登录超时') {
