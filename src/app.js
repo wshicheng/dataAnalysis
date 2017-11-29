@@ -63,12 +63,10 @@ var vm = new Vue({
     router,
     render: h => h(app),
     methods:{
-        closeWin(){
-            console.log(1)
-        }
+       
     },
     mounted:function(){
       //  window.addEventlistener('beforeunload',this.closeWin())
-      this.closeWin()
+     
     }
 })

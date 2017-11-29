@@ -312,8 +312,28 @@ export default {
           key: "userCont"
         },
         {
-          title: "占比",
+          title: "用户数占比",
           key: "percentage"
+        },
+        {
+          title: "订单数",
+          key: "orderCount"
+        },
+        {
+          title: "订单数占比",
+          key: "orderCountRate"
+        },
+        {
+          title: "订单金额",
+          key: "amount"
+        },
+        {
+          title: "订单金额占比",
+          key: "amountRate"
+        },
+         {
+          title: "均单价",
+          key: "averagePrice"
         }
       ],
 
@@ -444,43 +464,18 @@ export default {
             this.noDataText = "暂无数据";
             return;
           }
-          this.data2 = [
-            {
-              time: "1",
-              userCont: parseFloat(data[0].userCont),
-              percentage: data[0].percentage
-            },
-            {
-              time: "2",
-              userCont: parseFloat(data[1].userCont),
-              percentage: data[1].percentage
-            },
-            {
-              time: "3",
-              userCont: parseFloat(data[2].userCont),
-              percentage: data[2].percentage
-            },
-            {
-              time: "4",
-              userCont: parseFloat(data[3].userCont),
-              percentage: data[3].percentage
-            },
-            {
-              time: "5",
-              userCont: parseFloat(data[4].userCont),
-              percentage: data[4].percentage
-            },
-            {
-              time: "5次以上",
-              userCont: parseFloat(data[5].userCont),
-              percentage: data[5].percentage
-            },
-            {
-              time: "合计",
-              userCont: parseFloat(data[6].userCont),
-              percentage: data[6].percentage
-            }
-          ];
+          this.data2 = data.map((item)=>{
+            return {
+                    time:item.frequency,
+                    userCont:item.userCont,
+                    percentage:item.percentage,
+                    orderCount:item.orderCount,
+                    orderCountRate:item.orderCountRate,
+                    amount:item.amount,
+                    amountRate:item.amountRate,
+                    averagePrice:item.averagePrice
+                   }
+          })
         })
         .catch(err => {
           console.log(err);
@@ -512,6 +507,7 @@ export default {
             this.data3 = [];
             return;
           }
+          //  7天全部地区
           var zeroStart = [];
           var oneStart = [];
           var twoStart = [];
@@ -519,15 +515,10 @@ export default {
           var fiveStart = [];
           var tenStart = [];
           var recodeCity = [];
-          data.map(list => {
-            zeroStart.push(parseFloat(list.freq_0));
-            oneStart.push(parseFloat(list.freq_1));
-            twoStart.push(parseFloat(list.freq_2));
-            threeStart.push(parseFloat(list.freq_3));
-            fiveStart.push(parseFloat(list.freq_4));
-            tenStart.push(parseFloat(list["freq_5+"]));
-            recodeCity.push(list.cityName);
-          });
+          // data.map(list => {
+          //   console.log(list)
+          // });
+         
           // this.citySelectNum = recodeCity;
           this.data3 = [
             {
