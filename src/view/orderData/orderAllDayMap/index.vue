@@ -39,7 +39,7 @@
                 </div>
             </Poptip>
         </div>
-        <Table  border size='small' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
+        <Table height='300'  border size='small' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
       </div>
 
       <div class="orderAllDayMap_chart" v-show="noDataBox">
@@ -50,7 +50,7 @@
         <div class="select">
             <button class="active" @click="chartType" myType='orderNum'>订单数</button>
             <button @click="chartType" myType='orderAmount'>订单金额</button>
-            <button @click="chartType" myType='aa'>投产车辆数</button>
+            <button @click="chartType" myType='bikeNum'>投产车辆数</button>
         </div>
         <div id="container" style="min-width:400px; height: 400px;"></div>
       </div>
@@ -279,15 +279,15 @@ export default {
                 // v0,5新增需求
                 {
                     title: '投产车辆数',
-                    key: 'orderAmountAccuProp'
+                    key: 'bikeNum'
                 },
                 {
                     title: '累计投产车辆数',
-                    key: 'orderAmountAccuProp'
+                    key: 'sumBikeNum'
                 },
                 {
                     title: '车辆使用率',
-                    key: 'orderAmountAccuProp'
+                    key: 'bikeUsageRate'
                 },
             ],
             orderData: [],
@@ -299,6 +299,9 @@ export default {
             // 订单金额图表数据
             orderMoneyData: [],
             orderMoneyProData: [],
+            // 投产车辆数数据
+            bikeNumData: [],
+            sumBikeNumData: [],
             noDataBox: false,
             loadFlag: false,
             options: {
@@ -358,6 +361,8 @@ export default {
                     this.orderNumProData = []
                     this.orderMoneyData = []
                     this.orderMoneyProData = []
+                    this.bikeNumData = []
+                    this.sumBikeNumData = []
                     var that = this
                     setTimeout(function () {
                         newData.map( (item) => {
@@ -365,7 +370,16 @@ export default {
                             that.orderNumProData.push(Number(that.delcommafy(item.orderNumAccumulate)))
                             that.orderMoneyData.push(Number(that.delcommafy(item.orderAmount)))
                             that.orderMoneyProData.push(Number(that.delcommafy(item.orderAmountAccumulate)))
+                            that.bikeNumData.push(Number(that.delcommafy(item.bikeNum)))
+                            that.sumBikeNumData.push(Number(that.delcommafy(item.sumBikeNum)))
                         })
+
+                        console.log('that.orderNumData', that.orderNumData)
+                        console.log('that.orderNumProData', that.orderNumProData)
+                        console.log('that.orderMoneyData', that.orderMoneyData)
+                        console.log('that.orderMoneyProData', that.orderMoneyProData)
+                        console.log('that.bikeNumData', that.bikeNumData)
+                        console.log('that.sumBikeNumData', that.sumBikeNumData)
                         that.initChart($(".select button.active").attr('myType'))
                         that.loadFlag = true
                     }, 100)
@@ -391,6 +405,8 @@ export default {
             this.orderNumProData = []
             this.orderMoneyData = []
             this.orderMoneyProData = []
+            this.bikeNumData = []
+            this.sumBikeNumData = []
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
                 elems[i].setAttribute('class', '')
@@ -456,19 +472,17 @@ export default {
                             }
                         },
                         title: {
-                            text: $('.select button.active')[0].innerHTML === '订单数'?'累计订单数':'累计订单金额',
+                            text: $('.select button.active')[0].innerHTML === '订单数'?'累计订单数':($('.select button.active')[0].innerHTML === '订单金额'?'累计订单金额':'累计投产车辆'),
                             style: {
-                                color: '#ed7d31',
-                                // fontWeight: 'bolder'
+                                color: '#ed7d31'
                             }
                         },
                         allowDecimals: false
                     }, { // Secondary yAxis
                         title: {
-                            text: $('.select button.active')[0].innerHTML === '订单数'?'订单数':'订单金额',
+                            text: $('.select button.active')[0].innerHTML === '订单数'?'订单数':($('.select button.active')[0].innerHTML === '订单金额'?'订单金额':'投产车辆'),
                             style: {
-                                color: '#4472c4',
-                                // fontWeight: 'bolder'
+                                color: '#4472c4'
                             }
                         },
                         labels: {
@@ -484,26 +498,23 @@ export default {
                         shared: true,
                         useHTML: true,
                         headerFormat: "<p>时间: {point.key}</p>",
-                        // pointFormatter:function () {
-                        //     return "<br><span style='color:" + this.color + "; font-weight: bolder;'>" + 
-                        //      this.series.name + ':</span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")]
-                        // }
                         pointFormatter:function () {
                             return "<span>" + this.series.name + ':</span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")] + '<br>'
                         }
                     },
                     series: [{
-                        name: type==='orderNum'?'订单数':'订单金额',
-                        type: 'column',
+                        name: type==='orderNum'?'订单数':[type === 'orderAmount'?'订单金额':'投产车辆'],
+                        type: 'spline',
                         yAxis: 1,
-                        data: type==='orderNum'?this.orderNumData:this.orderMoneyData,
+                        data: type==='orderNum'?this.orderNumData:(type === 'orderAmount'?this.orderMoneyData:this.bikeNumData),
                         tooltip: {
                             valueSuffix: ''
                         }
                     }, {
-                        name: type==='orderNum'?'累计订单数':'累计订单金额',
+                        name: type==='orderNum'?'累计订单数':[type === 'orderAmount'?'累计订单金额':'累计投产车辆'],
                         type: 'spline',
-                        data: type==='orderNum'?this.orderNumProData:this.orderMoneyProData,
+                        data: type==='orderNum'?this.orderNumProData:(type === 'orderAmount'?this.orderMoneyProData:this.sumBikeNumData),
+                        // data: this.sumBikeNumData],
                         tooltip: {
                             valueSuffix: ''
                         }
