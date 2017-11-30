@@ -9,7 +9,7 @@ require('highcharts/modules/exporting')(Highcharts);
 
 export default {
     methods: {
-        initChart(title,xAxis,data,subtitle) {
+        initChart(toolType,type,title,xAxis,data, subtitle) {
             var options = {
                 chart: {
                     type: 'column'
@@ -37,7 +37,7 @@ export default {
                     categories:xAxis
                 },
                 yAxis: {
-                    visible:false,
+                    visible:true,
                     min: 0,
                     title: {
                         text: ' '
@@ -63,9 +63,16 @@ export default {
                 },
                 tooltip: {
                     formatter: function() {
-                        return '<b>' + this.x + '</b><br/>' +
-                            this.series.name + ': ' + this.y + '<br/>' +
+                        if(type=='频次分布'){
+                            return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + (this.y) + '%' + '<br/>' +
                             '总量: ' + Highcharts.numberFormat(this.point.stackTotal, 0,"",",");
+                        }else{
+                            return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + (this.y) + '<br/>' +
+                            '总量: ' + Highcharts.numberFormat(this.point.stackTotal, 0,"",",");
+                        }
+                        
                     }
                 },
                 plotOptions: {
@@ -88,20 +95,20 @@ export default {
             new Highcharts.chart('container', options);
         },
     },
-    props: ['title', 'xAxis', 'chartData', 'subtitle'],
+    props:['toolType','type','title','xAxis','chartData','subtitle'],
     mounted() {
-        this.initChart(this.title,this.xAxis,this.chartData, this.subtitle)
+        this.initChart(this.toolType,this.type,this.title,this.xAxis,this.chartData, this.subtitle)
     },
      watch:{
        xAxis:{
            handler:function(n,o){
-               this.initChart(this.title,this.xAxis,this.chartData, this.subtitle)
+                this.initChart(this.toolType,this.type,this.title,this.xAxis,this.chartData, this.subtitle)
            },
            deep:true
        },
        chartData:{
            handler:function(n,o){
-               this.initChart(this.title,this.xAxis,this.chartData, this.subtitle)
+                this.initChart(this.toolType,this.type,this.title,this.xAxis,this.chartData, this.subtitle)
            },
            deep:true
        }  

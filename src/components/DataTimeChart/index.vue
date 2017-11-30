@@ -53,8 +53,13 @@ export default {
                tooltip: {
                    
                     formatter: function() {  
+                       console.log(type)
+                       if(type=='频次分布'){
+                            return type + ':' + this.x + '<br>' + toolType + ':' + (this.y) + '%';
+                        }else{
+                            return type + ':' + this.x + '<br>' + toolType + ':' + Highcharts.numberFormat(this.y, 0,"",",") ;
+                        }
                       
-                       return type + ':' + this.x + '<br>' + toolType + ':' + Highcharts.numberFormat(this.point.y, 0,"",",");
                         
                     }                 
                 },
