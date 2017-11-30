@@ -36,7 +36,7 @@ export default {
                 xAxis: {
                     categories:xAxis
                 },
-                yAxis: {
+                yAxis:type!=='频次分布'? {
                     visible:true,
                     min: 0,
                     title: {
@@ -49,7 +49,29 @@ export default {
                             color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
                         }
                     }
-                },
+                } :{
+                            opposite: false,
+                            tickPositions: [20, 40, 60, 80, 100],
+                            title: {
+                                text: '',
+                                style: {
+                                    color: '#9999ff'
+                                }
+                            },
+                            labels: {                        
+                                // formatter:function(){
+                                //     if (Number(this.value) <= 100) {
+                                //         return this.value + '%'
+                                //     } else {
+                                //         return 100 + '%'
+                                //     }
+                                // },
+                                format: '{value}%',
+                                style: {
+                                    color: '#9999ff'
+                                }
+                            }
+                        },
                 legend: {
                     align: 'right',
                     x: -30,

@@ -676,6 +676,15 @@ export default {
         this.timeLine = ["", ""];
       }
       if (this.cityName.length < 2) {
+        if(this.cityName.length==0){
+          this.amountRate = []
+          this.percentage = []
+          this.orderCountRate = []
+          this.cityName = []
+          this.frequency = []
+          return;
+
+        }
         var cityList = JSON.parse(window.localStorage.getItem("cityList"));
         var cityCode;
         if (cityList.length == 1) {
@@ -845,8 +854,6 @@ export default {
     "$store.state.cityList": "cityChange",
     'chartSelectType':{
       handler:function(n,o){
-        console.log(n)
-        debugger
         if(this.citySelectNum.length>2){
           if(n=='percentage'){
           

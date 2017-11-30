@@ -596,6 +596,11 @@ export default {
         this.timeLine = ["", ""];
       }
       if (this.citySelectNum.length < 2) {
+         if(this.citySelectNum.length==0){
+           this.data2 = []
+           this.data3 = []
+           return;
+         }
          var cityList = JSON.parse(window.localStorage.getItem('cityList'));
           var cityCode
           if(cityList.length==1){
