@@ -434,7 +434,6 @@ export default {
       if (this.citySelectNum.length < 2) {
         var data = [...this.data2];
         data.pop();
-        console.log(data)
         return data.map(item => item.time);
       } else {
         return this.cityName;
@@ -445,7 +444,7 @@ export default {
         var data = [...this.data2];
         data.pop();
         var type = $('.select button.active').attr('mytype')
-        console.log(type)
+
         this.chartSelectType = type
         if(this.chartSelectType=='percentage'){
            return data.map(item => {
@@ -604,7 +603,6 @@ export default {
          
           data.map((list,index) => {
             list.pop()
-            console.log(list)
            if(index==0){
             list.map((item)=>{
               that.frequency.push(item.frequency)

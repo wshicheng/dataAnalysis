@@ -702,7 +702,6 @@ export default {
             e.target.setAttribute('class', 'active')
         },
         tabChange (name) {
-            console.log(name)
             if (name === 'comparison') {
                 this.initChart2()
             } else if (name === 'tendency') {
