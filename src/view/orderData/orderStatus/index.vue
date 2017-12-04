@@ -20,7 +20,7 @@
       </div>
 
     <Tabs :value="currentTab" style="background: rgba(255,255,255,0.3); margin-top: 20px; margin-bottom: -10px;" type='line' @on-click='tabChange'> 
-        <TabPane label="汇总" name="gather" >
+        <TabPane label="汇总" name="1" >
             <div class="orderStatus_table">
                 <Spin fix size="large" v-if="spinShow"  class="spin">
                     <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
@@ -47,7 +47,7 @@
                 <div id="container" style="min-width:400px; height: 400px;"></div>
             </div>
         </TabPane>
-        <TabPane label="对比" name="comparison" id="orderStatus_comparison_table">
+        <TabPane label="对比" name="2" id="orderStatus_comparison_table">
             <div class="orderStatus_table">
                 <Spin fix size="large" v-if="spinShow"  class="spin">
                     <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
@@ -63,7 +63,7 @@
                     </Poptip> 
                 </div>
                 <Table :no-data-text='noDataText2'  border size='small' :columns="columnsComparison" :data="comparisonData"></Table>
-                <Page :total="100" show-sizer show-elevator :styles='page' placement="bottom"></Page>
+                <Page :total="totalListNum" show-sizer show-elevator  :styles='page' placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
             </div>
 
             <div v-show="noData" class="orderStatus_chart">
@@ -74,12 +74,12 @@
                 <div id="container2" style="min-width:400px; height: 400px;"></div>
             </div>
         </TabPane>
-        <TabPane label="趋势" name="tendency" class="orderStatus_tendency">
+        <TabPane label="趋势" name="3" class="orderStatus_tendency">
             <div class="btn">
-                <button @click="handleTendencyClick" class="active" >人工关闭</button>
-                <button @click="handleTendencyClick">开锁失败</button>
-                <button @click="handleTendencyClick">已取消</button>
-                <button @click="handleTendencyClick">已结束</button>
+                <button @click="handleTendencyClick" class="active" myType='1'>人工关闭</button>
+                <button @click="handleTendencyClick" myType='2'>开锁失败</button>
+                <button @click="handleTendencyClick" myType='3'>已取消</button>
+                <button @click="handleTendencyClick" myType='4'>已结束</button>
             </div>
 
             <div v-show="noData" class="orderStatus_chart">
@@ -272,7 +272,7 @@ export default {
     },
     data () {
         return {
-            currentTab: 'gather',
+            currentTab: '1',
             timeSelectShow: false,
             timeLine: ['',''],
             spinShow: false,
@@ -280,6 +280,11 @@ export default {
                 'float': 'right',
                 'margin-top': '20px'
             },
+            totalListNum: 100,
+            pageSizeOpts: [10, 20, 30, 40],
+            pageSize: 10,
+            currentPage: 1,
+            pageShow: false,
             columns_orderStatusData: [
                 {
                     title: '订单状态',
@@ -303,7 +308,7 @@ export default {
                 },
                 {
                     title: '合计',
-                    key: 'money',
+                    key: 'num',
                     align: 'center'
                 },
                 {
@@ -352,7 +357,7 @@ export default {
                                     borderBox: 'box-sizing',
                                     borderRight: '1px solid #e9eaec'
                                 }
-                            }, params.row.one),
+                            }, params.row.closeNum),
                             h('div', {
                                 style: {
                                     width: 'calc(100%/2)',
@@ -361,7 +366,7 @@ export default {
                                     textAlign: 'center',
                                     borderBox: 'box-sizing'
                                 }
-                            }, params.row.two)
+                            }, params.row.failNum)
                         ])
                     }
                 },
@@ -411,7 +416,7 @@ export default {
                                     borderBox: 'box-sizing',
                                     borderRight: '1px solid #e9eaec'
                                 }
-                            }, params.row.one),
+                            }, params.row.cancelNum),
                             h('div', {
                                 style: {
                                     width: 'calc(100%/2)',
@@ -420,7 +425,7 @@ export default {
                                     textAlign: 'center',
                                     borderBox: 'box-sizing'
                                 }
-                            }, params.row.two)
+                            }, params.row.endNum)
                         ])
                     }
                 },
@@ -470,7 +475,7 @@ export default {
                                     borderBox: 'box-sizing',
                                     borderRight: '1px solid #e9eaec'
                                 }
-                            }, params.row.one),
+                            }, params.row.closePercent),
                             h('div', {
                                 style: {
                                     width: 'calc(100%/2)',
@@ -479,7 +484,7 @@ export default {
                                     textAlign: 'center',
                                     borderBox: 'box-sizing'
                                 }
-                            }, params.row.two)
+                            }, params.row.failPercent)
                         ])
                     }
                 },
@@ -529,7 +534,7 @@ export default {
                                     borderBox: 'box-sizing',
                                     borderRight: '1px solid #e9eaec'
                                 }
-                            }, params.row.one),
+                            }, params.row.cancelPercent),
                             h('div', {
                                 style: {
                                     width: 'calc(100%/2)',
@@ -538,64 +543,14 @@ export default {
                                     textAlign: 'center',
                                     borderBox: 'box-sizing'
                                 }
-                            }, params.row.two)
+                            }, params.row.endPercent)
                         ])
                     }
                 }
             ],
-            comparisonData: [
-                    {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }, {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }, {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }, {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }, {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }, {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }, {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }, {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }, {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }, {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }
-            ],
+            comparisonData: [],
+            currentPage: 1,
+            pageSize: 10,
             noDataText: '',
             noDataText2: '',
             chartArr: '',
@@ -625,7 +580,13 @@ export default {
                     type: type,
                     cityCode: this.$store.state.cityList.toString(),
                     beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
-                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
+                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD'),
+                    data_type: this.currentTab,
+                    // state是趋势模块，四种不同类型的标识
+                    state: this.currentTab === '3'?$('.btn button.active').attr('myType'):'',
+                    // 发送pageSize与pageNo是对比模块表格的数据，不发则是chart图表的数据。
+                    pageSize: this.currentTab === '2'?this.pageSize:'',
+                    pageNo: this.currentTab === '2'?this.currentPage:'',
                 }
             })
             .then((res) => {
@@ -635,24 +596,39 @@ export default {
                 this.checkLogin(res)
                 var data = res.data.data
                 if (data.length > 0) {
-                    this.noData = true
-                    var newArr = []
-                    data.map( (item) => {
-                        newArr.push(Object.assign({},item,{proportion: item.proportion + "%"}))
-                        return newArr
-                    })
-                    this.orderStatusData = newArr
-                    // 去掉合计字段集
-                    data.pop()
-                    var arr = new Array()
-                    for (var i in data) {
-                        arr.push([data[i].orderFlow, Number(data[i].proportion)])
+                    console.log('dada', this.currentTab)
+                    if (this.currentTab === '1') {
+                        this.noData = true
+                        var newArr = []
+                        data.map( (item) => {
+                            newArr.push(Object.assign({},item,{proportion: item.proportion + "%"}))
+                            return newArr
+                        })
+                        this.orderStatusData = newArr
+                        // 去掉合计字段集
+                        data.pop()
+                        var arr = new Array()
+                        for (var i in data) {
+                            arr.push([data[i].orderFlow, Number(data[i].proportion)])
+                        }
+                        // 取掉无关字段
+                        arr.pop()
+                        this.chartArr = arr
+                        // console.log(this.chartArr)
+                        this.initChart()            
+                    } else if (this.currentTab === '2') {
+                        this.noData = true
+                        // console.log('this.currentTab')
+                        this.comparisonData = data
+
+                        if (res.data.totalPage < 2 && this.pageSize === 10) {
+                            this.pageShow = false
+                        } else {
+                            this.pageShow = true
+                        }
+                        this.totalListNum = res.data.totalItems
+                        this.getCompariseChart($('.orderStatus_head_time button.active').attr('myId'))
                     }
-                    // 取掉无关字段
-                    arr.pop()
-                    this.chartArr = arr
-                    // console.log(this.chartArr)
-                    this.initChart()                    
                 } else {
                     var newArr = []
                     data.map( (item) => {
@@ -680,6 +656,56 @@ export default {
                 console.log(err)
             })
         },
+        getCompariseChart (type) {
+            this.axios.get('/beefly/orderState/getOrderState', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    type: type,
+                    cityCode: this.$store.state.cityList.toString(),
+                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD'),
+                    data_type: this.currentTab,
+                    // state是趋势模块，四种不同类型的标识
+                    state: this.currentTab === '3'?$('.btn button.active').attr('myType'):''
+                }
+            })
+            .then( res => {
+                console.log('compariseData', res.data.data)
+                var data = res.data.data
+                var delArr = new Array()
+                // data.map(item => {
+                //     debugger
+                //     for (var i = 0; i < item.length; i++) {
+                //         var obj = {}
+                //         obj.name = item[i].cityName
+                //         var data = new Array()
+                //         var num = Number(item[i].proportion.replace('%', ''))
+                //         data.push(num)
+                //         delArr.push(obj)
+                //     }
+                // })
+                for (var i = 0; i < data.length; i++) {
+                    
+                }
+
+
+// var obj = {}
+//                     var arr = new Array()
+//                     obj.name = item.length === 0?'':item[0].cityName
+//                     for (var i = 0; i < item.length; i++) {
+//                         var num = Number(item[i].proportion.replace('%', ''))
+//                         arr.push(num)
+//                     }
+//                     obj.data = arr
+//                     delArr.push(obj)
+                console.log(delArr)
+
+                this.initChart2(delArr)
+            })
+            .catch( err => {
+                console.log(err)
+            })
+        },
         handleClick (e) {
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
@@ -703,9 +729,11 @@ export default {
         },
         tabChange (name) {
             console.log(name)
-            if (name === 'comparison') {
-                this.initChart2()
-            } else if (name === 'tendency') {
+            this.currentTab = name
+            if (name === '2') {
+                this.loadData($('.orderStatus_head_time button.active').attr('myId'))
+            } else if (name === '3') {
+                this.loadData($('.orderStatus_head_time button.active').attr('myId'))
                 this.initChart3()
             }
         },
@@ -834,7 +862,7 @@ export default {
 
             new Highcharts.chart('container', options);
         },
-        initChart2 () {
+        initChart2 (data) {
             var options = {
                 chart: {
                     type: 'column'
@@ -878,15 +906,19 @@ export default {
                     name: '东京',
                     data: [49.9, 71.5, 106.4, 129.2]
                 }, {
-                    name: '纽约',
-                    data: [83.6, 78.8, 98.5, 93.4]
+                    name: '北京',
+                    data: [59.9, 71.5, 106.4, 129.2]
                 }, {
-                    name: '伦敦',
-                    data: [48.9, 38.8, 39.3, 41.4]
+                    name: '东京',
+                    data: [79.9, 71.5, 106.4, 129.2]
                 }, {
-                    name: '柏林',
-                    data: [42.4, 33.2, 34.5, 39.7]
+                    name: '东京',
+                    data: [99.9, 74.5, 106.4, 129.2]
+                }, {
+                    name: '东京',
+                    data: [49.9, 71.5, 106.4, 129.2]
                 }]
+                // series: data
             }
 
             new Highcharts.chart('container2', options);
@@ -954,6 +986,12 @@ export default {
         cityChange () {
             var type = $('.orderStatus_head_time button.active').attr('myId')
             this.loadData(type)
+        },
+        handleCurrentPage(currentPage) {
+            this.currentPage = currentPage
+        },
+        handlePageSize(pageSize) {
+            this.currentPage = pageSize
         }
     },
     watch: {
