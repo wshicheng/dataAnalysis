@@ -9,7 +9,7 @@ require('highcharts/modules/exporting')(Highcharts);
 
 export default {
     methods: {
-        initChart(title,xAxis,data,subtitle) {
+        initChart(toolType,type,title,xAxis,data, subtitle) {
             var options = {
                 chart: {
                     type: 'column'
@@ -36,8 +36,8 @@ export default {
                 xAxis: {
                     categories:xAxis
                 },
-                yAxis: {
-                    visible:false,
+                yAxis:type!=='频次分布'? {
+                    visible:true,
                     min: 0,
                     title: {
                         text: ' '
@@ -49,7 +49,29 @@ export default {
                             color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
                         }
                     }
-                },
+                } :{
+                            opposite: false,
+                            tickPositions: [20, 40, 60, 80, 100],
+                            title: {
+                                text: '',
+                                style: {
+                                    color: '#9999ff'
+                                }
+                            },
+                            labels: {                        
+                                // formatter:function(){
+                                //     if (Number(this.value) <= 100) {
+                                //         return this.value + '%'
+                                //     } else {
+                                //         return 100 + '%'
+                                //     }
+                                // },
+                                format: '{value}%',
+                                style: {
+                                    color: '#9999ff'
+                                }
+                            }
+                        },
                 legend: {
                     align: 'right',
                     x: -30,
@@ -63,9 +85,16 @@ export default {
                 },
                 tooltip: {
                     formatter: function() {
-                        return '<b>' + this.x + '</b><br/>' +
-                            this.series.name + ': ' + this.y + '<br/>' +
+                        if(type=='频次分布'){
+                            return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + (this.y) + '%' + '<br/>' +
                             '总量: ' + Highcharts.numberFormat(this.point.stackTotal, 0,"",",");
+                        }else{
+                            return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + (this.y) + '<br/>' +
+                            '总量: ' + Highcharts.numberFormat(this.point.stackTotal, 0,"",",");
+                        }
+                        
                     }
                 },
                 plotOptions: {
@@ -88,20 +117,20 @@ export default {
             new Highcharts.chart('container', options);
         },
     },
-    props: ['title', 'xAxis', 'chartData', 'subtitle'],
+    props:['toolType','type','title','xAxis','chartData','subtitle'],
     mounted() {
-        this.initChart(this.title,this.xAxis,this.chartData, this.subtitle)
+        this.initChart(this.toolType,this.type,this.title,this.xAxis,this.chartData, this.subtitle)
     },
      watch:{
        xAxis:{
            handler:function(n,o){
-               this.initChart(this.title,this.xAxis,this.chartData, this.subtitle)
+                this.initChart(this.toolType,this.type,this.title,this.xAxis,this.chartData, this.subtitle)
            },
            deep:true
        },
        chartData:{
            handler:function(n,o){
-               this.initChart(this.title,this.xAxis,this.chartData, this.subtitle)
+                this.initChart(this.toolType,this.type,this.title,this.xAxis,this.chartData, this.subtitle)
            },
            deep:true
        }  

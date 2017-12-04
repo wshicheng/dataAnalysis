@@ -327,11 +327,11 @@ export default {
         },
          {
           title: "累计有效订单占比",
-          key: "orderNumProportion",
+          key: "orderNumAccuProp",
           render: function(h, params) {
             return h(
               "div",
-             '等后台数据'
+            parseFloat(params.row.orderNumAccuProp).toFixed(1) + "%"
             );
           }
         },
@@ -354,27 +354,29 @@ export default {
           render: function(h, params) {
             return h(
               "div",
-              parseFloat(params.row.orderAmountProportion).toFixed(1) + "%"
+               parseFloat(params.row.orderAmountProportion).toFixed(1) + "%"
+            
             );
           }
         },
         {
           title: "累计订单金额占比",
-          key: "orderAmountProportion",
+          key: "orderAmountAccuProp",
           render: function(h, params) {
             return h(
               "div",
-             '等后台数据'
+               parseFloat(params.row.orderAmountAccuProp).toFixed(1) + "%"
+            
             );
           }
         },
          {
           title: "均单价",
-          key: "orderAmountProportion",
+          key: "avgUnitPrice",
           render: function(h, params) {
             return h(
               "div",
-             '等后台数据'
+            params.row.avgUnitPrice
             );
           }
         }
@@ -483,7 +485,10 @@ export default {
               orderAmount: parseFloat(list.orderAmount),
               orderAmountProportion: parseFloat(list.orderAmountProportion),
               orderNum: parseFloat(list.orderNum),
-              orderNumProportion: parseFloat(list.orderNumProportion)
+              orderNumProportion: parseFloat(list.orderNumProportion),
+              orderNumAccuProp:list.orderNumAccuProp,
+             orderAmountAccuProp:list.orderAmountAccuProp,
+             avgUnitPrice:list.avgUnitPrice
             };
           });
         })
@@ -532,8 +537,8 @@ export default {
             threeStart.push(parseFloat(list.fifToTwentyCount));
             fiveStart.push(parseFloat(list.tweToTweFiveCount));
             tenStart.push(parseFloat(list.tweFiveToThiCount));
-            genThirty.push(parseFloat(list.gtThirtyCount));
-            genSixty.push(parseFloat(list.gtThirtyCount));
+            genThirty.push(parseFloat(list.thiToSixtyCount));
+            genSixty.push(parseFloat(list.gtSixtyCount));
             recodeCity.push(list.cityName);
           });
           this.citySelectNum = recodeCity;
@@ -591,6 +596,11 @@ export default {
         this.timeLine = ["", ""];
       }
       if (this.citySelectNum.length < 2) {
+         if(this.citySelectNum.length==0){
+           this.data2 = []
+           this.data3 = []
+           return;
+         }
          var cityList = JSON.parse(window.localStorage.getItem('cityList'));
           var cityCode
           if(cityList.length==1){
@@ -676,9 +686,20 @@ export default {
         return item !== undefined;
       });
       if (this.citySelectNum.length < 2) {
+        if(this.citySelectNum.length==0){
+          this.data2 = []
+          this.data3 = []
+          this.noDataText = "请至少选择一个城市";
+          return;
+        }
         //发送请求
         var cityCode = this.$store.state.cityList.join();
-        var type = $("button.active").attr("myid");
+        var type = "";
+        if (this.timeSelectShow == true) {
+          type = "";
+        } else {
+          type = $("button.active").attr("myid");
+        }
         var beginDate = this.timeLine[0]
           ? moment(this.timeLine[0]).format("YYYY-MM-DD")
           : "";
@@ -688,7 +709,12 @@ export default {
         this.loadData(type, cityCode, beginDate, endDate);
       } else {
         var cityCode = this.$store.state.cityList.join();
-        var type = $("button.active").attr("myid");
+        var type = "";
+        if (this.timeSelectShow == true) {
+          type = "";
+        } else {
+          type = $("button.active").attr("myid");
+        }
         var beginDate = this.timeLine[0]
           ? moment(this.timeLine[0]).format("YYYY-MM-DD")
           : "";
@@ -697,7 +723,7 @@ export default {
           : "";
         this.loadData(type, cityCode, beginDate, endDate);
         this.loadMultData(type, cityCode, beginDate, endDate);
-      }
+        }
     },
     checkLogin (res) {
         if (res.data.message === '用户登录超时') {

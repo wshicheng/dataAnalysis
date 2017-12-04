@@ -43,15 +43,26 @@
             </div>
            
         </div>
-        <div class="chart">
+        <div class="orderRate_chart" v-show="noDataBox">
+              <Spin fix size="large" v-if="spinShow"  class="spin">
+                  <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
+                  <div style="color: #ccc; text-indent: 5px;">  loading...</div>
+              </Spin>
+             <div class="select">
+                <button class="active" @click="chartType" myType='percentage'>用户数占比</button>
+                <button @click="chartType" myType='orderCountRate'>订单数占比</button>
+                <button @click="chartType" myType='amountRate'>订单金额占比</button>
+            </div>
+             <div class="chart">
 
+          
             <div v-if="citySelectNum.length<2">
                  <div v-show="data2.length>0">
                      <div>
                         <!-- <p class="vaildOrderNum">*数据来自有效订单数</p> -->
                     </div>
                     <div>
-                        <chart toolType="用户数" type="频次分布" title="使用频次分布" :xAxis="xAxis" :chartData="chartData" subtitle="*数据来自有效订单数"></chart>
+                        <chart v-bind:toolType="toolType" type="频次分布" title="使用频次分布" :xAxis="xAxis" :chartData="chartData" :subtitle="'*数据来自'+toolType"></chart>
                     </div>
                  </div>
             </div>
@@ -62,16 +73,53 @@
                         <p class="vaildOrderNum">*地区超过10个时，显示10个地区,</p>
                     </div> -->
                     <div>
-                        <chart-more toolType="用户数" type="频次分布" title="分地区使用频次分布" :xAxis="xAxis" :chartData="chartData" subtitle=""></chart-more>
+                        <chart-more v-bind:toolType="toolType" type="频次分布" title="分地区使用频次分布" :xAxis="xAxis" :chartData="chartData" :subtitle="'*数据来自'+toolType"></chart-more>
                     </div>
                 </div>
                
             </div>
            
         </div>
+        </div>
+       
     </div>
 </template>
 <style lang='scss' scoped type="text/css">
+div.orderRate_chart{
+            margin-top: 20px;
+            padding: 10px;
+            background: #fff;
+             position: relative;
+              .spin {
+                position: absolute;
+                display: inline-block;
+                // background-color: rgba(253, 248, 248,0.0); 
+                background-color: rgba(255, 255, 255, 0.8); 
+            }
+              .select {
+              width: 100%;
+              height: 40px;
+              padding-left: 30px;
+              line-height: 40px;
+              button {
+                  height: 30px;
+                  line-height: 30px;
+                  text-align: center;
+                  border-radius: inherit;
+                  border: none;
+                  font-size: 14px;
+                  margin-right: 10px;
+                  font-weight: bolder;
+                  outline: none;
+                  background: #fff;
+                  cursor: pointer;
+              }
+              button.active {
+                  border-bottom: 3px solid blue;
+              }
+          }
+}
+
 div.loading {
   position: relative;
   .spin {
@@ -299,6 +347,15 @@ export default {
   },
   data() {
     return {
+      frequency:[],
+      cityName:[],
+      spinShow:false,
+      noDataBox:false,
+      chartSelectType:'',
+      toolType:'',
+      percentage:[],
+      orderCountRate:[],
+      amountRate:[],
       noDataText: "",
       loading: true,
       citySelectNum: [],
@@ -379,16 +436,32 @@ export default {
         data.pop();
         return data.map(item => item.time);
       } else {
-        return this.citySelectNum;
+        return this.cityName;
       }
     },
     chartData: function() {
       if (this.citySelectNum.length < 2) {
         var data = [...this.data2];
         data.pop();
-        return data.map(item => {
-          return { color: randomColor(), y: item.userCont };
-        });
+        var type = $('.select button.active').attr('mytype')
+
+        this.chartSelectType = type
+        if(this.chartSelectType=='percentage'){
+           return data.map(item => {
+            return { color: randomColor(), y: 1*parseFloat(item.percentage).toFixed(2) };
+          });
+        }
+          if(this.chartSelectType=='orderCountRate'){
+           return data.map(item => {
+            return { color: randomColor(), y: 1*parseFloat(item.orderCountRate).toFixed(2) };
+          });
+        }
+          if(this.chartSelectType=='amountRate'){
+           return data.map(item => {
+            return { color: randomColor(), y: 1*parseFloat(item.amountRate).toFixed(2) };
+          });
+        }
+       
         // var newArr = []
         // newArr.push({
         //   color: '#4472c4',
@@ -424,10 +497,20 @@ export default {
   },
 
   mounted() {
+   
     this.$store.dispatch("menuActiveName", "/index/orderRate");
     document.title = "订单数据 - 使用频次分布";
   },
   methods: {
+     chartType (e) {
+        var elems = siblings(e.target)
+        for (var i = 0; i < elems.length; i++) {
+            elems[i].setAttribute('class', '')
+        }
+        e.target.setAttribute('class', 'active')
+        this.chartSelectType =  e.target.getAttribute('myType')
+        //this.initChart($(".select button.active").attr('myType'))
+    },
     generatArray(len) {
       var arr = [];
       for (var i = 0; i < len; i++) {
@@ -436,6 +519,8 @@ export default {
       return arr;
     },
     loadData(type, cityCode, beginDate, endDate) {
+      this.noDataBox = true
+      this.spinShow = true
       this.noDataText = "";
       // 默认请求
       this.loading = true;
@@ -451,16 +536,19 @@ export default {
           }
         })
         .then(res => {
+          this.spinShow = false
           this.checkLogin(res)
           this.loading = false;
           var data = res.data.data;
           if (Object.prototype.toString.call(data) != "[object Array]") {
             this.data2 = [];
+            this.noDataBox = false
             this.noDataText = "暂无数据";
             return;
           }
           if (data.length == 0) {
             this.data2 = [];
+            this.noDataBox = false;
             this.noDataText = "暂无数据";
             return;
           }
@@ -476,6 +564,7 @@ export default {
                     averagePrice:item.averagePrice
                    }
           })
+        
         })
         .catch(err => {
           console.log(err);
@@ -484,6 +573,9 @@ export default {
         });
     },
     loadMultData(type, cityCode, beginDate, endDate) {
+      this.noDataBox = true
+      this.spinShow = true;
+      var that = this;
       // 默认请求
       this.axios
         .get("/beefly/Frequency/getOrderFrequency", {
@@ -497,6 +589,7 @@ export default {
           }
         })
         .then(res => {
+          this.spinShow = false
           this.checkLogin(res)
           var data = res.data.data;
           if (Object.prototype.toString.call(data) != "[object Array]") {
@@ -507,45 +600,50 @@ export default {
             this.data3 = [];
             return;
           }
-          //  7天全部地区
-          var zeroStart = [];
-          var oneStart = [];
-          var twoStart = [];
-          var threeStart = [];
-          var fiveStart = [];
-          var tenStart = [];
-          var recodeCity = [];
-          // data.map(list => {
-          //   console.log(list)
-          // });
          
-          // this.citySelectNum = recodeCity;
-          this.data3 = [
-            {
-              name: "1",
-              data: zeroStart
-            },
-            {
-              name: "2",
-              data: oneStart
-            },
-            {
-              name: "3",
-              data: twoStart
-            },
-            {
-              name: "4",
-              data: threeStart
-            },
-            {
-              name: "5",
-              data: fiveStart
-            },
-            {
-              name: "5次以上",
-              data: tenStart
-            }
-          ];
+          data.map((list,index) => {
+            list.pop()
+           if(index==0){
+            list.map((item)=>{
+              that.frequency.push(item.frequency)
+            })
+           }
+           that.cityName.push(list[0].cityName)
+          });
+          var percentage = []
+          var orderCountRate = []
+          var amountRate = []
+          for(var i=0;i<that.frequency.length;i++){
+            data.map((list)=>{
+              list.map((item)=>{
+                if(item.frequency==that.frequency[i]){
+                 percentage.push(1*parseFloat(item.percentage).toFixed(2))
+                 orderCountRate.push(1*parseFloat(item.orderCountRate).toFixed(2))
+                 amountRate.push(1*parseFloat(item.amountRate).toFixed(2))
+                }
+              })
+            })
+          }
+          var _percentage = []
+          var _orderCountRate = []
+          var _amountRate = []
+         for(var i=0;i<percentage.length;i+=that.cityName.length){
+          _percentage.push(percentage.slice(i,i+that.cityName.length))
+          _orderCountRate.push(orderCountRate.slice(i,i+that.cityName.length))
+          _amountRate.push(amountRate.slice(i,i+that.cityName.length))
+         }
+         this.percentage = _percentage.map((list,index)=>{
+           return {name:that.frequency[index],data:list}
+         })
+         this.orderCountRate = _orderCountRate.map((list,index)=>{
+           return {name:that.frequency[index],data:list}
+         })
+          this.amountRate = _amountRate.map((list,index)=>{
+           return {name:that.frequency[index],data:list}
+         })
+        
+          this.chartSelectType = 'percentage'
+          this.noDataBox = true;
           return;
         })
         .catch(err => {
@@ -553,6 +651,15 @@ export default {
         });
     },
     handleClick(e) {
+       $('.select button').removeClass('active')
+       $('.select button').eq(0).addClass('active')
+        this.amountRate = []
+        this.percentage = []
+        this.orderCountRate = []
+        this.cityName = []
+        this.frequency = []
+        this.chartSelectType = ''
+        this.toolType = '用户数占比'
       this.current = 1;
       var elems = siblings(e.target);
       for (var i = 0; i < elems.length; i++) {
@@ -566,7 +673,16 @@ export default {
         this.timeSelectShow = false;
         this.timeLine = ["", ""];
       }
-      if (this.citySelectNum.length < 2) {
+      if (this.cityName.length < 2) {
+        if(this.cityName.length==0){
+          this.amountRate = []
+          this.percentage = []
+          this.orderCountRate = []
+          this.cityName = []
+          this.frequency = []
+          return;
+
+        }
         var cityList = JSON.parse(window.localStorage.getItem("cityList"));
         var cityCode;
         if (cityList.length == 1) {
@@ -660,6 +776,17 @@ export default {
       }
     },
     cityChange() {
+
+       this.toolType = '用户数占比'
+        this.data2 = []
+        this.data3 = []
+        this.amountRate = []
+        this.percentage = []
+        this.orderCountRate = []
+        this.cityName = []
+        this.frequency = []
+      $('.select button').removeClass('active')
+       $('.select button').eq(0).addClass('active')
       this.current = 1;
       var res = this.$store.state.keepCitys.map(item => {
         if (this.$store.state.cityList.indexOf(item.code) != -1) {
@@ -670,11 +797,23 @@ export default {
         return item !== undefined;
       });
       if (this.citySelectNum.length < 2) {
+        if(this.citySelectNum.length==0){
+          this.data2 = []
+          this.data3 = []
+          this.noDataText = "请至少选择一个城市";
+          this.noDataBox = false;
+          this.spinShow = false;
+          this.amountRate = []
+          this.percentage = []
+          this.orderCountRate = []
+          this.cityName = []
+          return;
+        }
         //发送请求
         var cityCode = this.$store.state.cityList.join();
         var type = "";
         if (this.timeSelectShow == true) {
-          type = $("button.active").attr("myid");
+          type = "";
         } else {
           type = $("button.active").attr("myid");
         }
@@ -689,7 +828,7 @@ export default {
         var cityCode = this.$store.state.cityList.join();
         var type = "";
         if (this.timeSelectShow == true) {
-          type = $("button.active").attr("myid");
+          type = "";
         } else {
           type = $("button.active").attr("myid");
         }
@@ -710,7 +849,31 @@ export default {
     }
   },
   watch: {
-    "$store.state.cityList": "cityChange"
+    "$store.state.cityList": "cityChange",
+    'chartSelectType':{
+      handler:function(n,o){
+        if(this.citySelectNum.length>2){
+          if(n=='percentage'){
+          
+          this.data3 = this.percentage
+          this.toolType = '用户数占比'
+         
+        }
+        if(n=='orderCountRate'){
+          this.data3 = this.orderCountRate
+           this.toolType = '订单数占比'
+            
+        }
+        if(n=='amountRate'){
+          this.data3 = this.amountRate
+           this.toolType = '订单金额占比'
+           
+        }
+        }
+        
+      },
+      deep:true
+    }
   }
 };
 </script>

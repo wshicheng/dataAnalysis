@@ -43,18 +43,52 @@ export default {
                     categories:xAxis ,
                     crosshair: true
                 },
-                yAxis: {
+                yAxis:type!=='频次分布'? {
+                    visible:true,
                     min: 0,
                     title: {
-                        text: ''
+                        text: ' '
                     },
-                    allowDecimals: false
-                },
+                    stackLabels: {
+                        enabled: true,
+                        style: {
+                            fontWeight: 'bold',
+                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                        }
+                    }
+                } :{
+                            opposite: false,
+                            tickPositions: [20, 40, 60, 80, 100],
+                            title: {
+                                text: '',
+                                style: {
+                                    color: '#9999ff'
+                                }
+                            },
+                            labels: {                        
+                                // formatter:function(){
+                                //     if (Number(this.value) <= 100) {
+                                //         return this.value + '%'
+                                //     } else {
+                                //         return 100 + '%'
+                                //     }
+                                // },
+                                format: '{value}%',
+                                style: {
+                                    color: '#9999ff'
+                                }
+                            }
+                        },
                tooltip: {
                    
                     formatter: function() {  
+                       console.log(type)
+                       if(type=='频次分布'){
+                            return type + ':' + this.x + '<br>' + toolType + ':' + (this.y) + '%';
+                        }else{
+                            return type + ':' + this.x + '<br>' + toolType + ':' + Highcharts.numberFormat(this.y, 0,"",",") ;
+                        }
                       
-                       return type + ':' + this.x + '<br>' + toolType + ':' + Highcharts.numberFormat(this.point.y, 0,"",",");
                         
                     }                 
                 },
