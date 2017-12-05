@@ -48,7 +48,7 @@
             <div style="color: #ccc; text-indent: 5px;">  loading...</div>
         </Spin>
         <div class="select">
-            <button class="active" @click="chartType" myType='orderNum'>订单数</button>
+            <button class="active" @click="chartType" myType='orderNum' style='margin-right: 5px;'>订单数</button>
             <button @click="chartType" myType='orderAmount'>订单金额</button>
             <button @click="chartType" myType='bikeNum'>投产车辆数</button>
         </div>
@@ -373,13 +373,6 @@ export default {
                             that.bikeNumData.push(Number(that.delcommafy(item.bikeNum)))
                             that.sumBikeNumData.push(Number(that.delcommafy(item.sumBikeNum)))
                         })
-
-                        console.log('that.orderNumData', that.orderNumData)
-                        console.log('that.orderNumProData', that.orderNumProData)
-                        console.log('that.orderMoneyData', that.orderMoneyData)
-                        console.log('that.orderMoneyProData', that.orderMoneyProData)
-                        console.log('that.bikeNumData', that.bikeNumData)
-                        console.log('that.sumBikeNumData', that.sumBikeNumData)
                         that.initChart($(".select button.active").attr('myType'))
                         that.loadFlag = true
                     }, 100)

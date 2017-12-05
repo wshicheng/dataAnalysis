@@ -392,7 +392,8 @@ export default {
                     endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD'),
                     pageNo: this.current,
                     pageSize: this.pageSize,
-                    cityCode: this.$store.state.cityList.toString()
+                    cityCode: this.$store.state.cityList.toString(),
+                    data_type: $('.dateAndArea_type_select button.active').attr("myType")
                 }
             })
             .then( (res) => {
@@ -476,7 +477,8 @@ export default {
                     type: type,
                     beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
                     endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD'),
-                    cityCode: this.$store.state.cityList.toString()
+                    cityCode: this.$store.state.cityList.toString(),
+                    data_type: $('.dateAndArea_type_select button.active').attr("myType")
                 }
             })
             .then( (res) => {
@@ -556,7 +558,6 @@ export default {
                 obj[type] = dataTime[type]
                 return newArr
             })
-            // console.log('newArr',newArr)
 
             return newArr
         },

@@ -303,6 +303,8 @@ export default {
     },
     data () {
         return {
+            orderCmsDataRate:[],
+            orderCmsData:[],
             orderComparisonData:[],
             tabChangeName:'',
             resultData:[],
@@ -1038,7 +1040,7 @@ export default {
                         }
                        
                     })
-                    console.log(res)
+                   
                      this.initChart2(res)
                 }
                
