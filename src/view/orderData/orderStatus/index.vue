@@ -63,7 +63,7 @@
                     </Poptip> 
                 </div>
                 <Table :no-data-text='noDataText2'  border size='small' :columns="columnsComparison" :data="comparisonData"></Table>
-                <Page :total="100" show-sizer show-elevator :styles='page' placement="bottom"></Page>
+                <Page @on-change="pageNumChange" @on-page-size-change="pageSizeChange" :total="totalPageNum" :current="currentPageNum" show-sizer show-elevator :styles='page' placement="bottom"></Page>
             </div>
 
             <div v-show="noData" class="orderStatus_chart">
@@ -71,6 +71,10 @@
                         <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                         <div style="color: #ccc; text-indent: 5px;">  loading...</div>
                     </Spin>
+                     <div class="select">
+                            <button class="active" @click="chartType" myType='percentage'>订单数</button>
+                            <button @click="chartType" myType='orderCountRate'>订单数占比</button>
+                     </div>
                 <div id="container2" style="min-width:400px; height: 400px;"></div>
             </div>
         </TabPane>
@@ -256,6 +260,33 @@
                 }
             }
         }
+          div.orderStatus_chart {
+      margin-bottom: 10px;
+      span:nth-of-type(1) {
+        margin-right: 9px;
+      }
+      button {
+        width: 80px;
+        height: 30px;
+        line-height: 30px;
+        cursor: pointer;
+        display: inline-block;
+        background: #fff;
+        border: 1px solid #dddee1;
+        border-radius: 4px;
+        text-align: center;
+        color: #565c6b;
+        outline: none;
+        margin-right: 10px;
+      }
+      button:nth-last-of-type(1) {
+        width: 80px;
+      }
+      button.active {
+        border: 1px solid orange;
+        color: orange;
+      }
+    }
     }
 </style>
 <script>
@@ -272,6 +303,12 @@ export default {
     },
     data () {
         return {
+            orderComparisonData:[],
+            tabChangeName:'',
+            resultData:[],
+            currentPageSize:10,
+            totalPageNum:100,
+            currentPageNum:1,
             currentTab: 'gather',
             timeSelectShow: false,
             timeLine: ['',''],
@@ -303,7 +340,7 @@ export default {
                 },
                 {
                     title: '合计',
-                    key: 'money',
+                    key: 'num',
                     align: 'center'
                 },
                 {
@@ -352,7 +389,7 @@ export default {
                                     borderBox: 'box-sizing',
                                     borderRight: '1px solid #e9eaec'
                                 }
-                            }, params.row.one),
+                            }, params.row.closeNum),
                             h('div', {
                                 style: {
                                     width: 'calc(100%/2)',
@@ -361,7 +398,7 @@ export default {
                                     textAlign: 'center',
                                     borderBox: 'box-sizing'
                                 }
-                            }, params.row.two)
+                            }, params.row.closePercent)
                         ])
                     }
                 },
@@ -411,7 +448,7 @@ export default {
                                     borderBox: 'box-sizing',
                                     borderRight: '1px solid #e9eaec'
                                 }
-                            }, params.row.one),
+                            }, params.row.failNum),
                             h('div', {
                                 style: {
                                     width: 'calc(100%/2)',
@@ -420,7 +457,7 @@ export default {
                                     textAlign: 'center',
                                     borderBox: 'box-sizing'
                                 }
-                            }, params.row.two)
+                            }, params.row.failPercent)
                         ])
                     }
                 },
@@ -470,7 +507,7 @@ export default {
                                     borderBox: 'box-sizing',
                                     borderRight: '1px solid #e9eaec'
                                 }
-                            }, params.row.one),
+                            }, params.row.cancelNum),
                             h('div', {
                                 style: {
                                     width: 'calc(100%/2)',
@@ -479,7 +516,7 @@ export default {
                                     textAlign: 'center',
                                     borderBox: 'box-sizing'
                                 }
-                            }, params.row.two)
+                            }, params.row.cancelPercent)
                         ])
                     }
                 },
@@ -529,7 +566,7 @@ export default {
                                     borderBox: 'box-sizing',
                                     borderRight: '1px solid #e9eaec'
                                 }
-                            }, params.row.one),
+                            }, params.row.endNum),
                             h('div', {
                                 style: {
                                     width: 'calc(100%/2)',
@@ -538,63 +575,12 @@ export default {
                                     textAlign: 'center',
                                     borderBox: 'box-sizing'
                                 }
-                            }, params.row.two)
+                            }, params.row.endPercent)
                         ])
                     }
                 }
             ],
             comparisonData: [
-                    {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }, {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }, {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }, {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }, {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }, {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }, {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }, {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }, {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }, {
-                    cityName: '你好',
-                    money: '11',
-                    one: 'ooo',
-                    two: '2222'
-                }
             ],
             noDataText: '',
             noDataText2: '',
@@ -612,20 +598,90 @@ export default {
     mounted () {
         this.$store.dispatch('menuActiveName', '/index/orderStatus')
         document.title = '订单数据 - 订单状态构成'
-        this.loadData('3')
+        this.loadData('3',1)
     },
     methods: {
-        loadData (type) {
+        chartType (e) {
+            var elems = siblings(e.target)
+            for (var i = 0; i < elems.length; i++) {
+                elems[i].setAttribute('class', '')
+            }
+            e.target.setAttribute('class', 'active')
+            this.chartSelectType =  e.target.getAttribute('myType')
+            //this.initChart($(".select button.active").attr('myType'))
+        },
+        pageNumChange(val){
+            this.currentPageNum = val
+        },
+        pageSizeChange(val){
+            this.currentPageSize = val
+        },
+        loadMutlData (type,data_type,state,) {
             this.spinShow = true
             this.noDataText = '' 
             this.noData = false
+            this.orderComparisonData = []
             this.axios.get('/beefly/orderState/getOrderState', {
                 params: {
                     accessToken: this.$store.state.token,
                     type: type,
                     cityCode: this.$store.state.cityList.toString(),
                     beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
-                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD')
+                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD'),
+                    data_type:data_type,
+                    state:state
+
+                }
+            })
+            .then((res) => {
+                this.spinShow = false
+                this.noDataText = '暂无数据'
+                // 判断是否超时
+                this.checkLogin(res)
+                var data = res.data.data
+                if (data.length > 0) {
+                    this.noData = true
+                    var newArr = []
+                    data.map( (item) => {
+                        newArr.push(Object.assign({},item,{proportion: item.proportion + "%"}))
+                        return newArr
+                    })
+                    this.orderComparisonData = newArr
+
+                                   
+                } else {
+                    var newArr = []
+                    data.map( (item) => {
+                        newArr.push(Object.assign({},item,{proportion: item.proportion + "%"}))
+                        return newArr
+                    })
+                    this.orderComparisonData = newArr
+                }
+
+            })
+            .catch( (err) => {
+                this.spinShow = false
+                this.noDataText = '暂无数据'
+                console.log(err)
+            })
+        },
+        loadData (type,data_type,state,pageNo,pageSize) {
+            this.spinShow = true
+            this.noDataText = '' 
+            this.noData = false
+            this.orderStatusData = []
+            this.axios.get('/beefly/orderState/getOrderState', {
+                params: {
+                    accessToken: this.$store.state.token,
+                    type: type,
+                    cityCode: this.$store.state.cityList.toString(),
+                    beginDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[0]).format('YYYY-MM-DD'),
+                    endDate: this.timeLine[0] === ''||this.timeLine[0] === null?'':moment(this.timeLine[1]).format('YYYY-MM-DD'),
+                    data_type:data_type,
+                    state:state,
+                    pageNo:pageNo,
+                    pageSize:pageSize
+
                 }
             })
             .then((res) => {
@@ -652,8 +708,11 @@ export default {
                     arr.pop()
                     this.chartArr = arr
                     // console.log(this.chartArr)
-                    this.initChart()                    
+                    this.initChart()
+
+                                   
                 } else {
+                    resultData = []
                     var newArr = []
                     data.map( (item) => {
                         newArr.push(Object.assign({},item,{proportion: item.proportion + "%"}))
@@ -673,6 +732,7 @@ export default {
                     this.chartArr = []
                     this.noData = false
                 }
+
             })
             .catch( (err) => {
                 this.spinShow = false
@@ -702,10 +762,19 @@ export default {
             e.target.setAttribute('class', 'active')
         },
         tabChange (name) {
+            this.tabChangeName = name
             if (name === 'comparison') {
-                this.initChart2()
+                 var type = $('.orderStatus_head_time button.active').attr('myId')
+                // loadData (type,data_type,state,pageNum,pageSize)
+              this.loadData(type,2,0,this.currentPageNum,this.currentPageSize)
+              this.loadMutlData(type,2,0)
+               //this.comparisonData = this.resultData
+               this.initChart2()
             } else if (name === 'tendency') {
                 this.initChart3()
+            }else{
+                var type = $('.orderStatus_head_time button.active').attr('myId')
+                this.loadData(type,1,0,0,0)
             }
         },
         checkLogin (res) {
@@ -833,16 +902,16 @@ export default {
 
             new Highcharts.chart('container', options);
         },
-        initChart2 () {
+        initChart2 (data) {
             var options = {
                 chart: {
                     type: 'column'
                 },
                 title: {
-                    text: '月平均降雨量'
+                    text: '订单状态构成--订单数'
                 },
                 subtitle: {
-                    text: '数据来源: WorldClimate.com'
+                    text: ''
                 },
                 xAxis: {
                     categories: [
@@ -856,13 +925,13 @@ export default {
                 yAxis: {
                     min: 0,
                     title: {
-                        text: '降雨量 (mm)'
+                        text: ''
                     }
                 },
                 tooltip: {
                     headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                     pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                    '<td style="padding:0"><b>{point.y:.1f}单</b></td></tr>',
                     footerFormat: '</table>',
                     shared: true,
                     useHTML: true
@@ -873,19 +942,7 @@ export default {
                         borderWidth: 0
                     }
                 },
-                series: [{
-                    name: '东京',
-                    data: [49.9, 71.5, 106.4, 129.2]
-                }, {
-                    name: '纽约',
-                    data: [83.6, 78.8, 98.5, 93.4]
-                }, {
-                    name: '伦敦',
-                    data: [48.9, 38.8, 39.3, 41.4]
-                }, {
-                    name: '柏林',
-                    data: [42.4, 33.2, 34.5, 39.7]
-                }]
+                series: data
             }
 
             new Highcharts.chart('container2', options);
@@ -952,11 +1009,43 @@ export default {
         },
         cityChange () {
             var type = $('.orderStatus_head_time button.active').attr('myId')
-            this.loadData(type)
+            this.loadData(type,1)
         }
     },
     watch: {
-        '$store.state.cityList': 'cityChange'
+        '$store.state.cityList': 'cityChange',
+        'orderStatusData':{
+            handler:function(val,old){
+                this.comparisonData = val
+            },
+            deep:true
+        },
+         'orderComparisonData':{
+            handler:function(val,old){
+                this.orderComparisonData = val
+                if(this.tabChangeName==='comparison'){
+                    var data = val;
+
+                    var res =  data.map((item)=>{
+                     var tem = []
+                        tem.push(1*item.closeNum)
+                        tem.push(1*item.failNum)
+                        tem.push(1*item.cancelNum)
+                        tem.push(1*item.endNum)
+                        return {
+                            name:item.cityName,
+                            data:tem
+                        }
+                       
+                    })
+                    console.log(res)
+                     this.initChart2(res)
+                }
+               
+            },
+            deep:true
+        },
+        
     }
 }
 </script>
