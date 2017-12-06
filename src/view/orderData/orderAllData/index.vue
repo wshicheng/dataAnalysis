@@ -56,7 +56,7 @@
             </Poptip>
         </div>
         <Table  border size='small' height='300' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
-        <Page :total="totalListNum" show-sizer show-elevator  :styles='page' placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
+        <Page :total="totalListNum" :styles='page' placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize"  :page-size="pageSize" :page-size-opts='pageSizeOpts' show-sizer show-elevator></Page>
       </div>
 
       <div class="orderTotalAllData_table">

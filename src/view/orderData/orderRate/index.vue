@@ -660,7 +660,7 @@ export default {
         this.frequency = []
         this.chartSelectType = ''
         this.toolType = '用户数占比'
-      this.current = 1;
+       this.current = 1;
       var elems = siblings(e.target);
       for (var i = 0; i < elems.length; i++) {
         elems[i].setAttribute("class", "");
@@ -673,8 +673,8 @@ export default {
         this.timeSelectShow = false;
         this.timeLine = ["", ""];
       }
-      if (this.cityName.length < 2) {
-        if(this.cityName.length==0){
+      if (this.citySelectNum.length < 2) {
+        if(this.citySelectNum.length==0){
           this.amountRate = []
           this.percentage = []
           this.orderCountRate = []
