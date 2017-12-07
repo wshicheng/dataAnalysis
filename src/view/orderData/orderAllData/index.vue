@@ -55,7 +55,7 @@
                 </div>
             </Poptip>
         </div>
-        <Table  border size='small' height='300' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
+        <Table  border size='small' height='400' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
         <Page :total="totalListNum" :styles='page' placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize"  :page-size="pageSize" :page-size-opts='pageSizeOpts' show-sizer show-elevator></Page>
       </div>
 
@@ -344,7 +344,13 @@ export default {
                     }
                 },
                 {
-                    title: '订单金额(￥)',
+                 
+                     renderHeader:(h)=>{
+                        return h('div',[
+                            h('div','订单金额'),
+                            h('span','(￥)')
+                        ])
+                    },
                     key: 'orderAllAmount',
                     // sortable: true
                 },
@@ -366,14 +372,24 @@ export default {
                     key: 'discountRate'
                 },
                 {
-                    title: '平均订单时长(min)',
+                     renderHeader:(h)=>{
+                        return h('div',[
+                            h('div','平均订单时长'),
+                            h('span','(min)')
+                        ])
+                    },
                     key: 'avgTime',
-                    width: 140
+                    width: 100
                 },
                 {
-                    title: '平均订单里程(km)',
+                    renderHeader:(h)=>{
+                        return h('div',[
+                            h('div','平均订单里程'),
+                            h('span','(km)')
+                        ])
+                    },
                     key: 'avgMileage',
-                    width: 140
+                    width: 100
                 }
             ],
             orderData: [],

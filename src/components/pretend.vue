@@ -7,7 +7,8 @@
             <div class="nodata2" v-show="isNoData2">
                     <i class="iconfont icon-zanwushuju"></i>
                 </div>
-            <Row class="cityBindTable" style="position:relative;">
+            <div style="    text-align: center;padding: 10px 0;" v-show="citySelectNum.length>0?false:true">请至少选择一个城市</div>    
+            <Row v-show="citySelectNum.length>0?true:false" class="cityBindTable" style="position:relative;">
                 <Spin fix size="large" v-if="spinShow"  class="spin">
                     <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                     <div style="color: #ccc; text-indent: 5px;">  loading...</div>
@@ -93,6 +94,7 @@ import citySelect from './citySelect.vue'
         },
         data(){
             return {
+                citySelectNum:[],
                 allCount2:false,
                 spinShow:true,
                 isNoData:false,
@@ -226,7 +228,11 @@ import citySelect from './citySelect.vue'
                     deep: true
                 },
             '$store.state.cityList': {
-                handler: function(){
+                handler: function(n){
+                    this.citySelectNum = n
+                    if(this.citySelectNum.length==0){
+                        return;
+                    }
                     this.changePage()
                 },
                 deep: true
