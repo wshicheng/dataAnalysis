@@ -404,7 +404,7 @@ export default {
         var data = [...this.data2];
         data.pop();
         return data.map(item => {
-          return { color: randomColor(), y: item.orderNum };
+          return { color: randomColor(), y: 1*parseFloat(item.validOrderRate).toFixed(1) };
         });
       } else {
         var data = [...this.data3];
@@ -565,12 +565,12 @@ export default {
           var tenStart = [];
           var recodeCity = [];
           data.map(list => {
-            zeroStart.push(list.zeroToOne);
-            oneStart.push(list.oneToTwo);
-            twoStart.push(list.twoToThree);
-            threeStart.push(list.threeToFive);
-            fiveStart.push(list.fiveToTen);
-            tenStart.push(list.gtTen);
+            zeroStart.push(1*list.zeroToOneRate);
+            oneStart.push(1*list.oneToTwoRate);
+            twoStart.push(1*list.twoToThreeRate);
+            threeStart.push(1*list.threeToFiveRate);
+            fiveStart.push(1*list.fiveToTenRate);
+            tenStart.push(1*list.gtTenRate);
             recodeCity.push(list.cityName);
           });
           this.citySelectNum = recodeCity;

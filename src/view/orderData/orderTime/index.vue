@@ -438,7 +438,8 @@ export default {
         var data = [...this.data2];
         data.pop();
         return data.map(item => {
-          return { color: randomColor(), y: item.orderNum };
+          console.log(item.orderNumProportion)
+          return { color: randomColor(), y: item.orderNumProportion };
         });
       } else {
         var data = [...this.data3];
@@ -495,7 +496,7 @@ export default {
               orderAmount: parseFloat(list.orderAmount),
               orderAmountProportion: parseFloat(list.orderAmountProportion),
               orderNum: parseFloat(list.orderNum),
-              orderNumProportion: parseFloat(list.orderNumProportion),
+              orderNumProportion:1*(list.orderNumProportion),
               orderNumAccuProp:list.orderNumAccuProp,
              orderAmountAccuProp:list.orderAmountAccuProp,
              avgUnitPrice:list.avgUnitPrice
@@ -541,14 +542,14 @@ export default {
           var recodeCity = [];
           var genSixty = [];
           data.map(list => {
-            zeroStart.push(parseFloat(list.zeroToFiveCount));
-            oneStart.push(parseFloat(list.fiveToTenCount));
-            twoStart.push(parseFloat(list.tenToFifCount));
-            threeStart.push(parseFloat(list.fifToTwentyCount));
-            fiveStart.push(parseFloat(list.tweToTweFiveCount));
-            tenStart.push(parseFloat(list.tweFiveToThiCount));
-            genThirty.push(parseFloat(list.thiToSixtyCount));
-            genSixty.push(parseFloat(list.gtSixtyCount));
+            zeroStart.push(100*parseFloat(list.zeroToFiveCountProp));
+            oneStart.push(100*parseFloat(list.fiveToTenCountProp));
+            twoStart.push(100*parseFloat(list.tenToFifCountProp));
+            threeStart.push(100*parseFloat(list.fifToTwentyCountProp));
+            fiveStart.push(100*parseFloat(list.tweToTweFiveCountProp));
+            tenStart.push(100*parseFloat(list.tweFiveToThiCountProp));
+            genThirty.push(100*parseFloat(list.thiToSixtyCountProp));
+            genSixty.push(100*parseFloat(list.gtSixtyCountProp));
             recodeCity.push(list.cityName);
           });
           this.citySelectNum = recodeCity;
@@ -583,7 +584,7 @@ export default {
             },
             {
               name: "60以上",
-              data: genThirty
+              data: genSixty
             }
           ];
         })

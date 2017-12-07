@@ -48,7 +48,7 @@
             <div style="color: #ccc; text-indent: 5px;">  loading...</div>
         </Spin>
         <div class="select">
-            <button class="active" @click="chartType" myType='orderNum' style='margin-right: 5px;'>订单数</button>
+            <button class="active" @click="chartType" myType='orderNum'>订单数</button>
             <button @click="chartType" myType='orderAmount'>订单金额</button>
             <button @click="chartType" myType='bikeNum'>投产车辆数</button>
         </div>
@@ -203,7 +203,7 @@
                     border-radius: inherit;
                     border: none;
                     font-size: 14px;
-                    margin-right: 10px;
+                  
                     font-weight: bolder;
                     outline: none;
                     background: #fff;
@@ -496,7 +496,13 @@ export default {
                         useHTML: true,
                         headerFormat: "<p>时间: {point.key}</p>",
                         pointFormatter:function () {
-                            return "<span>" + this.series.name + ':</span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")] + '<br>'
+                            var text = $('.select button.active').text()
+                            if(text=='订单金额'){
+                                 return "<span>" + this.series.name + ':</span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")] + '<br>'    
+                            }else{
+                                 return "<span>" + this.series.name + ':</span>' + [new String(this.y).length<3?this.y:this.y] + '<br>'
+                            }
+                           
                         }
                     },
                     series: [{

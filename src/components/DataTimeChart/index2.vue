@@ -36,20 +36,7 @@ export default {
                 xAxis: {
                     categories:xAxis
                 },
-                yAxis:type!=='频次分布'? {
-                    visible:true,
-                    min: 0,
-                    title: {
-                        text: ' '
-                    },
-                    stackLabels: {
-                        enabled: true,
-                        style: {
-                            fontWeight: 'bold',
-                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                        }
-                    }
-                } :{
+                yAxis:{
                             opposite: false,
                             tickPositions: [0, 20, 40, 60, 80,100],
                             title: {
@@ -85,14 +72,15 @@ export default {
                 },
                 tooltip: {
                     formatter: function() {
-                        if(type=='频次分布'){
-                            return '<b>' + this.x + '</b><br/>' +
-                            this.series.name + ': ' + (this.y) + '%' + '<br/>' 
-                        }else{
-                            return '<b>' + this.x + '</b><br/>' +
-                            this.series.name + ': ' + (this.y) + '<br/>'
+                         return type + ':' + this.x + '<br>' + '占比' + ':' + (this.y) + '%';
+                        // if(type=='频次分布'){
+                        //     return '<b>' + this.x + '</b><br/>' +
+                        //     this.series.name + ': ' + (this.y) + '%' + '<br/>' 
+                        // }else{
+                        //     return '<b>' + this.x + '</b><br/>' +
+                        //     this.series.name + ': ' + (this.y) + '<br/>'
                             
-                        }
+                        // }
                         
                     }
                 },
