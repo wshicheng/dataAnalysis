@@ -302,7 +302,12 @@ export default {
       citySelectNum: [],
       columns1: [
         {
-          title: "里程分布（km）",
+          renderHeader:(h)=>{
+            return h('div',[
+                h('div','里程分布'),
+                h('span','(km)')
+            ])
+          },
           key: "time"
         },
         {
@@ -323,11 +328,13 @@ export default {
           }
         },
         {
-          title: "订单金额（￥）",
+           renderHeader:(h)=>{
+            return h('div',[
+                h('div','订单金额'),
+                h('span','(￥)')
+            ])
+          },
           key: "orderMoney",
-          renderHeader: function(h) {
-            return h("div", "订单金额（￥）");
-          }
         },
         {
           title: "订单金额占比",
@@ -472,7 +479,7 @@ export default {
               time: "2-3",
               orderNum: parseFloat(data[2].validCount),
               validOrderRate: data[2].validCountRate,
-              orderMoney: data2.validAmount,
+              orderMoney: data[2].validAmount,
               orderMoneyRate: data[2].validAmountRate,
                 sumCountRate:data[2].sumCountRate,
               sumAmountRate:data[2].sumAmountRate,
@@ -669,6 +676,9 @@ export default {
         this.$Message.warning("请选择时间段");
       } else {
         if (this.citySelectNum.length < 2) {
+          if(this.citySelectNum.length==0){
+            return;
+          }
           var cityList = JSON.parse(window.localStorage.getItem("cityList"));
           var cityCode;
           if (cityList.length == 1) {
@@ -681,11 +691,7 @@ export default {
             cityCode = this.$store.state.cityList.join();
           }
           var type = "";
-          if (this.timeSelectShow == true) {
-            type = "";
-          } else {
-            type = $("button.active").attr("myid");
-          }
+          type = $("button.active").attr("myid");
           var beginDate = this.timeLine[0]
             ? moment(this.timeLine[0]).format("YYYY-MM-DD")
             : "";
@@ -706,11 +712,7 @@ export default {
             cityCode = this.$store.state.cityList.join();
           }
           var type = "";
-          if (this.timeSelectShow == true) {
-            type = "";
-          } else {
-            type = $("button.active").attr("myid");
-          }
+         type = $("button.active").attr("myid");
           var beginDate = this.timeLine[0]
             ? moment(this.timeLine[0]).format("YYYY-MM-DD")
             : "";
@@ -742,11 +744,7 @@ export default {
         //发送请求
         var cityCode = this.$store.state.cityList.join();
         var type = "";
-        if (this.timeSelectShow == true) {
-          type = "";
-        } else {
-          type = $("button.active").attr("myid");
-        }
+        type = $("button.active").attr("myid");
         var beginDate = this.timeLine[0]
           ? moment(this.timeLine[0]).format("YYYY-MM-DD")
           : "";
@@ -757,11 +755,7 @@ export default {
       } else {
         var cityCode = this.$store.state.cityList.join();
         var type = "";
-        if (this.timeSelectShow == true) {
-          type = "";
-        } else {
-          type = $("button.active").attr("myid");
-        }
+       type = $("button.active").attr("myid");
         var beginDate = this.timeLine[0]
           ? moment(this.timeLine[0]).format("YYYY-MM-DD")
           : "";

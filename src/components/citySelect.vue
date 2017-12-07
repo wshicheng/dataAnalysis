@@ -102,9 +102,6 @@ export default {
     },
     methods: {
         areaClick (e) {
-            // if(this.$store.state.cityList.length==this.$store.state.keepCitys.length){
-            //    console.log( this.$refs.allCity)
-            // }
             var that = this
             var id = e.target.getAttribute('myid')
             var res = siblings(e.target)
@@ -129,15 +126,11 @@ export default {
                
             }else{
                 if(e.target.getAttribute('class')=='active'){
-                     console.log(this.citySelect)
                      e.target.setAttribute('class','');
                      var index= this.citySelect.indexOf(e.target.getAttribute('myid'))
                      this.citySelect.splice(index,1)
-                     console.log(this.$refs.allCity)
-                     console.log(this.citySelect)
                      this.$refs.allCity.setAttribute('class','')
                 }else{
-                     console.log(this.$refs.allCity)
                      e.target.setAttribute('class','active');
                      this.citySelect.push(e.target.getAttribute('myid'))
                 }

@@ -59,7 +59,7 @@
         <Page :total="totalListNum" :styles='page' placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize"  :page-size="pageSize" :page-size-opts='pageSizeOpts' show-sizer show-elevator></Page>
       </div>
 
-      <div class="orderTotalAllData_table">
+      <div class="orderTotalAllData_table" v-show="pageShow">
         <Spin fix size="large" v-if="spinShow3"  class="spin">
             <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
             <div style="color: #ccc; text-indent: 5px;">  loading...</div>
@@ -513,7 +513,8 @@ export default {
                 // 先展示下面的图表加载状 态
                 this.noDataBox = true
                 if (res.data.resultCode != 1) {
-                    this.noDataText = '暂无数据'
+                    this.noDataText = '请至少选择一个城市'
+                    this.pageShow = false
                     this.orderData = []
                     this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
                     this.loadTotalData($('.orderAllData_head_time button.active').attr('myId'))

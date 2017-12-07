@@ -361,7 +361,7 @@ export default {
       citySelectNum: [],
       columns1: [
         {
-          title: "次数(次/天)",
+          title: "次数",
           key: "time"
         },
         {

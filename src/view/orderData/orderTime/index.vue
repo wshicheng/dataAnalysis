@@ -305,7 +305,12 @@ export default {
       citySelectNum: [],
       columns1: [
         {
-          title: "时长分布（m）",
+          renderHeader:(h)=>{
+            return h('div',[
+                h('div','时长分布'),
+                h('span','(min)')
+            ])
+          },
           key: "duration"
         },
         {
@@ -336,7 +341,12 @@ export default {
           }
         },
         {
-          title: "订单金额（￥）",
+          renderHeader:(h)=>{
+            return h('div',[
+                h('div','订单金额'),
+                h('span','￥')
+            ])
+          },
           key: "orderAmount",
           renderHeader: function(h) {
             return h("div", "订单金额（￥）");
@@ -640,6 +650,9 @@ export default {
         this.$Message.warning("请选择时间段");
       } else {
         if (this.citySelectNum.length < 2) {
+          if(this.citySelectNum.length==0){
+            return;
+          }
           var cityList = JSON.parse(window.localStorage.getItem('cityList'));
           var cityCode
           if(cityList.length==1){
@@ -695,11 +708,7 @@ export default {
         //发送请求
         var cityCode = this.$store.state.cityList.join();
         var type = "";
-        if (this.timeSelectShow == true) {
-          type = "";
-        } else {
-          type = $("button.active").attr("myid");
-        }
+        type = $("button.active").attr("myid");
         var beginDate = this.timeLine[0]
           ? moment(this.timeLine[0]).format("YYYY-MM-DD")
           : "";
@@ -710,11 +719,7 @@ export default {
       } else {
         var cityCode = this.$store.state.cityList.join();
         var type = "";
-        if (this.timeSelectShow == true) {
-          type = "";
-        } else {
-          type = $("button.active").attr("myid");
-        }
+        type = $("button.active").attr("myid");
         var beginDate = this.timeLine[0]
           ? moment(this.timeLine[0]).format("YYYY-MM-DD")
           : "";

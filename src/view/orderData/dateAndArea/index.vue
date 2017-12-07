@@ -297,6 +297,7 @@ export default {
     },
     data () {
         return {
+            citySelectNum:[],
             timeSelectShow: false,
             timeLine: ['',''],
             page: {
@@ -371,6 +372,7 @@ export default {
         }
     },
     mounted () {
+       
         this.$store.dispatch('menuActiveName', '/index/dateAndArea')
         this.$store.state.cityList = []
         document.title = '订单数据 - 分日期分地区'
@@ -772,7 +774,14 @@ export default {
             
         },
         cityChange () {
+            this.citySelectNum = this.$store.state.cityList
             this.current = 1
+            if(this.citySelectNum.length==0){
+                this.orderData = []
+                this.noDataText = '请至少选择一个城市'
+                this.noDataBox = false
+                return;
+            }
             this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
             this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
             // this.getChartData($('.dateAndArea_head_time button.active').attr('myId'))

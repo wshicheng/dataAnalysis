@@ -51,7 +51,7 @@ export default {
                     }
                 } :{
                             opposite: false,
-                            tickPositions: [20, 40, 60, 80, 100],
+                            tickPositions: [0, 20, 40, 60, 80,100],
                             title: {
                                 text: '',
                                 style: {
@@ -87,12 +87,11 @@ export default {
                     formatter: function() {
                         if(type=='频次分布'){
                             return '<b>' + this.x + '</b><br/>' +
-                            this.series.name + ': ' + (this.y) + '%' + '<br/>' +
-                            '总量: ' + Highcharts.numberFormat(this.point.stackTotal, 0,"",",");
+                            this.series.name + ': ' + (this.y) + '%' + '<br/>' 
                         }else{
                             return '<b>' + this.x + '</b><br/>' +
-                            this.series.name + ': ' + (this.y) + '<br/>' +
-                            '总量: ' + Highcharts.numberFormat(this.point.stackTotal, 0,"",",");
+                            this.series.name + ': ' + (this.y) + '<br/>'
+                            
                         }
                         
                     }

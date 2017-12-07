@@ -52,7 +52,7 @@
             <button @click="chartType" myType='orderAmount'>订单金额</button>
             <button @click="chartType" myType='bikeNum'>投产车辆数</button>
         </div>
-        <div id="container" style="min-width:400px; height: 400px;"></div>
+        <div  id="container" style="min-width:400px; height: 400px;"></div>
       </div>
   </div>
 </template>
@@ -233,6 +233,7 @@ export default {
     },   
     data () {
         return {
+            citySelectNum:[],
             timeSelectShow: false,
             timeLine: ['',''],
             page: {
@@ -421,6 +422,9 @@ export default {
             if (this.timeLine[0] === '' || this.timeLine[0] === null) {
                 this.$Message.warning('请选择时间段')
             } else {
+                if(this.citySelectNum.length==0){
+                    return;
+                }
                 this.loadData('5')
             }
         },
@@ -517,6 +521,13 @@ export default {
             new Highcharts.chart('container', options);
         },
         cityChange () {
+            this.citySelectNum = this.$store.state.cityList
+            if(this.citySelectNum.length==0){
+                this.orderData = []
+                this.noDataBox = false;
+                this.noDataText = '请至少选择一个城市'
+                return;
+            }
             if (this.loadFlag === true) {
                 this.loadData($(".orderAllDayMap_head_time button.active").attr('myId'))
             }

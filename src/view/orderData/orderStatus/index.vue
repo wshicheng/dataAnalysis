@@ -39,7 +39,7 @@
                 <!-- <Page :total="100" show-sizer show-elevator :styles='page' placement="bottom"></Page> -->
             </div>
 
-            <div v-show="noData" class="orderStatus_chart">
+            <div v-show="orderStatusData.length>0?true:false" class="orderStatus_chart">
                     <Spin fix size="large" v-if="spinShow"  class="spin">
                         <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                         <div style="color: #ccc; text-indent: 5px;">  loading...</div>
@@ -67,10 +67,10 @@
                
                 
            </div>
-            <div style="height:43px;background:#fff;">
+            <div v-show="comparisonData.length>0?true:false" style="height:43px;background:#fff;">
                  <Page show-total  :total="totalItemsNum" :styles='page' placement="top" :current="currentPageNum" @on-change="pageNumChange" @on-page-size-change="pageSizeChange"   :page-size-opts="pageOpts"  :page-size="pageSize" show-sizer show-elevator  ></Page>
             </div>
-            <div v-show="noData" class="orderStatus_chart">
+            <div v-show="comparisonData.length>0?true:false" class="orderStatus_chart">
                     <Spin fix size="large" v-if="spinShow"  class="spin">
                         <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                         <div style="color: #ccc; text-indent: 5px;">  loading...</div>
@@ -83,20 +83,21 @@
             </div>
         </TabPane>
         <TabPane label="趋势" name="tendency" class="orderStatus_tendency">
-            <div class="btn">
+            <div v-show="citySelectNum.length>0?true:false" class="btn">
                 <button @click="handleTendencyClick" class="active" myType="close" >人工关闭</button>
                 <button @click="handleTendencyClick" myType="fail">开锁失败</button>
                 <button @click="handleTendencyClick" myType="cancel">已取消</button>
                 <button @click="handleTendencyClick" myType="end">已结束</button>
             </div>
 
-            <div class="orderStatus_chart">
+            <div v-show="citySelectNum.length>0?true:false" class="orderStatus_chart">
                     <Spin fix size="large" v-if="spinShow"  class="spin">
                         <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                         <div style="color: #ccc; text-indent: 5px;">  loading...</div>
                     </Spin>
                 <div id="container3" style="min-width:400px; height: 400px;"></div>
             </div>
+            <div style="text-align: center;padding: 10px 0;" v-show="citySelectNum.length>0?false:true">请至少选择一个城市</div>
         </TabPane>
     </Tabs>
   </div>
@@ -251,6 +252,7 @@
         outline: none;
         font-size: 13px;
         cursor: pointer;
+        background:#fff;
       }
       button:nth-of-type(1) {
         margin-left: 4px;
@@ -306,6 +308,9 @@ export default {
   },
   data() {
     return {
+        citySelectNum:[],
+        cityNameCategory:[],
+        category:[],
      orderTdyColData:[],//人工关闭
      orderTdyFailData:[],//开锁失败
      orderTdyCelData:[],//已取消
@@ -746,6 +751,7 @@ export default {
           // 判断是否超时
           this.checkLogin(res);
           var data = res.data.data;
+          this.orderTendencyData = [...data];
           if (data.length > 0) {
             this.noData = true;
             var newArr = [];
@@ -757,7 +763,7 @@ export default {
             });
             this.orderComparisonData = newArr;
             this.orderStatusData = newArr;
-            this.orderTendencyData = [] = newArr;
+            
             // 去掉合计字段集
             data.pop();
             var arr = new Array();
@@ -767,10 +773,10 @@ export default {
             // 取掉无关字段
             arr.pop();
             this.chartArr = arr;
-            // console.log(this.chartArr)
             this.initChart();
           } else {
             var newArr = [];
+              this.orderTendencyData = []; 
             data.map(item => {
               newArr.push(
                 Object.assign({}, item, { proportion: item.proportion + "%" })
@@ -779,7 +785,7 @@ export default {
             });
             this.orderComparisonData = newArr;
             this.orderStatusData = newArr;
-            this.orderTendencyData = [] = newArr;
+         
             data.pop();
             var arr = new Array();
             for (var i in data) {
@@ -850,7 +856,6 @@ export default {
             // 取掉无关字段
             arr.pop();
             this.chartArr = arr;
-            // console.log(this.chartArr)
             this.initChart();
           } else {
             resultData = [];
@@ -887,7 +892,10 @@ export default {
         .removeClass("active")
         .eq(0)
         .trigger("click");
-
+        if(this.citySelectNum.length==0){
+           
+            return;
+        }
       var elems = siblings(e.target);
       for (var i = 0; i < elems.length; i++) {
         elems[i].setAttribute("class", "");
@@ -899,8 +907,10 @@ export default {
         this.timeSelectShow = false;
         this.timeLine = ["", ""];
         if (this.tabChangeName == "gather") {
+          this.orderTdyStatu =''
           this.loadMutlData(e.target.getAttribute("myId"), 1, 0);
         } else if (this.tabChangeName == "comparison") {
+          this.orderTdyStatu=''
           this.loadData(
             e.target.getAttribute("myId"),
             2,
@@ -910,7 +920,19 @@ export default {
           );
           this.loadMutlData(e.target.getAttribute("myId"), 2, 0);
         } else {
-          this.loadMutlData(e.target.getAttribute("myId"), 3, 0);
+          this.orderTdyStatu='close'
+          debugger
+            var type = $(".orderStatus_head_time button.active").attr("myId");
+             if(this.orderTdyStatu=='close'){
+                  this.loadMutlData(type, 3, 0);
+             }else if(this.orderTdyStatu=='fail'){
+                 this.loadMutlData(type, 3, 10);
+             }else if(this.orderTdyStatu=='cancel'){
+                 this.loadMutlData(type, 3, 4);
+             }else{
+                 this.loadMutlData(type, 3, 3);
+             }
+
         }
       }
     },
@@ -924,6 +946,9 @@ export default {
     },
     tabChange(name) {
       this.tabChangeName = name;
+      if(this.citySelectNum.length==0){
+            return;
+        }
       if (name === "comparison") {
         var type = $(".orderStatus_head_time button.active").attr("myId");
         // loadData (type,data_type,state,pageNum,pageSize)
@@ -936,46 +961,10 @@ export default {
         //     this.initChart2(res,'订单数占比')
         // }
       } else if (name === "tendency") {
-        var type = $(".orderStatus_head_time button.active").attr("myId");
-        this.loadMutlData(type, 3, 0);
-        this.orderTdyColData =  [
-          {
-            name: "东京",
-            data: [
-              7.0,
-              6.9,
-              9.5,
-              14.5,
-              18.2,
-              21.5,
-              25.2,
-              26.5,
-              23.3,
-              18.3,
-              13.9,
-              9.6
-            ]
-          },
-          {
-            name: "伦敦",
-            data: [
-              3.9,
-              4.2,
-              5.7,
-              8.5,
-              11.9,
-              15.2,
-              17.0,
-              16.6,
-              14.2,
-              10.3,
-              6.6,
-              4.8
-            ]
-          }
-        ]
+          this.orderTdyStatu = 'close'
+          $('.orderStatus_tendency .btn button').removeClass('active').eq(0).trigger('click')
+          var type = $(".orderStatus_head_time button.active").attr("myId");
        
-        this.initChart3(this.orderTdyColData);
       } else {
         var type = $(".orderStatus_head_time button.active").attr("myId");
         this.loadMutlData(type, 1, 0);
@@ -999,7 +988,16 @@ export default {
           //this.comparisonData = this.resultData
           //this.initChart2()
         } else if (this.tabChangeName === "tendency") {
-          this.initChart3();
+            var type = $(".orderStatus_head_time button.active").attr("myId");
+             if(this.orderTdyStatu=='close'){
+                  this.loadMutlData(type, 3, 0);
+             }else if(this.orderTdyStatu=='fail'){
+                 this.loadMutlData(type, 3, 10);
+             }else if(this.orderTdyStatu=='cancel'){
+                 this.loadMutlData(type, 3, 4);
+             }else{
+                 this.loadMutlData(type, 3, 3);
+             }
         } else {
           var type = $(".orderStatus_head_time button.active").attr("myId");
           this.loadData(type, 1, 0, 0, 0);
@@ -1046,8 +1044,6 @@ export default {
               // 取掉无关字段
               arr.pop();
               this.chartArr = arr;
-
-              // console.log(this.chartArr)
               this.initChart();
             } else {
               var newArr = [];
@@ -1149,15 +1145,26 @@ export default {
         subtitle: {
           text: ""
         },
+        exporting:{
+          enabled:false,
+        },
         xAxis: {
           categories: ["人工关闭", "开锁失败", "已取消", "已结束"],
           crosshair: true
         },
+        credits: {
+                      enabled: false
+                  },
         yAxis: {
           min: 0,
           title: {
             text: ""
-          }
+          },
+          labels: {
+                    formatter:function(){
+                        return   (title == "订单数" ? this.value : this.value +'%') ;
+                    }
+          },
         },
         tooltip: {
           headerFormat:
@@ -1182,7 +1189,7 @@ export default {
 
       new Highcharts.chart("container2", options);
     },
-    initChart3(data) {
+    initChart3(data,categories) {
       var options = {
         chart: {
           type: "spline"
@@ -1193,35 +1200,27 @@ export default {
         subtitle: {
           text: ""
         },
+         credits: {  
+            enabled: false     //不显示LOGO 
+        },
         xAxis: {
-          categories: [
-            "一月",
-            "二月",
-            "三月",
-            "四月",
-            "五月",
-            "六月",
-            "七月",
-            "八月",
-            "九月",
-            "十月",
-            "十一月",
-            "十二月"
-          ]
+          categories: categories
         },
         yAxis: {
+        allowDecimals:false,
           title: {
-            text: "温度"
+            text: "单数"
           },
           labels: {
             formatter: function() {
-              return this.value + "°";
+              return this.value ;
             }
           }
         },
         tooltip: {
           crosshairs: true,
-          shared: true
+          shared: true,
+          
         },
         plotOptions: {
           spline: {
@@ -1238,20 +1237,90 @@ export default {
       new Highcharts.chart("container3", options);
     },
     cityChange() {
+        this.citySelectNum = this.$store.state.cityList
+        if(this.citySelectNum.length==0){
+           this.orderStatusData = []
+           this.noDataText = '请至少选择一个城市'
+           this.noDataText2 = '请至少选择一个城市'
+            return;
+        }
       $("div.select button")
         .removeClass("active")
         .eq(0)
         .trigger("click");
       var type = $(".orderStatus_head_time button.active").attr("myId");
+      
       if (this.tabChangeName == "gather") {
         this.loadData(type, 1);
       } else if (this.tabChangeName == "comparison") {
         this.loadData(type, 2, 0, this.currentPageNum, this.currentPageSize);
         this.loadMutlData(type, 2, 0);
+      }else{
+        
+            var type = $(".orderStatus_head_time button.active").attr("myId");
+             if(this.orderTdyStatu=='close'){
+                  this.loadMutlData(type, 3, 0);
+             }else if(this.orderTdyStatu=='fail'){
+                 this.loadMutlData(type, 3, 10);
+             }else if(this.orderTdyStatu=='cancel'){
+                 this.loadMutlData(type, 3, 4);
+             }else{
+                 this.loadMutlData(type, 3, 3);
+             }
       }
     }
   },
   watch: {
+     orderTendencyData:{
+         handler:function(n,o){
+            debugger
+             this.cityNameCategory = []
+             if(this.tabChangeName!=='tendency'){
+               return;
+             }
+             if(n.length>0){
+                 n.map((list)=>{
+                     this.cityNameCategory.push(list[0].cityName)
+                 })
+                 var tem = []
+                 this.cityNameCategory.map((cityName)=>{
+                    n.map((list)=>{
+                         var arr = []
+                        for(var i=0;i<list.length;i++){
+                            if(list[i].cityName==cityName){
+                                arr.push(1*list[i].num)
+                            }
+                        }
+                        if(arr.length>0){
+                            tem.push({name:cityName,data:arr})
+                        }
+                     })
+                 })
+                this.category = n[0].map((item)=>{
+                     return item.orderTime
+                 })
+                this.initChart3(tem,this.category);
+             }else{
+               return;
+             }
+         },
+         deep:true
+     },
+     orderTdyStatu:{
+         handler:function(n,o){
+             var type = $(".orderStatus_head_time button.active").attr("myId");
+             if(n=='close'){
+                  this.loadMutlData(type, 3, 0);
+             }else if(n=='fail'){
+                 this.loadMutlData(type, 3, 10);
+             }else if(n=='cancel'){
+                 this.loadMutlData(type, 3, 4);
+             }else{
+                 this.loadMutlData(type, 3, 3);
+             }
+         },
+         deep:true
+     },
     "$store.state.cityList": "cityChange",
     orderStatusData: {
       handler: function(val, old) {

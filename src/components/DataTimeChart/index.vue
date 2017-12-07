@@ -58,7 +58,7 @@ export default {
                     }
                 } :{
                             opposite: false,
-                            tickPositions: [20, 40, 60, 80, 100],
+                            tickPositions: [0,20, 40, 60, 80, 100],
                             title: {
                                 text: '',
                                 style: {
