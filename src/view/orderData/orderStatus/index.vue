@@ -858,7 +858,7 @@ export default {
             this.chartArr = arr;
             this.initChart();
           } else {
-            resultData = [];
+            var resultData = [];
             var newArr = [];
             data.map(item => {
               newArr.push(
@@ -892,24 +892,30 @@ export default {
         .removeClass("active")
         .eq(0)
         .trigger("click");
-        if(this.citySelectNum.length==0){
-           
-            return;
-        }
       var elems = siblings(e.target);
       for (var i = 0; i < elems.length; i++) {
         elems[i].setAttribute("class", "");
       }
       e.target.setAttribute("class", "active");
+
       if (e.target.innerHTML === "指定时间段") {
         this.timeSelectShow = true;
       } else {
         this.timeSelectShow = false;
         this.timeLine = ["", ""];
+        
         if (this.tabChangeName == "gather") {
           this.orderTdyStatu =''
+           if(this.citySelectNum.length==0){
+           
+            return;
+        }
           this.loadMutlData(e.target.getAttribute("myId"), 1, 0);
         } else if (this.tabChangeName == "comparison") {
+           if(this.citySelectNum.length==0){
+           
+            return;
+        }
           this.orderTdyStatu=''
           this.loadData(
             e.target.getAttribute("myId"),
@@ -921,7 +927,10 @@ export default {
           this.loadMutlData(e.target.getAttribute("myId"), 2, 0);
         } else {
           this.orderTdyStatu='close'
-          debugger
+          if(this.citySelectNum.length==0){
+           
+            return;
+        }
             var type = $(".orderStatus_head_time button.active").attr("myId");
              if(this.orderTdyStatu=='close'){
                   this.loadMutlData(type, 3, 0);
@@ -1273,7 +1282,6 @@ export default {
   watch: {
      orderTendencyData:{
          handler:function(n,o){
-            debugger
              this.cityNameCategory = []
              if(this.tabChangeName!=='tendency'){
                return;

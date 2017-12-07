@@ -535,7 +535,8 @@ export default {
                     this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
                     this.loadTotalData($('.orderAllData_head_time button.active').attr('myId'))
                 } else {
-                    this.orderData = data
+                    console.log(data)
+                    this.orderData = [...data]
 
                     this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
                     this.loadTotalData($('.orderAllData_head_time button.active').attr('myId'))
