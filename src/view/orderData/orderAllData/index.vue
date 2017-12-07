@@ -488,6 +488,12 @@ export default {
         },
         sortMethod (type) {
             this.sortNum = type
+            if( this.sortNum==0){
+                this.sortNum = 1
+            }else{
+                this.sortNum=0
+            }
+           
         },
         loadData (type) {
             this.spinShow = true
