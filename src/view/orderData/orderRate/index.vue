@@ -642,7 +642,7 @@ export default {
            return {name:that.frequency[index],data:list}
          })
         
-          this.chartSelectType = 'percentage'
+         $('div.select button').removeClass('active').eq(0).trigger('click')
           this.noDataBox = true;
           return;
         })
@@ -776,7 +776,7 @@ export default {
       }
     },
     cityChange() {
-
+       this.chartSelectType = ''
        this.toolType = '用户数占比'
         this.data2 = []
         this.data3 = []
@@ -852,24 +852,22 @@ export default {
     "$store.state.cityList": "cityChange",
     'chartSelectType':{
       handler:function(n,o){
-        if(this.citySelectNum.length>2){
-          if(n=='percentage'){
+        if(n=='percentage'){
           
-          this.data3 = this.percentage
-          this.toolType = '用户数占比'
-         
-        }
-        if(n=='orderCountRate'){
-          this.data3 = this.orderCountRate
-           this.toolType = '订单数占比'
+            this.data3 = this.percentage
+            this.toolType = '用户数占比'
+          
+          }
+          if(n=='orderCountRate'){
+            this.data3 = this.orderCountRate
+            this.toolType = '订单数占比'
+              
+          }
+          if(n=='amountRate'){
+            this.data3 = this.amountRate
+            this.toolType = '订单金额占比'
             
-        }
-        if(n=='amountRate'){
-          this.data3 = this.amountRate
-           this.toolType = '订单金额占比'
-           
-        }
-        }
+          }
         
       },
       deep:true
