@@ -463,9 +463,12 @@ export default {
         var type = Number(window.localStorage.getItem('cityType'))
         this.cityType = type
         var that = this
-        setTimeout( function () {
-            //that.loadData($('.orderAllData_head_time button.active').attr('myId'))
-        }, 200)
+        if(this.citySelectNum.length==0){
+              setTimeout( function () {
+                that.loadData($('.orderAllData_head_time button.active').attr('myId'))
+            }, 200)
+        }
+      
     },
     computed: {
         city:{
@@ -570,7 +573,6 @@ export default {
                 // 先展示下面的图表加载状 态
                 this.noDataBox = true
                 if (res.data.resultCode != 1) {
-                    debugger
                   
                      this.orderData = data
                     this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
