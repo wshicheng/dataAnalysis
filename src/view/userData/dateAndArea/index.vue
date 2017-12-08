@@ -305,6 +305,7 @@ export default {
     },
     data () {
         return {
+            citySelectNum:[],
             noDataBox2:false,
             timeSelectShow: false,
             timeLine: ['',''],
@@ -675,6 +676,9 @@ export default {
             } else {
                 this.timeSelectShow = false
                 this.timeLine = ['','']
+                 if(this.citySelectNum.length==0){
+                    return;
+                }
                 this.loadData(e.target.getAttribute('myId'))
                 this.loadTotalData(e.target.getAttribute('myId'))
             }
@@ -689,6 +693,9 @@ export default {
                 elems[i].setAttribute('class', '')
             }
             e.target.setAttribute('class', 'active')
+            if(this.citySelectNum.length==0){
+                return;
+            }
             this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
             if(e.target.innerText=='累计用户'|| e.target.innerText=='累计押金用户'){
                 this.noDataBox2 = false
@@ -702,6 +709,9 @@ export default {
             if (this.timeLine[0] === '' || this.timeLine[0] === null) {
                 this.$Message.warning('请选择时间段')
             } else {
+                 if(this.citySelectNum.length==0){
+                    return;
+                }
                 this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
                 this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
             }
@@ -781,6 +791,13 @@ export default {
             clearTimeout(this.timer)
             clearTimeout(this.timerAll)
             this.currentPage = 1
+            this.citySelectNum = this.$store.state.cityList
+            if(this.citySelectNum.length==0){
+                this.noDataText = '请至少选择一个城市'
+                this.orderData = [];
+                this.noDataBox = false
+                return;
+            }
             this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
             this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
             // this.getChartData($('.dateAndArea_head_time button.active').attr('myId'))

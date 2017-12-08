@@ -287,6 +287,7 @@ export default {
     data () {
         var that = this;
         return {
+            citySelectNum:[],
             cityType: '',
             timeSelectShow: false,
             timeLine: ['',''],
@@ -332,16 +333,11 @@ export default {
                 },
                 {
                     title: '有效订单数',
-                    key: 'orderNum',
-                    sortable: true,
-                    sortMethod (a, b, type) {
-                        // 升序是0，降序是1
-                        if (type === 'asc') {
-                            that.sortMethod(0)
-                        } else {
-                            that.sortMethod(1)
-                        }
-                    }
+                   render:function(h,params){
+                       return h('div',1*params.row.orderNum.replace(',',''))
+                   },
+                    "sortable": true,
+                    
                 },
                 {
                  
@@ -501,6 +497,7 @@ export default {
             this.spinShow3 = true
             this.noDataText = ''
             // 调取数据前，清空chart数据
+            this.orderData = []
             this.chartDataPayAmount = []
             this.chartDisCountAmount = []
             this.chartProfitRate = []
@@ -541,8 +538,7 @@ export default {
                     this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
                     this.loadTotalData($('.orderAllData_head_time button.active').attr('myId'))
                 } else {
-                    console.log(data)
-                    this.orderData = [...data]
+                    this.orderData = data
 
                     this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
                     this.loadTotalData($('.orderAllData_head_time button.active').attr('myId'))
@@ -846,6 +842,12 @@ export default {
             new Highcharts.chart('container', options);
         },
         cityChange () {
+            this.citySelectNum = this.$store.state.cityList;
+            if(this.citySelectNum.length==0){
+                this.orderData = []
+                this.noDataText = '请至少选择一个城市'
+                return;
+            }
             if (this.loadFlag === true) {
                 this.currentPage = 1
                 this.loadData($('.orderAllData_head_time button.active').attr('myId'))

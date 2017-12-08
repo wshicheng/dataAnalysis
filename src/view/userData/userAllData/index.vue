@@ -268,6 +268,7 @@ export default {
     data () {
         var that = this;
         return {
+            citySelectNum:[],
             cityType: '',
             timeSelectShow: false,
             time:  Date.now() - 86400000,
@@ -448,6 +449,9 @@ export default {
             if (this.time.length === '') {
                 return
             } else {
+                 if(this.citySelectNum.length==0){
+                    return;
+                }
                 this.loadData($('.userAllData_head_time2 button.active').attr('myId'))
             }
         },
@@ -750,12 +754,17 @@ export default {
             new Highcharts.chart('userAllDataChart', options);
         },
         cityChange () {
+            this.citySelectNum = this.$store.state.cityList
             clearTimeout(this.timer)
             // if (this.loadFlag === true) {
             //     this.currentPage = 1
             //     this.loadData($('.userAllData_head_time2 button.active').attr('myId'))
             // }
             this.currentPage = 1
+            if(this.citySelectNum.length==0){
+                this.noDataText = '请至少选择一个城市'
+                return;
+            }
             this.loadData($('.userAllData_head_time2 button.active').attr('myId'))
         },
         checkLogin (res) {

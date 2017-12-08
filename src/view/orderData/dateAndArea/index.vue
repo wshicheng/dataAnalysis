@@ -679,6 +679,9 @@ export default {
                 elems[i].setAttribute('class', '')
             }
             e.target.setAttribute('class', 'active')
+            if(this.citySelectNum.length==0){
+                return;
+            }
             this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
             this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
         },

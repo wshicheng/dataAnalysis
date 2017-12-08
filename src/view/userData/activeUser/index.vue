@@ -222,6 +222,7 @@ export default {
     data () {
         var that = this;
         return {
+            citySelectNum:[],
             cityType: '',
             timeSelectShow: false,
             timeLine: ['',''],
@@ -313,7 +314,7 @@ export default {
     },
     methods: {
         handleSort(column,key,order){
-            console.log(column,key,order)
+           
         },
         loadData (type) {
             this.spinShow = true
@@ -361,7 +362,6 @@ export default {
                         this.loadChartData(type)
                     } else {
                         this.activeUserData = data
-                        console.log('this.activeUserData', this.activeUserData)
 
                         this.loadChartData(type)
                         // 处理分页数据
@@ -412,10 +412,7 @@ export default {
                             this.chartDataX.push(this.cityType === 1?item.cityName:item.time)
                         })
 
-                        console.log('this.chartActiveUser', this.chartActiveUser)
-                        console.log('this.chartActiveRate', this.chartActiveRate)
-                        console.log('this.chartNewActiveRate]', this.chartNewActiveRate)
-                        console.log('this.chartDataX', this.chartDataX)
+                    
                         this.initChart()
                         setTimeout( () => {
                             this.loadFlag = true
@@ -446,6 +443,9 @@ export default {
             } else {
                 this.timeSelectShow = false
                 this.timeLine = ['','']
+                if(this.citySelectNum.length==0){
+                    return;
+                }
                 if (this.loadFlag === true) {
                     this.loadData(e.target.getAttribute('myId'))
                 } else {
@@ -606,6 +606,13 @@ export default {
         cityChange () {
             clearTimeout(this.timer)
             clearTimeout(this.timerChart)
+            this.citySelectNum = this.$store.state.cityList
+            if(this.citySelectNum.length==0){
+                this.noDataText = '请至少选择一个城市'
+                this.activeUserData = [];
+                this.noDataBox = false
+                return;
+            }
             if (this.loadFlag === true) {
                 this.currentPage = 1
                 this.loadData($('.activeUser_head_time button.active').attr('myId'))
@@ -621,6 +628,12 @@ export default {
         '$store.state.cityList': 'cityChange',
         'activeUserData': {
             handler: function () {
+                 if(this.citySelectNum.length==0){
+                    this.noDataText = '请至少选择一个城市'
+                    this.pageShow = false
+                    this.noDataBox = false
+                    return;
+                }
                 if (this.loadFlag) {
                     this.loadData($('.activeUser_head_time button.active').attr('myId'))
                 }

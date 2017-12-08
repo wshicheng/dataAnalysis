@@ -461,6 +461,9 @@ export default {
                 this.timeSelectShow = false
                 this.timeLine = ['','']
                 if (this.loadFlag === true) {
+                     if(this.citySelectNum.length==0){
+                        return;
+                    }
                     this.loadData(e.target.getAttribute('myId'))
                 } else {
                     return
@@ -471,6 +474,9 @@ export default {
             if (this.timeLine[0] === '' || this.timeLine[0] === null) {
                 this.$Message.warning('请选择时间段')
             } else {
+                 if(this.citySelectNum.length==0){
+                        return;
+                    }
                 this.loadData('5')
             }
         },
@@ -590,6 +596,14 @@ export default {
         cityChange () {
             clearTimeout(this.timer)
             clearTimeout(this.timerChart)
+            this.citySelectNum = this.$store.state.cityList
+            if(this.citySelectNum.length==0){
+                this.noDataText = '请至少选择一个城市'
+                this.noDataBox = false
+                this.newUserData = []
+                this.pageShow = false
+                return;
+            }
             if (this.loadFlag === true) {
                 this.currentPage = 1
                 this.loadData($('.newUser_head_time button.active').attr('myId'))
@@ -609,6 +623,9 @@ export default {
         '$store.state.cityList': 'cityChange',
         'newUserData': {
             handler: function () {
+                if(this.citySelectNum.length==0){
+                    return;
+                }
                 if (this.loadFlag) {
                     this.loadData($('.newUser_head_time button.active').attr('myId'))
                 }
