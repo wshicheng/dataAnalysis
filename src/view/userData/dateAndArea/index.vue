@@ -42,7 +42,8 @@
                     </div>
                 </Poptip>
             </div>
-            <Table :no-data-text='noDataText' :ellipsis='ellipsis' :loading='loading' border size='small' :columns="columns_orderData" :data="orderData"></Table>
+             <div style="text-align:center;padding:10px 0;" v-show="citySelectNum.length==0?true:false">请至少选择一个城市</div>
+            <Table v-show="citySelectNum.length==0?false:true" :no-data-text='noDataText' :ellipsis='ellipsis' :loading='loading' border size='small' :columns="columns_orderData" :data="orderData"></Table>
             <Page :total="totalListNum" show-sizer show-elevator :styles='page' v-show="pageShow" :current='currentPage' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </div>
 

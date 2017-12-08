@@ -55,7 +55,7 @@
                 </div>
             </Poptip>
         </div>
-        <Table  border size='small' height='400' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
+        <Table @on-sort-change="sortChange"  border size='small' height='400' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
         <Page :total="totalListNum" :styles='page' placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize"  :page-size="pageSize" :page-size-opts='pageSizeOpts' show-sizer show-elevator></Page>
       </div>
 
@@ -333,10 +333,10 @@ export default {
                 },
                 {
                     title: '有效订单数',
-                   render:function(h,params){
-                       return h('div',1*params.row.orderNum.replace(',',''))
-                   },
-                    "sortable": true,
+                    render:function(h,params){
+                        return h('div',params.row.orderNum)
+                    },
+                    sortable:'custom'
                     
                 },
                 {
@@ -464,7 +464,7 @@ export default {
         this.cityType = type
         var that = this
         setTimeout( function () {
-            that.loadData($('.orderAllData_head_time button.active').attr('myId'))
+            //that.loadData($('.orderAllData_head_time button.active').attr('myId'))
         }, 200)
     },
     computed: {
@@ -479,8 +479,47 @@ export default {
         }
     },  
     methods: {
+        sortChange(params){
+          var arr = this.orderData.map((item)=>{
+             return  item.orderNum.replace(',','')
+          })
+          var that = this
+         var tem = []
+          if(params.order=='asc'){
+              // 从小到大
+               var res = arr.sort(function(a,b){
+                    return a - b;
+                })
+         
+                res.map((item)=>{
+                    that.orderData.map((list)=>{
+                        if(list.orderNum.replace(',','')==item){
+                            tem.push(list)
+                        }
+                    })
+                })
+          }
+          if(params.order=='desc'){
+              // 从小到大
+               var res = arr.sort(function(a,b){
+                    return b - a;
+                })
+         
+                res.map((item)=>{
+                    that.orderData.map((list)=>{
+                        if(list.orderNum.replace(',','')==item){
+                            tem.push(list)
+                        }
+                    })
+                })
+          }
+          if(params.order=='normal'){
+              tem = this.orderData
+          }
+         
+          this.orderData = tem;
+        },
         handleSort(column,key,order){
-            console.log(column,key,order)
         },
         sortMethod (type) {
             this.sortNum = type
@@ -527,14 +566,13 @@ export default {
                 //     this.cityType = 1
                 // }
 
-
                 this.spinShow = false
                 // 先展示下面的图表加载状 态
                 this.noDataBox = true
                 if (res.data.resultCode != 1) {
-                    this.noDataText = '请至少选择一个城市'
-                    this.pageShow = false
-                    this.orderData = []
+                    debugger
+                  
+                     this.orderData = data
                     this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
                     this.loadTotalData($('.orderAllData_head_time button.active').attr('myId'))
                 } else {
@@ -848,10 +886,8 @@ export default {
                 this.noDataText = '请至少选择一个城市'
                 return;
             }
-            if (this.loadFlag === true) {
-                this.currentPage = 1
-                this.loadData($('.orderAllData_head_time button.active').attr('myId'))
-            }
+            this.currentPage = 1
+            this.loadData($('.orderAllData_head_time button.active').attr('myId'))
         },
         sortData () {
             this.loadData($('.orderAllData_head_time button.active').attr('myId'))

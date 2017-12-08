@@ -70,7 +70,7 @@ export default {
                    
                     formatter: function() {  
                        console.log(type)
-                       return type + ':' + this.x + '<br>' + '占比' + ':' + (this.y) + '%';
+                       return type + ':' + this.x + '<br>' + '占比' + ':' + (this.y).toFixed(1) + '%';
                     //    if(type=='频次分布'){
                     //         return type + ':' + this.x + '<br>' + toolType + ':' + (this.y) + '%';
                     //     }else{

@@ -44,6 +44,7 @@
                     </div>
                 </Poptip>
             </div>
+           
             <Table :no-data-text='noDataText' :ellipsis='ellipsis' :loading='loading' border size='small' :columns="columns_orderData" :data="orderData"></Table>
             <Page :total="totalListNum" show-sizer show-elevator :styles='page' v-show="pageShow" :current='current' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </div>
