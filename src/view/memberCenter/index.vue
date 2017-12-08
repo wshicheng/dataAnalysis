@@ -818,6 +818,10 @@ export default {
                         this.checkLogin(res)
                         if (res.data.resultCode === 1) {
                             this.$Message.success('密码修改成功!');
+                            setTimeout(()=>{
+                                 window.localStorage.clear()
+                                this.$router.push({path:'/login'})
+                            },1000)
                             this.loadData()
                             this.$refs.editPassWord.resetFields()
                             this.passWordModal = false
