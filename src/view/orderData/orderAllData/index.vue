@@ -626,6 +626,10 @@ export default {
                         this.chartProfitRate.push(Number(item.profitRate))
                         this.chartDataX.push(this.cityType === 1?item.cityName:item.orderTime)
                     })
+                    this.chartDataPayAmount = this.chartDataPayAmount.unique()
+                    this.chartDisCountAmount =  this.chartDisCountAmount.unique()
+                    this.chartProfitRate = this.chartProfitRate.unique()
+                    this.chartDataX = this.chartDataX.unique()
                     this.initChart()
                     this.loadFlag = true
                 }
@@ -913,7 +917,6 @@ export default {
     },
     watch: {
         '$store.state.cityList': 'cityChange',
-        'sortNum': 'sortData'
     }
 }
 </script>
