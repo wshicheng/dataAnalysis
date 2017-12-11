@@ -567,7 +567,7 @@ export default {
                 //     this.cityType = 1
                 // }
 
-                this.spinShow = false
+                
                 // 先展示下面的图表加载状 态
                 this.noDataBox = true
                 if (res.data.resultCode != 1) {
@@ -588,6 +588,7 @@ export default {
                         this.pageShow = true
                     }
                     this.totalListNum = res.data.totalItems
+                    this.spinShow = false
                 }
 
             })
@@ -693,6 +694,9 @@ export default {
             })
         },
         handleClick (e) {
+            if(this.loadFlag==false){
+                return
+            }
             this.currentPage = 1
             this.pageSize = 10
             var elems = siblings(e.target)
