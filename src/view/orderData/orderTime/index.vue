@@ -289,9 +289,7 @@ div.loading {
 </style>
 <script>
 import citySelect from "../../../components/citySelect.vue";
-import moment from "moment";
 import { siblings, randomColor } from "../../../util/util.js";
-import $ from "jquery";
 import chart from "../../../components/DataTimeChart/index.vue";
 import chartMore from "../../../components/DataTimeChart/index2.vue";
 export default {

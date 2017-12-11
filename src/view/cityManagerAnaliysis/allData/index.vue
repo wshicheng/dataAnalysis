@@ -18,8 +18,6 @@
     </Row>
 </template>
 <script>
-import $ from 'jquery'
-import moment from 'moment'
 export default {
     data() {
         return {

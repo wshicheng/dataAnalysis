@@ -85,7 +85,6 @@
     </div>
 </template>
 <script>
-import $ from 'jquery'
 import { mapGetters } from 'vuex'
 import citySelect from './citySelect.vue'
     export default {

@@ -36,8 +36,6 @@
     </Row>
 </template>
 <script>
-import moment from 'moment'
-import $ from 'jquery'
 import baseDatas from '../../../components/baseDatas.vue'
 import operatingCost  from '../../../components/operatCosts.vue'
 import operatingAnalysis from '../../../components/operatAnalysis.vue'

@@ -11,7 +11,6 @@
     </div>
 </template>
 <script>
-import $ from 'jquery'
 import { mapGetters } from 'vuex'
 export default {
     data() {

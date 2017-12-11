@@ -349,7 +349,6 @@
     </div>
 </template>
 <script>
-import $ from 'jquery'
 import { mapGetters,mapActions } from 'vuex'
 export default {
     data() {

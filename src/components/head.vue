@@ -43,7 +43,6 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import $ from 'jquery'
 
 export default {
     data() {

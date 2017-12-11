@@ -355,10 +355,8 @@ div.ivu-modal {
 </style>
 
 <script>
-import $ from 'jquery'
 import citySelect from '../../../components/citySelect.vue'
 import { siblings } from '../../../util/util.js'
-import moment from 'moment'
 import qs from 'qs'
 export default {
     components: {

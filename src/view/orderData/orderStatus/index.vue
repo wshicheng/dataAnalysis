@@ -297,8 +297,6 @@
 <script>
 import citySelect from "../../../components/citySelect.vue";
 import { siblings } from "../../../util/util.js";
-import moment from "moment";
-import $ from "jquery";
 var Highcharts = require("highcharts");
 // 在 Highcharts 加载之后加载功能模块
 require("highcharts/modules/exporting")(Highcharts);

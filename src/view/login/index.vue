@@ -78,7 +78,6 @@
 <script>
 import {checkMobile, IsEmpty} from '../../util/util.js'
 import {mapActions,mapState,mapGetters} from 'vuex'
-import $ from 'jquery'
     export default {
         data () {
             var validateTel = (rule, value, callback) => {

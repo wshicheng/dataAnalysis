@@ -407,7 +407,6 @@
 
 <script>
 import {checkMobile, IsEmpty} from '../../util/util.js'
-import $ from 'jquery'
 import qs from 'qs'
 export default {
 	name: 'HomePage',

@@ -56,7 +56,6 @@
 }
 </style>
 <script>
-import $ from 'jquery'
 import {siblings} from '../util/util.js'
 export default {
     data () {
