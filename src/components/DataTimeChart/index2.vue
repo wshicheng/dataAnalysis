@@ -15,7 +15,8 @@ export default {
                     type: 'column'
                 },
                 title: {
-                    text: title
+                    text: title,
+                    y:5
                 },
                 subtitle: {
                     text: subtitle,
@@ -63,7 +64,7 @@ export default {
                     align: 'right',
                     x: -30,
                     verticalAlign: 'top',
-                    y: 25,
+                    y: 10,
                     floating: true,
                     backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
                     borderColor: '#CCC',
