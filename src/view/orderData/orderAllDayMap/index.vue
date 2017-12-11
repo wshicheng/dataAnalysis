@@ -413,7 +413,11 @@ export default {
                 this.timeSelectShow = true
             } else {
                 this.timeSelectShow = false
+<<<<<<< HEAD
                  if(this.citySelectNum.length==0){
+=======
+                if(this.citySelectNum.length==0){
+>>>>>>> 9990dd1c53519863eda4d020263e86ae05e77db5
                     return;
                 }
                 if (this.loadFlag === true) {
