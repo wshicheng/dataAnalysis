@@ -59,7 +59,7 @@
         <Page :total="totalListNum" :styles='page' placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize"  :page-size="pageSize" :page-size-opts='pageSizeOpts' show-sizer show-elevator></Page>
       </div>
 
-      <div class="orderTotalAllData_table" v-show="pageShow">
+      <div class="orderTotalAllData_table" v-show="citySelectNum.length==0?false:true">
         <Spin fix size="large" v-if="spinShow3"  class="spin">
             <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
             <div style="color: #ccc; text-indent: 5px;">  loading...</div>
@@ -706,6 +706,9 @@ export default {
             } else {
                 this.timeSelectShow = false
                 this.timeLine = ['','']
+                if(this.citySelectNum.length==0){
+                    return;
+                }
                 if (this.loadFlag === true) {
                     this.loadData(e.target.getAttribute('myId'))
                 } else {
@@ -717,6 +720,9 @@ export default {
             if (this.timeLine[0] === '' || this.timeLine[0] === null) {
                 this.$Message.warning('请选择时间段')
             } else {
+                if(this.citySelectNum.length==0){
+                    return;
+                }
                 this.loadData('5')
             }
         },
@@ -886,6 +892,8 @@ export default {
             if(this.citySelectNum.length==0){
                 this.orderData = []
                 this.noDataText = '请至少选择一个城市'
+                this.pageShow = false
+                this.noDataBox = false
                 return;
             }
             this.currentPage = 1

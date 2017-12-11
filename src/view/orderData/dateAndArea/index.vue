@@ -668,6 +668,9 @@ export default {
             } else {
                 this.timeSelectShow = false
                 this.timeLine = ['','']
+                if(this.citySelectNum.length==0){
+                    return;
+                }
                 this.loadData(e.target.getAttribute('myId'))
                 this.loadTotalData(e.target.getAttribute('myId'))
             }
@@ -690,6 +693,10 @@ export default {
             if (this.timeLine[0] === '' || this.timeLine[0] === null) {
                 this.$Message.warning('请选择时间段')
             } else {
+
+                if(this.citySelectNum.length==0){
+                    return;
+                }
                 this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
                 this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
             }
