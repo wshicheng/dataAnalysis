@@ -425,12 +425,12 @@ export default {
                 {
                     title: '平均订单时长(min)',
                     key: 'avgTime',
-                    width: 140
+                    width: 100
                 },
                 {
                     title: '平均订单里程(km)',
                     key: 'avgMileage',
-                    width: 140
+                    width: 115
                 }
             ],
             orderTotalData: [],
