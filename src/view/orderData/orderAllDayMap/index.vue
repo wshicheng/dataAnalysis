@@ -327,7 +327,6 @@ export default {
             // console.log('this.timeLine[0]',this.timeLine[0])
             // console.log("this.timeLine[0] === ''",this.timeLine[0] === '')
             // console.log("this.timeLine[0] === null",this.timeLine[0] === null)
-
             this.spinShow = true
             this.noDataText = ''
             // 节流防止用户快速点击时数据串行。
@@ -345,7 +344,7 @@ export default {
             .then( res => {
                 this.checkLogin(res)
                 var data = res.data.data
-                this.spinShow = false
+               
                 
                 if (res.data.resultCode != 1) {
                     this.noDataText = '暂无数据'
@@ -381,6 +380,7 @@ export default {
                         that.loadFlag = true
                     }, 100)
                 }
+                 this.spinShow = false
 
             })
             .catch( err => {
@@ -397,6 +397,9 @@ export default {
           return num;
         },
         handleClick (e) {
+            if(this.spinShow==true){
+                return
+            }
             // 清空chart数据
             this.orderNumData = []
             this.orderNumProData = []
@@ -404,6 +407,7 @@ export default {
             this.orderMoneyProData = []
             this.bikeNumData = []
             this.sumBikeNumData = []
+             
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {
                 elems[i].setAttribute('class', '')
