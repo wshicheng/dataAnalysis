@@ -987,10 +987,14 @@ export default {
       }
     },
     searchByTimeLine() {
+     
       var type = $(".orderStatus_head_time button.active").attr("myId");
       if (this.timeLine[0] === "" || this.timeLine[0] === null) {
         this.$Message.warning("请选择时间段");
       } else {
+         if(this.citySelectNum.length==0){
+            return;
+          }
         if (this.tabChangeName === "comparison") {
           var type = $(".orderStatus_head_time button.active").attr("myId");
           // loadData (type,data_type,state,pageNum,pageSize)
