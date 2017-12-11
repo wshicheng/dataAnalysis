@@ -297,6 +297,7 @@
 <script>
 import citySelect from "../../../components/citySelect.vue";
 import { siblings } from "../../../util/util.js";
+import '../../../util/util.js'
 var Highcharts = require("highcharts");
 // 在 Highcharts 加载之后加载功能模块
 require("highcharts/modules/exporting")(Highcharts);
@@ -358,7 +359,10 @@ export default {
         {
           title: "合计",
           key: "num",
-          align: "center"
+          align: "center",
+          render:function(h,params){
+            return h('div',Number(params.row.num).thousand())
+          }
         },
         {
           align: "center",
@@ -421,7 +425,7 @@ export default {
                     borderRight: "1px solid #e9eaec"
                   }
                 },
-                params.row.closeNum
+                Number(params.row.closeNum).thousand()
               ),
               h(
                 "div",
@@ -434,7 +438,7 @@ export default {
                     borderBox: "box-sizing"
                   }
                 },
-                params.row.closePercent
+               params.row.closePercent
               )
             ]);
           }
@@ -500,7 +504,7 @@ export default {
                     borderRight: "1px solid #e9eaec"
                   }
                 },
-                params.row.failNum
+                Number(params.row.failNum)
               ),
               h(
                 "div",
@@ -579,7 +583,7 @@ export default {
                     borderRight: "1px solid #e9eaec"
                   }
                 },
-                params.row.cancelNum
+                Number(params.row.cancelNum).thousand()
               ),
               h(
                 "div",
@@ -658,7 +662,7 @@ export default {
                     borderRight: "1px solid #e9eaec"
                   }
                 },
-                params.row.endNum
+                Number(params.row.endNum).thousand()
               ),
               h(
                 "div",
@@ -903,11 +907,11 @@ export default {
         this.timeLine = ["", ""];
         
         if (this.tabChangeName == "gather") {
-          this.orderTdyStatu =''
-           if(this.citySelectNum.length==0){
-           
-            return;
-        }
+           this.orderTdyStatu =''
+            if(this.citySelectNum.length==0){
+            
+              return;
+          }
           this.loadMutlData(e.target.getAttribute("myId"), 1, 0);
         } else if (this.tabChangeName == "comparison") {
            if(this.citySelectNum.length==0){
@@ -1174,11 +1178,12 @@ export default {
           },
         },
         tooltip: {
+          
           headerFormat:
             '<span style="font-size:10px">{point.key}</span><table>',
           pointFormat:
             '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style="padding:0"><b>{point.y:0f}' +
+            '<td style="padding:0"><b>{point.y:,0f}' +
             (title == "订单数" ? "单" : "%") +
             "</b></td></tr>",
           footerFormat: "</table>",
@@ -1315,15 +1320,18 @@ export default {
      orderTdyStatu:{
          handler:function(n,o){
              var type = $(".orderStatus_head_time button.active").attr("myId");
-             if(n=='close'){
-                  this.loadMutlData(type, 3, 0);
-             }else if(n=='fail'){
-                 this.loadMutlData(type, 3, 10);
-             }else if(n=='cancel'){
-                 this.loadMutlData(type, 3, 4);
-             }else{
-                 this.loadMutlData(type, 3, 3);
+             if(this.tabChangeName=='tendency'){
+                if(n=='close'){
+                      this.loadMutlData(type, 3, 0);
+                }else if(n=='fail'){
+                    this.loadMutlData(type, 3, 10);
+                }else if(n=='cancel'){
+                    this.loadMutlData(type, 3, 4);
+                }else{
+                    this.loadMutlData(type, 3, 3);
+                }
              }
+            
          },
          deep:true
      },

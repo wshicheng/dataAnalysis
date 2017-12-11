@@ -364,6 +364,7 @@ export default {
     },
     data() {
         return {
+            citySelectNum:[],
             listChose: [],
             close: false,
             // 固定资产
@@ -675,6 +676,11 @@ export default {
             this.noDataText = ''
 
             this.current = 1
+            if(this.citySelectNum.length==0){
+                this.spinShow = false
+                this.noDataText = '请至少选择一个城市'
+                return;
+            }
             this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
                     cityCode: this.$store.state.cityList.toString(),
@@ -962,13 +968,22 @@ export default {
                 e.target.setAttribute('class', '')
                 var id = this.typeList.indexOf(e.target.innerHTML)
                 this.typeList.splice(id, 1)
+
+                if(this.citySelectNum.length==0){
+                    return;
+                }
+                this.loadData()
             } else {
                 e.target.setAttribute('class', 'active')
                 this.typeList.push(e.target.innerHTML)
                 this.typeList.unique()
+                if(this.citySelectNum.length==0){
+                    return;
+                }
+                this.loadData()
             }
 
-            this.loadData()
+          
             
 
         },
@@ -1093,6 +1108,7 @@ export default {
             }
         },
         cityChange() {
+            this.citySelectNum = this.$store.state.cityList
             // 清空多选删除的数组容器。
             this.checkList = []
             this.current = 1
@@ -1100,7 +1116,13 @@ export default {
             // loading显示，同时让无数据的文本为空
             this.spinShow = true
             this.noDataText = ''
-
+            if(this.citySelectNum.length==0){
+                this.noDataText = '请至少选择一个城市'
+                this.spinShow = false
+                this.pageShow = false
+                this.data1 = []
+                return;
+            }
             this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
                     accessToken: this.$store.state.token,
