@@ -371,7 +371,8 @@ export default {
         this.$store.dispatch('menuActiveName', '/index/dateAndArea')
         this.$store.state.cityList = []
         document.title = '订单数据 - 分日期分地区'
-        this.loadData('1')
+        // loadData和cityChange中都会渲染图表，图表会渲染两次，故注释掉
+        // this.loadData('1')
         this.loadTotalData('1')
     },
     methods: {
@@ -651,6 +652,9 @@ export default {
             return newArr
         },
         handleClick (e) {
+            if(this.spinShow == true){
+                return
+            }
             this.current = 1
             var elems = siblings(e.target)
             for (var i = 0; i < elems.length; i++) {

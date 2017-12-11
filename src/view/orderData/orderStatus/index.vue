@@ -833,7 +833,7 @@ export default {
           }
         })
         .then(res => {
-          this.spinShow = false;
+          
           this.noDataText = "暂无数据";
           // 判断是否超时
           this.checkLogin(res);
@@ -882,6 +882,7 @@ export default {
             this.chartArr = [];
             this.noData = false;
           }
+          this.spinShow = false;
         })
         .catch(err => {
           this.spinShow = false;
@@ -890,6 +891,9 @@ export default {
         });
     },
     handleClick(e) {
+      if(this.spinShow==true){
+        return
+      }
       $("div.select button")
         .removeClass("active")
         .eq(0)

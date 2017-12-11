@@ -23,6 +23,7 @@ export default {
                 subtitle: {
                     text: subtitle,
                     align: 'right',
+                    y:5,
                     verticalAlign: 'top',
                     style: {
                         color: '#ccc',
