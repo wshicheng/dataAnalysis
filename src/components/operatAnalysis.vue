@@ -25,7 +25,7 @@
                                     </div>
                                 </dt>
                                 <dd>
-                                    <ul>
+                                    <ul class="nowRate">
                                         <li v-for="list of cityList" v-bind:key="list.cityId">
                                             <div class="cityName">
                                                 <div>
