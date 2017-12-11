@@ -972,6 +972,9 @@ export default {
                 if(this.citySelectNum.length==0){
                     return;
                 }
+                if(this.typeList.length==0){
+                    return;
+                }
                 this.loadData()
             } else {
                 e.target.setAttribute('class', 'active')
@@ -1116,8 +1119,27 @@ export default {
             // loading显示，同时让无数据的文本为空
             this.spinShow = true
             this.noDataText = ''
-            if(this.citySelectNum.length==0){
+            if(this.citySelectNum.length==0&&this.typeList.length==0){
+                this.noDataText = ''
                 this.noDataText = '请至少选择一个城市'
+                this.spinShow = false
+                this.pageShow = false
+                this.data1 = []
+                return;
+            }
+            if(this.citySelectNum.length==0&&this.typeList.length>0){
+                 this.noDataText = ''
+                this.noDataText = '请至少选择一个城市'
+               
+                this.spinShow = false
+                this.pageShow = false
+                this.data1 = []
+                return;
+            }
+             if(this.citySelectNum.length>0&&this.typeList.length==0){
+                   this.noDataText = ''
+                this.noDataText = '请至少选择一个类别'
+              
                 this.spinShow = false
                 this.pageShow = false
                 this.data1 = []
@@ -1304,6 +1326,24 @@ export default {
         }
     },
     watch: {
+        'typeList':{
+            handler:function(n,o){
+                if(n.length==0){
+                     this.noDataText = '请至少选择一个类别'
+                     this.spinShow = false
+                     this.pageShow = false
+                     this.data1 = []
+                     return;
+                }else{
+                     this.noDataText = '请至少选择一个城市'
+                     this.spinShow = false
+                     this.pageShow = false
+                     this.data1 = []
+                     return;
+                }
+            },
+            deep:true
+        },
         'selectTime': 'dateChange',
         '$store.state.cityList': 'cityChange',
         'editValidate.bigKind': 'bigListWatch',
