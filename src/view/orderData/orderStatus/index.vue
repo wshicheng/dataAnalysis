@@ -1154,6 +1154,7 @@ export default {
         chart: {
           type: "column"
         },
+        
         title: {
           text: "订单状态构成--" + title
         },
@@ -1224,7 +1225,7 @@ export default {
           enabled:false,
         },
         xAxis: {
-          categories: categories
+          categories: categories,
         },
         yAxis: {
         allowDecimals:false,
