@@ -1177,19 +1177,20 @@ export default {
                     }
           },
         },
-        tooltip: {
-          
-          headerFormat:
-            '<span style="font-size:10px">{point.key}</span><table>',
-          pointFormat:
-            '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style="padding:0"><b>{point.y:,0f}' +
-            (title == "订单数" ? "单" : "%") +
-            "</b></td></tr>",
-          footerFormat: "</table>",
+         tooltip: {
+          crosshairs: true,
           shared: true,
-          useHTML: true
+          formatter: function () {
+              var s = '<b>' + this.x + '</b>';
+              $.each(this.points, function () {
+                  s += '<br/>' + '<span style="color:'+this.series.color+'">' + this.series.name + '</span>: ' +
+                  (title == "订单数" ?  Highcharts.numberFormat(this.y, 0, "", ",") :  Highcharts.numberFormat(this.y, 1, ".", ""))  +  (title == "订单数" ? "单" : "%");
+              });
+              return s;
+          },
+          
         },
+       
         plotOptions: {
           column: {
             pointPadding: 0.2,
@@ -1215,6 +1216,9 @@ export default {
          credits: {  
             enabled: false     //不显示LOGO 
         },
+         exporting:{
+          enabled:false,
+        },
         xAxis: {
           categories: categories
         },
@@ -1232,6 +1236,14 @@ export default {
         tooltip: {
           crosshairs: true,
           shared: true,
+          formatter: function () {
+              var s = '<b>' + this.x + '</b>';
+              $.each(this.points, function () {
+                  s += '<br/>' + '<span style="color:'+this.series.color+'">' + this.series.name + '</span>: ' +
+                    Highcharts.numberFormat(this.y, 0, "", ",") + '单';
+              });
+              return s;
+          },
           
         },
         plotOptions: {
