@@ -413,6 +413,9 @@ export default {
                 this.timeSelectShow = true
             } else {
                 this.timeSelectShow = false
+                if(this.citySelectNum.length==0){
+                    return;
+                }
                 if (this.loadFlag === true) {
                     this.timeLine = ['','']
                     this.loadData(e.target.getAttribute('myId'))
