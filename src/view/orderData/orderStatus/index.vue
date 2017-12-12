@@ -298,9 +298,9 @@
 import citySelect from "../../../components/citySelect.vue";
 import { siblings } from "../../../util/util.js";
 import '../../../util/util.js'
-var Highcharts = require("highcharts");
-// 在 Highcharts 加载之后加载功能模块
-require("highcharts/modules/exporting")(Highcharts);
+// var Highcharts = require("highcharts");
+// // 在 Highcharts 加载之后加载功能模块
+// require("highcharts/modules/exporting")(Highcharts);
 export default {
   components: {
     "city-select": citySelect
@@ -1108,7 +1108,7 @@ export default {
           enabled: false
         },
         title: {
-          text: "订单状态的构成"
+          text: "订单状态的构成-汇总"
         },
         tooltip: {
           headerFormat: "{series.name}<br>",
@@ -1230,6 +1230,11 @@ export default {
         },
         xAxis: {
           categories: categories,
+          min:0, //别忘了这里
+          max:6
+        },
+        scrollbar:{
+            enabled:true //是否产生滚动条
         },
         yAxis: {
         allowDecimals:false,

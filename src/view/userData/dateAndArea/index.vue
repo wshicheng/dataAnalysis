@@ -295,9 +295,9 @@
 <script>
 import citySelect from '../../../components/citySelect.vue'
 import { siblings } from '../../../util/util.js'
-var Highcharts = require('highcharts');
-// 在 Highcharts 加载之后加载功能模块
-require('highcharts/modules/exporting')(Highcharts);
+// var Highcharts = require('highcharts');
+// // 在 Highcharts 加载之后加载功能模块
+// require('highcharts/modules/exporting')(Highcharts);
 export default {
     components: {
         "city-select": citySelect
@@ -662,6 +662,9 @@ export default {
             return newArr
         },
         handleClick (e) {
+            if(this.spinShow==true || this.spinShow2==true || this.spinShow3==true){
+                return
+            }
             clearTimeout(this.timer)
             clearTimeout(this.timerAll)
             this.currentPage = 1
@@ -683,6 +686,9 @@ export default {
             }
         },
         handleTypeClick (e) {
+            if(this.spinShow==true || this.spinShow2==true || this.spinShow3==true){
+                return
+            }
             clearTimeout(this.timer)
             clearTimeout(this.timerAll)
             this.chartTitleName = e.target.innerHTML

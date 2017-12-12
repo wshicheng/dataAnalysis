@@ -608,6 +608,9 @@ export default {
         });
     },
     handleClick(e) {
+      if(this.loading==true){
+        return
+      }
       this.current = 1;
       var elems = siblings(e.target);
       for (var i = 0; i < elems.length; i++) {

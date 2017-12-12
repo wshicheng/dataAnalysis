@@ -66,7 +66,7 @@
                         <!-- <p class="vaildOrderNum">*数据来自有效订单数</p> -->
                     </div>
                     <div>
-                        <chart v-bind:toolType="toolType" type="频次分布" title="使用频次分布--用户数占比" :xAxis="xAxis" :chartData="chartData" :subtitle="'*数据来自'+toolType"></chart>
+                        <chart v-bind:toolType="toolType" type="频次分布" :title="'使用频次分布--'+toolType" :xAxis="xAxis" :chartData="chartData" :subtitle="'*数据来自'+toolType"></chart>
                     </div>
                  </div>
             </div>
@@ -77,7 +77,7 @@
                         <p class="vaildOrderNum">*地区超过10个时，显示10个地区,</p>
                     </div> -->
                     <div>
-                        <chart-more v-bind:toolType="toolType" type="频次分布" title="分地区使用频次分布--用户数占比" :xAxis="xAxis" :chartData="chartData" :subtitle="'*数据来自'+toolType"></chart-more>
+                        <chart-more v-bind:toolType="toolType" type="频次分布" :title="'分地区使用频次分布--'+toolType" :xAxis="xAxis" :chartData="chartData" :subtitle="'*数据来自'+toolType"></chart-more>
                     </div>
                 </div>
                
@@ -653,6 +653,9 @@ export default {
         });
     },
     handleClick(e) {
+      if(this.loading==true || this.spinShow==true){
+        return
+      }
        $('.select button').removeClass('active')
        $('.select button').eq(0).addClass('active')
         this.amountRate = []

@@ -209,9 +209,9 @@
 <script>
 import citySelect from '../../../components/citySelect.vue'
 import { siblings } from '../../../util/util.js'
-var Highcharts = require('highcharts');
-// 在 Highcharts 加载之后加载功能模块
-require('highcharts/modules/exporting')(Highcharts);
+// var Highcharts = require('highcharts');
+// // 在 Highcharts 加载之后加载功能模块
+// require('highcharts/modules/exporting')(Highcharts);
 // require('highcharts-no-data-to-display')(Highcharts)
 export default {
     components: {
@@ -426,6 +426,9 @@ export default {
             })
         },
         handleClick (e) {
+             if(this.spinShow==true || this.spinShow2==true){
+                return
+            }
             clearTimeout(this.timer)
             clearTimeout(this.timerChart)
 
