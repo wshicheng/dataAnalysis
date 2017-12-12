@@ -397,7 +397,7 @@ export default {
           return num;
         },
         handleClick (e) {
-            if(this.spinShow==true){
+            if(this.spinShow==true||this.flag==false){
                 return
             }
             // 清空chart数据

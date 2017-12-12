@@ -662,6 +662,9 @@ export default {
             return newArr
         },
         handleClick (e) {
+            if(this.spinShow==true || this.spinShow2==true || this.spinShow3==true){
+                return
+            }
             clearTimeout(this.timer)
             clearTimeout(this.timerAll)
             this.currentPage = 1
@@ -683,6 +686,9 @@ export default {
             }
         },
         handleTypeClick (e) {
+            if(this.spinShow==true || this.spinShow2==true || this.spinShow3==true){
+                return
+            }
             clearTimeout(this.timer)
             clearTimeout(this.timerAll)
             this.chartTitleName = e.target.innerHTML

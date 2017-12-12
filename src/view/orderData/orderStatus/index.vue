@@ -1108,7 +1108,7 @@ export default {
           enabled: false
         },
         title: {
-          text: "订单状态的构成"
+          text: "订单状态的构成-汇总"
         },
         tooltip: {
           headerFormat: "{series.name}<br>",

@@ -444,6 +444,9 @@ export default {
             })
         },
         handleClick (e) {
+            if(this.spinShow==true || this.spinShow2==true){
+                return
+            }
             clearTimeout(this.timer)
             clearTimeout(this.timerChart)
             this.currentPage = 1
