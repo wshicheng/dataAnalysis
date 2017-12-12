@@ -754,6 +754,12 @@ export default {
             }
         },
         handleCurrentPage(currentPage) {
+             $('div.spieceTable').parent().hide() 
+                   $('div.spieceTable').parent().css({
+                       position:'relative',
+                       top:'initial' ,
+                       zIndex:99
+                   })
             this.currentPage = currentPage
             if (this.loadFlag === true) {
                 this.loadData($('.orderAllData_head_time button.active').attr('myId'))
