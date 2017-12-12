@@ -991,10 +991,16 @@ export default {
       }
     },
     searchByTimeLine() {
-     
+      if($(".search button").attr("disabled")=='disabled'){
+          return
+       }
       var type = $(".orderStatus_head_time button.active").attr("myId");
       if (this.timeLine[0] === "" || this.timeLine[0] === null) {
         this.$Message.warning("请选择时间段");
+         $(".search button").attr("disabled","disabled")
+        setTimeout(function(){
+            $(".search button").attr("disabled",false)
+        },1500)
       } else {
          if(this.citySelectNum.length==0){
             return;
@@ -1108,7 +1114,7 @@ export default {
           enabled: false
         },
         title: {
-          text: "订单状态的构成"
+          text: "订单状态的构成-汇总"
         },
         tooltip: {
           headerFormat: "{series.name}<br>",

@@ -608,6 +608,9 @@ export default {
         });
     },
     handleClick(e) {
+      if(this.loading==true){
+        return
+      }
       this.current = 1;
       var elems = siblings(e.target);
       for (var i = 0; i < elems.length; i++) {
@@ -673,8 +676,15 @@ export default {
       }
     },
     searchByTimeLine() {
+      if($(".search button").attr("disabled")=='disabled'){
+          return
+      }
       if (this.timeLine[0] === "" || this.timeLine[0] === null) {
         this.$Message.warning("请选择时间段");
+          $(".search button").attr("disabled","disabled")
+          setTimeout(function(){
+              $(".search button").attr("disabled",false)
+          },1500)
       } else {
         if (this.citySelectNum.length < 2) {
           if(this.citySelectNum.length==0){

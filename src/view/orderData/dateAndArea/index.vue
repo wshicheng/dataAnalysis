@@ -688,8 +688,15 @@ export default {
             this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
         },
         searchByTimeLine () {
+            if($(".search button").attr("disabled")=='disabled'){
+                return
+            }
             if (this.timeLine[0] === '' || this.timeLine[0] === null) {
                 this.$Message.warning('请选择时间段')
+                 $(".search button").attr("disabled","disabled")
+                setTimeout(function(){
+                    $(".search button").attr("disabled",false)
+                },1500)
             } else {
 
                 if(this.citySelectNum.length==0){
