@@ -681,6 +681,11 @@ export default {
                 this.noDataText = '请至少选择一个城市'
                 return;
             }
+             if(this.typeList.length==0){
+                this.spinShow = false
+                this.noDataText = '请至少选择一个类别'
+                return;
+            }
             this.axios.get('/beefly/baseData/api/v1/page', {
                 params: {
                     cityCode: this.$store.state.cityList.toString(),
@@ -1335,11 +1340,7 @@ export default {
                      this.data1 = []
                      return;
                 }else{
-                     this.noDataText = '请至少选择一个城市'
-                     this.spinShow = false
-                     this.pageShow = false
-                     this.data1 = []
-                     return;
+                     
                 }
             },
             deep:true

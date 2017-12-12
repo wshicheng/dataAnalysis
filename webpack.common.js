@@ -17,8 +17,7 @@ module.exports = {
        vue:['vue','vue-router','vuex'],
        iview:['iview'],
        lodash:['lodash'],
-       axios:['axios'],
-       highcharts:['highcharts']
+       axios:['axios']
     },
    
     module: {
@@ -103,7 +102,7 @@ module.exports = {
         }),
         new webpack.optimize.CommonsChunkPlugin({
            // name: 'common' // Specify the common bundle's name.
-            name:['vue','iview','lodash','axios','highcharts','manifest']
+            name:['vue','iview','lodash','axios','manifest']
         }),
         new webpack.HashedModuleIdsPlugin({
             hashFunction: 'sha256',
