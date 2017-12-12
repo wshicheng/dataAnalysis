@@ -18,11 +18,13 @@ export default new Vuex.Store({
         cityList: [],
         keepCitys: [],
         menuActiveName: '',
-        imageUrl: ''
+        imageUrl: '',
+        scrollTop:''
     },
     getters:{
         cityList: state => {return state.cityList},
-        accessToken: state => {return state.token}
+        accessToken: state => {return state.token},
+        scrollTop: state => {return state.scrollTop}
     },
     mutations: {
         [types.LOGIN](state, data){
@@ -47,9 +49,15 @@ export default new Vuex.Store({
         },
         set_HeadImg ( state , imageUrl) {
             state.imageUrl = imageUrl
+        },
+        ScrollTop_mutation(state,top){
+            state.scrollTop = top
         }
     },
     actions:{
+        setScrollTop({commit},top){
+           commit('ScrollTop_mutation',top)
+        },
         setToken({commit},token){
             commit(types.LOGIN,token)
         },

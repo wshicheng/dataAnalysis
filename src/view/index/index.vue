@@ -7,7 +7,7 @@
                 <i-col span="5">
                     <menu-component></menu-component>
                 </i-col>
-                <i-col span="19">
+                <i-col span="19" v-scroll="onScroll">
                     <div class="layout-content-main">
                         <!-- 路由匹配到的组件将渲染在这里 -->
                         <router-view></router-view>
@@ -24,6 +24,7 @@
 <script>
 import MenuComponent from '../../components/menu.vue'
 import HeadComponent from '../../components/head.vue'
+import {mapGetters,mapActions} from 'vuex'
   export default  {
      components: {
         "menu-component": MenuComponent,
@@ -36,11 +37,17 @@ import HeadComponent from '../../components/head.vue'
         }
     },
     computed: {
+        ...mapGetters(['scrollTop']),
         iconSize() {
             return this.spanLeft === 5 ? 14 : 24;
         }
     },
     methods: {
+        ...mapActions(['setScrollTop']),
+        onScroll(e,position){
+            //console.log(e,position)
+            this.setScrollTop(position.scrollTop)
+        },
         toggleClick() {
             if (this.spanLeft === 5) {
                 this.spanLeft = 2;

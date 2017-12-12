@@ -55,7 +55,14 @@
                 </div>
             </Poptip>
         </div>
-        <Table @on-sort-change="sortChange"  border size='small' height='400' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
+        <div class="spieceTablePar" >
+
+              <Table class="spieceTable" @on-sort-change="sortChange"  border size='small'  :no-data-text='noDataTextSpace' :columns="columns_orderData" :data="[]"></Table>
+        </div>
+      
+       <div class="relTab">
+            <Table @on-sort-change="sortChange"  border size='small'  :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
+       </div>
         <Page :total="totalListNum" :styles='page' placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize"  :page-size="pageSize" :page-size-opts='pageSizeOpts' show-sizer show-elevator></Page>
       </div>
 
@@ -77,6 +84,7 @@
   </div>
 </template>
 <style lang='scss' scoped type="text/css">
+    div.spieceTablePar{width:calc(100% - 20px);height:58px;position: absolute;z-index: 99}
     #orderAllData_body {
         background: #ececec;
         .Breadcrumb {
@@ -274,6 +282,7 @@
 <script>
 import citySelect from '../../../components/citySelect.vue'
 import { siblings } from '../../../util/util.js'
+import {mapGetters,mapActions} from 'vuex'
 // var Highcharts = require('highcharts');
 // // 在 Highcharts 加载之后加载功能模块
 // require('highcharts/modules/exporting')(Highcharts);
@@ -285,6 +294,7 @@ export default {
     data () {
         var that = this;
         return {
+            noDataTextSpace:'',
             citySelectNum:[],
             cityType: '',
             timeSelectShow: false,
@@ -470,6 +480,7 @@ export default {
       
     },
     computed: {
+        ...mapGetters(['scrollTop']),
         city:{
             get () {
                 return this.city = window.localStorage.getItem('city')
@@ -481,6 +492,8 @@ export default {
         }
     },  
     methods: {
+
+        ...mapActions(['setScrollTop']),
         sortChange(params){
           var arr = this.orderData.map((item)=>{
              return  item.orderNum.replace(',','')
@@ -744,12 +757,24 @@ export default {
             }
         },
         handleCurrentPage(currentPage) {
+            $('div.spieceTable').parent().hide() 
+            $('div.spieceTable').parent().css({
+                position:'relative',
+                top:'initial' ,
+                zIndex:99
+            })
             this.currentPage = currentPage
             if (this.loadFlag === true) {
                 this.loadData($('.orderAllData_head_time button.active').attr('myId'))
             }
         },
         handlePageSize(pageSize) {
+             $('div.spieceTable').parent().hide() 
+            $('div.spieceTable').parent().css({
+                position:'relative',
+                top:'initial' ,
+                zIndex:99
+            })
             this.currentPage = 1
             this.pageSize = pageSize
             if (this.loadFlag === true) {
@@ -926,6 +951,50 @@ export default {
         }
     },
     watch: {
+        'scrollTop':{
+            handler:function(n,o){
+                console.log("滚动的距离：" + n)
+               var partop = $('div.ivu-col.ivu-col-span-19').offset().top
+               //relTab spieceTable
+               var _relTop = $('div.relTab').offset().top
+               var top =  $('div.spieceTable').offset().top
+               var _selfHeight =  $('div.spieceTable').height()
+
+               console.log(_selfHeight)
+               console.log('假头部距离 窗口顶部的距离：' +  (top - partop))
+               //console.log((top-partop) * (-1) + ':' + _selfHeight)
+                var pageToTop =  $('.ivu-page').offset().top // tab的高度
+                 console.log('pageToTop:' + pageToTop)
+               if(-(top-partop) > _selfHeight){
+                   console.log('此时假头部改出现了')
+                    console.log("n-o:" + (n - o))
+                   var disY = -(top-partop) - _selfHeight;
+                    $('div.spieceTable').parent().show() 
+                   $('div.spieceTable').parent().css({
+                       position:'fixed',
+                       top:disY + _selfHeight ,
+                       zIndex:99
+                   })
+               }
+               if(-(_relTop-partop) < _selfHeight){
+                    $('div.spieceTable').parent().hide() 
+                   $('div.spieceTable').parent().css({
+                       position:'relative',
+                       top:'initial' ,
+                       zIndex:99
+                   })
+               }
+              if(pageToTop - 30 <_selfHeight){
+                  $('div.spieceTable').parent().hide() 
+                    $('div.spieceTable').parent().css({
+                        position:'relative',
+                        top:'initial' ,
+                        zIndex:99
+                    }) 
+              }
+            },
+            deep:true
+        },
         '$store.state.cityList': 'cityChange',
     }
 }
