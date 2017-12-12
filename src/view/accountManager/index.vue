@@ -29,7 +29,7 @@
             <Page v-show="pageShow" :total="totalListNum" :current='currentPage' class="tableGrid_page" placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts' show-elevator></Page>
         </Row>
         <!-- 模态框区域 编辑数据 -->
-        <Modal v-model="editModal" width="800px" :mask-closable="close" :styles="{top: '3%'}" class="editModal_form">
+        <Modal v-model="editModal" width="800px" :mask-closable="close" :styles="{top: '3%'}" class="editModal_form"  @on-cancel="closeEditModel">
             <p slot="header" style="color: #404040;">
                 <span>编辑账号</span>
             </p>
@@ -96,7 +96,7 @@
             </div>
         </Modal>
         <!-- 模态框区域 增加数据 -->
-        <Modal v-model="addModal" width="800px" :styles="{top: '3%'}" :mask-closable="close" class="addModal_form">
+        <Modal v-model="addModal" width="800px" :styles="{top: '3%'}" :mask-closable="close" class="addModal_form" @on-cancel="closeAddModel">
             <p slot="header" class="editModal_head" style="color: #404040;">
                 <span>添加账号</span>
             </p>

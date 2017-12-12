@@ -25,7 +25,7 @@
                                     </div>
                                 </dt>
                                 <dd>
-                                    <ul class="nowRate">
+                                    <ul>
                                         <li v-for="list of cityList" v-bind:key="list.cityId">
                                             <div class="cityName">
                                                 <div>
@@ -926,7 +926,7 @@ import { mapGetters } from 'vuex'
                 var h2 = $('.monthSelect').outerHeight()
                 var h3 = $('.title').outerHeight()
                 $('#analysis').height(availHeight - h1 - h2 -h3 - 70)
-                $('#analysis div.fixedHeader dd ul').width(len*liW - 6)
+                $('#analysis div.fixedHeader dd ul').width(len*liW - 2)
                 $('#analysis div.fixedBody dd ul').width(bodylen*bodyliW)
                 $('#analysis div.fixedBody').width(bodylen*bodyliW + dtW )
             },
@@ -1246,8 +1246,11 @@ import { mapGetters } from 'vuex'
         },
         mounted:function(){
             //this.mockDatas()
+            // 动态设置ul的宽度
+            
             this.month = this.$route.params.month.split('-')[1]
             window.addEventListener('resize',this.fx())
+
         },
         watch: {
                 'dataMonth':{

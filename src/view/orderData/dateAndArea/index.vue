@@ -799,6 +799,7 @@ export default {
                 this.pageShow = false
                 return;
             }
+            
             this.loadData($('.dateAndArea_head_time button.active').attr('myId'))
             this.loadTotalData($('.dateAndArea_head_time button.active').attr('myId'))
             // this.getChartData($('.dateAndArea_head_time button.active').attr('myId'))

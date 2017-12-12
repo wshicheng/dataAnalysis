@@ -288,14 +288,24 @@ button.DIY_button:hover {
 }
 
 .ivu-table-cell {
-    padding-left: 18px;
-    padding-right: 18px;
+    padding-left: 8px;
+    padding-right: 8px;
     font-size: 13px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: normal;
     word-break: break-all;
     box-sizing: border-box;
+    text-align:right;
+}
+.ivu-table-row td:nth-child(1) .ivu-table-cell:nth-child(1){
+    text-align:left;
+}
+.ivu-table-header th{
+    text-align:right;
+}
+.ivu-table-header th:nth-child(1){
+    text-align:left;
 }
 
 // 树形结构对齐样式
@@ -322,7 +332,6 @@ button.DIY_button:hover {
 #operatAnalysis div.ivu-table-body{height:235px;}
 #operatAnalysis div.ivu-table-fixed-body{height:216px;}
 #operatAnalysis div#fiexedAssets5{height:297px;}
-#operatAnalysis ul.nowRate{min-width:200px!important}
 
 // 单车日收益
 #singleBikeIncoming div.ivu-tabs{overflow-y: hidden;}

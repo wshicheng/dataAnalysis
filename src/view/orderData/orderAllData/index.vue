@@ -327,7 +327,8 @@ export default {
                 },
                 {
                     title: '订单总数',
-                    key: 'orderAllNum'
+                    key: 'orderAllNum',
+                    
                 },
                 {
                     title: '有效订单数',
@@ -573,6 +574,7 @@ export default {
                 if (res.data.resultCode != 1) {
                      this.noDataText = '暂无数据'
                      this.pageShow = false
+                     this.spinShow = false
                      this.orderData = data
                     this.loadChartData($('.orderAllData_head_time button.active').attr('myId'))
                     this.loadTotalData($('.orderAllData_head_time button.active').attr('myId'))
@@ -661,6 +663,7 @@ export default {
                 if (res.data.resultCode === 0) {
                     this.orderTotalData = []
                     this.noDataText2 = '暂无数据'
+                    
                 } else {
                     // 多个和单个城市登录时，分别显示是合计，还是平均 + 合计
                     if (this.cityType === 1) {
