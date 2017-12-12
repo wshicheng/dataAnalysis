@@ -754,18 +754,24 @@ export default {
             }
         },
         handleCurrentPage(currentPage) {
-             $('div.spieceTable').parent().hide() 
-                   $('div.spieceTable').parent().css({
-                       position:'relative',
-                       top:'initial' ,
-                       zIndex:99
-                   })
+            $('div.spieceTable').parent().hide() 
+            $('div.spieceTable').parent().css({
+                position:'relative',
+                top:'initial' ,
+                zIndex:99
+            })
             this.currentPage = currentPage
             if (this.loadFlag === true) {
                 this.loadData($('.orderAllData_head_time button.active').attr('myId'))
             }
         },
         handlePageSize(pageSize) {
+             $('div.spieceTable').parent().hide() 
+            $('div.spieceTable').parent().css({
+                position:'relative',
+                top:'initial' ,
+                zIndex:99
+            })
             this.currentPage = 1
             this.pageSize = pageSize
             if (this.loadFlag === true) {
@@ -950,10 +956,12 @@ export default {
                var _relTop = $('div.relTab').offset().top
                var top =  $('div.spieceTable').offset().top
                var _selfHeight =  $('div.spieceTable').height()
+
                console.log(_selfHeight)
                console.log('假头部距离 窗口顶部的距离：' +  (top - partop))
                //console.log((top-partop) * (-1) + ':' + _selfHeight)
-            
+                var TabHeight =  $('.relTab').height() // tab的高度
+               
                if(-(top-partop) > _selfHeight){
                    console.log('此时假头部改出现了')
                     console.log("n-o:" + (n - o))
@@ -973,6 +981,14 @@ export default {
                        zIndex:99
                    })
                }
+              if(n>TabHeight){
+                  $('div.spieceTable').parent().hide() 
+                    $('div.spieceTable').parent().css({
+                        position:'relative',
+                        top:'initial' ,
+                        zIndex:99
+                    }) 
+              }
             },
             deep:true
         },
