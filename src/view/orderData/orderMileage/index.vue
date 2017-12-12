@@ -54,7 +54,7 @@
                         <p class="vaildOrderNum">*数据来自有效订单数</p>
                     </div> -->
                     <div>
-                        <chart toolType="单数" type="里程分布" title="订单里程分布" :xAxis="xAxis" :chartData="chartData" subtitle="*数据来自有效订单数"></chart>
+                        <chart toolType="单数" type="里程分布" title="订单里程分布--有效订单占比" :xAxis="xAxis" :chartData="chartData" subtitle="*数据来自有效订单数"></chart>
                     </div>
                  </div>
             </div>
@@ -64,7 +64,7 @@
                         <p class="vaildOrderNum">*地区超过10个时，显示10个地区,数据来自有效订单数</p>
                     </div> -->
                     <div>
-                        <chart-more toolType="单数" type="里程分布" title="分地区订单里程分布" :xAxis="xAxis" :chartData="chartData" subtitle=""></chart-more>
+                        <chart-more toolType="单数" type="里程分布" title="分地区订单里程分布--有效订单占比" :xAxis="xAxis" :chartData="chartData" subtitle=""></chart-more>
                     </div>
                 </div>
                

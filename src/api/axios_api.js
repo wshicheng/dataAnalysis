@@ -6,7 +6,7 @@ import router from '../router/router-config'
 /**
  * 生产 
  */
-//let baseURL = 'http://10.31.147.119:5080'
+// let baseURL = 'http://10.31.147.119:5080'
 
 
 let baseURL = 'http://47.93.48.250:5080'
