@@ -26,7 +26,7 @@
             <Button class="cancel" @click="delTableByGroup" style="font-size: 13px;">删除</Button>
             <span>*每月10号后，不可编辑和删除上月数据</span>
                         
-            <Table :row-class-name="rowClassName" :no-data-text='noDataText' class="cityManage_table" border size='small' :columns="columns4" :data="data1" @on-select="selectGroup" @on-select-all="selectAll" @on-selection-change="selectChange">                
+            <Table :row-class-name="rowClassName" :no-data-text='noDataText' class="cityManage_table message_table" border size='small' :columns="columns4" :data="data1" @on-select="selectGroup" @on-select-all="selectAll" @on-selection-change="selectChange">                
             </Table>
             <Page :total="totalListNum" show-sizer show-elevator :styles='page' :current='current' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts' v-show="this.pageShow"></Page>
 

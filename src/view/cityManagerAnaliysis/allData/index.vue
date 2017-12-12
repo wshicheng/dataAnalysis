@@ -12,7 +12,7 @@
                  <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                  <div style="color: #ccc; text-indent: 5px;">  loading...</div>
             </Spin>
-            <Table :columns="columns" :no-data-text='noDataText' :data="data"></Table>
+            <Table :columns="columns" :no-data-text='noDataText' :data="data" class="message_table"></Table>
             <Page :total="totalListNum" v-show="pageShow" class="tableGrid_page" placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </Row>
     </Row>

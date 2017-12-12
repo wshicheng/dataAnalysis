@@ -14,7 +14,7 @@
             <Col class="opeartor">
                 <Button type="warning" @click="handleAdd" style="font-size: 13px;">添加角色</Button>
             </Col>
-            <Table :columns="columns"  :no-data-text='noDataText'  :data="data"></Table>
+            <Table :columns="columns"  :no-data-text='noDataText'  :data="data" class="message_table"></Table>
             <Spin fix size="large" v-if="spinShow"  class="spin">
                  <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                  <div style="color: #ccc; text-indent: 5px;">  loading...</div>

@@ -63,7 +63,7 @@
                         </div>
                     </Poptip> 
                 </div>
-                <Table :no-data-text='noDataText2'  border size='small' :columns="columnsComparison" :data="comparisonData"></Table>
+                <Table :no-data-text='noDataText2'  border size='small' :columns="columnsComparison" :data="comparisonData" class="compare_table"></Table>
                
                 
            </div>
@@ -700,6 +700,7 @@ export default {
     document.title = "订单数据 - 订单状态构成";
     this.tabChangeName = "gather";
     this.loadData("3", 1);
+    console.log(this.cityNameCategory)
   },
   methods: {
     chartType(e) {

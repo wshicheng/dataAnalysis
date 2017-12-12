@@ -973,7 +973,8 @@ export default {
                    $('div.spieceTable').parent().css({
                        position:'fixed',
                        top:disY + _selfHeight ,
-                       zIndex:99
+                       zIndex:99,
+                       width:'calc(100% -20px)'
                    })
                }
                if(-(_relTop-partop) < _selfHeight){

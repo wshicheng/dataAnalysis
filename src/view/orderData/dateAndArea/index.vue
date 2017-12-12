@@ -41,7 +41,7 @@
                 </Poptip>
             </div>
            <div style="padding:10px 0;text-align:center;" v-show="citySelectNum.length==0?true:false">请至少选择一个城市</div>
-            <Table v-show="citySelectNum.length==0?false:true" :no-data-text='noDataText' :ellipsis='ellipsis' :loading='loading' border size='small' :columns="columns_orderData" :data="orderData"></Table>
+            <Table v-show="citySelectNum.length==0?false:true" :no-data-text='noDataText' :ellipsis='ellipsis' :loading='loading' border size='small' :columns="columns_orderData" :data="orderData" class="create"></Table>
             <Page :total="totalListNum" show-sizer show-elevator :styles='page' v-show="pageShow" :current='current' placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
         </div>
 
@@ -58,7 +58,7 @@
                     合计
                 </div>
             </div> -->
-            <Table :no-data-text='noDataText2' class="totalTable" :show-header='showHeader' border size='small' :columns="columns_total" :data="totalData"></Table>
+            <Table :no-data-text='noDataText2' class="totalTable create" :show-header='showHeader' border size='small' :columns="columns_total" :data="totalData"></Table>
         </div>
 
         <div class="dateAndArea_chart"  v-show="noDataBox">
