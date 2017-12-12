@@ -960,8 +960,8 @@ export default {
                console.log(_selfHeight)
                console.log('假头部距离 窗口顶部的距离：' +  (top - partop))
                //console.log((top-partop) * (-1) + ':' + _selfHeight)
-                var TabHeight =  $('.relTab').height() // tab的高度
-               
+                var pageToTop =  $('.ivu-page').offset().top // tab的高度
+                 console.log('pageToTop:' + pageToTop)
                if(-(top-partop) > _selfHeight){
                    console.log('此时假头部改出现了')
                     console.log("n-o:" + (n - o))
@@ -981,7 +981,7 @@ export default {
                        zIndex:99
                    })
                }
-              if(n>TabHeight){
+              if(pageToTop - 30 <_selfHeight){
                   $('div.spieceTable').parent().hide() 
                     $('div.spieceTable').parent().css({
                         position:'relative',
