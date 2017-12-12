@@ -76,7 +76,7 @@
                         <div style="color: #ccc; text-indent: 5px;">  loading...</div>
                     </Spin>
                      <div class="select">
-                            <button class="active" @click="chartType" myType='percentage'>订单数1</button>
+                            <button class="active" @click="chartType" myType='percentage'>订单数</button>
                             <button @click="chartType" myType='orderCountRate'>订单数占比</button>
                      </div>
                 <div id="container2" style="min-width:400px; height: 400px;"></div>

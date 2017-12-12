@@ -8,7 +8,6 @@ import router from '../router/router-config'
  */
 //let baseURL = 'http://10.31.147.119:5080'
 
-
 let baseURL = 'http://47.93.48.250:5080'
 
 //let baseURL = 'http://192.168.0.131:5080'
@@ -25,7 +24,6 @@ axios.defaults.baseURL = baseURL;
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
-
 // axios 配置
 // axios.defaults.timeout = 5000;
 // axios.defaults.baseURL = 'https://api.github.com';
@@ -35,6 +33,7 @@ axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded'
 //     config => {
 //         if (localStorage.getItem('token')) {
 //             config.headers.Authorization = `token ${localStorage.getItem('token')}`;
+//             
 //         }
 //         return config;
 //     },
