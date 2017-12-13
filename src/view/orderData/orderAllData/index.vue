@@ -352,12 +352,13 @@ export default {
                 },
                 {
                  
-                     renderHeader:(h)=>{
-                        return h('div',[
-                            h('div','订单金额'),
-                            h('span','(￥)')
-                        ])
-                    },
+                    //  renderHeader:(h)=>{
+                    //     return h('div',[
+                    //         h('div','订单金额'),
+                    //         h('span','(￥)')
+                    //     ])
+                    // },
+                    title:'订单金额(￥)',
                     key: 'orderAllAmount',
                     // sortable: true
                 },
