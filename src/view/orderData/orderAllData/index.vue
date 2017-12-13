@@ -360,6 +360,7 @@ export default {
                     // },
                     title:'订单金额(￥)',
                     key: 'orderAllAmount',
+                    width:100
                     // sortable: true
                 },
                 {
@@ -387,7 +388,7 @@ export default {
                         ])
                     },
                     key: 'avgTime',
-                    width: 100
+                    width: 120
                 },
                 {
                     renderHeader:(h)=>{
@@ -397,7 +398,7 @@ export default {
                         ])
                     },
                     key: 'avgMileage',
-                    width: 100
+                    width: 120
                 }
             ],
             orderData: [],
@@ -417,6 +418,7 @@ export default {
                 {
                     title: '订单金额(￥)',
                     key: 'orderAllAmount',
+                     width:100
                     // sortable: true
                 },
                 {
@@ -439,12 +441,12 @@ export default {
                 {
                     title: '平均订单时长(min)',
                     key: 'avgTime',
-                    width: 100
+                    width: 120
                 },
                 {
                     title: '平均订单里程(km)',
                     key: 'avgMileage',
-                    width: 115
+                    width: 120
                 }
             ],
             orderTotalData: [],
@@ -961,22 +963,22 @@ export default {
                var _relTop = $('div.relTab').offset().top
                var top =  $('div.spieceTable').offset().top
                var _selfHeight =  $('div.spieceTable').height()
-               console.log('假头部距离 窗口顶部的距离：' +  (top - partop))
+            //    console.log('假头部距离 窗口顶部的距离：' +  (top - partop))
                 var pageToTop =  $('.ivu-page').offset().top // tab的高度
                 // console.log('pageToTop:' + pageToTop)
                if(-(_relTop-partop) > _selfHeight){
-                   console.log('此时假头部改出现了')
+                //    console.log('此时假头部改出现了')
                    if(Math.abs(-(top-partop) - _selfHeight)<10){
                         this.recode = n
                        
                     }
                      var disY = -(_relTop-partop) - _selfHeight;
-                    console.log('disY:'+ disY)
-                        console.log('recode:' + this.recode)
+                    // console.log('disY:'+ disY)
+                        // console.log('recode:' + this.recode)
                         $('div.spieceTable').parent().show() 
                     $('div.spieceTable').parent().css({
                         position:'absolute',
-                        top:Math.abs(-(_relTop-partop)) + _selfHeight - 25  ,
+                        top:Math.abs(-(_relTop-partop)) + _selfHeight - 10  ,
                         zIndex:99
                     }) 
                }else{

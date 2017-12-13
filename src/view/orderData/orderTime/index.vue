@@ -305,12 +305,13 @@ export default {
       citySelectNum: [],
       columns1: [
         {
-          renderHeader:(h)=>{
-            return h('div',[
-                h('div','时长分布'),
-                h('span','(min)')
-            ])
-          },
+        //   renderHeader:(h)=>{
+        //     return h('div',[
+        //         h('div','时长分布'),
+        //         h('span','(min)')
+        //     ])
+        //   },
+          title:'时长分布(min)',
           key: "duration"
         },
         {
@@ -349,7 +350,7 @@ export default {
           },
           key: "orderAmount",
           renderHeader: function(h) {
-            return h("div", "订单金额（￥）");
+            return h("div", "订单金额(￥)");
           },
           render: function(h, params) {
             return h(

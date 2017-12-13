@@ -158,6 +158,7 @@
                 display: inline-block;
                 // background-color: rgba(253, 248, 248,0.0); 
                 background-color: rgba(255, 255, 255, 0.8); 
+
             }
             .help {
                 width: 100%;
@@ -295,7 +296,13 @@ export default {
                     key: 'bikeNum'
                 },
                 {
-                    title: '累计投产车（日均）',
+                    renderHeader:(h)=>{
+                        return h('div',[
+                            h('div','累计投产车'),
+                            h('span','（日均）')
+                        ])
+                    },
+                    // title: '累计投产车（日均）',
                     key: 'sumBikeNum'
                 },
                 {
@@ -497,7 +504,7 @@ export default {
                         labels: {
                             // format: '{value} ',
                             formatter:function(){
-                                    return Highcharts.numberFormat(this.value, 2, ".",",") + '元'
+                                    return $('.select button.active')[0].innerHTML=='订单金额'?Highcharts.numberFormat(this.value, 2, ".",",")+'元':Highcharts.numberFormat(this.value, 0, ".",",")
                                 },
                             style: {
                                 color: '#ed7d31'
@@ -518,7 +525,10 @@ export default {
                             }
                         },
                         labels: {
-                            format: '{value} ',
+                            // format: '{value} ',
+                            formatter:function(){
+                                    return $('.select button.active')[0].innerHTML=='订单金额'?Highcharts.numberFormat(this.value, 2, ".",",")+'元':Highcharts.numberFormat(this.value, 0, ".",",")
+                                },
                             style: {
                                 color: '#4472c4'
                             }
@@ -587,22 +597,22 @@ export default {
                var _relTop = $('div.relTab').offset().top
                var top =  $('div.spieceTable').offset().top
                var _selfHeight =  $('div.spieceTable').height()
-               console.log('假头部距离 窗口顶部的距离：' +  (top - partop))
+            //    console.log('假头部距离 窗口顶部的距离：' +  (top - partop))
                 var pageToTop =  $('.ivu-page').offset().top // tab的高度
                 // console.log('pageToTop:' + pageToTop)
                if(-(_relTop-partop) > _selfHeight){
-                   console.log('此时假头部改出现了')
+                //    console.log('此时假头部改出现了')
                    if(Math.abs(-(top-partop) - _selfHeight)<10){
                         this.recode = n
                        
                     }
                      var disY = -(_relTop-partop) - _selfHeight;
-                    console.log('disY:'+ disY)
-                        console.log('recode:' + this.recode)
+                    // console.log('disY:'+ disY)
+                        // console.log('recode:' + this.recode)
                         $('div.spieceTable').parent().show() 
                     $('div.spieceTable').parent().css({
                         position:'absolute',
-                        top:Math.abs(-(_relTop-partop)) + _selfHeight - 25  ,
+                        top:Math.abs(-(_relTop-partop)) + _selfHeight - 10  ,
                         zIndex:99
                     }) 
                }else{

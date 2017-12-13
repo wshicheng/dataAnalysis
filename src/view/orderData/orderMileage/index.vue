@@ -303,12 +303,13 @@ export default {
       citySelectNum: [],
       columns1: [
         {
-          renderHeader:(h)=>{
-            return h('div',[
-                h('div','里程分布'),
-                h('span','(km)')
-            ])
-          },
+          // renderHeader:(h)=>{
+          //   return h('div',[
+          //       h('div','里程分布'),
+          //       h('span','(km)')
+          //   ])
+          // },
+          title:'里程分布(km)',
           key: "time"
         },
         {
@@ -329,12 +330,13 @@ export default {
           }
         },
         {
-           renderHeader:(h)=>{
-            return h('div',[
-                h('div','订单金额'),
-                h('span','(￥)')
-            ])
-          },
+          //  renderHeader:(h)=>{
+          //   return h('div',[
+          //       h('div','订单金额'),
+          //       h('span','(￥)')
+          //   ])
+          // },
+          title: "订单金额(￥)",
           key: "orderMoney",
         },
         {

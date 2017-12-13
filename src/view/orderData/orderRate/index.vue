@@ -383,7 +383,7 @@ export default {
           key: "orderCountRate"
         },
         {
-          title: "订单金额",
+          title: "订单金额(￥)",
           key: "amount"
         },
         {

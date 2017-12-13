@@ -88,10 +88,12 @@ export default {
         // }
         city: {
             get: function () {
+               
                 this.cityList = this.userInfo.cityList
                 if (this.cityList.length != 0) {
                     window.localStorage.setItem('city', this.cityList[0].name)
                     if(window.localStorage.getItem('cityStr')==''){
+        
                         return;
                     }
                     if (window.localStorage.getItem('cityStr') != '全部地区' && window.localStorage.getItem('cityStr').length > 3) {
