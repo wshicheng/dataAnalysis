@@ -67,12 +67,7 @@ export default {
         handleLoginOut() {
             this.$router.push('/login')
             this.removeToken()
-            window.localStorage.removeItem('token')
-            window.localStorage.removeItem('userInfo')
-            window.localStorage.removeItem('openNames')
-            window.localStorage.removeItem('authList')
-            window.localStorage.removeItem('cityStr')
-            window.localStorage.removeItem('cityType')
+            window.localStorage.clear()
         },
         getImage() {
             if (this.$store.state.imageUrl === '') {
@@ -96,6 +91,9 @@ export default {
                 this.cityList = this.userInfo.cityList
                 if (this.cityList.length != 0) {
                     window.localStorage.setItem('city', this.cityList[0].name)
+                    if(window.localStorage.getItem('cityStr')==''){
+                        return;
+                    }
                     if (window.localStorage.getItem('cityStr') != '全部地区' && window.localStorage.getItem('cityStr').length > 3) {
                         return this.userInfo.cityList.map((item) => { return item.name }).join('、')
                     } else {
@@ -114,7 +112,7 @@ export default {
         '$store.state.imageUrl': 'getImage',
         '$route': {
             handler: function() {
-                this.$store.dispatch('setCityList', [])
+                //this.$store.dispatch('setCityList', [])
             },
             deep: true
         }
