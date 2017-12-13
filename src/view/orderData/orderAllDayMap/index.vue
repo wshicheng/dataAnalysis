@@ -495,7 +495,10 @@ export default {
                     }],
                     yAxis: [{ // Primary yAxis
                         labels: {
-                            format: '{value} ',
+                            // format: '{value} ',
+                            formatter:function(){
+                                    return Highcharts.numberFormat(this.value, 2, ".",",") + '元'
+                                },
                             style: {
                                 color: '#ed7d31'
                             }
@@ -532,7 +535,7 @@ export default {
                             if(text=='订单金额'){
                                  return "<span>" + this.series.name + ':</span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 2, ".",",")] + '<br>'    
                             }else{
-                                 return "<span>" + this.series.name + ':</span>' + [new String(this.y).length<3?this.y:this.y] + '<br>'
+                                 return "<span>" + this.series.name + ':</span>' + [new String(this.y).length<3?this.y:Highcharts.numberFormat(this.y, 0, ".",",")] + '<br>'
                             }
                            
                         }

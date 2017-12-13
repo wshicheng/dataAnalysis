@@ -745,7 +745,10 @@ export default {
                 ? ""
                 : moment(this.timeLine[1]).format("YYYY-MM-DD"),
             data_type: data_type,
-            state: state
+            state: state,
+            // 修改点击对比时会加载所有数据，故传入默认pageNo和pageSize
+            pageNo:1,
+            pageSize:10
           }
         })
         .then(res => {
