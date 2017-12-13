@@ -84,7 +84,8 @@
   </div>
 </template>
 <style lang='scss' scoped type="text/css">
-    div.spieceTablePar{width:calc(100% - 20px);height:58px;position: absolute;z-index: 99}
+    div.spieceTablePar{
+        position: absolute;left: 10px;top: 33px;z-index: 99;width:calc(100% - 20px);height:58px;}
     #orderAllData_body {
         background: #ececec;
         .Breadcrumb {
@@ -294,6 +295,7 @@ export default {
     data () {
         var that = this;
         return {
+            recode:'',
             noDataTextSpace:'',
             citySelectNum:[],
             cityType: '',
@@ -953,43 +955,41 @@ export default {
     watch: {
         'scrollTop':{
             handler:function(n,o){
-                console.log("滚动的距离：" + n)
                var partop = $('div.ivu-col.ivu-col-span-19').offset().top
                //relTab spieceTable
                var _relTop = $('div.relTab').offset().top
                var top =  $('div.spieceTable').offset().top
                var _selfHeight =  $('div.spieceTable').height()
-
-               console.log(_selfHeight)
                console.log('假头部距离 窗口顶部的距离：' +  (top - partop))
-               //console.log((top-partop) * (-1) + ':' + _selfHeight)
                 var pageToTop =  $('.ivu-page').offset().top // tab的高度
-                 console.log('pageToTop:' + pageToTop)
-               if(-(top-partop) > _selfHeight){
+                // console.log('pageToTop:' + pageToTop)
+               if(-(_relTop-partop) > _selfHeight){
                    console.log('此时假头部改出现了')
-                    console.log("n-o:" + (n - o))
-                   var disY = -(top-partop) - _selfHeight;
-                    $('div.spieceTable').parent().show() 
-                   $('div.spieceTable').parent().css({
-                       position:'fixed',
-                       top:disY + _selfHeight ,
-                       zIndex:99,
-                    //    width:'calc(100% -20px)'
-                   })
-               }
-               if(-(_relTop-partop) < _selfHeight){
-                    $('div.spieceTable').parent().hide() 
-                   $('div.spieceTable').parent().css({
-                       position:'relative',
-                       top:'initial' ,
-                       zIndex:99
-                   })
+                   if(Math.abs(-(top-partop) - _selfHeight)<10){
+                        this.recode = n
+                       
+                    }
+                     var disY = -(_relTop-partop) - _selfHeight;
+                    console.log('disY:'+ disY)
+                        console.log('recode:' + this.recode)
+                        $('div.spieceTable').parent().show() 
+                    $('div.spieceTable').parent().css({
+                        position:'absolute',
+                        top:Math.abs(-(_relTop-partop)) + _selfHeight - 25  ,
+                        zIndex:99
+                    }) 
+               }else{
+                    $('div.spieceTable').parent().css({
+                        position:'absolute',
+                        top:33  ,
+                        zIndex:99
+                    }) 
                }
               if(pageToTop - 30 <_selfHeight){
                   $('div.spieceTable').parent().hide() 
                     $('div.spieceTable').parent().css({
                         position:'relative',
-                        top:'initial' ,
+                        top:33 ,
                         zIndex:99
                     }) 
               }
