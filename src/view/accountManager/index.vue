@@ -24,7 +24,7 @@
             <Button type="warning" @click="handleAdd">添加账号</Button>
             </Col>
             <div style="position:relative;">
-                <Table :no-data-text='noDataText' :columns="columns" :data="data" class="message_table"></Table>
+                <Table size='small' :no-data-text='noDataText' :columns="columns" :data="data" class="message_table"></Table>
             </div>
             <Page v-show="pageShow" :total="totalListNum" :current='currentPage' class="tableGrid_page" placement="top" @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts' show-elevator></Page>
         </Row>

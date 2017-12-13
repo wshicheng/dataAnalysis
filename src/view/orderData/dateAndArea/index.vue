@@ -755,7 +755,13 @@ export default {
                     }                 
                 },
                 xAxis: {
-                    categories: this.chartTime
+                    categories: this.chartTime,
+                    min:0, //别忘了这里
+                    max:this.chartTime.length>30?29:this.chartTime.length-1
+                },
+                 scrollbar:{
+                    // enabled:true //是否产生滚动条
+                    enabled:this.chartTime.length>30?true:false //是否产生滚动条
                 },
                 yAxis: {
                     title: {

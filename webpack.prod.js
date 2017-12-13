@@ -9,7 +9,8 @@
  module.exports = merge(common, {
      devtool: 'sourceMap',
      output:{
-        filename: 'javascripts/[name].[hash].js', 
+        // filename: 'javascripts/[name].[hash].js', 
+        filename: '[name].js'+"?update="+ new Date().getTime(), 
         path: BUILD_PATH,
         publicPath:'',
      },

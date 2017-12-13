@@ -43,7 +43,14 @@
             </Poptip>
         </div>
         <p style="margin-top: -19px;margin-bottom: 5px;color: #bbbec4;">*时间查询条件不等于“今日”时，仅注册用户、存量押金用户、已退押金用户、活跃新用户(累计)的数据统计到今日0：00 ；等于“今日”时，统计的是实时数据。</p>
-        <Table  border size='small' :no-data-text='noDataText' :columns="columns_newUserData" :data="newUserData"></Table>
+         <div class="spieceTablePar">
+            <Table  class="spieceTable"  border  size='small' :no-data-text='noDataTextSpace' :columns="columns_newUserData" :data="[]"></Table>
+         </div>
+
+        <div class="relTab">
+            <Table  border size='small' :no-data-text='noDataText' :columns="columns_newUserData" :data="newUserData"></Table>
+        </div>
+
         <Page :total="totalListNum" show-sizer show-elevator  :styles='page' placement="top" :current='currentPage' v-show="pageShow"  @on-change="handleCurrentPage" @on-page-size-change="handlePageSize" show-sizer :page-size="pageSize" :page-size-opts='pageSizeOpts'></Page>
       </div>
 
@@ -57,6 +64,8 @@
   </div>
 </template>
 <style lang='scss' scoped type="text/css">
+    div.spieceTablePar{
+        position: absolute;left: 10px;top: 37px;z-index: 99;width:calc(100% - 20px);height:58px;}
     #newUser_body {
         position: relative;
         background: #ececec;
@@ -212,6 +221,7 @@
 <script>
 import citySelect from '../../../components/citySelect.vue'
 import { siblings } from '../../../util/util.js'
+import {mapGetters,mapActions} from 'vuex'
 // var Highcharts = require('highcharts');
 // // 在 Highcharts 加载之后加载功能模块
 // require('highcharts/modules/exporting')(Highcharts);
@@ -293,6 +303,7 @@ export default {
             spinShow: false,
             spinShow2: false,
             noDataText: '',
+            noDataTextSpace: "",
             chartDataX: [],
             chartDataOnlyRegister: [],
             chartStock: [],
@@ -320,6 +331,7 @@ export default {
         }, 200)
     },
     computed: {
+        ...mapGetters(['scrollTop']),
         city:{
             get () {
                 return this.city = window.localStorage.getItem('city')
@@ -331,6 +343,7 @@ export default {
         }
     },
     methods: {
+         ...mapActions(['setScrollTop']),
         handleSort(column,key,order){
             console.log(column,key,order)
         },
@@ -489,12 +502,24 @@ export default {
             }
         },
         handleCurrentPage(currentPage) {
+             $('div.spieceTable').parent().hide() 
+            $('div.spieceTable').parent().css({
+                position:'relative',
+                top:'initial' ,
+                zIndex:99
+            })
             this.currentPage = currentPage
             if (this.loadFlag === true) {
                 this.loadData($('.newUser_head_time button.active').attr('myId'))
             }
         },
         handlePageSize(pageSize) {
+             $('div.spieceTable').parent().hide() 
+            $('div.spieceTable').parent().css({
+                position:'relative',
+                top:'initial' ,
+                zIndex:99
+            })
             this.currentPage = 1
             this.pageSize = pageSize
             if (this.loadFlag === true) {
@@ -628,6 +653,49 @@ export default {
         }
     },
     watch: {
+        'scrollTop':{
+            handler:function(n,o){
+               var partop = $('div.ivu-col.ivu-col-span-19').offset().top
+               //relTab spieceTable
+               var _relTop = $('div.relTab').offset().top
+               var top =  $('div.spieceTable').offset().top
+               var _selfHeight =  $('div.spieceTable').height()
+              //  console.log('假头部距离 窗口顶部的距离：' +  (top - partop))
+                var pageToTop =  $('.ivu-page').offset().top // tab的高度
+                // console.log('pageToTop:' + pageToTop)
+               if(-(_relTop-partop) > _selfHeight){
+                  //  console.log('此时假头部改出现了')
+                   if(Math.abs(-(top-partop) - _selfHeight)<10){
+                        this.recode = n
+                       
+                    }
+                     var disY = -(_relTop-partop) - _selfHeight;
+                    // console.log('disY:'+ disY)
+                        // console.log('recode:' + this.recode)
+                        $('div.spieceTable').parent().show() 
+                    $('div.spieceTable').parent().css({
+                        position:'absolute',
+                        top:Math.abs(-(_relTop-partop)) + _selfHeight + 4 ,
+                        zIndex:99
+                    }) 
+               }else{
+                    $('div.spieceTable').parent().css({
+                        position:'absolute',
+                        top:37  ,
+                        zIndex:99
+                    }) 
+               }
+              if(pageToTop - 30 <_selfHeight){
+                  $('div.spieceTable').parent().hide() 
+                    $('div.spieceTable').parent().css({
+                        position:'relative',
+                        top:37 ,
+                        zIndex:99
+                    }) 
+              }
+            },
+            deep:true
+        },
         '$store.state.cityList': 'cityChange',
         'newUserData': {
             handler: function () {

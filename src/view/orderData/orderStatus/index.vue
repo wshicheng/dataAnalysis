@@ -1241,10 +1241,11 @@ export default {
         xAxis: {
           categories: categories,
           min:0, //别忘了这里
-          max:6
+          max:categories.length>30?29:categories.length-1
         },
         scrollbar:{
-            enabled:true //是否产生滚动条
+            // enabled:true //是否产生滚动条
+            enabled:categories.length>30?true:false //是否产生滚动条
         },
         yAxis: {
         allowDecimals:false,
@@ -1380,10 +1381,46 @@ export default {
     },
     orderComparisonData: {
       handler: function(val, old) {
+        console.log( '---------this.orderComparisonData----------',this.orderComparisonData)
         this.orderComparisonData = val;
         if (this.tabChangeName === "comparison") {
           var data = val;
-
+          // 人工关闭的数据closeNum
+          var closeNum = data.map(item => {
+            var tem = parseFloat(item.closeNum);
+            return {
+              name: item.cityName,
+              data: tem
+            };
+          });
+          console.log('人工关闭的数据-----',closeNum)
+          // 开锁失败的订单数的数据failNum
+          var failNum = data.map(item => {
+            var tem = parseFloat(item.failNum);
+            return {
+              name: item.cityName,
+              data: tem
+            };
+          });
+          console.log('开锁失败的订单数-----',failNum)
+          // 已取消的订单数的数据closeNum
+          var cancelNum = data.map(item => {
+            var tem = parseFloat(item.cancelNum);
+            return {
+              name: item.cityName,
+              data: tem
+            };
+          });
+          console.log('已取消的订单数-----',cancelNum)
+          // 已结束的订单数的数据closeNum
+          var endNum = data.map(item => {
+            var tem = parseFloat(item.endNum);
+            return {
+              name: item.cityName,
+              data: tem
+            };
+          });
+          console.log('已结束的订单数-----',endNum)
           var res = data.map(item => {
             var tem = [];
             tem.push(1 * item.closeNum);

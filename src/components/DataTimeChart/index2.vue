@@ -16,7 +16,7 @@ export default {
                 },
                 title: {
                     text: title,
-                    y:5
+                    margin:35 
                 },
                 subtitle: {
                     text: subtitle,
@@ -63,9 +63,9 @@ export default {
                         },
                 legend: {
                     align: 'right',
-                    x: -30,
+                    x: -20,
                     verticalAlign: 'top',
-                    y: 10,
+                    y: 25,
                     floating: true,
                     backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
                     borderColor: '#CCC',

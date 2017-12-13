@@ -38,6 +38,7 @@ if (token) {
 
 router.beforeEach((route,redirect,next) => {
     if(route.path === '/login'){
+        window.localStorage.clear()
         window.localStorage.removeItem('token')
         window.localStorage.removeItem('userInfo')
         store.commit(types.GET_USER,{})

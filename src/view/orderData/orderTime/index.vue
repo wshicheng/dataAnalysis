@@ -39,7 +39,7 @@
                 </Poptip>
             </div>
             <div class="loading">
-                 <Table :no-data-text="noDataText" border  :columns="columns1" :data="data2"></Table>
+                 <Table size='small' :no-data-text="noDataText" border  :columns="columns1" :data="data2"></Table>
                     <Spin fix size="large" v-show="loading"  class="spin">
                         <Icon type="load-c" size=18 class="demo-spin-icon-load" style="color: #ccc;"></Icon>
                         <div style="color: #ccc; text-indent: 5px;">  loading...</div>
