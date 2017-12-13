@@ -43,7 +43,14 @@
                 </div>
             </Poptip>
         </div>
-        <Table height='300'  border size='small' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
+         <div class="spieceTablePar" >
+
+              <Table class="spieceTable" border size='small' :no-data-text='noDataTextSpace' :columns="columns_orderData" :data="[]"></Table>
+        </div>
+        <div  class="relTab">
+            <Table border size='small' :no-data-text='noDataText' :columns="columns_orderData" :data="orderData"></Table>
+            <div class="ivu-page"></div>
+        </div>
       </div>
 
       <div class="orderAllDayMap_chart" v-show="noDataBox">
@@ -61,6 +68,8 @@
   </div>
 </template>
 <style lang='scss' scoped type="text/css">
+ div.spieceTablePar{
+        position: absolute;left: 10px;top: 33px;z-index: 99;width:calc(100% - 20px);height:58px;}
     #orderAllDayMap_body {
         background: #ececec;
         .Breadcrumb {
@@ -226,6 +235,7 @@
 <script>
 import citySelect from '../../../components/citySelect.vue'
 import { siblings } from '../../../util/util.js'
+import {mapGetters,mapActions} from 'vuex'
 // var Highcharts = require('highcharts');
 // // 在 Highcharts 加载之后加载功能模块
 // require('highcharts/modules/exporting')(Highcharts);
@@ -297,6 +307,7 @@ export default {
             orderData: [],
             spinShow: false,
             noDataText: '',
+            noDataTextSpace:'',
             // 订单数图表数据
             orderNumData: [],
             orderNumProData: [],
@@ -316,12 +327,16 @@ export default {
             transfer: true
         }
     },
+    computed:{
+        ...mapGetters(['scrollTop']),
+    },
     mounted () {
         this.$store.dispatch('menuActiveName', '/index/orderAllDayMap')
         document.title = '订单数据 - 24小时趋势'
         this.loadData('3')
     },
     methods: {
+        ...mapActions(['setScrollTop']),
         loadData (type) {
             // console.log('this.timeLine',this.timeLine)
             // console.log('this.timeLine[0]',this.timeLine[0])
@@ -562,6 +577,49 @@ export default {
         }
     },
     watch: {
+         'scrollTop':{
+            handler:function(n,o){
+               var partop = $('div.ivu-col.ivu-col-span-19').offset().top
+               //relTab spieceTable
+               var _relTop = $('div.relTab').offset().top
+               var top =  $('div.spieceTable').offset().top
+               var _selfHeight =  $('div.spieceTable').height()
+               console.log('假头部距离 窗口顶部的距离：' +  (top - partop))
+                var pageToTop =  $('.ivu-page').offset().top // tab的高度
+                // console.log('pageToTop:' + pageToTop)
+               if(-(_relTop-partop) > _selfHeight){
+                   console.log('此时假头部改出现了')
+                   if(Math.abs(-(top-partop) - _selfHeight)<10){
+                        this.recode = n
+                       
+                    }
+                     var disY = -(_relTop-partop) - _selfHeight;
+                    console.log('disY:'+ disY)
+                        console.log('recode:' + this.recode)
+                        $('div.spieceTable').parent().show() 
+                    $('div.spieceTable').parent().css({
+                        position:'absolute',
+                        top:Math.abs(-(_relTop-partop)) + _selfHeight - 25  ,
+                        zIndex:99
+                    }) 
+               }else{
+                    $('div.spieceTable').parent().css({
+                        position:'absolute',
+                        top:33  ,
+                        zIndex:99
+                    }) 
+               }
+              if(pageToTop - 30 <_selfHeight){
+                  $('div.spieceTable').parent().hide() 
+                    $('div.spieceTable').parent().css({
+                        position:'relative',
+                        top:33 ,
+                        zIndex:99
+                    }) 
+              }
+            },
+            deep:true
+        },
         '$store.state.cityList': 'cityChange'
     }
 }
