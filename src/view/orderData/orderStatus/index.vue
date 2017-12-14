@@ -79,6 +79,12 @@
                             <button class="active" @click="chartType" myType='percentage'>订单数</button>
                             <button @click="chartType" myType='orderCountRate'>订单数占比</button>
                      </div>
+                     <div class="select1">
+                      <button  @click="handleStatusClick" class="active" myType="close" >人工关闭</button>
+                      <button  @click="handleStatusClick" myType="fail">开锁失败</button>
+                      <button  @click="handleStatusClick" myType="cancel">已取消</button>
+                      <button  @click="handleStatusClick" myType="end">已结束</button>
+                    </div>
                 <div id="container2" style="min-width:400px; height: 400px;"></div>
             </div>
         </TabPane>
@@ -103,6 +109,14 @@
   </div>
 </template>
 <style lang='scss' scoped type="text/css">
+.select1 {
+  margin-top: 20px;
+}
+.select1 button {
+  width: 80px;
+  height: 50px;
+  margin-right: 10px;
+}
 #orderStatus_body {
   background: #ececec;
   .Breadcrumb {
@@ -307,6 +321,18 @@ export default {
   },
   data() {
     return {
+       statusType:'close', // 图表中订单状态
+       statusData1:[],// 订单状态对比图表数据
+       statusData2:[],// 订单状态对比图表数据
+       statusCityName:[],
+       closeNum:[],
+       failNum:[],
+       cancelNum:[],
+       endNum:[],
+       closePercent:[],
+       failPercent:[],
+       cancelPercent:[],
+       endPercent:[],
         citySelectNum:[],
         cityNameCategory:[],
         category:[],
@@ -700,9 +726,18 @@ export default {
     document.title = "订单数据 - 订单状态构成";
     this.tabChangeName = "gather";
     this.loadData("3", 1);
+    // this.loadMutlData("3", 1);
     console.log(this.cityNameCategory)
   },
   methods: {
+    handleStatusClick(e){
+      var elems = siblings(e.target);
+      for (var i = 0; i < elems.length; i++) {
+        elems[i].setAttribute("class", "");
+      }
+      e.target.setAttribute("class", "active");
+      this.statusType = e.target.getAttribute("myType");
+    },
     chartType(e) {
       var elems = siblings(e.target);
       for (var i = 0; i < elems.length; i++) {
@@ -746,12 +781,11 @@ export default {
                 : moment(this.timeLine[1]).format("YYYY-MM-DD"),
             data_type: data_type,
             state: state,
-            // 修改点击对比时会加载所有数据，故传入默认pageNo和pageSize
-            pageNo:1,
-            pageSize:10
+
           }
         })
         .then(res => {
+
           this.spinShow = false;
           this.noDataText = "暂无数据";
           // 判断是否超时
@@ -769,6 +803,7 @@ export default {
             });
             this.orderComparisonData = newArr;
             this.orderStatusData = newArr;
+            console.log("-----loadMultData里的城市",this.orderComparisonData)
             
             // 去掉合计字段集
             data.pop();
@@ -853,6 +888,7 @@ export default {
               return newArr;
             });
             this.orderStatusData = newArr;
+            this.comparisonData = this.orderStatusData
             // 去掉合计字段集
             data.pop();
             var arr = new Array();
@@ -971,9 +1007,11 @@ export default {
       if (name === "comparison") {
         var type = $(".orderStatus_head_time button.active").attr("myId");
         // loadData (type,data_type,state,pageNum,pageSize)
+        
         this.loadData(type, 2, 0, this.currentPageNum, this.currentPageSize);
         this.loadMutlData(type, 2, 0);
-        //this.comparisonData = this.resultData
+        
+ 
         // if(this.chartSelectType=='percentage'){
         //     this.initChart2(res,'订单数')
         // }else{
@@ -1163,8 +1201,14 @@ export default {
 
       new Highcharts.chart("container", options);
     },
-    initChart2(data, title) {
+    initChart2(data, title,cityName) {
+      console.log('图标里的cityName',cityName)
+      console.log('图标里的data',data)
+      console.log('this.citySelectNum----',this.citySelectNum)
       var options = {
+        legend: {
+            enabled: false
+        },
         chart: {
           type: "column"
         },
@@ -1179,7 +1223,8 @@ export default {
           enabled:false,
         },
         xAxis: {
-          categories: ["人工关闭", "开锁失败", "已取消", "已结束"],
+          // categories: ["人工关闭", "开锁失败", "已取消", "已结束"],
+          categories:cityName,
           crosshair: true
         },
         credits: {
@@ -1190,9 +1235,10 @@ export default {
           title: {
             text: ""
           },
+          max:Math.max.apply({},data[0].data),
           labels: {
                     formatter:function(){
-                        return   (title == "订单数" ? this.value : this.value +'%') ;
+                        return   (title == "订单数" ?Highcharts.numberFormat(this.value, 0, "", ",") : this.value +'%') ;
                     }
           },
         },
@@ -1200,9 +1246,9 @@ export default {
           crosshairs: true,
           shared: true,
           formatter: function () {
-              var s = '<b>' + this.x + '</b>';
+              var s = '';
               $.each(this.points, function () {
-                  s += '<br/>' + '<span style="color:'+this.series.color+'">' + this.series.name + '</span>: ' +
+                  s += '<br/>' + '<span style="color:'+this.series.color+'">' + this.x + '</span>: ' +
                   (title == "订单数" ?  Highcharts.numberFormat(this.y, 0, "", ",") :  Highcharts.numberFormat(this.y, 1, ".", ""))  +  (title == "订单数" ? "单" : "%");
               });
               return s;
@@ -1213,7 +1259,8 @@ export default {
         plotOptions: {
           column: {
             pointPadding: 0.2,
-            borderWidth: 0
+            borderWidth: 0,
+            maxPointWidth:60
           }
         },
         series: data
@@ -1289,6 +1336,7 @@ export default {
         this.citySelectNum = this.$store.state.cityList
         if(this.citySelectNum.length==0){
            this.orderStatusData = []
+           this.comparisonData = []
            this.noDataText = '请至少选择一个城市'
            this.noDataText2 = '请至少选择一个城市'
             return;
@@ -1302,8 +1350,9 @@ export default {
       if (this.tabChangeName == "gather") {
         this.loadData(type, 1);
       } else if (this.tabChangeName == "comparison") {
-        this.loadData(type, 2, 0, this.currentPageNum, this.currentPageSize);
         this.loadMutlData(type, 2, 0);
+        this.loadData(type, 2, 0, this.currentPageNum, this.currentPageSize);
+        
       }else{
         
             var type = $(".orderStatus_head_time button.active").attr("myId");
@@ -1375,52 +1424,73 @@ export default {
     "$store.state.cityList": "cityChange",
     orderStatusData: {
       handler: function(val, old) {
-        this.comparisonData = val;
+        // if(this.tabChangeName == "comparison"){
+        //    this.comparisonData = val;
+        // }
+       
       },
       deep: true
     },
     orderComparisonData: {
-      handler: function(val, old) {
+      handler: function(val, old) {         
         console.log( '---------this.orderComparisonData----------',this.orderComparisonData)
-        this.orderComparisonData = val;
+        // this.orderComparisonData = val;
         if (this.tabChangeName === "comparison") {
           var data = val;
-          // 人工关闭的数据closeNum
-          var closeNum = data.map(item => {
-            var tem = parseFloat(item.closeNum);
-            return {
-              name: item.cityName,
-              data: tem
-            };
+          var tem1 = [];
+          if(this.statusType=='close'){
+            
+          data.forEach(item => {
+             tem1.push(1*item.closeNum)
           });
-          console.log('人工关闭的数据-----',closeNum)
-          // 开锁失败的订单数的数据failNum
-          var failNum = data.map(item => {
-            var tem = parseFloat(item.failNum);
-            return {
-              name: item.cityName,
-              data: tem
-            };
+          this.statusData1=[{data:tem1}]
+          console.log('this.statusData1-----------',this.statusData1)
+            tem1=[]
+             data.forEach(item => {
+              tem1.push(1*item.closePercent.replace("%",''))
+            });
+             this.statusData2=[{data:tem1}]
+          }else if(this.statusType=='fail'){
+             tem1=[]
+             data.forEach(item => {
+              tem1.push(1*item.failNum)
+            });
+             this.statusData1=[{data:tem1}]
+              tem1=[]
+              data.forEach(item => {
+              tem1.push(1*item.failPercent.replace("%",''))
+            });
+             this.statusData2=[{data:tem1}]
+          }else if(this.statusType=='cancel'){
+            tem1=[]
+            data.forEach(item => {
+              tem1.push(1*item.cancelNum)
+            });
+            this.statusData1=[{data:tem1}]
+            tem1=[]
+            data.forEach(item => {
+              tem1.push(1*item.cancelPercent.replace("%",''))
+            });
+            this.statusData2=[{data:tem1}]
+          }else{
+            tem1=[]
+            data.forEach(item => {
+              tem1.push(1*item.endNum)
+            });
+             this.statusData1=[{data:tem1}]
+             tem1=[]
+             data.forEach(item => {
+              tem1.push(1*item.endPercent.replace("%",''))
+            });
+             this.statusData2=[{data:tem1}]
+          }
+
+         
+          // x轴显示的城市名称
+          this.statusCityName = data.map(item => {
+            return item.cityName  
           });
-          console.log('开锁失败的订单数-----',failNum)
-          // 已取消的订单数的数据closeNum
-          var cancelNum = data.map(item => {
-            var tem = parseFloat(item.cancelNum);
-            return {
-              name: item.cityName,
-              data: tem
-            };
-          });
-          console.log('已取消的订单数-----',cancelNum)
-          // 已结束的订单数的数据closeNum
-          var endNum = data.map(item => {
-            var tem = parseFloat(item.endNum);
-            return {
-              name: item.cityName,
-              data: tem
-            };
-          });
-          console.log('已结束的订单数-----',endNum)
+
           var res = data.map(item => {
             var tem = [];
             tem.push(1 * item.closeNum);
@@ -1445,10 +1515,11 @@ export default {
           });
           this.orderCmsData = res;
           this.orderCmsDataRate = res2;
+         
           if (this.chartSelectType == "percentage") {
-            this.initChart2(res, "订单数");
+            this.initChart2(this.statusData1, "订单数",this.statusCityName);
           } else {
-            this.initChart2(res, "订单数占比");
+            this.initChart2(this.statusData2, "订单数占比",this.statusCityName);
           }
         }
       },
@@ -1456,11 +1527,119 @@ export default {
     },
     chartSelectType: {
       handler: function(n, o) {
+       var data =  this.orderComparisonData
+          var tem1 = [];
+          if(this.statusType=='close'){
+            
+          data.forEach(item => {
+             tem1.push(1*item.closeNum)
+          });
+          this.statusData1=[{data:tem1}]
+          console.log('this.statusData1-----------',this.statusData1)
+            tem1=[]
+             data.forEach(item => {
+              tem1.push(1*item.closePercent.replace("%",''))
+            });
+             this.statusData2=[{data:tem1}]
+          }else if(this.statusType=='fail'){
+             tem1=[]
+             data.forEach(item => {
+              tem1.push(1*item.failNum)
+            });
+             this.statusData1=[{data:tem1}]
+              tem1=[]
+              data.forEach(item => {
+              tem1.push(1*item.failPercent.replace("%",''))
+            });
+             this.statusData2=[{data:tem1}]
+          }else if(this.statusType=='cancel'){
+            tem1=[]
+            data.forEach(item => {
+              tem1.push(1*item.cancelNum)
+            });
+            this.statusData1=[{data:tem1}]
+            tem1=[]
+            data.forEach(item => {
+              tem1.push(1*item.cancelPercent.replace("%",''))
+            });
+            this.statusData2=[{data:tem1}]
+          }else{
+            tem1=[]
+            data.forEach(item => {
+              tem1.push(1*item.endNum)
+            });
+             this.statusData1=[{data:tem1}]
+             tem1=[]
+             data.forEach(item => {
+              tem1.push(1*item.endPercent.replace("%",''))
+            });
+             this.statusData2=[{data:tem1}]
+          }
         if (n == "percentage") {
-          this.initChart2(this.orderCmsData, "订单数");
+          this.initChart2( this.statusData1, "订单数",this.statusCityName);
+
         } else {
-          this.initChart2(this.orderCmsDataRate, "订单数占比");
+          this.initChart2( this.statusData2, "订单数占比",this.statusCityName);
         }
+      },
+      deep: true
+    },
+    statusType:{
+       handler: function(n, o) {
+          var data =  this.orderComparisonData
+          var tem1 = [];
+          if(this.statusType=='close'){
+            
+          data.forEach(item => {
+             tem1.push(1*item.closeNum)
+          });
+          this.statusData1=[{data:tem1}]
+          console.log('this.statusData1-----------',this.statusData1)
+            tem1=[]
+             data.forEach(item => {
+              tem1.push(1*item.closePercent.replace("%",''))
+            });
+             this.statusData2=[{data:tem1}]
+          }else if(this.statusType=='fail'){
+             tem1=[]
+             data.forEach(item => {
+              tem1.push(1*item.failNum)
+            });
+             this.statusData1=[{data:tem1}]
+              tem1=[]
+              data.forEach(item => {
+              tem1.push(1*item.failPercent.replace("%",''))
+            });
+             this.statusData2=[{data:tem1}]
+          }else if(this.statusType=='cancel'){
+            tem1=[]
+            data.forEach(item => {
+              tem1.push(1*item.cancelNum)
+            });
+            this.statusData1=[{data:tem1}]
+            tem1=[]
+            data.forEach(item => {
+              tem1.push(1*item.cancelPercent.replace("%",''))
+            });
+            this.statusData2=[{data:tem1}]
+          }else{
+            tem1=[]
+            data.forEach(item => {
+              tem1.push(1*item.endNum)
+            });
+             this.statusData1=[{data:tem1}]
+             tem1=[]
+             data.forEach(item => {
+              tem1.push(1*item.endPercent.replace("%",''))
+            });
+             this.statusData2=[{data:tem1}]
+          }
+
+          if(this.chartSelectType== "percentage"){
+            this.initChart2( this.statusData1, "订单数",this.statusCityName);
+          }else{
+            this.initChart2( this.statusData2, "订单数占比",this.statusCityName);
+          }
       },
       deep: true
     }

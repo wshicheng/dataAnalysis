@@ -20,7 +20,7 @@ const OrderAllDataDetail = resolve => require.ensure([], () => resolve(require('
 //import dateAndArea from '../view/orderData/dateAndArea/index.vue'
 const DateAndArea = resolve => require.ensure([], () => resolve(require('../view/orderData/dateAndArea/index.vue')), 'dateAndArea')
 //import orderStatus from '../view/orderData/orderStatus/index.vue'
-const OrderStatus = resolve => require.ensure([], () => resolve(require('../view/orderData/orderStatus/index2.vue')), 'orderStatus')
+const OrderStatus = resolve => require.ensure([], () => resolve(require('../view/orderData/orderStatus/index.vue')), 'orderStatus')
 //import orderTime from '../view/orderData/orderTime/index.vue'
 const OrderTime = resolve => require.ensure([], () => resolve(require('../view/orderData/orderTime/index.vue')), 'orderTime')
 //import orderMileage from '../view/orderData/orderMileage/index.vue'

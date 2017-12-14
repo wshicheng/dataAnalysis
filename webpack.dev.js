@@ -7,8 +7,8 @@
  module.exports = merge(common, {
    devtool: 'inline-source-map',
    output:{
-    // filename: 'javascripts/[name].[hash].js', 
-    filename: '[name].js'+"?update="+ new Date().getTime(), 
+    filename: 'javascripts/[name].[hash].js', 
+    // filename: '[name].js'+"?update="+ new Date().getTime(), 
     path: BUILD_PATH,
     publicPath:'/',
  },

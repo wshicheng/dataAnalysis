@@ -101,6 +101,7 @@ export default {
     },
     methods: {
         areaClick (e) {
+           
             var that = this
             var id = e.target.getAttribute('myid')
             var res = siblings(e.target)
@@ -157,6 +158,7 @@ export default {
                 this.$refs.allCity.setAttribute('class','active')
             }
             this.$store.dispatch('setCityList', this.citySelect)
+          
         }
     },
     watch: {
