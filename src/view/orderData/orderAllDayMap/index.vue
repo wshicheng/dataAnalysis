@@ -60,7 +60,7 @@
         </Spin>
         <div class="select">
             <button class="active" @click="chartType" myType='orderNum'>订单数</button>
-            <button @click="chartType" myType='orderAmount'>订单金额</button>
+            <button @click="chartType" myType='orderAmount' style="margin-right:8px">订单金额</button>
             <button @click="chartType" myType='bikeNum'>投产车辆数</button>
         </div>
         <div  id="container" style="min-width:400px; height: 400px;"></div>

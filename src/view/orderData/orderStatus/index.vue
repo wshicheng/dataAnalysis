@@ -76,14 +76,14 @@
                         <div style="color: #ccc; text-indent: 5px;">  loading...</div>
                     </Spin>
                      <div class="select">
-                            <button class="active" @click="chartType" myType='percentage'>订单数</button>
-                            <button @click="chartType" myType='orderCountRate'>订单数占比</button>
+                            <span class="active1 bottom1" @click="chartType" myType='percentage'>订单数</span>
+                            <span class="bottom1" @click="chartType" myType='orderCountRate'>订单数占比</span>
                      </div>
                      <div class="select1">
-                      <button  @click="handleStatusClick" class="active" myType="close" >人工关闭</button>
-                      <button  @click="handleStatusClick" myType="fail">开锁失败</button>
-                      <button  @click="handleStatusClick" myType="cancel">已取消</button>
-                      <button  @click="handleStatusClick" myType="end">已结束</button>
+                      <button  @click="handleStatusClick" class="active bottom" myType="close" >人工关闭</button>
+                      <button  @click="handleStatusClick" class="bottom" myType="fail">开锁失败</button>
+                      <button  @click="handleStatusClick" class="bottom" myType="cancel">已取消</button>
+                      <button  @click="handleStatusClick" class="bottom" myType="end">已结束</button>
                     </div>
                 <div id="container2" style="min-width:400px; height: 400px;"></div>
             </div>
@@ -110,12 +110,12 @@
 </template>
 <style lang='scss' scoped type="text/css">
 .select1 {
-  margin-top: 20px;
+  margin-top: 5px;
 }
 .select1 button {
   width: 80px;
   height: 50px;
-  margin-right: 10px;
+  margin-right: 5px;
 }
 #orderStatus_body {
   background: #ececec;
@@ -161,6 +161,7 @@
         border: 1px solid orange;
         color: orange;
       }
+     
     }
     div.timeSelectShow {
       display: inline;
@@ -301,10 +302,35 @@
     button:nth-last-of-type(1) {
       width: 80px;
     }
-    button.active {
-      border: 1px solid orange;
-      color: orange;
+    button.bottom{
+      border:none;
+      margin-right:-10px
     }
+    .select{
+      margin-top:10px;
+      margin-left:15px;
+      margin-bottom:0;
+    }
+     span.bottom1{
+      display: inline-block;
+      font-size: 14px;
+      color: black;
+      margin-right:20px;
+      cursor:pointer;
+      font-weight:700;
+      
+    }
+    button:hover {
+        color: #f90;
+        border:none;
+      }
+      button.active {
+        color: #f60;
+         border:none;
+      }
+      .bottom1.active1 {
+        border-bottom: 3px solid blue;
+      }
   }
 }
 </style>
@@ -343,7 +369,7 @@ export default {
      orderTdyStatu:'',//记录四种状态
       pageOpts: [10, 20, 30, 40, 50],
       pageSize: 10,
-      chartSelectType: "",
+      chartSelectType: "percentage",
       orderCmsDataRate: [],
       orderCmsData: [],
       orderComparisonData: [],
@@ -731,19 +757,21 @@ export default {
   },
   methods: {
     handleStatusClick(e){
-      var elems = siblings(e.target);
+
+       var elems = siblings(e.target);
       for (var i = 0; i < elems.length; i++) {
-        elems[i].setAttribute("class", "");
+        elems[i].setAttribute("class", "bottom");
       }
-      e.target.setAttribute("class", "active");
+      e.target.setAttribute("class", "active bottom");
+ 
       this.statusType = e.target.getAttribute("myType");
     },
     chartType(e) {
       var elems = siblings(e.target);
       for (var i = 0; i < elems.length; i++) {
-        elems[i].setAttribute("class", "");
+        elems[i].setAttribute("class", "bottom1");
       }
-      e.target.setAttribute("class", "active");
+      e.target.setAttribute("class", "active1 bottom1");
       this.chartSelectType = e.target.getAttribute("myType");
       //this.initChart($(".select button.active").attr('myType'))
     },
@@ -1231,14 +1259,17 @@ export default {
                       enabled: false
                   },
         yAxis: {
+          allowDecimals: false,
           min: 0,
           title: {
             text: ""
           },
           max:Math.max.apply({},data[0].data),
+          // tickPositions: title=='订单数'?"":(parseFloat(Math.max.apply({},data[0].data))<0.1?[0, 20, 40, 60, 80,100]:[]),
           labels: {
                     formatter:function(){
-                        return   (title == "订单数" ?Highcharts.numberFormat(this.value, 0, "", ",") : this.value +'%') ;
+                      console.log(this)
+                        return   title == "订单数占比"?this.value +'%':(this.value>=1||this.value==0?Highcharts.numberFormat(this.value, 0, "",","):Highcharts.numberFormat(this.value, 1, ".","")) 
                     }
           },
         },

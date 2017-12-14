@@ -867,10 +867,13 @@ export default {
       //     this.loadData($('.userAllData_head_time2 button.active').attr('myId'))
       // }
       this.currentPage = 1;
-      if (this.citySelectNum.length == 0) {
-        this.noDataText = "请至少选择一个城市";
-        return;
-      }
+       if(this.citySelectNum.length==0){
+                this.orderData = []
+                this.noDataText = '请至少选择一个城市'
+                this.pageShow = false
+                this.noDataBox = false
+                return;
+       }
       this.loadData($(".userAllData_head_time2 button.active").attr("myId"));
     },
     checkLogin(res) {
