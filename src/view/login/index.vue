@@ -268,7 +268,7 @@ import {mapActions,mapState,mapGetters} from 'vuex'
                                 var message = res.data.message
 
                                 if(resultCode === 1){
-
+                                    window.localStorage.setItem('time',new Date().getTime())
                                     var resData = res.data.data
 
                                     resData.authList.map( (item) => {

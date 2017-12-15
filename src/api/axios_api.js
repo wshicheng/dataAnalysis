@@ -2,7 +2,7 @@ import axios from 'axios'
 import store from '../store/store'
 import * as types from '../store/types'
 import router from '../router/router-config'
-
+import qs from 'qs'
 /**
  * 生产 
  */
@@ -21,46 +21,34 @@ let baseURL = 'http://47.93.48.250:5080'
 // });
 
 axios.defaults.baseURL = baseURL;
-//axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
-// axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
-// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
 axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
 
-// axios 配置
-// axios.defaults.timeout = 5000;
-// axios.defaults.baseURL = 'https://api.github.com';
-
-// http request 拦截器
-// axios.interceptors.request.use(
-//     config => {
-//         if (localStorage.getItem('token')) {
-//             config.headers.Authorization = `token ${localStorage.getItem('token')}`;
-//         }
-//         return config;
-//     },
-//     err => {
-//         return Promise.reject(err);
-//     });
-
-// http response 拦截器
-// axios.interceptors.response.use(
-//     response => {
-//         return response;
-//     },
-//     error => {
-//         if (error.response) {
-//             switch (error.response.status) {
-//                 case 401:
-//                     // 401 清除token信息并跳转到登录页面
-//                     store.commit(types.LOGOUT);
-//                     router.replace({
-//                         path: 'login',
-//                         query: {redirect: router.currentRoute.fullPath}
-//                     })
-//             }
-//         }
-//         // console.log(JSON.stringify(error));//console : Error: Request failed with status code 402
-//         return Promise.reject(error.response.data)
-//     });
+//POST传参序列化(添加请求拦截器)
+axios.interceptors.request.use((config) => {
+	//在发送请求之前做某件事
+    if(config.method  === 'post'){
+        config.data = qs.stringify(config.data);
+    }
+    
+    return config;
+},(error) =>{
+     _.toast("错误的传参", 'fail');
+    return Promise.reject(error);
+});
+//返回状态判断(添加响应拦截器)
+axios.interceptors.response.use((res) =>{
+    //对响应数据做些事
+    console.log(res)
+    if(!res.data.success){
+        // _.toast(res.data.msg);
+        return Promise.reject(res);
+    }
+    return res;
+}, (error) => {
+    console.log("网络异常", 'fail');
+    return Promise.reject(error);
+});
+  
 
 export default axios;

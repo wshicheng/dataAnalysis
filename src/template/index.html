@@ -15,6 +15,9 @@
         <div id="app"></div>
     </body>
     <script>
+        
+       var lastTime = window.localStorage.getItem('time')
+        console.log(new Date().getTime()-lastTime)
         function myFunction(){
             if (event.clientX > document.body.clientWidth && event.clientY < 0 || event.altKey) {
                 window.localStorage.clear()
