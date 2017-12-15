@@ -22,6 +22,7 @@ import 'iview/dist/styles/iview.css';
 import router from './router/index.js'
 import './my-theme/index.less';
 import * as types from './store/types'
+import {setCookie,getCookie}  from './util/util.js'
 Vue.use(iView)
 Vue.use(vuescroll)
 Vue.prototype.axios = axios
@@ -37,6 +38,8 @@ if (token) {
 }
 
 router.beforeEach((route,redirect,next) => {
+    
+  
     if(route.path === '/login'){
         window.localStorage.removeItem('token')
         window.localStorage.removeItem('userInfo')
@@ -48,6 +51,7 @@ router.beforeEach((route,redirect,next) => {
     if(!accessToken&&route.path!=='/login'){
         next({path:'/login'})
     }else{
+       
         if(route.name){
             next()
         }else{

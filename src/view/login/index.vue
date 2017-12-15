@@ -76,7 +76,7 @@
   </div>
 </template>
 <script>
-import {checkMobile, IsEmpty} from '../../util/util.js'
+import {checkMobile, IsEmpty,setCookie} from '../../util/util.js'
 import {mapActions,mapState,mapGetters} from 'vuex'
     export default {
         data () {
@@ -264,7 +264,7 @@ import {mapActions,mapState,mapGetters} from 'vuex'
                                 }
                             })
                             .then((res) => {
-                                var resultCode = res.data.resultCode
+                                    var resultCode = res.data.resultCode
                                 var message = res.data.message
 
                                 if(resultCode === 1){
