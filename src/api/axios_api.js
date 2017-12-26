@@ -6,10 +6,11 @@ import router from '../router/router-config'
 /**
  * 生产 
  */
-let baseURL = 'http://10.31.147.119:5080'
+// let baseURL = 'http://10.31.147.119:5080'
 
 
 // let baseURL = 'http://47.93.48.250:5080'
+// let baseURL = 'http://192.168.0.117:5080'
 
 //let baseURL = 'http://192.168.0.131:5080'
 // let baseURL = 'http://192.168.0.129:5080'
@@ -21,6 +22,7 @@ let baseURL = 'http://10.31.147.119:5080'
 // });
 
 axios.defaults.baseURL = baseURL;
+axios.defaults.withCredentials=true;
 //axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';

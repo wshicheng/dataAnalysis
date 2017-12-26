@@ -61,7 +61,7 @@
 </template>
 <style lang='scss' scoped type="text/css">
     div.spieceTablePar{
-        position: absolute;left: 10px;top: 33px;z-index: 99;width:calc(100% - 20px);height:58px;}
+        position: absolute;left: 10px;top: 33px;z-index: 99;width:calc(100% - 20px);height:38px;}
     #activeUser_body {
         background: #ececec;
         .Breadcrumb {

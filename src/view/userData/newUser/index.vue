@@ -65,7 +65,7 @@
 </template>
 <style lang='scss' scoped type="text/css">
     div.spieceTablePar{
-        position: absolute;left: 10px;top: 37px;z-index: 99;width:calc(100% - 20px);height:58px;}
+        position: absolute;left: 10px;top: 37px;z-index: 99;width:calc(100% - 20px);height:38px;}
     #newUser_body {
         position: relative;
         background: #ececec;

@@ -290,7 +290,7 @@ import {mapActions,mapState,mapGetters} from 'vuex'
                                     window.localStorage.setItem('cityStr', res.data.data.cityStr)
                                     window.localStorage.setItem('cityList', JSON.stringify(res.data.data.cityList))
                                     // 后台将totalPage的值在这里用来表示单个/多个城市， 1:多个，0：单个
-                                    window.localStorage.setItem('cityType', res.data.totalPage)
+                                    window.localStorage.setItem('cityType', res.data.totalPage)               
                                     // window.localStorage.setItem('authList', )
                                     // 登录相关操作
                                     if (this.menuitems.length === 0) {
@@ -362,6 +362,7 @@ import {mapActions,mapState,mapGetters} from 'vuex'
                                 id: this.setNewPassWord.id,
                                 passWord: this.setNewPassWord.newPassWord
                             }
+                            
                         })
                         .then( (res) => {
                             if (res.data.resultCode === 1) {

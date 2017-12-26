@@ -22,9 +22,12 @@ import 'iview/dist/styles/iview.css';
 import router from './router/index.js'
 import './my-theme/index.less';
 import * as types from './store/types'
+import {getCookie} from './util/util.js'
+
 Vue.use(iView)
 Vue.use(vuescroll)
 Vue.prototype.axios = axios
+axios.defaults.withCredentials=true;
 let token = window.localStorage.getItem('token')
 let userInfo = window.localStorage.getItem('userInfo')
 let authList = window.localStorage.getItem('authList')
@@ -47,11 +50,14 @@ router.beforeEach((route,redirect,next) => {
     }
     let accessToken = window.localStorage.getItem('token')
     if(!accessToken&&route.path!=='/login'){
+        
         next({path:'/login'})
     }else{
+        console.log(route)
         if(route.name){
             next()
         }else{
+            window.localStorage.clear()
             next({
                 path:'/index/orderAllData'
             })
@@ -64,10 +70,34 @@ var vm = new Vue({
     router,
     render: h => h(app),
     methods:{
-       
+     checkoutSession(){
+        this.axios.get('/beefly/user/api/v1/mycenter', {
+            params: {
+                accessToken: this.$store.state.token
+            }
+        })
+        .then( (res) => {
+            console.log('checkoutSession---------------',res)
+            var message = (res.data).message
+            if (message == '用户登录超时') {
+              this.$router.push('/login')
+            } else {
+              return
+            }
+        })
+        .catch( (err) => {
+            console.log('11111111111111111111111',err)
+        })
+      }
     },
     mounted:function(){
-      //  window.addEventlistener('beforeunload',this.closeWin())
+    //    window.addEventlistener('beforeunload',this.closeWin())
      
-    }
+    },
+    watch: {
+        '$route': 'checkoutSession'
+      }
+
 })
+
+

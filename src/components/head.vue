@@ -65,9 +65,10 @@ export default {
     },
     methods: {
         handleLoginOut() {
+            window.localStorage.clear()
             this.$router.push('/login')
             this.removeToken()
-            window.localStorage.clear()
+            
         },
         getImage() {
             if (this.$store.state.imageUrl === '') {
